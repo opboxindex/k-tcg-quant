@@ -28,67 +28,6 @@
   "canonicalPage": "https://opboxindex.com/auction.html",
   "daily": [
    {
-    "date": "2026-09-26",
-    "partialDay": true,
-    "ended": 588,
-    "sold": 160,
-    "unsold": 428,
-    "sellThroughPct": null,
-    "amountUsd": 16043.34,
-    "byCategory": {
-     "box": {
-      "ended": 0,
-      "sold": 0,
-      "sellThroughPct": null,
-      "amountUsd": 0
-     },
-     "graded": {
-      "ended": 69,
-      "sold": 35,
-      "sellThroughPct": 50.7,
-      "amountUsd": 3022.78
-     },
-     "raw": {
-      "ended": 425,
-      "sold": 80,
-      "sellThroughPct": 18.8,
-      "amountUsd": 11602.71
-     },
-     "pack": {
-      "ended": 43,
-      "sold": 32,
-      "sellThroughPct": 74.4,
-      "amountUsd": 920.85
-     },
-     "lot": {
-      "ended": 51,
-      "sold": 13,
-      "sellThroughPct": 25.5,
-      "amountUsd": 497
-     }
-    },
-    "byPrinting": {
-     "jp": {
-      "ended": 110,
-      "sold": 49,
-      "sellThroughPct": 44.5,
-      "amountUsd": 2590.62
-     },
-     "en": {
-      "ended": 422,
-      "sold": 89,
-      "sellThroughPct": 21.1,
-      "amountUsd": 11554.45
-     },
-     "other": {
-      "ended": 56,
-      "sold": 22,
-      "sellThroughPct": 39.3,
-      "amountUsd": 1898.27
-     }
-    }
-   },
-   {
     "date": "2026-09-27",
     "partialDay": true,
     "ended": 829,
@@ -1798,12 +1737,12 @@
    },
    {
     "date": "2026-10-25",
-    "partialDay": true,
-    "ended": 1524,
-    "sold": 457,
-    "unsold": 1067,
-    "sellThroughPct": 29.99,
-    "amountUsd": 63936.54,
+    "partialDay": false,
+    "ended": 1550,
+    "sold": 460,
+    "unsold": 1090,
+    "sellThroughPct": 29.68,
+    "amountUsd": 64114.04,
     "byCategory": {
      "box": {
       "ended": 17,
@@ -1812,94 +1751,114 @@
       "amountUsd": 27135.95
      },
      "graded": {
-      "ended": 184,
-      "sold": 96,
-      "sellThroughPct": 52.2,
-      "amountUsd": 20489.47
+      "ended": 185,
+      "sold": 97,
+      "sellThroughPct": 52.4,
+      "amountUsd": 20654.97
      },
      "raw": {
-      "ended": 1211,
-      "sold": 306,
-      "sellThroughPct": 25.3,
-      "amountUsd": 14138.56
+      "ended": 1231,
+      "sold": 308,
+      "sellThroughPct": 25,
+      "amountUsd": 14150.56
      },
      "pack": {
-      "ended": 45,
+      "ended": 46,
       "sold": 22,
-      "sellThroughPct": 48.9,
+      "sellThroughPct": 47.8,
       "amountUsd": 733.85
      },
      "lot": {
-      "ended": 67,
+      "ended": 71,
       "sold": 18,
-      "sellThroughPct": 26.9,
+      "sellThroughPct": 25.4,
       "amountUsd": 1438.71
      }
     },
     "byPrinting": {
      "jp": {
-      "ended": 374,
+      "ended": 376,
       "sold": 85,
-      "sellThroughPct": 22.7,
+      "sellThroughPct": 22.6,
       "amountUsd": 7552.37
      },
      "en": {
-      "ended": 750,
-      "sold": 221,
-      "sellThroughPct": 29.5,
-      "amountUsd": 43460.63
+      "ended": 772,
+      "sold": 224,
+      "sellThroughPct": 29,
+      "amountUsd": 43638.13
      },
      "other": {
-      "ended": 400,
+      "ended": 402,
       "sold": 151,
-      "sellThroughPct": 37.8,
+      "sellThroughPct": 37.6,
       "amountUsd": 12923.54
+     }
+    }
+   },
+   {
+    "date": "2026-10-26",
+    "partialDay": true,
+    "ended": 126,
+    "sold": 50,
+    "unsold": 76,
+    "sellThroughPct": null,
+    "amountUsd": 2574.05,
+    "byCategory": {
+     "box": {
+      "ended": 0,
+      "sold": 0,
+      "sellThroughPct": null,
+      "amountUsd": 0
+     },
+     "graded": {
+      "ended": 20,
+      "sold": 17,
+      "sellThroughPct": 85,
+      "amountUsd": 1437.04
+     },
+     "raw": {
+      "ended": 95,
+      "sold": 27,
+      "sellThroughPct": 28.4,
+      "amountUsd": 960.73
+     },
+     "pack": {
+      "ended": 5,
+      "sold": 3,
+      "sellThroughPct": null,
+      "amountUsd": 81.78
+     },
+     "lot": {
+      "ended": 6,
+      "sold": 3,
+      "sellThroughPct": null,
+      "amountUsd": 94.5
+     }
+    },
+    "byPrinting": {
+     "jp": {
+      "ended": 18,
+      "sold": 2,
+      "sellThroughPct": null,
+      "amountUsd": 80.5
+     },
+     "en": {
+      "ended": 84,
+      "sold": 25,
+      "sellThroughPct": 29.8,
+      "amountUsd": 1182.28
+     },
+     "other": {
+      "ended": 24,
+      "sold": 23,
+      "sellThroughPct": 95.8,
+      "amountUsd": 1311.27
      }
     }
    }
   ],
   "weekly": [
-   {
-    "weekStart": "2026-08-31",
-    "days": 7,
-    "partialDays": 0,
-    "ended": 8835,
-    "sold": 3337,
-    "sellThroughPct": 37.77,
-    "amountUsd": 512504.69,
-    "byCategory": {
-     "box": {
-      "ended": 100,
-      "sold": 80,
-      "sellThroughPct": 80,
-      "amountUsd": 132256.83
-     },
-     "graded": {
-      "ended": 1020,
-      "sold": 660,
-      "sellThroughPct": 64.7,
-      "amountUsd": 178416.72
-     },
-     "raw": {
-      "ended": 6683,
-      "sold": 2037,
-      "sellThroughPct": 30.5,
-      "amountUsd": 149128.99
-     },
-     "pack": {
-      "ended": 521,
-      "sold": 394,
-      "sellThroughPct": 75.6,
-      "amountUsd": 18982.77
-     },
-     "lot": {
-      "ended": 511,
-      "sold": 166,
-      "sellThroughPct": 32.5,
-      "amountUsd": 33719.38
-     }
-    }
-   },
    {
     "weekStart": "2026-09-07",
     "days": 7,
@@ -2150,10 +2109,10 @@
     "weekStart": "2026-10-19",
     "days": 7,
     "partialDays": 0,
-    "ended": 8691,
-    "sold": 2585,
-    "sellThroughPct": 29.74,
-    "amountUsd": 387876.09,
+    "ended": 8717,
+    "sold": 2588,
+    "sellThroughPct": 29.69,
+    "amountUsd": 388053.59,
     "byCategory": {
      "box": {
       "ended": 77,
@@ -2162,28 +2121,69 @@
       "amountUsd": 79504.65
      },
      "graded": {
-      "ended": 1166,
-      "sold": 709,
+      "ended": 1167,
+      "sold": 710,
       "sellThroughPct": 60.8,
-      "amountUsd": 153477.91
+      "amountUsd": 153643.41
      },
      "raw": {
-      "ended": 6704,
-      "sold": 1547,
-      "sellThroughPct": 23.1,
-      "amountUsd": 138839.14
+      "ended": 6724,
+      "sold": 1549,
+      "sellThroughPct": 23,
+      "amountUsd": 138851.14
      },
      "pack": {
-      "ended": 306,
+      "ended": 307,
       "sold": 180,
-      "sellThroughPct": 58.8,
+      "sellThroughPct": 58.6,
       "amountUsd": 8294.07
      },
      "lot": {
-      "ended": 438,
+      "ended": 442,
       "sold": 91,
-      "sellThroughPct": 20.8,
+      "sellThroughPct": 20.6,
       "amountUsd": 7760.32
+     }
+    }
+   },
+   {
+    "weekStart": "2026-10-26",
+    "days": 1,
+    "partialDays": 1,
+    "ended": 126,
+    "sold": 50,
+    "sellThroughPct": 39.68,
+    "amountUsd": 2574.05,
+    "byCategory": {
+     "box": {
+      "ended": 0,
+      "sold": 0,
+      "sellThroughPct": null,
+      "amountUsd": 0
+     },
+     "graded": {
+      "ended": 20,
+      "sold": 17,
+      "sellThroughPct": 85,
+      "amountUsd": 1437.04
+     },
+     "raw": {
+      "ended": 95,
+      "sold": 27,
+      "sellThroughPct": 28.4,
+      "amountUsd": 960.73
+     },
+     "pack": {
+      "ended": 5,
+      "sold": 3,
+      "sellThroughPct": null,
+      "amountUsd": 81.78
+     },
+     "lot": {
+      "ended": 6,
+      "sold": 3,
+      "sellThroughPct": null,
+      "amountUsd": 94.5
      }
     }
    }

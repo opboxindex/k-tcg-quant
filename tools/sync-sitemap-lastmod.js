@@ -30,6 +30,9 @@ const ROOT = path.join(__dirname, "..");
 const SM = path.join(ROOT, "sitemap.xml");
 const STATE = path.join(ROOT, "data", "sitemap-lastmod-state.json");
 const TODAY = new Date().toISOString().slice(0, 10);
+// '미래' 판정만 한국 날짜까지 허용한다 — 박스 원장 기준일(collectedAt)은 한국 날짜라, 무인 수집이 09:00 KST(=UTC 자정) 전에
+// 끝나면 글 dateModified 가 UTC 오늘보다 하루 앞선다. 2026-10-25 08:59 에 이걸 '미래'로 막아 그날 푸시가 빠지고 클라우드 워크플로(FX·진행매물)가 연달아 실패했다.
+const TODAY_KST = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 
 // loc → 저장소 안 파일 경로
 function locToFile(loc) {
@@ -190,7 +193,7 @@ function verify() {
     if (!st) { problems.push(`${loc} 가 상태 파일에 없다`); continue; }
     if (st.h !== bodyHash(fs.readFileSync(path.join(ROOT, file), "utf8"))) problems.push(`${file} 본문이 바뀌었는데 lastmod 를 다시 정하지 않았다`);
     else if (cur !== st.d) problems.push(`${file} lastmod ${cur} ≠ 본문이 바뀐 날 ${st.d}(본문 그대로인데 날짜만 바뀜)`);
-    if (cur && cur > TODAY) problems.push(`${file} lastmod ${cur} 가 미래`);
+    if (cur && cur > TODAY_KST) problems.push(`${file} lastmod ${cur} 가 미래`);
     // 글: 사이트맵 lastmod 가 글의 dateModified 보다 이르면 안 된다(같은 본문 정의 — 본문이 바뀐 날은 두 곳에 같이 찍힌다).
     if (/^articles\/[^/]+\.html$/.test(file) && cur) {
       const ld = (fs.readFileSync(path.join(ROOT, file), "utf8").match(/"dateModified":\s*"(\d{4}-\d{2}-\d{2})"/) || [])[1];

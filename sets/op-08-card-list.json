@@ -3,7 +3,7 @@
  "name": "Two Legends",
  "edition": "Japanese",
  "page": "https://opboxindex.com/sets/op-08-card-list.html",
- "updated": "2026-10-24",
+ "updated": "2026-10-25",
  "officialList": {
   "url": "https://www.onepiece-cardgame.com/cardlist/?series=550108",
   "checked": "2026-10-24",
@@ -30,9 +30,9 @@
   "japaneseSoldMedianUsd": 80,
   "japaneseObservedOn": "2026-10-09",
   "japaneseN": 10,
-  "englishSoldMedianUsd": 257,
-  "englishObservedOn": "2026-10-21",
-  "englishN": 15
+  "englishSoldMedianUsd": 258,
+  "englishObservedOn": "2026-10-25",
+  "englishN": 11
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -58,7 +58,7 @@
     "medianUsd": 21.5,
     "sold": 3,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "auctionEnglishPrint": null,
    "psa10": null,
@@ -1572,7 +1572,7 @@
     "medianUsd": 43,
     "sold": 4,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "psa10": {
     "usd": 100,
@@ -2133,7 +2133,7 @@
     "medianUsd": 4.26,
     "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "psa10": null,
    "cardPage": null
@@ -2771,7 +2771,13 @@
    "features": "Egghead/Bonney Pirates",
    "trigger": true,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 23.5,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-10-25"
+   },
    "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null
@@ -2816,7 +2822,13 @@
    "trigger": true,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 2,
+    "sold": 6,
+    "windowDays": 45,
+    "through": "2026-10-25"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -3225,7 +3237,7 @@
     "medianUsd": 5,
     "sold": 9,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "psa10": null,
    "cardPage": null
@@ -3302,7 +3314,7 @@
     "medianUsd": 56.95,
     "sold": 3,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "auctionEnglishPrint": null,
    "psa10": {
@@ -3339,7 +3351,7 @@
     "medianUsd": 145,
     "sold": 7,
     "windowDays": 45,
-    "through": "2026-10-24"
+    "through": "2026-10-25"
    },
    "psa10": {
     "usd": 300,

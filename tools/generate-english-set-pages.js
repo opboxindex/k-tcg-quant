@@ -292,11 +292,12 @@ function jsonLd(code, nameEn, m, s, items, canonical, pageName, pageDate) {
     const best = s.ask.en;
     const lowV = best ? best.total : a.low;
     // AggregateOffer 는 지표 칸에 "Range $low – $high" 가 그려질 때만(statGrid 와 같은 조건) — 2026-10-15(감사 #6, 일본판 OP-07 과 같은 결함):
-    // 실매물만 있고 a.low 가 비면 Range 는 안 보이는데 highPrice 가 a.high 로 나갈 수 있었다. 그때는 화면의 중간 호가 하나(Offer).
+    // 실매물만 있고 a.low 가 비면 Range 는 안 보이는데 highPrice 가 a.high 로 나갈 수 있었다. 그때는 화면의 중간 호가 하나(lowPrice = highPrice).
+    // 값이 하나여도 AggregateOffer 다(2026-10-28) — 개별 Offer 는 판매자 등록정보로 읽혀 배송·반품 정책 누락 경고가 난다(우리는 판매자가 아니다).
     const rangeShown = a.low != null && a.high != null && a.high >= a.low;
     const offers = rangeShown && (best || a.high >= lowV)
       ? { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.round(lowV), highPrice: Math.round(Math.max(a.high, lowV)), offerCount: a.sampleSize, availability: "https://schema.org/InStock", url: canonical }
-      : { "@type": "Offer", priceCurrency: "USD", price: Math.round(a.middle), availability: "https://schema.org/InStock", url: canonical };
+      : { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.round(a.middle), highPrice: Math.round(a.middle), availability: "https://schema.org/InStock", url: canonical };
     ld.push({
       "@context": "https://schema.org", "@type": "Product",
       name: `One Piece Card Game ${code} ${nameEn} Booster Box (English)`,

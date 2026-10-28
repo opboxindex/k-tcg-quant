@@ -166,7 +166,7 @@ function setPage(code, ed, f, lang) {
   } else {
     cmp("U2", f, "Data updated", first(h, /Data updated <time datetime="(\d{4}-\d{2}-\d{2})"/), s.pageDate);
     const prod = ldOf(h).find((j) => j["@type"] === "Product"), rel = ed === "jp" ? k.jpRelease : k.enRelease;
-    if (prod) { if (rel) cmp("KF1", f, "Product releaseDate", prod.releaseDate, rel); const o = prod.offers || {}; cmp("KF1", f, "Product lowPrice", o.lowPrice ?? o.price, k.ask ? k.ask.total : null); if (o["@type"] === "AggregateOffer" && s.liveAsk[ed]) { cmp("KF1", f, "Product highPrice", o.highPrice, s.liveAsk[ed].hi); cmp("KF1", f, "Product offerCount", o.offerCount, s.liveAsk[ed].n); } }
+    if (prod) { if (rel) cmp("KF1", f, "Product releaseDate", prod.releaseDate, rel); const o = prod.offers || {}; cmp("KF1", f, "Product lowPrice", o.lowPrice ?? o.price, k.ask ? k.ask.total : null); if (o["@type"] === "AggregateOffer" && o.offerCount != null && s.liveAsk[ed]) { cmp("KF1", f, "Product highPrice", o.highPrice, s.liveAsk[ed].hi); cmp("KF1", f, "Product offerCount", o.offerCount, s.liveAsk[ed].n); } }
     if (ed === "en") cmp("KF1", f, "구매 버튼", first(h, /<a class="buyNow"[^>]*>[\s\S]*?<b>(\$[\d,]+)<\/b>/), k.ask ? k.ask.total : null);
   }
   cmp("U2", f, "dateModified", (ldOf(h).find((j) => j["@type"] === "WebPage") || {}).dateModified, s.pageDate);
@@ -238,10 +238,11 @@ function cardPages() {
     cmp("U2", f, "설명 Updated", first(d, /Updated (\d{4}-\d{2}-\d{2})\.$/), c.pageDate);
     const lds = ldOf(h);
     cmp("U2", f, "Article dateModified", (lds.find((j) => j["@type"] === "Article") || {}).dateModified, c.pageDate);
-    const offers = [].concat((lds.find((j) => j["@type"] === "Product") || {}).offers || []);
-    const nmO = offers.find((o) => o.name === "Japanese NM (raw)"), psO = offers.find((o) => o.name === "PSA 10 (lowest listing)");
-    cmp("PO1", f, "NM Offer", nmO ? nmO.price : null, c.nm.usable && c.nm.fresh && c.nm.stock !== "unknown" ? c.nm.usd : null);
-    cmp("PO1", f, "PSA 10 Offer", psO ? psO.price : null, c.psa10Ask && c.psa10Ask.fresh && c.psa10Ask.buy ? c.psa10Ask.usd : null);
+    // 카드 Product 의 AggregateOffer = 지금 화면의 두 호가(일본판 NM 소매·PSA 10 최저 실매물)의 최저·최고(2026-10-28, 종전엔 호가마다 Offer)
+    const off = (lds.find((j) => j["@type"] === "Product") || {}).offers || {};
+    const asks = [c.nm.usable && c.nm.fresh && c.nm.stock !== "unknown" ? c.nm.usd : null, c.psa10Ask && c.psa10Ask.fresh && c.psa10Ask.buy ? c.psa10Ask.usd : null].filter((v) => v != null);
+    cmp("PO1", f, "AggregateOffer lowPrice", off.lowPrice, asks.length ? Math.min(...asks) : null);
+    cmp("PO1", f, "AggregateOffer highPrice", off.highPrice, asks.length ? Math.max(...asks) : null);
     const wa = ans(faqOf(h), /worth\?$/);
     if (wa) { const wm = wa.match(/^On (\d{4}-\d{2}-\d{2}), .* was tracked near (\$[\d,]+)/); cmp("NM2", f, "FAQ NM", wm && wm[2], psa.nmSrc === "jp" ? psa.nm : null); if (wm) cmp("NM1", f, "FAQ NM 날짜", wm[1], c.nm.date); }
     for (const r of rows((h.match(/grading population by grader<\/h2>[\s\S]*?<\/table>/) || [""])[0]).slice(1)) {

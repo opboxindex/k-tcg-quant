@@ -202,12 +202,13 @@ function run() {
   for (const f of cardPages) {
     const prod = ldOf(read(f)).find((j) => j["@type"] === "Product");
     if (!prod) continue;
-    const offers = [].concat(prod.offers || []);
-    if (!offers.length) errors.push(`PO1: ${f} Product 에 offers 가 없다 — 지금 나와 있는 호가가 없으면 Product 를 내지 않는다`);
-    for (const o of offers) {
-      if (o["@type"] !== "Offer" || "offerCount" in o) errors.push(`PO1: ${f} offers 는 Offer 만(AggregateOffer·offerCount 금지 — PSA 10 sold 중앙값이 범위에 섞였었다)`);
-      if (!Number.isFinite(o.price) || o.priceCurrency !== "USD" || !/^https:\/\/schema\.org\/(?:InStock|OutOfStock)$/.test(o.availability || "")) errors.push(`PO1: ${f} Offer "${o.name}" 에 price·priceCurrency·availability 가 다 있지 않다`);
-      if (!/^(?:Japanese NM \(raw\)|PSA 10 \(lowest listing\))$/.test(o.name || "")) errors.push(`PO1: ${f} 알 수 없는 Offer "${o.name}" — NM 호가·PSA 10 최저 매물만`);
+    // offers = 지금 나와 있는 두 호가(NM 소매·PSA 10 최저 실매물)의 AggregateOffer 하나(2026-10-28). 개별 Offer 는 판매자 등록정보로 읽혀
+    // 서치콘솔이 배송·반품 정책 누락을 경고했다(우리는 판매자가 아니다). offerCount 는 매물 수를 다 세지 않아 쓰지 않는다 — 값 대조는 PAGES-VS-FACTS/PO1.
+    const o = prod.offers;
+    if (!o || Array.isArray(o)) errors.push(`PO1: ${f} Product offers 는 AggregateOffer 하나여야 한다 — 지금 나와 있는 호가가 없으면 Product 를 내지 않는다`);
+    else {
+      if (o["@type"] !== "AggregateOffer" || "offerCount" in o) errors.push(`PO1: ${f} offers 는 AggregateOffer(offerCount 없이) — 개별 Offer 는 판매자 등록정보로 읽힌다`);
+      if (!Number.isFinite(o.lowPrice) || !Number.isFinite(o.highPrice) || o.lowPrice > o.highPrice || o.priceCurrency !== "USD" || !/^https:\/\/schema\.org\/(?:InStock|OutOfStock)$/.test(o.availability || "")) errors.push(`PO1: ${f} AggregateOffer 에 lowPrice ≤ highPrice·priceCurrency·availability 가 다 있지 않다`);
     }
   }
   // S3 — 카드가 있는 세트 페이지는 Key facts 행 + 그 세트 카드로 채운 Top 10 + 세트끼리 다른 설명문(문장 반복률은 audit-adsense-readiness)

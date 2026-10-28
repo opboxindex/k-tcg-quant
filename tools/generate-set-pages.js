@@ -335,7 +335,9 @@ function productLd(code, nameEn, s) {
   const ask = s.ask.jp;
   // 구조화데이터의 가격은 전부 화면에 있는 값이어야 한다(2026-10-15, 감사 #6):
   //   Range 줄이 보이면 → AggregateOffer(lowPrice = 최저 실매물 또는 Range 하단, highPrice = Range 상단, offerCount = 위젯의 매물 수)
-  //   Range 가 없으면 → Offer 하나: 최저 실매물(Key facts "Lowest live ask"·구매 버튼) → 없으면 위젯 중간값 → 둘 다 없으면 Product 를 내지 않는다.
+  //   Range 가 없으면 → 값 하나(lowPrice = highPrice): 최저 실매물(Key facts "Lowest live ask"·구매 버튼) → 없으면 위젯 중간값 → 둘 다 없으면 Product 를 내지 않는다.
+  //   값이 하나여도 Offer 가 아니라 AggregateOffer 다(2026-10-28) — 개별 Offer 는 '이 사이트가 판다'는 판매자 등록정보로 읽혀
+  //   서치콘솔이 배송·반품 정책 누락을 경고했다. 우리는 판매자가 아니다(남의 매물 값을 모아 보여 준다).
   const live = liveAsk(s);
   const url = `${SITE}/sets/${slug(code)}.html`;
   const lowV = live && live.range ? (ask ? ask.total : live.lo) : null;
@@ -343,7 +345,7 @@ function productLd(code, nameEn, s) {
   const offers =
     lowV != null && (ask || live.hi >= lowV)
       ? { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.round(lowV), highPrice: Math.round(Math.max(live.hi, lowV)), offerCount: live.n, availability: "https://schema.org/InStock", url }
-      : one != null ? { "@type": "Offer", priceCurrency: "USD", price: Math.round(one), availability: "https://schema.org/InStock", url } : null;
+      : one != null ? { "@type": "AggregateOffer", priceCurrency: "USD", lowPrice: Math.round(one), highPrice: Math.round(one), availability: "https://schema.org/InStock", url } : null;
   if (!offers) return "";   // 화면에 박스 가격이 하나도 없으면 Product 도 없다(불완전 Product 는 서치콘솔 경고)
   const prod = {
     "@context": "https://schema.org",

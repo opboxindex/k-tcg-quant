@@ -344,22 +344,21 @@ for (const { code, set: s, card: c } of cands) {
   // offers = **지금 나와 있는 호가만** — 2026-10-15 감사(#5). 종전엔 PSA 10 표시가(sold 중앙값)까지 AggregateOffer 범위에 넣고
   // offerCount 를 판매 건수+1 로 적었다(115장 중 92장이 sold 중앙값, 13장은 6~8월 관측인데 InStock). 구글 정의로 Offer 가격은
   // 지금 나와 있는 매물 값이고 offerCount 는 매물 수다 — 지난 판매가는 매물이 아니다(OP13-118: 범위 상한 $14,134 = 7/10 sold,
-  // 같은 날 화면의 최저 PSA 10 매물은 $20,668). 그래서 아래 두 호가만 각자 Offer 로 싣는다. 재고 상태가 서로 달라
-  // AggregateOffer 하나로 묶지 않고, 매물 수를 다 세지 않으므로 offerCount 도 쓰지 않는다.
+  // 같은 날 화면의 최저 PSA 10 매물은 $20,668). 그래서 아래 두 호가만 싣는다(지난 판매가는 범위에 넣지 않는다).
   //   ① 일본판 NM 소매 호가 — 실제로 다시 본 날(nm.date)이 28일 이내(nm.fresh)이고 재고 표기가 있을 때. "×" 면 OutOfStock
   //      (AI JSON 의 stockStatus 와 같은 함수 — 한 사실은 한 값).
   //   ② PSA 10 최저 실매물 — 화면 구매 버튼(buyCta)이 보일 때만, 버튼과 같은 값. 관측일(psa10Ask.date) 28일 이내(psa10Ask.fresh).
   // 28일 = 사이트의 "현재" 기준(가드 D17, 위 박스 배수와 같다 — 사실 빌더 CURRENT_DAYS). 둘 다 없으면 Product 를 내지 않는다 —
   // offers 없는 Product 는 Search Console 무효 항목이다(2026-10-14 QA). sold 중앙값은 화면·FAQ·description 에만 남는다.
+  // 2026-10-28: 개별 Offer 는 '이 사이트가 판다'는 판매자 등록정보(merchant listing)로 읽혀 서치콘솔이 shippingDetails·
+  // hasMerchantReturnPolicy 누락을 경고했다. 우리는 판매자가 아니라 남의 매물 값을 모아 보여 주므로, 구글 문서대로 제품 스니펫용
+  // AggregateOffer(위 두 호가의 최저·최고) 하나로 싣는다. 매물 수를 다 세지 않으므로 offerCount 는 그대로 쓰지 않고,
+  // 재고는 호가 중 하나라도 있으면 InStock(둘 다 품절 표기일 때만 OutOfStock).
   const nmStock = c.nm.stock;
   const paUsd = pa ? pa.usd : null;
   const asks = [];
-  if (Number.isFinite(nmUsd) && nmUsd > 0 && c.nm.fresh && nmStock !== "unknown") {
-    asks.push({ "@type": "Offer", name: "Japanese NM (raw)", priceCurrency: "USD", price: Math.round(nmUsd), availability: nmStock === "in_stock" ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", url: canonical });
-  }
-  if (psaBuy && Number.isFinite(paUsd) && paUsd > 0 && pa.fresh) {
-    asks.push({ "@type": "Offer", name: "PSA 10 (lowest listing)", priceCurrency: "USD", price: Math.round(paUsd), availability: "https://schema.org/InStock", url: canonical });
-  }
+  if (Number.isFinite(nmUsd) && nmUsd > 0 && c.nm.fresh && nmStock !== "unknown") asks.push({ usd: Math.round(nmUsd), inStock: nmStock === "in_stock" });
+  if (psaBuy && Number.isFinite(paUsd) && paUsd > 0 && pa.fresh) asks.push({ usd: Math.round(paUsd), inStock: true });
   const prodLd = asks.length ? JSON.stringify({
     "@context": "https://schema.org", "@type": "Product",
     name: `One Piece Card Game ${c.number} ${c.name} (Japanese)`,
@@ -367,7 +366,11 @@ for (const { code, set: s, card: c } of cands) {
     description: desc,
     sku: c.number, brand: { "@type": "Brand", name: "Bandai" }, category: "Trading Card Games",
     url: canonical,
-    offers: asks.length > 1 ? asks : asks[0],
+    offers: {
+      "@type": "AggregateOffer", priceCurrency: "USD",
+      lowPrice: Math.min(...asks.map((a) => a.usd)), highPrice: Math.max(...asks.map((a) => a.usd)),
+      availability: asks.some((a) => a.inStock) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", url: canonical,
+    },
   }) : "";
 
   const html = `<!doctype html>

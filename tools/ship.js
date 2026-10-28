@@ -247,7 +247,7 @@ function ship(o) {
     const who = /auto-detect email|user\.email|tell me who you are/i.test(said2);
     stop(5, `pull 이 깨끗하게 끝나지 않았다${aborted ? " — 리베이스는 abort 해 시작 상태로 돌려놨다" : ""}`, [...said2.split("\n").slice(-8), ...unmerged.map((f) => `미병합: ${f}`)],
       who ? "git 신원(user.name·user.email)이 없다 — 이 checkout 의 git 설정 문제라 소유자에게 보고한다."
-        : "미병합이 전부 생성물(daily.ps1 Regenerable)이면 손으로: git pull --rebase --autostash origin main → git checkout --ours -- <생성물들>(리베이스 중 --ours = origin/main) → git add -A → GIT_EDITOR=true git rebase --continue → 같은 명령. " +
+        : "미병합이 전부 생성물(daily.ps1 Regenerable)이면 손으로: git pull --rebase --autostash origin main → git checkout --ours -- <생성물들>(리베이스 중 --ours = origin/main) → git add -- <생성물들> → GIT_EDITOR=true git rebase --continue → 같은 명령. " +
           `소스·원장 충돌은 손으로 합치거나 소유자에게.${inRebase() ? " 아직 리베이스 중이다 — 먼저 git rebase --abort." : ""}${stashes() > stash0 ? " autostash 가 남았다 — git stash list." : ""}`);
   }
   const base = out(["merge-base", "HEAD", "origin/main"]).trim();

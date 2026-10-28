@@ -28,9 +28,13 @@ const TOOLS = path.join(ROOT, "tools");
 //   soft    — 실패해도 전체를 FAIL 로 만들지 않는다(경고만). 알림용 감사.
 //   browser — 로컬 크롬이 필요하다(--fast 로 건너뜀). 크롬이 없으면 도구 스스로 skip 으로 끝난다.
 //   global  — 전역 신선도 감사(가드 W4). --gate 에서 뺀다.
+//   data    — 커밋된 생성물(AI 파일·CSV)이 원장과 같은지 보는 테스트. --pre 에서 뺀다 — 원장은 다른 워크플로(collect-grading 등)가
+//             먼저 바꿀 수 있고 생성물은 이 잡의 빌드가 고치는데, 빌드 앞에서 막으면 '낡으면 막고 → 못 고치고 → 더 낡는' 교착이 된다
+//             (2026-10-26~28: CGC 원장만 바뀐 뒤 진행 매물·환율 수집이 test-ai-data 로 3일 멈춤). 빌드 뒤 --gate 에서는 그대로 돈다.
+const DATA_TESTS = new Set(["test-ai-data"]);
 const CHECKS = [
   // mutates: 추적 데이터(packs.json)를 제자리에서 썼다 되돌리는 테스트 — 커밋 직전 관문(--gate)에서는 뺀다(2026-10-16).
-  ...fs.readdirSync(TOOLS).filter((f) => /^test-.*\.js$/.test(f)).sort().map((f) => ({ name: f.replace(/\.js$/, ""), kind: "test", mutates: f === "test-collect-status.js" })),
+  ...fs.readdirSync(TOOLS).filter((f) => /^test-.*\.js$/.test(f)).sort().map((f) => ({ name: f.replace(/\.js$/, ""), kind: "test", mutates: f === "test-collect-status.js", data: DATA_TESTS.has(f.replace(/\.js$/, "")) })),
   { name: "audit-seo", kind: "audit" },
   { name: "audit-grading-numbers", kind: "audit" },           // 등급 숫자는 틀리면 안 된다(소유자 지시) — 종전엔 두 워크플로에 따로 있었다
   { name: "audit-workflows", kind: "audit" },
@@ -57,9 +61,9 @@ function parseArgs(argv) {
 }
 
 // 모드에 따라 실제로 도는 검사 — audit-workflows 가 워크플로의 `check.js --pre/--gate` 를 이걸로 펼친다.
-//   pre → 테스트만 · gate → 전역 신선도 감사 제외 · fast → 브라우저 감사 제외
+//   pre → 테스트만(생성물 대조 테스트 제외) · gate → 전역 신선도 감사 제외 · fast → 브라우저 감사 제외
 function plan({ pre = false, gate = false, fast = false } = {}) {
-  return CHECKS.filter((c) => (pre ? c.kind === "test" : !(c.browser && fast) && !(c.global && gate) && !(c.mutates && gate)));
+  return CHECKS.filter((c) => (pre ? c.kind === "test" && !c.data : !(c.browser && fast) && !(c.global && gate) && !(c.mutates && gate)));
 }
 
 const sec = (ms) => `${(ms / 1000).toFixed(1)}s`.padStart(6);
@@ -110,7 +114,7 @@ function main() {
   const todo = new Set(plan(o).map((c) => c.name));
   for (const c of CHECKS) {
     if (o.pre && c.kind !== "test") continue;
-    if (!todo.has(c.name)) { skipped++; console.log(`skip  ${"".padStart(6)}  ${c.name}  — ${c.browser ? "--fast" : c.mutates ? "--gate (원장을 제자리에서 쓰는 테스트)" : "--gate (전역 감사는 collection-health.yml)"}`); continue; }
+    if (!todo.has(c.name)) { skipped++; console.log(`skip  ${"".padStart(6)}  ${c.name}  — ${c.browser ? "--fast" : c.data && o.pre ? "--pre (생성물 대조는 빌드 뒤 --gate 에서)" : c.mutates ? "--gate (원장을 제자리에서 쓰는 테스트)" : "--gate (전역 감사는 collection-health.yml)"}`); continue; }
     const r = run([path.join(TOOLS, `${c.name}.js`)]);
     if (logDir) fs.writeFileSync(path.join(logDir, `${c.name}.log`), r.out);
     ran++;

@@ -15,6 +15,7 @@
 | 브라우저 감사 빼고 | `node tools/check.js --fast` |
 | 커밋 직전 관문(워크플로·daily.ps1) | `node tools/check.js --gate` — 전역 신선도 감사 제외(가드 W4) |
 | 수집 전 빠른 검사 | `node tools/check.js --pre` — 구문(`node --check`) + 테스트만 |
+| 로컬 수정 올리기 | `node tools/ship.js -m "<메시지>" --paths <고친 파일>` — pull → build → 노출·비밀 검사 → `check.js --gate --fast` → 커밋 → push. 뒤에 `node tools/ship.js --verify <sha>`(스킬 `배포`) |
 
 수정 뒤 한 바퀴: `node tools/build.js && node tools/check.js`. 전체 빌드 9~13초(prerender-home 1.5~5.6초), 검사 20초(브라우저 감사 11.5초·가드 3.5초·테스트 24개 4.7초) — 2026-10-15 실측.
 

@@ -8,7 +8,8 @@ description: opboxindex 수집을 밀린 것만 골라 전부 돌린다 — 소�
 2026-09-02 소유자 절대지시: "여태 수집하던 것 하나도 빼먹지 마라. 그래프 틀리면 안 된다."
 관련 기억: `opbox-never-miss-collection`
 
-레포: `C:\Users\kimtt\Documents\Codex\2026-06-21\https-youtu-be-rhuyy9lp72m-si-a4jhiygdebzzpvjf`
+레포: `C:\Users\kimtt\opbox-heartbeat\repo` (무인 수집 전용 worktree, detached HEAD — 브랜치를 만들거나 checkout 하지 않는다).
+`Documents\Codex\…` 본 clone 은 같은 저장소지만 그 checkout 은 10/06 main 에 멈춰 있고 미커밋 변경이 있어 쓰지 않는다(2026-10-28 확인).
 
 ## 절대 규칙 (2026-09-02 소유자 지시)
 
@@ -23,7 +24,7 @@ description: opboxindex 수집을 밀린 것만 골라 전부 돌린다 — 소�
 ## 0. 먼저 무엇이 밀렸는지 본다
 
 ```
-git pull --rebase
+git pull --rebase --autostash origin main
 node tools/collect-status.js --json
 ```
 
@@ -143,7 +144,9 @@ node tools/guard-invariants.js
 **가드가 FAIL 이면 절대 푸시하지 않는다**(소유자 절대지시). `head` 로 확인한다 — `tail` 로 보면
 배열 닫는 괄호만 보여서 FAIL 을 놓친다(2026-09-02 실수).
 
-통과하면 커밋·푸시한다. 커밋 메시지에는 **무엇을 몇 건 넣었는지 숫자로** 적는다.
+커밋·푸시는 `배포` 스킬로 한다: `node tools/ship.js -m "<무엇을 몇 건>" --paths <바꾼 원장·파일>` —
+pull → build → 관문(`check.js --gate --fast`)을 순서대로 돌고 FAIL 이면 멈춘다. guard 단독 통과나 `| tail && git push` 로 올리지 않는다(2026-10-28 사고).
+커밋 메시지에는 **무엇을 몇 건 넣었는지 숫자로** 적는다.
 
 ⚠️ 사이트맵에 URL 을 추가한 날은 **서치콘솔에서 사이트맵을 다시 제출**한다(실브라우저, 계정 슬롯 /u/1/,
 `https://search.google.com/u/1/search-console/sitemaps?resource_id=https%3A%2F%2Fopboxindex.com%2F` → 입력칸에 `sitemap.xml` → 제출).

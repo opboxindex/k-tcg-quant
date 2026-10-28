@@ -108,7 +108,7 @@ function setPage(code, ed, f, lang) {
     if (pa && cur) { cmp("KO1", f, "시세 문답 날짜", first(pa, /^(\d{4}-\d{2}-\d{2}) 기준/), cur.d); cmp("KO1", f, "시세 문답 금액", first(pa, /약 ([\d,]+)원/), krw(cur.median)); }
     const ca = ans(faq, /변동률은/), ch = s.change28.jp;
     cmp("KO1", f, "변동률 문답", ca, ch ? { present: true } : null);
-    if (ca && ch) { cmp("KO1", f, "변동률 문답 값", first(ca, /변동률\(([^)]*)\)/), ch.pct); cmp("KO1", f, "변동률 문답 기준일", first(ca, /28일 전\((\d{4}-\d{2}-\d{2})\)/), ch.basis); if (cur) cmp("KO1", f, "변동률 문답 값 날짜", first(ca, /은 (\d{4}-\d{2}-\d{2}) 판매 중앙값/), cur.d); }
+    if (ca && ch) { cmp("KO1", f, "변동률 문답 값", first(ca, /변동률\(([^)]*)\)/), ch.pct); cmp("KO1", f, "변동률 문답 기준일", first(ca, /\d+일 전\((\d{4}-\d{2}-\d{2})\)/), ch.basis); if (cur) cmp("KO1", f, "변동률 문답 값 날짜", first(ca, /은 (\d{4}-\d{2}-\d{2}) 판매 중앙값/), cur.d); }
     const ra = ans(faq, /재판 기록이 있나요/);
     if (ra) cmp("KO2", f, "재판 문답 횟수", first(ra, /재판 (\d+)회/), s.reprint.count || null);
   } else {

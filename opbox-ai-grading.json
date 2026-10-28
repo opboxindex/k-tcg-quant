@@ -2,7 +2,7 @@
  "schemaVersion": "1.0.0",
  "datasetId": "opbox-ai-grading",
  "name": "OP Box Index — graded population per set (PSA, CGC, TAG)",
- "datasetUpdatedOn": "2026-10-26",
+ "datasetUpdatedOn": "2026-10-28",
  "publisher": {
   "name": "OP Box Index",
   "url": "https://opboxindex.com/"
@@ -21,7 +21,7 @@
   "gem10": "PSA 10 / CGC 10 (Pristine + Gem Mint) / TAG 10 + 10 Pristine counts; graders define 10 differently, so never add them across graders",
   "gemRatePct": "gem10 ÷ total × 100"
  },
- "observedOn": "2026-10-26",
+ "observedOn": "2026-10-28",
  "sets": [
   {
    "setCode": "OP-01",
@@ -35,11 +35,11 @@
      "addedSinceLastPoint": 352
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 7283,
+     "observedOn": "2026-10-26",
+     "total": 7372,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 34
+     "addedSinceLastPoint": 89
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -58,11 +58,11 @@
      "addedSinceLastPoint": 698
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4468,
+     "observedOn": "2026-10-26",
+     "total": 4498,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 18
+     "addedSinceLastPoint": 30
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -85,11 +85,11 @@
      "addedSinceLastPoint": 207
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4192,
+     "observedOn": "2026-10-26",
+     "total": 4293,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 89
+     "addedSinceLastPoint": 101
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -108,11 +108,11 @@
      "addedSinceLastPoint": 136
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2929,
+     "observedOn": "2026-10-26",
+     "total": 2945,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 18
+     "addedSinceLastPoint": 16
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -135,11 +135,11 @@
      "addedSinceLastPoint": 256
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2609,
+     "observedOn": "2026-10-26",
+     "total": 2637,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 11
+     "addedSinceLastPoint": 28
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -158,11 +158,11 @@
      "addedSinceLastPoint": 95
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 1719,
+     "observedOn": "2026-10-26",
+     "total": 1746,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 14
+     "addedSinceLastPoint": 27
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -185,11 +185,11 @@
      "addedSinceLastPoint": 235
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3487,
+     "observedOn": "2026-10-26",
+     "total": 3546,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 10
+     "addedSinceLastPoint": 59
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -208,11 +208,11 @@
      "addedSinceLastPoint": 143
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2842,
+     "observedOn": "2026-10-26",
+     "total": 2862,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 18
+     "addedSinceLastPoint": 20
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -235,11 +235,11 @@
      "addedSinceLastPoint": 1009
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 9554,
+     "observedOn": "2026-10-26",
+     "total": 9697,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 76
+     "addedSinceLastPoint": 143
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -258,11 +258,11 @@
      "addedSinceLastPoint": 475
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 5004,
+     "observedOn": "2026-10-26",
+     "total": 5059,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 61
+     "addedSinceLastPoint": 55
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -285,11 +285,11 @@
      "addedSinceLastPoint": 182
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 7693,
+     "observedOn": "2026-10-26",
+     "total": 7869,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 49
+     "addedSinceLastPoint": 176
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -308,11 +308,11 @@
      "addedSinceLastPoint": 304
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4511,
+     "observedOn": "2026-10-26",
+     "total": 4530,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 35
+     "addedSinceLastPoint": 19
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -335,11 +335,11 @@
      "addedSinceLastPoint": 318
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 7428,
+     "observedOn": "2026-10-26",
+     "total": 7526,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 51
+     "addedSinceLastPoint": 98
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -358,11 +358,11 @@
      "addedSinceLastPoint": 281
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4198,
+     "observedOn": "2026-10-26",
+     "total": 4253,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 52
+     "addedSinceLastPoint": 55
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -385,11 +385,11 @@
      "addedSinceLastPoint": 270
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4173,
+     "observedOn": "2026-10-26",
+     "total": 4271,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 55
+     "addedSinceLastPoint": 98
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -408,11 +408,11 @@
      "addedSinceLastPoint": 382
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3302,
+     "observedOn": "2026-10-26",
+     "total": 3345,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 56
+     "addedSinceLastPoint": 43
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -435,11 +435,11 @@
      "addedSinceLastPoint": 991
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 13330,
+     "observedOn": "2026-10-26",
+     "total": 13505,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 99
+     "addedSinceLastPoint": 175
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -458,11 +458,11 @@
      "addedSinceLastPoint": 516
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3548,
+     "observedOn": "2026-10-26",
+     "total": 3604,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 24
+     "addedSinceLastPoint": 56
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -485,11 +485,11 @@
      "addedSinceLastPoint": 274
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3465,
+     "observedOn": "2026-10-26",
+     "total": 3524,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 39
+     "addedSinceLastPoint": 59
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -508,11 +508,11 @@
      "addedSinceLastPoint": 330
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2760,
+     "observedOn": "2026-10-26",
+     "total": 2814,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 34
+     "addedSinceLastPoint": 54
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -535,11 +535,11 @@
      "addedSinceLastPoint": 511
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3621,
+     "observedOn": "2026-10-26",
+     "total": 3687,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 42
+     "addedSinceLastPoint": 66
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -558,11 +558,11 @@
      "addedSinceLastPoint": 604
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2813,
+     "observedOn": "2026-10-26",
+     "total": 2884,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 32
+     "addedSinceLastPoint": 71
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -585,11 +585,11 @@
      "addedSinceLastPoint": 249
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2642,
+     "observedOn": "2026-10-26",
+     "total": 2702,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 59
+     "addedSinceLastPoint": 60
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -608,11 +608,11 @@
      "addedSinceLastPoint": 538
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3442,
+     "observedOn": "2026-10-26",
+     "total": 3502,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 55
+     "addedSinceLastPoint": 60
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -635,11 +635,11 @@
      "addedSinceLastPoint": 1382
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 8342,
+     "observedOn": "2026-10-26",
+     "total": 8691,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 174
+     "addedSinceLastPoint": 349
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -658,11 +658,11 @@
      "addedSinceLastPoint": 1557
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 6892,
+     "observedOn": "2026-10-26",
+     "total": 7166,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 221
+     "addedSinceLastPoint": 274
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -685,11 +685,11 @@
      "addedSinceLastPoint": 560
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3689,
+     "observedOn": "2026-10-26",
+     "total": 3821,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 59
+     "addedSinceLastPoint": 132
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -702,11 +702,11 @@
    "english": {
     "psa": null,
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4896,
+     "observedOn": "2026-10-26",
+     "total": 5062,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 94
+     "addedSinceLastPoint": 166
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -729,11 +729,11 @@
      "addedSinceLastPoint": 1403
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4076,
+     "observedOn": "2026-10-26",
+     "total": 4220,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 84
+     "addedSinceLastPoint": 144
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -746,11 +746,11 @@
    "english": {
     "psa": null,
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3435,
+     "observedOn": "2026-10-26",
+     "total": 3673,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 141
+     "addedSinceLastPoint": 238
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -773,11 +773,11 @@
      "addedSinceLastPoint": 2002
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4588,
+     "observedOn": "2026-10-26",
+     "total": 4698,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 273
+     "addedSinceLastPoint": 110
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -796,11 +796,11 @@
      "addedSinceLastPoint": 1280
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2188,
+     "observedOn": "2026-10-26",
+     "total": 2389,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 238
+     "addedSinceLastPoint": 201
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -823,22 +823,22 @@
      "addedSinceLastPoint": 206
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 846,
+     "observedOn": "2026-10-26",
+     "total": 933,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 183
+     "addedSinceLastPoint": 87
     },
     "tag": null
    },
    "english": {
     "psa": null,
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 782,
+     "observedOn": "2026-10-26",
+     "total": 962,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 46
+     "addedSinceLastPoint": 180
     },
     "tag": null
    }
@@ -855,11 +855,11 @@
      "addedSinceLastPoint": 120
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 1837,
+     "observedOn": "2026-10-26",
+     "total": 1968,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 52
+     "addedSinceLastPoint": 131
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -878,11 +878,11 @@
      "addedSinceLastPoint": 77
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 912,
+     "observedOn": "2026-10-26",
+     "total": 921,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 8
+     "addedSinceLastPoint": 9
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -905,11 +905,11 @@
      "addedSinceLastPoint": 618
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3553,
+     "observedOn": "2026-10-26",
+     "total": 3781,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 59
+     "addedSinceLastPoint": 228
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -928,11 +928,11 @@
      "addedSinceLastPoint": 197
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 1011,
+     "observedOn": "2026-10-26",
+     "total": 1038,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 31
+     "addedSinceLastPoint": 27
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -955,11 +955,11 @@
      "addedSinceLastPoint": 814
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 5440,
+     "observedOn": "2026-10-26",
+     "total": 5580,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 75
+     "addedSinceLastPoint": 140
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -978,11 +978,11 @@
      "addedSinceLastPoint": 880
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2375,
+     "observedOn": "2026-10-26",
+     "total": 2458,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 69
+     "addedSinceLastPoint": 83
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -1005,11 +1005,11 @@
      "addedSinceLastPoint": 632
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 21887,
+     "observedOn": "2026-10-26",
+     "total": 22245,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 171
+     "addedSinceLastPoint": 358
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -1028,11 +1028,11 @@
      "addedSinceLastPoint": 266
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 3545,
+     "observedOn": "2026-10-26",
+     "total": 3560,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 22
+     "addedSinceLastPoint": 15
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -1055,11 +1055,11 @@
      "addedSinceLastPoint": 662
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 6604,
+     "observedOn": "2026-10-26",
+     "total": 6792,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 154
+     "addedSinceLastPoint": 188
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -1078,11 +1078,11 @@
      "addedSinceLastPoint": 409
     },
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 4691,
+     "observedOn": "2026-10-26",
+     "total": 4800,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 75
+     "addedSinceLastPoint": 109
     },
     "tag": {
      "observedOn": "2026-10-22",
@@ -1099,11 +1099,11 @@
    "japanese": {
     "psa": null,
     "cgc": {
-     "observedOn": "2026-10-19",
-     "total": 2432,
+     "observedOn": "2026-10-26",
+     "total": 2463,
      "gem10": null,
      "gemRatePct": null,
-     "addedSinceLastPoint": 41
+     "addedSinceLastPoint": 31
     },
     "tag": null
    },

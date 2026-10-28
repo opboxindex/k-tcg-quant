@@ -3,7 +3,7 @@
  "name": "Heroine's Edition",
  "edition": "Japanese",
  "page": "https://opboxindex.com/sets/eb-03-card-list.html",
- "updated": "2026-10-26",
+ "updated": "2026-10-27",
  "officialList": {
   "url": "https://www.onepiece-cardgame.com/cardlist/?series=550203",
   "checked": "2026-10-24",
@@ -30,9 +30,9 @@
   "japaneseSoldMedianUsd": 115,
   "japaneseObservedOn": "2026-10-25",
   "japaneseN": 16,
-  "englishSoldMedianUsd": 325,
+  "englishSoldMedianUsd": 326,
   "englishObservedOn": "2026-10-24",
-  "englishN": 11
+  "englishN": 12
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -79,9 +79,9 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 7,
-    "sold": 6,
+    "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -131,7 +131,7 @@
     "medianUsd": 7,
     "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -533,7 +533,7 @@
     "medianUsd": 1.04,
     "sold": 8,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -693,7 +693,7 @@
     "medianUsd": 3.25,
     "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -721,7 +721,7 @@
     "medianUsd": 20,
     "sold": 8,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -787,13 +787,19 @@
    "features": "The Seven Warlords of the Sea/Kuja Pirates",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 22,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-10-27"
+   },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 2.25,
     "sold": 13,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -953,7 +959,7 @@
     "medianUsd": 5.99,
     "sold": 4,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1047,7 +1053,7 @@
     "medianUsd": 5.6,
     "sold": 6,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1227,9 +1233,9 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 3.25,
-    "sold": 4,
+    "sold": 3,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1345,7 +1351,7 @@
     "medianUsd": 2.25,
     "sold": 6,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1546,16 +1552,16 @@
    "auction": {
     "print": "Japanese",
     "medianUsd": 3.75,
-    "sold": 5,
+    "sold": 6,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 6.5,
-    "sold": 13,
+    "sold": 15,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1582,14 +1588,14 @@
     "medianUsd": 20.02,
     "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 35,
     "sold": 10,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1614,10 +1620,10 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 42,
-    "sold": 19,
+    "medianUsd": 39,
+    "sold": 18,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1642,10 +1648,10 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 6.99,
-    "sold": 9,
+    "medianUsd": 5.5,
+    "sold": 10,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1672,14 +1678,14 @@
     "medianUsd": 8.75,
     "sold": 3,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 20.5,
-    "sold": 4,
+    "medianUsd": 30,
+    "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1838,14 +1844,14 @@
     "medianUsd": 1.5,
     "sold": 5,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 2.25,
-    "sold": 12,
+    "medianUsd": 3,
+    "sold": 13,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1917,16 +1923,16 @@
    "auction": {
     "print": "Japanese",
     "medianUsd": 6.5,
-    "sold": 7,
+    "sold": 8,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 5.5,
     "sold": 3,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -1953,7 +1959,7 @@
     "medianUsd": 5.5,
     "sold": 4,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "auctionEnglishPrint": null,
    "psa10": null,
@@ -2160,7 +2166,7 @@
     "medianUsd": 325,
     "sold": 4,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": null,
    "cardPage": null
@@ -2221,7 +2227,7 @@
     "medianUsd": 920,
     "sold": 4,
     "windowDays": 45,
-    "through": "2026-10-26"
+    "through": "2026-10-27"
    },
    "psa10": {
     "usd": 894,

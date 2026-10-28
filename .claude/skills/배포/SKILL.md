@@ -14,6 +14,7 @@ cd /c/Users/kimtt/opbox-heartbeat/repo && node tools/ship.js -m "<무엇을 왜 
 - `--paths` 에는 내가 손댄 소스(생성기·손으로 쓰는 HTML·원장·문서)를 적는다. build 산출물은 ship.js 가 pull 뒤에 다시 굽고 같이 커밋한다 — 미리 build 하지 않아도 된다.
 - 커밋 메시지는 한국어, 무엇을 몇 건 바꿨는지 숫자로. `Co-Authored-By` 줄은 ship.js 가 붙인다.
 - 먼저 `--dry-run` 으로 볼 필요는 없다(같은 검사를 다 하고 커밋 직전에 멈출 뿐). 노출 변경이 섞였을 것 같을 때만 쓴다.
+- 멈추거나 `--dry-run` 이 끝나면 build 가 바꾼 파일은 ship.js 가 되돌린다 — 시작할 때의 내 변경만 남으니 고친 뒤 **같은 명령을 그대로** 다시 돌린다.
 
 ## ship.js 가 하는 일 (순서가 곧 규칙)
 
@@ -24,6 +25,8 @@ cd /c/Users/kimtt/opbox-heartbeat/repo && node tools/ship.js -m "<무엇을 왜 
 5. 비밀·문서 파일, 토큰 모양 문자열, **검색 노출 변경**을 검사한다(아래 표).
 6. `node tools/check.js --gate --fast` — 무인·워크플로와 같은 관문. 종료코드를 spawnSync 로 직접 본다.
 7. 커밋 → `git push origin HEAD:main`(`GCM_INTERACTIVE=never`, `GIT_TERMINAL_PROMPT=0`) → 남은 미커밋 변경이 없는지 확인 → 확인 명령 출력.
+
+build 는 매번 `feed.xml`·`ko/feed.xml`(빌드 시각) 등 몇 파일을 바꾸므로 내 변경이 없어도 작은 커밋이 생길 수 있다 — 정상이다.
 
 ## 멈췄을 때 (종료코드)
 
@@ -41,7 +44,7 @@ cd /c/Users/kimtt/opbox-heartbeat/repo && node tools/ship.js -m "<무엇을 왜 
 | 11 | 원격 주소 | `git remote set-url origin https://opboxindex@github.com/opboxindex/k-tcg-quant.git` |
 | 12 | push 뒤 미커밋 남음 | 목록이 무엇인지 보고 커밋하거나 되돌린다 |
 
-멈춘 채로 작업을 끝내지 않는다. **고쳐서 올리거나, 버릴 거면 되돌린다.** 미커밋 변경이 남으면 다음 날 08:30 daily.ps1 이 `git add -A` 로 검토 없이 공개 저장소에 올린다.
+멈춘 채로 작업을 끝내지 않는다. **고쳐서 올리거나, 버릴 거면 내 변경도 되돌린다**(`git checkout HEAD -- <파일>`, 새 파일은 삭제 — 남의 변경은 건드리지 않는다). 미커밋 변경이 남으면 다음 날 08:30 daily.ps1 이 `git add -A` 로 검토 없이 공개 저장소에 올린다.
 
 ### 검색 노출 변경(코드 9) — 저장소 CLAUDE.md 절대 규칙 1
 

@@ -5,7 +5,7 @@
 // 왜: 2026-10-28 `node tools/check.js --gate --fast | tail -2 && git push` 로 이었더니 관문이 FAIL(exit 1)인데도 푸시됐다 —
 //   파이프의 종료코드는 마지막 명령(tail)의 것이다. FAIL 원인은 클라우드 커밋을 pull 한 뒤 build 를 안 돌린 낡은 생성물이었다.
 //   그래서 순서는 언제나 pull → build → 관문이고, 종료코드는 spawnSync 의 status 로 직접 본다. 셸 파이프는 어디에도 없다.
-// 멈춤(종료코드) — 멈추면 아무것도 커밋·push 하지 않는다
+// 멈춤(종료코드) — 멈추면 아무것도 커밋·push 하지 않고, build 가 바꾼 파일은 되돌린다(시작할 때의 내 변경만 남긴다)
 //   3 무인 수집과 겹침: 08:30~09:30 KST 이거나 작업 스케줄러 opbox-box-sold 실행 중(daily.ps1 이 같은 checkout 에서 pull·push 한다)
 //   4 --paths 밖의 미커밋 변경(남의 작업·잡파일을 같이 올리지 않는다)   5 pull 실패·충돌   6 build 실패
 //   7 관문(check.js --gate --fast) FAIL — 푸시 금지(소유자 절대 지시)
@@ -15,7 +15,8 @@
 // Run: node tools/ship.js -m "<커밋 메시지>" [--paths a b ...] [--dry-run] [--seo-ok] [--force-window]
 //      node tools/ship.js --verify <sha>   push 뒤 Pages 배포·라이브 반영 확인(읽기 전용: 공개 API·라이브 GET, 30초 간격 최대 8분 — Bash 포그라운드 한 번(timeout 600000)에 끝난다)
 //   --paths   내가 고친 파일·폴더. 이 밖에 미커밋 변경이 있으면 멈춘다. 커밋에는 이 경로 + pull 뒤 build 가 바꾼 생성물이 들어간다.
-//   --dry-run 커밋 직전까지(pull·build·검사·관문) 돌고 올라갈 목록만 보여준다. build 가 바꾼 파일은 작업 트리에 남는다.
+//   --dry-run 커밋 직전까지(pull·build·검사·관문) 돌고 올라갈 목록만 보여준다. build 가 바꾼 파일은 되돌린다.
+const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
@@ -24,7 +25,7 @@ const PAGES_RUNS = "https://api.github.com/repos/opboxindex/k-tcg-quant/actions/
 const SITE = "https://opboxindex.com";
 const TRAILER = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>";
 const USAGE = 'node tools/ship.js -m "<메시지>" [--paths a b ...] [--dry-run] [--seo-ok] [--force-window] | --verify <sha>';
-const TIDY = "고쳐서 다시 실행하거나, 이번 변경을 버린다면 되돌린다 — 미커밋 변경을 남긴 채 끝내지 않는다(08:30 daily.ps1 이 git add -A 로 검토 없이 올린다).";
+const TIDY = "고쳐서 같은 명령을 다시 실행하거나, 이번 변경을 버린다면 되돌린다 — 미커밋 변경을 남긴 채 끝내지 않는다(08:30 daily.ps1 이 git add -A 로 검토 없이 올린다).";
 
 // 공개 저장소에 올라가면 안 되는 파일. 회사·개인 자료는 거의 문서 파일이라 확장자로 막는다 — 이 저장소는 문서 파일을 하나도 추적하지 않는다(2026-10-28 git ls-files).
 const FORBIDDEN_FILE = /(^|\/)\.env(\.|$)|(^|\/)(id_rsa|id_ed25519)|(^|\/)auth\.json$|\.(pem|key|p12|pfx|xlsx?|xlsm|hwpx?|docx?|pptx?|pdf|zip|7z)$/i;
@@ -164,6 +165,18 @@ function runNode(args) {
   return r.error ? 1 : (r.status ?? 1);
 }
 const changedPages = (files) => files.filter((p) => /\.html$/.test(p) && !p.startsWith("_"));
+// build 가 바꾼 파일을 되돌린다(멈출 때·--dry-run). 시작할 때 있던 내 변경(mine)은 건드리지 않는다.
+//   왜: 생성물이 남으면 ① 같은 명령을 다시 돌릴 때 '--paths 밖 변경'(4)으로 멈추고 ② 08:30 daily.ps1 이 검토 없이 올린다.
+//   생성물은 커밋된 data/ 에서 결정적으로 다시 구워지니(tools/build.js) 버려도 잃는 것이 없다.
+function restoreBuild(mine) {
+  git(["reset", "-q"]);
+  const keep = new Set(mine);
+  const tracked = zlist(["diff", "--name-only", "HEAD"]).filter((f) => !keep.has(f));
+  const fresh = zlist(["ls-files", "--others", "--exclude-standard"]).filter((f) => !keep.has(f));
+  for (let i = 0; i < tracked.length; i += 200) git(["checkout", "HEAD", "--", ...tracked.slice(i, i + 200)]); // 명령줄 길이 한도
+  fresh.forEach((f) => fs.rmSync(path.join(ROOT, f), { force: true }));
+  return tracked.length + fresh.length;
+}
 
 function ship(o) {
   // 0. 무인 수집과 겹치지 않게
@@ -193,54 +206,54 @@ function ship(o) {
   const stash0 = stashes();
   console.log("\nship: git pull --rebase --autostash origin main");
   const pull = git(["pull", "--rebase", "--autostash", "origin", "main"], { allowFail: true });
+  const said = `${pull.stdout || ""}\n${pull.stderr || ""}`.split("\n").map((l) => l.trim()).filter((l) => l && !/\|\s+\d+|files? changed|^From |^\* branch|autostash/i.test(l));
+  console.log(`  ${said.slice(-2).join(" · ") || (pull.status === 0 ? "ok" : "")}`);
   const unmerged = zlist(["diff", "--name-only", "--diff-filter=U"]);
   if (pull.status !== 0 || unmerged.length || stashes() > stash0) {
     stop(5, "pull 이 깨끗하게 끝나지 않았다", [...String(pull.stderr || pull.stdout).trim().split("\n").slice(-8), ...unmerged.map((f) => `미병합: ${f}`)],
       "생성물 충돌이면 생성물은 HEAD 쪽으로 되돌리고(build 가 다시 굽는다), 소스 충돌이면 손으로 합친다. 리베이스 중이면 git rebase --continue 또는 --abort, autostash 가 남았으면 git stash list 확인.");
   }
   const base = out(["merge-base", "HEAD", "origin/main"]).trim();
+  // 여기부터 멈추면 build 산출물을 되돌리고 멈춘다 — 같은 명령을 그대로 다시 돌릴 수 있게.
+  const fail = (code, msg, list = []) => { const n = restoreBuild(before); stop(code, msg, list, `${TIDY}\n(build 가 바꾼 파일 ${n}개는 되돌렸다 — 시작할 때의 내 변경만 남아 있다)`); };
 
   // 4. build — pull 뒤에 반드시(10/28 FAIL 의 원인). 5. 관문은 검사 뒤에.
   console.log("\nship: node tools/build.js");
-  if (runNode([path.join("tools", "build.js")]) !== 0) stop(6, "build 실패 — 위 FAIL 단계 출력을 본다", [], TIDY);
+  if (runNode([path.join("tools", "build.js")]) !== 0) fail(6, "build 실패 — 위 FAIL 단계 출력을 본다");
 
   // 6. 올라갈 것 전부 스테이징 → 비밀·문서·노출 검사(관문보다 먼저 — 빨리 멈춘다)
   git(["add", "-A"]);
   const t = zlist(["diff", "--cached", "--name-status", "--no-renames", base]);
   const staged = [];
   for (let i = 0; i + 1 < t.length; i += 2) staged.push({ status: t[i][0], path: t[i + 1] });
-  const unstage = () => git(["reset", "-q"]);
   const bad = forbidden(staged.filter((e) => e.status !== "D").map((e) => e.path));
-  if (bad.length) { unstage(); stop(8, "공개 저장소에 올리면 안 되는 파일", bad, TIDY); }
+  if (bad.length) fail(8, "공개 저장소에 올리면 안 되는 파일", bad);
   const lines = diffLines(out(["diff", "--cached", "-U0", "--no-renames", "--no-color", base]));
   const leaks = secretHits(lines);
-  if (leaks.length) { unstage(); stop(8, "토큰·개인키 모양 문자열이 추가된다(값은 찍지 않는다) — 그 줄을 지운다", leaks, TIDY); }
+  if (leaks.length) fail(8, "토큰·개인키 모양 문자열이 추가된다(값은 찍지 않는다) — 그 줄을 지운다", leaks);
   const touched = (p) => { const d = lines.get(p); return !!d && [...d.add, ...d.del].some((l) => SEO_LINE.test(l)); };
   const entries = staged
     .filter((e) => e.status === "D" || PROTECTED.test(e.path) || e.path === "sitemap.xml" || (e.status === "M" && /\.html?$/i.test(e.path) && touched(e.path)))
     .map((e) => ({ ...e, old: e.status === "A" ? null : blob(base, e.path), new: e.status === "D" ? null : blob("", e.path) }));
   const seo = seoHits(entries);
-  if (seo.length && !o.seoOk) {
-    unstage();
-    stop(9, `검색 노출 변경 ${seo.length}건 — 소유자 확인 필수(CLAUDE.md 절대 규칙 1). 확인받았으면 같은 명령에 --seo-ok`, seo);
-  }
+  if (seo.length && !o.seoOk) fail(9, `검색 노출 변경 ${seo.length}건 — 소유자 확인 필수(CLAUDE.md 절대 규칙 1). 확인받았으면 같은 명령에 --seo-ok`, seo);
   if (seo.length) console.log(`노출 변경 ${seo.length}건 — --seo-ok(소유자 확인됨)로 진행:\n${seo.map((s) => `  ${s}`).join("\n")}`);
 
   // 7. 관문 — 무인(daily.ps1)·워크플로와 같은 것. 종료코드를 직접 본다(파이프 금지의 이유).
   console.log("\nship: node tools/check.js --gate --fast");
   const gate = runNode([path.join("tools", "check.js"), "--gate", "--fast"]);
-  if (gate !== 0) { unstage(); stop(7, `관문 FAIL(exit ${gate}) — push 하지 않는다. 위 '── 검사 이름' 아래 이유를 고친 뒤 다시`, [], TIDY); }
+  if (gate !== 0) fail(7, `관문 FAIL(exit ${gate}) — push 하지 않는다. 위 '── 검사 이름' 아래 이유를 고친 뒤 다시`);
 
   const ahead = Number(out(["rev-list", "--count", `${base}..HEAD`]).trim());
   const message = /co-authored-by:/i.test(o.message) ? o.message.trim() : `${o.message.trim()}\n\n${TRAILER}`;
   if (!staged.length && !ahead) { console.log("\nship OK — 올릴 것이 없다(작업 트리 깨끗, origin/main 과 같음)"); return; }
   if (o.dryRun) {
-    unstage();
+    const n = restoreBuild(before);
     console.log(`\nship DRY-RUN OK — 커밋·push 직전에 멈췄다. 올라갈 파일 ${staged.length}개${ahead ? ` + 아직 안 올린 커밋 ${ahead}개` : ""}:`);
     staged.slice(0, 40).forEach((e) => console.log(`  ${e.status} ${e.path}`));
     if (staged.length > 40) console.log(`  … 외 ${staged.length - 40}개`);
     console.log(`커밋 메시지:\n${message.replace(/^/gm, "  | ")}`);
-    console.log("변경은 작업 트리에 남아 있다 — 올리려면 --dry-run 없이 다시, 아니면 되돌린다.");
+    console.log(`build 가 바꾼 파일 ${n}개는 되돌렸다. 올리려면 --dry-run 없이 같은 명령(그때 다시 굽는다).`);
     return;
   }
 

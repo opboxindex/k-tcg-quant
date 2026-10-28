@@ -144,7 +144,7 @@ node tools/guard-invariants.js
 **가드가 FAIL 이면 절대 푸시하지 않는다**(소유자 절대지시). `head` 로 확인한다 — `tail` 로 보면
 배열 닫는 괄호만 보여서 FAIL 을 놓친다(2026-09-02 실수).
 
-커밋·푸시는 `배포` 스킬로 한다: `node tools/ship.js -m "<무엇을 몇 건>" --paths <바꾼 원장·파일>` —
+커밋·푸시는 개인 스킬 `opbox-배포`(`C:\Users\kimtt\.claude\skills\opbox-배포\SKILL.md`)로 한다: `node tools/ship.js -m "<무엇을 몇 건>" --paths <바꾼 원장·파일>` —
 pull → build → 관문(`check.js --gate --fast`)을 순서대로 돌고 FAIL 이면 멈춘다. guard 단독 통과나 `| tail && git push` 로 올리지 않는다(2026-10-28 사고).
 커밋 메시지에는 **무엇을 몇 건 넣었는지 숫자로** 적는다.
 

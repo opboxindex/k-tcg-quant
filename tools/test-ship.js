@@ -3,12 +3,13 @@
 // tools/ship.js 순수 함수 검사 — 2026-10-28. git·네트워크 없음(check.js 가 모든 관문에서 돌린다 — 빠르고 저장소를 건드리지 않게).
 //  · 08:30~09:30 KST 는 막는다(경계: 08:30 막음, 09:30 통과) — 이 PC 시간대와 무관하게 UTC 로 센다
 //  · --paths 밖 변경, 비밀·문서 파일, 토큰 모양 문자열을 잡는다(가짜 토큰은 이 파일이 스스로 걸리지 않게 실행 중에 조립한다)
-//  · 노출 변경(noindex 추가·canonical/hreflang 변경·사이트맵 URL 제거·페이지 삭제·title 변경)만 잡고,
+//  · 노출 변경(noindex 추가·canonical/hreflang 변경·사이트맵 URL 제거·페이지 삭제·title/h1 변경)만 잡고,
 //    노출을 늘리는 쪽(새 페이지·noindex 해제·사이트맵 추가)과 줄바꿈만 바뀐 페이지는 통과
+//  · title/h1 은 내가 고친 페이지(또는 생성기 코드를 고쳤을 때)만 — 생성기가 데이터로 바꾼 title 은 참고로만
 // Run: node tools/test-ship.js
 const assert = require("node:assert/strict");
 const path = require("node:path");
-const { parseArgs, inCollectionWindow, outside, forbidden, diffLines, secretHits, seoHits } = require("./ship");
+const { parseArgs, inCollectionWindow, outside, forbidden, diffLines, secretHits, titleScope, seoHits } = require("./ship");
 
 // 인자
 {
@@ -35,6 +36,7 @@ assert.equal(inCollectionWindow(new Date("2026-10-28T03:00:00Z")), false, "12:00
 assert.deepEqual(outside(["tools/a.js", "sets/op-01.html", "notes.txt", "setsX/y.html"], ["tools/a.js", "sets"]), ["notes.txt", "setsX/y.html"]);
 assert.deepEqual(forbidden([".env", "a/.env.local", "x/정산.xlsx", "scan.PDF", "doc.hwp", "id_rsa", "auth.json", "opbox-set-prices.csv", "tools/ship.js", "envoy.html"]),
   [".env", "a/.env.local", "x/정산.xlsx", "scan.PDF", "doc.hwp", "id_rsa", "auth.json"]);
+assert.deepEqual(forbidden([".env.example", ".env.example.bak", ".envrc"]), [".env.example.bak"], ".env.example 은 값 없는 공개 견본");
 
 // diff 파싱 · 토큰 모양
 {
@@ -55,11 +57,11 @@ assert.deepEqual(forbidden([".env", "a/.env.local", "x/정산.xlsx", "scan.PDF",
 
 // 노출 변경
 {
-  const page = ({ robots = "index,follow", canonical = "https://opboxindex.com/sets/op-01.html", ko = "https://opboxindex.com/ko/op-01.html", title = "OP-01 Booster Box Price", body = "" } = {}) =>
+  const page = ({ robots = "index,follow", canonical = "https://opboxindex.com/sets/op-01.html", ko = "https://opboxindex.com/ko/op-01.html", title = "OP-01 Booster Box Price", h1 = "OP-01 <span>Romance Dawn</span>", body = "" } = {}) =>
     `<!doctype html>\r\n<html><head><title>${title}</title>\r\n<meta name="robots" content="${robots}" />\n<link rel="canonical" href="${canonical}" />\n` +
-    `<link rel="alternate" hreflang="en" href="https://opboxindex.com/sets/op-01.html" />\n<link rel="alternate" hreflang="ko" href="${ko}" />\n</head><body>${body}<svg><title>chart</title></svg></body></html>`;
+    `<link rel="alternate" hreflang="en" href="https://opboxindex.com/sets/op-01.html" />\n<link rel="alternate" hreflang="ko" href="${ko}" />\n</head><body><h1 class="t">${h1}</h1>${body}<svg><title>chart</title></svg></body></html>`;
   const M = (path, old, nw) => ({ status: "M", path, old, new: nw });
-  const hits = (entries) => seoHits(entries).map((h) => h.split(":")[1].trim().split(/[ "]/)[0]);
+  const hits = (entries, scope) => seoHits(entries, scope).map((h) => h.split(":")[1].trim().split(/[ "]/)[0]);
 
   assert.deepEqual(seoHits([M("sets/op-01.html", page(), page({ body: "$350" }).replace(/\r\n/g, "\n"))]), [], "본문·줄바꿈만 바뀌면 통과");
   assert.deepEqual(hits([M("sets/op-01.html", page(), page({ robots: "noindex,follow" }))]), ["noindex"]);
@@ -67,6 +69,18 @@ assert.deepEqual(forbidden([".env", "a/.env.local", "x/정산.xlsx", "scan.PDF",
   assert.deepEqual(hits([M("sets/op-01.html", page(), page({ canonical: "https://opboxindex.com/" }))]), ["canonical"]);
   assert.deepEqual(hits([M("sets/op-01.html", page(), page({ ko: "https://opboxindex.com/ko/" }))]), ["hreflang"]);
   assert.deepEqual(hits([M("sets/op-01.html", page(), page({ title: "OP-01 Box" }))]), ["title"]);
+  assert.deepEqual(hits([M("sets/op-01.html", page(), page({ h1: "OP-01 tips" }))]), ["h1"]);
+  assert.deepEqual(seoHits([M("sets/op-01.html", page(), page({ h1: "OP-01 <b>Romance Dawn</b>" }))]), [], "h1 은 글자만 비교(태그만 바뀌면 통과)");
+
+  // title·h1 범위 — 생성기가 데이터로 바꾼 title(기준일 등)은 내 페이지가 아니면 참고로만
+  const dated = M("ko/index.html", page({ title: "박스 시세 (2026-10-26 기준)" }), page({ title: "박스 시세 (2026-10-28 기준)" }));
+  const notes = [];
+  assert.deepEqual(seoHits([dated], titleScope(["articles/reseal-checklist.html", "data/box-sold-ledger.json"]), notes), [], "build 산출물의 title 은 잡지 않는다");
+  assert.equal(notes.length, 1, "대신 참고로 남긴다");
+  assert.deepEqual(hits([dated], titleScope(["ko/index.html"])), ["title"], "내가 고친 페이지면 잡는다");
+  assert.equal(seoHits([dated], titleScope(["tools/generate-set-pages.js"])).length, 1, "생성기 코드를 고쳤으면 모든 페이지를 본다");
+  assert.equal(seoHits([dated], titleScope(["tools/test-ship.js"])).length, 0, "테스트 파일은 생성기가 아니다");
+  assert.equal(seoHits([M("ko/index.html", page(), page({ robots: "noindex" }))], titleScope([])).length, 1, "noindex 는 범위와 상관없이 잡는다");
   assert.deepEqual(hits([{ status: "D", path: "articles/old.html", old: page(), new: null }]), ["페이지"]);
   assert.deepEqual(seoHits([{ status: "A", path: "articles/new.html", old: null, new: page({ robots: "noindex" }) }]), [], "새 페이지는 허용");
   assert.deepEqual(seoHits([M("tools/x.js", "<title>a</title>", "<title>b</title>")]), [], "HTML 이 아니면 보지 않는다");

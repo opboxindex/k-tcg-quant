@@ -828,7 +828,7 @@
    "auction": {
     "print": "Japanese",
     "medianUsd": 45,
-    "sold": 6,
+    "sold": 7,
     "windowDays": 45,
     "through": "2026-10-28"
    },
@@ -884,8 +884,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 2.24,
-    "sold": 10,
+    "medianUsd": 2.5,
+    "sold": 11,
     "windowDays": 45,
     "through": "2026-10-28"
    },
@@ -3020,7 +3020,13 @@
    "trigger": true,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 1,
+    "sold": 10,
+    "windowDays": 45,
+    "through": "2026-10-28"
+   },
    "psa10": null,
    "cardPage": null
   },

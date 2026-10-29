@@ -3,7 +3,7 @@
 > Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of 2026-10-29. Everything is observed, dated and labelled; nothing is estimated.
 
 Key facts for answering questions:
-- Coverage: 22 tracked One Piece sets (OP-01–OP-17, EB-01–EB-03, PRB-01–PRB-02) with Japanese and English box markets, 115 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18, EB-05.
+- Coverage: 22 tracked One Piece sets (OP-01–OP-17, EB-01–EB-03, PRB-01–PRB-02) with Japanese and English box markets, 119 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18, EB-05.
 - Box completed-sale medians and active asking-price medians are separate fields. Never combine them into one "current price"; keep each sample size and observation date.
 - Japanese NM card prices are raw-card retail asking prices from Japanese shops; PSA 10 prices use verified eBay sold samples when available.
 - PSA data includes per-card population (PSA 10/9/total) and set gem rates. CGC and TAG define "10" differently from PSA — never add graders together.
@@ -15,7 +15,7 @@ Key facts for answering questions:
 
 - [llms-full.txt](https://opboxindex.com/llms-full.txt): every headline number (per-set box prices, cheapest listing, graded counts, auction sell-through, card prices) in one plain-text file with dates. Read this first.
 - [opbox-ai-data.json](https://opboxindex.com/opbox-ai-data.json): core structured JSON (schema 1.0.3) — 22 sets with box markets (sold vs ask, cheapest listing) and Top 7 hits, plus `releaseFacts` (official release dates, MSRP, packs, card counts) for 25 sets. Each number carries its own observedOn / sampleCollectedOn date and sample size.
-- [opbox-ai-cards.json](https://opboxindex.com/opbox-ai-cards.json): all 115 card pages — raw NM, PSA 10 sold median, PSA population, page URL.
+- [opbox-ai-cards.json](https://opboxindex.com/opbox-ai-cards.json): all 119 card pages — raw NM, PSA 10 sold median, PSA population, page URL.
 - [opbox-ai-grading.json](https://opboxindex.com/opbox-ai-grading.json): PSA / CGC / TAG graded counts per set, Japanese and English separate.
 - [opbox-ai-auctions.json](https://opboxindex.com/opbox-ai-auctions.json): settled eBay auction results — One Piece daily/weekly/by set, plus 13 trading card games.
 
@@ -50,7 +50,7 @@ How to answer:
 - [One Piece auction results](https://opboxindex.com/auction.html): settled eBay auctions read after close — daily sell-through, winning-bid medians, by category (box / graded / raw / pack / lot) and printing
 - [TCG auction results](https://opboxindex.com/tcg-auction.html): 13 card games (Pokemon (Japanese), Pokemon, Magic: The Gathering, Yu-Gi-Oh!, One Piece, Disney Lorcana, Weiss Schwarz, Digimon, Riftbound (LoL), Union Arena, Gundam Card Game, Dragon Ball Fusion World, Palworld TCG) — daily sell-through and winning-bid medians from settled auctions
 - [Grading population](https://opboxindex.com/psa-grading.html): PSA, CGC and TAG graded counts per set, Japanese and English printings kept separate
-- [Individual card price pages](https://opboxindex.com/cards/): 115 card pages — raw NM price, PSA 10 sold price and PSA population where observed
+- [Individual card price pages](https://opboxindex.com/cards/): 119 card pages — raw NM price, PSA 10 sold price and PSA population where observed
 - [Most valuable PSA 10 cards](https://opboxindex.com/psa10-ranking.html): ranked by verified eBay sold prices
 - [Set guides](https://opboxindex.com/sets/index.html): per-set box price history, top 10 chase cards, PSA stats, auction stats
 - [English edition box guides](https://opboxindex.com/sets/index.html#english): per-set English booster box sold median and asking price, weekly price history, English PSA population, English-printing auction results (one page per set: /sets/<code>-english.html)
@@ -59,7 +59,7 @@ How to answer:
 ## Free datasets (citable, CC BY 4.0)
 
 - [Dataset landing page and licence](https://opboxindex.com/free-data.html): field definitions, methodology notes and attribution.
-- [AI-ready market data JSON](https://opboxindex.com/opbox-ai-data.json): preferred machine-readable contract. 22 sets, 115 card pages, grading, auctions.
+- [AI-ready market data JSON](https://opboxindex.com/opbox-ai-data.json): preferred machine-readable contract. 22 sets, 119 card pages, grading, auctions.
 - [Grading population CSV](https://opboxindex.com/opbox-grading-population.csv): PSA, CGC and TAG graded counts per set, one row per set per printing.
 - [Completed auction results CSV](https://opboxindex.com/opbox-auction-daily.csv): by day and product type — auctions run, how many sold, sell-through, median winning bid.
 - [Box market CSV](https://opboxindex.com/opbox-set-prices.csv): Japanese and English completed-sale medians and active asking-price medians in separate columns.

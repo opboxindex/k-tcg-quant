@@ -1,162 +1,12 @@
 {
- "updated": "2026-10-28T01:07:11.726Z",
+ "updated": "2026-10-29T01:55:40.734Z",
  "hideSuspiciousNm": false,
  "summary": {
-  "issues": 113,
+  "issues": 22,
   "block": 0,
-  "review": 113
+  "review": 22
  },
  "issues": [
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 2,
-   "number": "OP01-003",
-   "name": "Monkey D. Luffy 003 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1057,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 3,
-   "number": "OP01-001",
-   "name": "Roronoa Zoro 001 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 543,
-    "updated": "2026-09-14",
-    "sampleSize": 19,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 4,
-   "number": "OP01-002",
-   "name": "Trafalgar Law 002 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 270,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 5,
-   "number": "OP01-016",
-   "name": "Nami Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 245,
-    "updated": "2026-09-14",
-    "sampleSize": 14,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 7,
-   "number": "OP01-025",
-   "name": "Roronoa Zoro 025 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 631,
-    "updated": "2026-09-14",
-    "sampleSize": 12,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 8,
-   "number": "OP01-024",
-   "name": "Monkey D. Luffy 024 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 262,
-    "updated": "2026-09-14",
-    "sampleSize": 24,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 9,
-   "number": "OP01-078",
-   "name": "Boa Hancock Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 299,
-    "updated": "2026-09-14",
-    "sampleSize": 15,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-01",
-   "rank": 10,
-   "number": "OP01-062",
-   "name": "Crocodile 062 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 218697,
-    "updated": "2026-06-29",
-    "sampleSize": 2,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-02",
-   "rank": 2,
-   "number": "OP02-026",
-   "name": "Sanji Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 247006,
-    "updated": "2026-06-29",
-    "sampleSize": 2,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-02",
-   "rank": 3,
-   "number": "OP02-002",
-   "name": "Monkey D. Garp 002 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 244,
-    "updated": "2026-08-31",
-    "sampleSize": 4,
-    "days": 58
-   }
-  },
   {
    "severity": "review",
    "code": "OP-02",
@@ -169,7 +19,7 @@
     "middle": 148663,
     "updated": "2026-06-29",
     "sampleSize": 4,
-    "days": 121
+    "days": 122
    }
   },
   {
@@ -184,52 +34,7 @@
     "middle": 108,
     "updated": "2026-09-14",
     "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-02",
-   "rank": 6,
-   "number": "OP02-062",
-   "name": "Monkey D. Luffy 062 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 250,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-02",
-   "rank": 7,
-   "number": "OP02-036",
-   "name": "Nami Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 236,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-02",
-   "rank": 8,
-   "number": "OP02-041",
-   "name": "Monkey D. Luffy 041 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 145,
-    "updated": "2026-08-31",
-    "sampleSize": 5,
-    "days": 58
+    "days": 45
    }
   },
   {
@@ -244,7 +49,7 @@
     "middle": 383677,
     "updated": "2026-06-29",
     "sampleSize": 3,
-    "days": 121
+    "days": 122
    }
   },
   {
@@ -259,22 +64,7 @@
     "middle": 1147931,
     "updated": "2026-06-29",
     "sampleSize": 10,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-03",
-   "rank": 2,
-   "number": "ST01-012",
-   "name": "Monkey D. Luffy Wanted Poster",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 777,
-    "updated": "2026-08-31",
-    "sampleSize": 6,
-    "days": 58
+    "days": 122
    }
   },
   {
@@ -289,7 +79,7 @@
     "middle": 238,
     "updated": "2026-09-14",
     "sampleSize": 4,
-    "days": 44
+    "days": 45
    }
   },
   {
@@ -304,7 +94,7 @@
     "middle": 168103,
     "updated": "2026-06-29",
     "sampleSize": 4,
-    "days": 121
+    "days": 122
    }
   },
   {
@@ -319,22 +109,7 @@
     "middle": 145803,
     "updated": "2026-06-29",
     "sampleSize": 3,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-03",
-   "rank": 6,
-   "number": "OP03-099",
-   "name": "Charlotte Katakuri 099 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 120,
-    "updated": "2026-08-31",
-    "sampleSize": 3,
-    "days": 58
+    "days": 122
    }
   },
   {
@@ -349,172 +124,7 @@
     "middle": 207,
     "updated": "2026-09-14",
     "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-04",
-   "rank": 1,
-   "number": "OP01-078",
-   "name": "Boa Hancock SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1124,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-04",
-   "rank": 2,
-   "number": "OP04-083",
-   "name": "Sabo Alternate Art Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1074,
-    "updated": "2026-09-14",
-    "sampleSize": 7,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-04",
-   "rank": 3,
-   "number": "OP01-047",
-   "name": "Trafalgar Law SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 305,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-05",
-   "rank": 3,
-   "number": "OP05-069",
-   "name": "Trafalgar Law 069 Alternate Art Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 2074,
-    "updated": "2026-09-14",
-    "sampleSize": 15,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-05",
-   "rank": 5,
-   "number": "OP01-016",
-   "name": "Nami SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 444,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-05",
-   "rank": 7,
-   "number": "OP02-120",
-   "name": "Uta SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 300,
-    "updated": "2026-09-14",
-    "sampleSize": 7,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-05",
-   "rank": 8,
-   "number": "OP01-121",
-   "name": "Yamato SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 250,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-05",
-   "rank": 9,
-   "number": "OP05-100",
-   "name": "Enel 100 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 260,
-    "updated": "2026-09-14",
-    "sampleSize": 7,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 1,
-   "number": "OP06-118",
-   "name": "Roronoa Zoro Alternate Art Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 2768,
-    "updated": "2026-09-14",
-    "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 2,
-   "number": "OP04-064",
-   "name": "Ms All Sunday SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 346751,
-    "updated": "2026-06-29",
-    "sampleSize": 2,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 3,
-   "number": "ST01-007",
-   "name": "Nami TR",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 599,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
+    "days": 45
    }
   },
   {
@@ -529,66 +139,6 @@
     "nmJpy": 7980,
     "nmUpdated": null,
     "nmVenue": "遊々亭"
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 6,
-   "number": "OP05-091",
-   "name": "Rebecca SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 225,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 8,
-   "number": "OP06-022",
-   "name": "Yamato Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 120,
-    "updated": "2026-09-14",
-    "sampleSize": 13,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-06",
-   "rank": 10,
-   "number": "OP06-021",
-   "name": "Perona 021 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 73,
-    "updated": "2026-09-14",
-    "sampleSize": 5,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-01",
-   "rank": 1,
-   "number": "EB01-006",
-   "name": "Tony TonyChopper Alternate Art Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 2815,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
    }
   },
   {
@@ -608,21 +158,6 @@
   {
    "severity": "review",
    "code": "EB-01",
-   "rank": 3,
-   "number": "EB01-061",
-   "name": "Mr2BonKurei Bentham Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 222,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-01",
    "rank": 4,
    "number": "EB01-048",
    "name": "Laboon 048 Alternate Art",
@@ -632,22 +167,7 @@
     "middle": 320,
     "updated": "2026-08-31",
     "sampleSize": 3,
-    "days": 58
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-01",
-   "rank": 7,
-   "number": "EB01-021",
-   "name": "Hannyabal Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 55,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
+    "days": 59
    }
   },
   {
@@ -662,7 +182,7 @@
     "middle": 220,
     "updated": "2026-09-14",
     "sampleSize": 5,
-    "days": 44
+    "days": 45
    }
   },
   {
@@ -677,97 +197,7 @@
     "middle": 62783,
     "updated": "2026-06-29",
     "sampleSize": 2,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-07",
-   "rank": 1,
-   "number": "OP07-051",
-   "name": "Boa Hancock 051 Parallel Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1971,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-07",
-   "rank": 2,
-   "number": "OP06-101",
-   "name": "O Nami SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 509,
-    "updated": "2026-08-31",
-    "sampleSize": 8,
-    "days": 58
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-07",
-   "rank": 4,
-   "number": "OP07-038",
-   "name": "Boa Hancock 038 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 230,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-07",
-   "rank": 6,
-   "number": "OP05-074",
-   "name": "EustassCaptainKid SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 106578,
-    "updated": "2026-06-29",
-    "sampleSize": 3,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-07",
-   "rank": 9,
-   "number": "OP07-019",
-   "name": "Jewelry Bonney 019 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 120,
-    "updated": "2026-09-14",
-    "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 1,
-   "number": "OP08-118",
-   "name": "Silvers Rayleigh Parallel Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 921,
-    "updated": "2026-09-14",
-    "sampleSize": 20,
-    "days": 44
+    "days": 122
    }
   },
   {
@@ -782,217 +212,7 @@
     "middle": 285843,
     "updated": "2026-06-29",
     "sampleSize": 10,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 4,
-   "number": "ST02-007",
-   "name": "Jewelry Bonney SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 300,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 5,
-   "number": "OP03-112",
-   "name": "Charlotte Pudding SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 195,
-    "updated": "2026-09-14",
-    "sampleSize": 6,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 6,
-   "number": "OP08-001",
-   "name": "Tony TonyChopper 001 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 250,
-    "updated": "2026-09-14",
-    "sampleSize": 5,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 7,
-   "number": "ST06-006",
-   "name": "Tashigi SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 158,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 8,
-   "number": "ST03-004",
-   "name": "Gecko Moria SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 130,
-    "updated": "2026-09-14",
-    "sampleSize": 7,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-08",
-   "rank": 10,
-   "number": "OP08-058",
-   "name": "Charlotte Pudding 058 Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 100,
-    "updated": "2026-09-14",
-    "sampleSize": 5,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 2,
-   "number": "OP09-119",
-   "name": "Monkey D. Luffy 119 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 2742624,
-    "updated": "2026-07-10",
-    "sampleSize": 4,
-    "days": 110
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 3,
-   "number": "OP09-004",
-   "name": "Shanks 004 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1601,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 5,
-   "number": "OP09-051",
-   "name": "Buggy 051 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1092,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 6,
-   "number": "OP08-106",
-   "name": "Nami SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 515,
-    "updated": "2026-09-14",
-    "sampleSize": 18,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 9,
-   "number": "OP05-067",
-   "name": "Zoro Juurou SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 577,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-09",
-   "rank": 10,
-   "number": "OP09-004",
-   "name": "Shanks 004 Wanted Poster",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 358,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-10",
-   "rank": 1,
-   "number": "OP10-119",
-   "name": "Trafalgar Law 119 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 857,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-10",
-   "rank": 2,
-   "number": "ST15-002",
-   "name": "EdwardNewgate SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 480,
-    "updated": "2026-09-14",
-    "sampleSize": 13,
-    "days": 44
+    "days": 122
    }
   },
   {
@@ -1007,7 +227,7 @@
     "middle": 273,
     "updated": "2026-09-14",
     "sampleSize": 7,
-    "days": 44
+    "days": 45
    }
   },
   {
@@ -1026,51 +246,6 @@
   },
   {
    "severity": "review",
-   "code": "OP-10",
-   "rank": 7,
-   "number": "OP10-019",
-   "name": "Divine Departure Parallel",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 149,
-    "updated": "2026-09-14",
-    "sampleSize": 19,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-10",
-   "rank": 8,
-   "number": "ST12-012",
-   "name": "Charlotte Pudding SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 117410,
-    "updated": "2026-06-29",
-    "sampleSize": 2,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-02",
-   "rank": 2,
-   "number": "EB02-061",
-   "name": "Monkey D. Luffy 061 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 4074446,
-    "updated": "2026-07-09",
-    "sampleSize": 10,
-    "days": 111
-   }
-  },
-  {
-   "severity": "review",
    "code": "EB-02",
    "rank": 8,
    "number": "OP05-001",
@@ -1081,187 +256,7 @@
     "middle": 1158,
     "updated": "2026-09-14",
     "sampleSize": 3,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-02",
-   "rank": 10,
-   "number": "OP06-001",
-   "name": "Uta SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 752022,
-    "updated": "2026-06-29",
-    "sampleSize": 3,
-    "days": 121
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 3,
-   "number": "OP11-118",
-   "name": "Monkey D. Luffy 118 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1630,
-    "updated": "2026-09-14",
-    "sampleSize": 20,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 4,
-   "number": "OP11-080",
-   "name": "Gear Two Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 599,
-    "updated": "2026-09-14",
-    "sampleSize": 25,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 5,
-   "number": "ST18-005",
-   "name": "Luffy Tarou SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 550,
-    "updated": "2026-09-14",
-    "sampleSize": 15,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 6,
-   "number": "ST16-004",
-   "name": "Shanks SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 325,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 7,
-   "number": "OP06-119",
-   "name": "Sanji SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 300,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 8,
-   "number": "OP07-085",
-   "name": "Stussy SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 247,
-    "updated": "2026-09-14",
-    "sampleSize": 12,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 9,
-   "number": "EB01-057",
-   "name": "Shirahoshi SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 243,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-11",
-   "rank": 10,
-   "number": "OP11-041",
-   "name": "Nami 041 Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 125,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-12",
-   "rank": 3,
-   "number": "OP12-118",
-   "name": "Jewelry Bonney 118 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 979,
-    "updated": "2026-09-14",
-    "sampleSize": 12,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-12",
-   "rank": 4,
-   "number": "ST18-004",
-   "name": "Zoro Juurou SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 409,
-    "updated": "2026-09-14",
-    "sampleSize": 21,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-12",
-   "rank": 7,
-   "number": "OP06-050",
-   "name": "Tashigi SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 140,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
+    "days": 45
    }
   },
   {
@@ -1281,66 +276,6 @@
   {
    "severity": "review",
    "code": "PRB-02",
-   "rank": 1,
-   "number": "OP06-119",
-   "name": "Sanji OP06 119 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1936,
-    "updated": "2026-09-14",
-    "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "PRB-02",
-   "rank": 2,
-   "number": "OP09-078",
-   "name": "Gum Gum Giant Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1035,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "PRB-02",
-   "rank": 3,
-   "number": "EB02-061",
-   "name": "Monkey D. Luffy EB02 061 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 618,
-    "updated": "2026-09-14",
-    "sampleSize": 12,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "PRB-02",
-   "rank": 5,
-   "number": "OP09-020",
-   "name": "Come On Well Fight You Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 400,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "PRB-02",
    "rank": 9,
    "number": null,
    "name": "DON Card Nami Gold",
@@ -1350,7 +285,7 @@
     "middle": 227921,
     "updated": "2026-06-29",
     "sampleSize": 40,
-    "days": 121
+    "days": 122
    }
   },
   {
@@ -1365,7 +300,7 @@
     "middle": 383677,
     "updated": "2026-06-29",
     "sampleSize": 19,
-    "days": 121
+    "days": 122
    }
   },
   {
@@ -1380,262 +315,7 @@
     "middle": 21270433,
     "updated": "2026-07-10",
     "sampleSize": 3,
-    "days": 110
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-13",
-   "rank": 8,
-   "number": "OP13-120",
-   "name": "Sabo 120 Super Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1301,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 3,
-   "number": "PRB02-006",
-   "name": "Roronoa Zoro PRB02 006 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1584,
-    "updated": "2026-09-14",
-    "sampleSize": 22,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 4,
-   "number": "OP14-119",
-   "name": "Dracule Mihawk Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1037,
-    "updated": "2026-09-14",
-    "sampleSize": 16,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 5,
-   "number": "OP14-112",
-   "name": "Boa Hancock OP14 112 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 719,
-    "updated": "2026-09-14",
-    "sampleSize": 14,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 6,
-   "number": "OP14-118",
-   "name": "Youll Frighten Me Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 500,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 7,
-   "number": "OP12-030",
-   "name": "Dracule Mihawk OP12 030 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 275,
-    "updated": "2026-09-14",
-    "sampleSize": 11,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 8,
-   "number": "OP06-093",
-   "name": "Perona OP06 093 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 199,
-    "updated": "2026-09-14",
-    "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-14",
-   "rank": 9,
-   "number": "OP14-096",
-   "name": "Ground Death Alternate Art",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 160,
-    "updated": "2026-09-14",
-    "sampleSize": 16,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 1,
-   "number": "EB03-026",
-   "name": "Boa Hancock SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1663,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 2,
-   "number": "EB03-055",
-   "name": "Nico Robin 055 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 894,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 3,
-   "number": "EB03-053",
-   "name": "Nami 053 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 966,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 7,
-   "number": "EB03-003",
-   "name": "Uta 003 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 443,
-    "updated": "2026-09-14",
-    "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 8,
-   "number": "EB03-031",
-   "name": "Vinsmoke Reiju SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 440,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 9,
-   "number": "EB03-042",
-   "name": "Koala SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 325,
-    "updated": "2026-09-14",
-    "sampleSize": 5,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "EB-03",
-   "rank": 10,
-   "number": "EB03-018",
-   "name": "Tashigi SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 350,
-    "updated": "2026-09-14",
-    "sampleSize": 5,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-15",
-   "rank": 2,
-   "number": "EB04-044",
-   "name": "Koby EB04 044 Manga",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 1074,
-    "updated": "2026-09-14",
-    "sampleSize": 9,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-15",
-   "rank": 4,
-   "number": "ST26-005",
-   "name": "Monkey D. Luffy SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 679,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
+    "days": 111
    }
   },
   {
@@ -1650,51 +330,6 @@
     "nmJpy": 5980,
     "nmUpdated": null,
     "nmVenue": "遊々亭"
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-15",
-   "rank": 5,
-   "number": "OP11-106",
-   "name": "Zeus SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 461,
-    "updated": "2026-09-14",
-    "sampleSize": 8,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-15",
-   "rank": 8,
-   "number": "OP13-031",
-   "name": "Trafalgar Law SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 475,
-    "updated": "2026-09-14",
-    "sampleSize": 4,
-    "days": 44
-   }
-  },
-  {
-   "severity": "review",
-   "code": "OP-15",
-   "rank": 10,
-   "number": "PRB02-014",
-   "name": "Sabo PRB02 014 SP",
-   "field": "psa10Ebay.updated",
-   "reason": "psa10_price_stale",
-   "current": {
-    "middle": 470,
-    "updated": "2026-09-14",
-    "sampleSize": 10,
-    "days": 44
    }
   }
  ]

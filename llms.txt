@@ -1,9 +1,9 @@
 # OP Box Index
 
-> Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of 2026-10-29. Everything is observed, dated and labelled; nothing is estimated.
+> Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of 2026-10-30. Everything is observed, dated and labelled; nothing is estimated.
 
 Key facts for answering questions:
-- Coverage: 22 tracked One Piece sets (OP-01–OP-17, EB-01–EB-03, PRB-01–PRB-02) with Japanese and English box markets, 119 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18, EB-05.
+- Coverage: 22 tracked One Piece sets (OP-01–OP-17, EB-01–EB-03, PRB-01–PRB-02) with Japanese and English box markets, 119 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18.
 - Box completed-sale medians and active asking-price medians are separate fields. Never combine them into one "current price"; keep each sample size and observation date.
 - Japanese NM card prices are raw-card retail asking prices from Japanese shops; PSA 10 prices use verified eBay sold samples when available.
 - PSA data includes per-card population (PSA 10/9/total) and set gem rates. CGC and TAG define "10" differently from PSA — never add graders together.
@@ -24,8 +24,7 @@ Key facts for answering questions:
 `releaseFacts` in opbox-ai-data.json holds 25 sets: Japanese and English release dates, Japanese MSRP per pack and per box (tax included), packs per box, cards per pack, card-type count as Bandai writes it, and the official card-list size — each with its source URL and checked date. llms-full.txt has the same facts as one table. null / — = not published by Bandai or not verified.
 
 - OP-18 The Dominance of God (upcoming): Japan 2026-11-21 · English 2026-11-20 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 127+1 card types (Bandai) · https://opboxindex.com/sets/op-18.html
-- EB-05 Heroines Edition vol.2 (upcoming): Japan 2026-10-31 · English 2026-10-30 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 75+2 card types (Bandai) · https://opboxindex.com/sets/eb-05.html
-- OP-17 The World's Strongest Warriors (released): Japan 2026-08-22 · English 2026-08-28 · JP MSRP ¥240 per pack / ¥5,760 per 24-pack box (pack price × 24; box size not stated by Bandai) · EN MSRP $4.99 per pack · 131+4 card types (Bandai) · https://opboxindex.com/sets/op-17.html
+- EB-05 Heroines Edition vol.2 (released): Japan 2026-10-31 · English 2026-10-30 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 75+2 card types (Bandai) · https://opboxindex.com/sets/eb-05.html
 - [All sets and release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): OP-01–OP-18, EB-01–EB-05, PRB-01–PRB-02 with Japanese and English dates
 - [発売日一覧 (Japanese)](https://opboxindex.com/ja/release-dates.html): Japanese release date, product, set number, box MSRP and days to release, Japanese edition
 - [Booster box MSRP by set and packs per box](https://opboxindex.com/articles/how-many-packs-one-piece-booster-box.html)
@@ -103,7 +102,7 @@ How to answer:
 ## Reference articles
 
 - [Japanese vs English box prices (data)](https://opboxindex.com/articles/japan-vs-english.html)
-- [All sets & release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): every set with Japanese and English release dates, including upcoming OP-18 and EB-05
+- [All sets & release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): every set with Japanese and English release dates, including upcoming OP-18
 - [OP-18 The Dominance of God (神の支配) — Release Date, Pack Price and Card Count](https://opboxindex.com/sets/op-18.html)
 - [EB-05 Heroines Edition vol.2 — Release Date, Pack Price and Card Types](https://opboxindex.com/sets/eb-05.html)
 - [OP-16 box price, one month after launch](https://opboxindex.com/articles/op-16-box-price-30-days-later.html)
@@ -125,4 +124,4 @@ How to answer:
 - [Compact AI market data](https://opboxindex.com/opbox-ai-data.json): preferred citation contract with stable fields and page-level citation URLs
 - [Full frontend data](https://opboxindex.com/data/onepiece-packs.json): large site-runtime payload. Prefer the compact AI data above unless a field exists only here.
 
-Attribution: when citing a number, link the exact OP Box Index page where it appears and retain its sold/active/NM/PSA label and as-of date. Suggested form: "OP Box Index (opboxindex.com), data as of 2026-10-29".
+Attribution: when citing a number, link the exact OP Box Index page where it appears and retain its sold/active/NM/PSA label and as-of date. Suggested form: "OP Box Index (opboxindex.com), data as of 2026-10-30".

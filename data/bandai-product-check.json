@@ -1,10 +1,10 @@
 {
  "note": "Written only by tools/check-bandai-product-pages.js. lastOkOn = last day both Bandai product pages (JP, EN) were fetched and still showed the release date and pack MSRP in data/upcoming-set-pages.json; cardList.checkedOn = last day the Japanese /cardlist/ product selector was fetched. log = every attempt.",
- "updated": "2026-10-29",
+ "updated": "2026-10-30",
  "sets": {
   "OP-18": {
-   "lastOkOn": "2026-10-29",
-   "lastTriedOn": "2026-10-29",
+   "lastOkOn": "2026-10-30",
+   "lastTriedOn": "2026-10-30",
    "ok": true,
    "jp": {
     "url": "https://www.onepiece-cardgame.com/products/op18.html",
@@ -27,12 +27,12 @@
    "mismatch": [],
    "cardList": {
     "listed": false,
-    "checkedOn": "2026-10-29"
+    "checkedOn": "2026-10-30"
    }
   },
   "EB-05": {
-   "lastOkOn": "2026-10-29",
-   "lastTriedOn": "2026-10-29",
+   "lastOkOn": "2026-10-30",
+   "lastTriedOn": "2026-10-30",
    "ok": true,
    "jp": {
     "url": "https://www.onepiece-cardgame.com/products/eb05.html",
@@ -55,7 +55,7 @@
    "mismatch": [],
    "cardList": {
     "listed": true,
-    "checkedOn": "2026-10-29"
+    "checkedOn": "2026-10-30"
    }
   }
  },
@@ -198,6 +198,22 @@
   },
   {
    "d": "2026-10-29",
+   "code": "EB-05",
+   "ok": true,
+   "jp": 200,
+   "en": 200,
+   "list": 200
+  },
+  {
+   "d": "2026-10-30",
+   "code": "OP-18",
+   "ok": true,
+   "jp": 200,
+   "en": 200,
+   "list": 200
+  },
+  {
+   "d": "2026-10-30",
    "code": "EB-05",
    "ok": true,
    "jp": 200,

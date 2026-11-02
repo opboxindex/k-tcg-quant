@@ -34,6 +34,7 @@ const MARK_END = "<!-- SET-COMPARISON:END -->";
 //   가장 비싼 카드 = market-data-normalizers.priciest(검증된 NM 최댓값, 동가 전부) — 세트 페이지 Key facts·한국어 문단과 같은 값. 모르면 칸을 비운다.
 //   4-wk = boxChange28(current vs 28일 이상 앞선 마지막 점) — 세트 페이지·홈 board 와 같은 값(종전 "5점 전"은 OP-06 이 +7% / -6.5% 로 갈렸다).
 const F = require("./build-site-facts").load();
+const { buyLink } = require("./set-page-shared");
 
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const money = (v) => (v == null ? "—" : "$" + Math.round(v).toLocaleString("en-US"));
@@ -48,12 +49,22 @@ const msrpCells = (code) => {
   return `<td>${b.msrpYen ? `${yen(b.msrpYen)}${b.msrpUsd ? `<small style="color:#7d8698"> $${b.msrpUsd}</small>` : ""}` : "—"}</td><td>${b.vsMsrp != null ? b.vsMsrp.toFixed(1) + "×" : "—"}</td>`;
 };
 
-function tableHtml(rows, updated) {
+// 세트 칸 아래 최저 실매물 링크(일본판·영문판, 세트 페이지 구매 버튼과 같은 값 — 사실 파일 ask) — 2026-11-02. 비교표 두 페이지에 구매 링크가 0개였다.
+// 가격 칸(판매 중앙값)에 넣지 않는다 — 가드 D17 이 그 칸의 첫 $ 값을 중앙값으로 읽고, 중앙값이 없는 행에선 매물가가 중앙값으로 읽힌다.
+// spot = EPN customid 머리(페이지별로 다르게 — compare 와 글을 EPN 보고서에서 가른다).
+const buyCell = (code, spot) => {
+  const a = (F.sets[code] || {}).ask || {}, slug = code.toLowerCase();
+  const jp = a.jp ? buyLink({ url: a.jp.url, price: a.jp.total, spot: `${spot}-${slug}-jp`, label: "JP" }) : "";
+  const en = a.en ? buyLink({ url: a.en.url, price: a.en.total, spot: `${spot}-${slug}-en`, label: "EN" }) : "";
+  return jp || en ? `<small class="ctBuy">eBay ${[jp, en].filter(Boolean).join(" · ")}</small>` : "";
+};
+
+function tableHtml(rows, updated, spot) {
   const body = rows.map((r) => {
     const chgTxt = r.chg == null ? "—" : `${r.chg > 0 ? "+" : ""}${r.chg}%`;   // 세트 페이지 "4-week change" 와 같은 표기(소수 한 자리)
     const chgColor = r.chg == null ? "#7d8698" : r.chg >= 0 ? "#26d07c" : "#ff6b6b";
     return `            <tr>` +
-      `<th scope="row" class="ctSet"><a href="/sets/${esc(r.code.toLowerCase())}.html"><b>${esc(r.code)}</b><span>${esc(r.name)}</span></a></th>` +
+      `<th scope="row" class="ctSet"><a href="/sets/${esc(r.code.toLowerCase())}.html"><b>${esc(r.code)}</b><span>${esc(r.name)}</span></a>${buyCell(r.code, spot)}</th>` +
       `<td>${money(r.jp)}${r.jpN ? `<small style="color:#7d8698"> n${r.jpN}</small>` : ""}</td>` +
       `<td>${money(r.en)}${r.enN ? `<small style="color:#7d8698"> n${r.enN}</small>` : ""}</td>` +
       `<td style="color:${chgColor}">${chgTxt}</td>` +
@@ -89,8 +100,7 @@ function inject(file, html) {
 
 const rows = buildRows();
 if (rows.length < 10) throw new Error(`세트가 ${rows.length}개뿐 — 시계열 로딩 실패 의심`);
-const html = tableHtml(rows, F.compare.asOf || "");
-const out = ["compare.html", "articles/best-one-piece-booster-box.html"].map((f) => inject(f, html));
+const out = [["compare.html", "cmp"], ["articles/best-one-piece-booster-box.html", "best"]].map(([f, spot]) => inject(f, tableHtml(rows, F.compare.asOf || "", spot)));
 
 
 // 글의 수정일(JSON-LD dateModified·화면 Updated)을 표의 "As of" 날짜에 맞춘다.

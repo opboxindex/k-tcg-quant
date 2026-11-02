@@ -280,7 +280,8 @@ function cardPages() {
   }
   if (exists("psa10-ranking.html")) {
     const all = F.order.all.flatMap((code) => S[code].cards.map((c) => [code, c]));
-    for (const r of read("psa10-ranking.html").matchAll(/<tr(?: class="stale")?><td class="rk">\d+<\/td><td class="l">[\s\S]*?<span><b>([^<]*)<\/b><small>([^<]*)<\/small><\/span><\/a><\/td><td class="psa">([^<]*)<\/td><td class="obs"[^>]*>([\s\S]*?)<\/td><td class="hideM">([^<]*)<\/td><td class="rng hideM">([^<]*)<\/td><td class="hideM">([^<]*)<\/td><td class="mul">([^<]*)<\/td><td class="pop hideM">([\s\S]*?)<\/td>/g)) {
+    // 카드 칸 클래스가 "l cardCell" 이 된 뒤 이 식이 표 행을 1개만 읽고 있었다(2026-11-02 발견 — "l" 만 받았다). 둘 다 받는다.
+    for (const r of read("psa10-ranking.html").matchAll(/<tr(?: class="stale")?><td class="rk">\d+<\/td><td class="l(?: cardCell)?">[\s\S]*?<span><b>([^<]*)<\/b><small>([^<]*)<\/small><\/span><\/a><\/td><td class="psa">([^<]*)<\/td><td class="obs"[^>]*>([\s\S]*?)<\/td><td class="hideM">([^<]*)<\/td><td class="rng hideM">([^<]*)<\/td><td class="hideM">([^<]*)<\/td><td class="mul">([^<]*)<\/td><td class="pop hideM">([\s\S]*?)<\/td>/g)) {
       const [set, num] = unH(r[2]).split(" · "), hit = all.find(([code, c]) => code === set && c.number === num && c.name === unH(r[1])); if (!hit) continue;
       const c = hit[1], w = `psa10-ranking.html ${num}`;
       cmp("PK1", w, "PSA 10", r[3], c.psa10 ? c.psa10.usd : null); if (c.psa10) { cmp("PK1", w, "PSA 10 날짜", times(r[4])[0], c.psa10.date); cmp("PK1", w, "PSA 10 표본", r[5], c.psa10.n); cmp("PK1", w, "PSA 10 저가", dollars(r[6]), c.psa10.low); }

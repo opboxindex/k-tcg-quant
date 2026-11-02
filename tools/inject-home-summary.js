@@ -8,6 +8,7 @@
 // Run: node tools/inject-home-summary.js
 const fs = require("fs");
 const { navHtml } = require("./site-nav");
+const { buyLink, AFF_TOP } = require("./set-page-shared");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const START = "<!-- HOME_SUMMARY:START -->";
@@ -54,7 +55,11 @@ const rowHtml = (withMsrp) => rows.map((b) => {
   const topLink = topSlug ? `<a href="cards/${topSlug}" title="${esc(top.name)} price">${esc(top.name)}</a>` : "";
   // 공식 카드리스트(sets/<code>-card-list.html) — 2026-10-16. 46장이 10-14 에 새로 났는데 홈에서 가는 링크가 0 이라 GSC 가 '알려지지 않은 URL' 로 봤다.
   const clLink = CARD_LISTS.has(b.code) ? `<a href="sets/${slug}-card-list.html" title="${esc(b.code)} official card list">Card list</a>` : "";
-  const links = [enLink, clLink, topLink].filter(Boolean).join(" · ");
+  // box-prices 표만 행마다 일본판 최저 실매물 링크(세트 페이지 구매 버튼과 같은 값 — 사실 파일 ask.jp) — 2026-11-02. 이 페이지는 유입이 많은데
+  // 구매 링크가 0개였다. 이름 칸 아래 링크 줄에 넣어 표 폭(390px 한 화면)은 그대로 둔다. 홈 요약표(봇용 접힘)는 그대로.
+  const ask = withMsrp && s.ask && s.ask.jp;
+  const buy = ask ? buyLink({ url: ask.url, price: ask.total, spot: `bp-${slug}`, label: "eBay from" }) : "";
+  const links = [buy, enLink, clLink, topLink].filter(Boolean).join(" · ");
   const when = b.nowDate
     ? `<td class="num when" title="Median point ${esc(b.nowDate)}${b.n != null ? ` · ${b.n} sales in its ${b.windowDays ? `${b.windowDays}-day ` : ""}window` : ""}">${esc(mmdd(b.nowDate))}${nCell(b)}</td>`
     : `<td class="num when" title="${esc(NO_MEDIAN)}">—</td>`;
@@ -238,6 +243,7 @@ ${KF_CSS_BODY}
       <p class="eyebrow">Prices · Updated ${esc(DATA_DATE)} · refreshed daily</p>
       <h1>Japanese One Piece booster box prices — all ${rows.length} sets</h1>
       ${boxKf}
+      ${AFF_TOP}
       <p class="note"><span data-ko="이베이 실거래 중앙값 · 기준일 = 그 중앙값 점의 날짜 · n = 그 점의 평균 창(28~56일, 세트별) 안 판매 건수 · 4주 등락 = 28일 전 중앙값 대비 · — = 28일 안에 날짜가 찍힌 중앙값 없음(중앙값은 창 안 판매 6건 이상) · × 정가 = 박스 시세 ÷ 일본판 박스 정가">Median of completed eBay sales · "As of" = date of that median point · n = sales inside its rolling window (28–56 days, set per series) · "4-wk change" = vs the median 28 days earlier · — = no median dated within ${STALE_DAYS} days (a median needs at least 6 sales in its window) · × MSRP = box price ÷ JP box MSRP</span> · ${nUp} up, ${nDn} down</p>
       ${cheapSection}
       <h2 id="all-sets" data-ko="전체 ${rows.length}개 세트">All ${rows.length} sets</h2>

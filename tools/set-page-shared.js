@@ -160,8 +160,10 @@ function upsertSitemap(urls, { priority = "0.8", changefreq = "weekly" } = {}) {
 // price   : 배송비 포함 총액(USD)
 // mid     : 같은 물건의 중간 호가(USD). 있으면 몇 % 싼지 배지를 붙인다(3% 미만 차이는 생략).
 // updated : 매물 수집일. 싼 매물은 빨리 나가므로 기준일을 반드시 같이 보여준다.
-function buyCta({ url, price, mid, updated, label }) {
-  const href = epnUrl(url);
+// spot    : EPN customid — EPN 보고서에서 자리별 클릭·거래를 가르는 꼬리표(경매의 auc-*, 발매 예정의 rel-*·preorder-* 와 같은 방식). 없으면 안 붙인다.
+const withSpot = (url, spot) => (url && spot ? `${url}${url.includes("?") ? "&" : "?"}customid=${encodeURIComponent(spot)}` : url);
+function buyCta({ url, price, mid, updated, label, spot }) {
+  const href = epnUrl(withSpot(url, spot));
   if (!href || price == null) return "";
   const off = mid != null && mid > 0 && price < mid * 0.97 ? Math.round((1 - price / mid) * 100) : null;
   const chip = off ? `<em class="buyOff">${off}% under mid ask</em>` : "";
@@ -169,6 +171,15 @@ function buyCta({ url, price, mid, updated, label }) {
   return `<a class="buyNow" href="${esc(href)}" target="_blank" rel="noopener noreferrer sponsored">`
     + `<span class="buyLine">Cheapest ${esc(label)} <b>${usd(price)}</b><span class="buyArrow">&#8599;</span></span>`
     + `${chip}${asOf}</a>`;
+}
+
+// 표 안 작은 가격 링크(buyLink) — 2026-11-02. 검색·AI 유입이 많은 표 페이지(box-prices·compare·psa10-ranking·발매일 글)에 구매 링크가
+// 0개였다(EPN 10월 클릭 94·거래 0 — 7월 312의 30%). buyCta 와 같은 값(최저 실매물, 배송비 포함)을 표 폭을 늘리지 않는 한 줄로 단다.
+// 값·URL 이 없으면 빈 문자열 — 호출부는 그 칸을 그냥 둔다(빈 값 > 틀린 값). 링크가 생긴 페이지는 첫 링크 앞에 AFF_TOP 이 있어야 한다(가드 E1).
+function buyLink({ url, price, spot, label = "Buy" }) {
+  const href = epnUrl(withSpot(url, spot));
+  if (!href || price == null) return "";
+  return `<a class="rowBuy" href="${esc(href)}" target="_blank" rel="noopener noreferrer sponsored">${esc(label)} <b>${usd(price)}</b>&#8599;</a>`;
 }
 
 // ── 상단 Key facts 표 — 2026-10-14(W5a) ─────────────────────────────────────────
@@ -334,4 +345,4 @@ function enOnlySeries(ser) {
   };
 }
 
-module.exports = { ROOT, SITE, EPN, CSS_VER, BoxChart, enOnlySeries, esc, usd, intl, monthYear, AFF_TOP, FOOT, foot, pageHead, upsertSitemap, epnUrl, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc };
+module.exports = { ROOT, SITE, EPN, CSS_VER, BoxChart, enOnlySeries, esc, usd, intl, monthYear, AFF_TOP, FOOT, foot, pageHead, upsertSitemap, epnUrl, buyCta, buyLink, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc };

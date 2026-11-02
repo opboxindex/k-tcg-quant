@@ -218,6 +218,7 @@ for (const { code, set: s, card: c } of cands) {
     mid: pa.mid,
     updated: pa.date,
     label: `PSA 10 ${c.number || c.name}`,
+    spot: `card-${String(c.number || "").toLowerCase()}`,
   }) : "";
 
   // 시리즈(가격 이력) 표 — 체크포인트가 2개 이상 쌓인 카드만 표시(1점짜리 무의미한 표 방지).

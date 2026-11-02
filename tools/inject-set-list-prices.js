@@ -31,6 +31,7 @@ if (!fs.existsSync(ART)) {
 
 // 현재가(current.jp)·기준일(판매 원장 asOf)·최신 발매 세트·다음 발매·공식 카드리스트 목록은 사실 파일(data/derived/site-facts.json)에서 — 2026-10-15.
 const F = require("./build-site-facts").load();
+const { buyLink } = require("./set-page-shared");
 const series = Object.fromEntries(F.order.series.map((c) => [c, F.sets[c]]));
 let html = fs.readFileSync(ART, "utf8");
 const crlf = html.includes("\r\n");
@@ -50,7 +51,11 @@ html = html.replace(trRe, (whole, code, rest) => {
   if (!series[code]) { untouched++; return whole; }
   const cur = curJp(code);
   // 값 옆에 그 중앙값 점의 날짜(<small>) — 열 하나에 기준일이 하나가 아니다.
-  const cell = cur ? `$${Math.round(cur.median).toLocaleString("en-US")}<small> ${SHORT(cur.d)}</small>` : "—";
+  // 값 뒤에 일본판 최저 실매물 링크(세트 페이지 구매 버튼과 같은 값 — 사실 파일 ask.jp) — 2026-11-02. 이 글은 검색 유입의 약 60%인데 구매 링크가 0개였다.
+  // 중앙값이 있는 행에만 단다 — 가드 D17 이 이 칸의 첫 $ 값을 중앙값으로 읽어서, 중앙값 없는 행("—")에 매물가를 두면 중앙값으로 읽힌다.
+  const ask = cur && F.sets[code] && F.sets[code].ask && F.sets[code].ask.jp;
+  const buy = ask ? buyLink({ url: ask.url, price: ask.total, spot: `sl-${code.toLowerCase()}`, label: "eBay from" }) : "";
+  const cell = cur ? `$${Math.round(cur.median).toLocaleString("en-US")}<small> ${SHORT(cur.d)}</small>${buy ? ` <small>${buy}</small>` : ""}` : "—";
   // 치환 문자열이 아니라 함수로 쓴다 — cell 이 "$" 로 시작해서 $1·$& 같은 치환 패턴으로 오인된다.
   const next = rest.replace(/<td class="num">(?:(?!<\/td>)[\s\S])*<\/td>/, () => `<td class="num">${cell}</td>`);
   if (next === rest) { untouched++; return whole; }

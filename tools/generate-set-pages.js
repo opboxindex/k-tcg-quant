@@ -9,7 +9,7 @@
 const fs = require("fs");
 const path = require("path");
 // <head>·푸터·제휴 고지·사이트맵 갱신은 set-page-shared.js 한 곳에서 온다(영문판 생성기와 공유).
-const { SITE, EPN, CSS_VER, esc, usd, intl, AFF_TOP, FOOT, pageHead, upsertSitemap, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc } = require("./set-page-shared");
+const { SITE, EPN, CSS_VER, esc, usd, intl, AFF_TOP, FOOT, pageHead, upsertSitemap, buyCta, buyLink, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc } = require("./set-page-shared");
 // 화면 크기에 맞는 이미지 파생본(2026-10-08): 머리 박스 사진 670px→264px, 랭킹 썸네일 100KB→5KB. 없으면 원본.
 const { variant } = require("./image-variants");
 
@@ -437,7 +437,7 @@ function setPage(code, prev, next) {
   // 최저 실매물 버튼 — 검색 링크는 값이 없어 잘 안 눌린다(2026-09-16 실측). 검증된 최저 매물이 있을 때만 낸다.
   // 값은 Key facts 표의 "Lowest live ask" 와 같은 값(사실 파일 ask.jp — build-site-facts.lowestAsk)에서 — 표와 버튼이 늘 같은 숫자다.
   const jpAsk = s.ask.jp;
-  const jpBuy = jpAsk ? buyCta({ url: jpAsk.url, price: jpAsk.total, mid: jpAsk.mid, updated: jpAsk.updated, label: `sealed ${code} Japanese box` }) : "";
+  const jpBuy = jpAsk ? buyCta({ url: jpAsk.url, price: jpAsk.total, mid: jpAsk.mid, updated: jpAsk.updated, label: `sealed ${code} Japanese box`, spot: `set-${code.toLowerCase()}-jp` }) : "";
   // 일본판 발매일(set-facts.json, 반다이 공식 출처) — 접힌 Key facts 문단·Product 구조화데이터가 쓴다.
   // 화면의 발매일·정가·팩 수·카드 종류는 H1 아래 Key facts 표(keyFactsHtml) 한 곳에 있다(2026-10-14, W5a).
   const jpRelDate = s.jpRelease;
@@ -888,6 +888,7 @@ function rankingRows() {
         stale: p.stale,   // 관측일이 35일 넘은 sold 중앙값은 "지금 값"이 아니다 — 세트·카드 페이지(psaStale)·홈(PSA10_STALE_DAYS)과 같은 기준. 2026-09-30.
         // 배수 규칙(35일·40배)은 사실 파일 psa10.multiple 한 곳(2026-10-19)
         rawUsd: c.nm.usd, mult: p.multiple, pop: c.pop, img: ownImage(c), slug: CARD_MAP[cardKey(c.number, c.name)] || null,
+        ask: c.psa10Ask && c.psa10Ask.buy ? c.psa10Ask : null,   // PSA 10 최저 실매물(카드 페이지 구매 버튼과 같은 값) — 2026-11-02 표 끝 열
       });
     }
   }
@@ -925,8 +926,8 @@ function rankingPage() {
   const popCell = (total, g10) => (total ? `${intl(total)} <small>${intl(g10)} × 10</small>` : "—");
   // 관측일 칸 — 행마다 그 sold 중앙값을 본 날. 35일 넘은 행은 흐리게, 날짜는 노랗게(세트 허브 표와 같은 표시).
   const obsCell = (r) => `<td class="obs"${r.stale ? ` title="Observed ${esc(r.updated)} — older than 35 days"` : ""}>${r.updated ? `<time datetime="${esc(r.updated)}">${esc(r.updated.slice(5))}</time>` : "—"}</td>`;
-  const tableHead = `<thead><tr><th class="rkH">#</th><th class="l">Card</th><th class="psaH">PSA 10</th><th class="obsH">Sold as of</th><th class="hideM">Sales</th><th class="hideM">Low–high</th><th class="hideM">Ungraded</th><th class="mulH">× ungraded</th><th class="hideM">PSA graded (10s)</th></tr></thead>`;
-  const rowHtml = (r, i) => `<tr${r.stale ? ' class="stale"' : ""}><td class="rk">${i + 1}</td>${cardCell(r)}<td class="psa">${usd(r.psa)}</td>${obsCell(r)}<td class="hideM">${r.n}</td><td class="rng hideM">${rangeCell(r)}</td><td class="hideM">${r.rawUsd != null ? usd(r.rawUsd) : "—"}</td><td class="mul">${r.mult ? r.mult.toFixed(1) + "×" : "—"}</td><td class="pop hideM">${r.pop ? popCell(r.pop.total, r.pop.g10) : "—"}</td></tr>`;
+  const tableHead = `<thead><tr><th class="rkH">#</th><th class="l">Card</th><th class="psaH">PSA 10</th><th class="obsH">Sold as of</th><th class="hideM">Sales</th><th class="hideM">Low–high</th><th class="hideM">Ungraded</th><th class="mulH">× ungraded</th><th class="hideM">PSA graded (10s)</th><th class="buyH">Lowest ask</th></tr></thead>`;
+  const rowHtml = (r, i) => `<tr${r.stale ? ' class="stale"' : ""}><td class="rk">${i + 1}</td>${cardCell(r)}<td class="psa">${usd(r.psa)}</td>${obsCell(r)}<td class="hideM">${r.n}</td><td class="rng hideM">${rangeCell(r)}</td><td class="hideM">${r.rawUsd != null ? usd(r.rawUsd) : "—"}</td><td class="mul">${r.mult ? r.mult.toFixed(1) + "×" : "—"}</td><td class="pop hideM">${r.pop ? popCell(r.pop.total, r.pop.g10) : "—"}</td><td class="buy">${(r.ask && buyLink({ url: r.ask.url, price: r.ask.usd, spot: `rk-${String(r.number || "").toLowerCase()}`, label: "eBay" })) || "—"}</td></tr>`;
   const rankTable = (list, offset) => `<div class="tblWrap"><table class="aTable">
           ${tableHead}
           <tbody>
@@ -1091,6 +1092,7 @@ ${KF_CSS_ANY}
         ["asof", "As of", "기준일", `<time datetime="${esc(asOf)}">${esc(asOf)}</time>`],   // 기준일은 표 제목(caption)의 <time> 이 첫 날짜다(2026-10-19)
       ], { label: "PSA 10 ranking key facts", caption: `<span data-ko="가장 비싼 원피스 PSA 10 카드">Most valuable One Piece PSA 10 cards</span> · <time datetime="${esc(asOf)}">${esc(asOf)}</time>` })}
       <p class="lead">Median of completed eBay sales · at least 3 sales per card · USD</p>
+      ${AFF_TOP}
 
       <div class="statRow">
         <div class="stat hi"><b>${usd(t1.psa)}</b><span>highest PSA 10 · ${esc(t1.name)}${t1.updated ? ` · sold as of ${esc(t1.updated)}` : ""}</span></div>

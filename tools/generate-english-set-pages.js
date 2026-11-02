@@ -135,7 +135,7 @@ function chartBlock(code) {
 // 값은 Key facts 표의 "Lowest live ask" 와 같은 값(사실 파일 sets[code].ask.en — build-site-facts.lowestAsk)에서 — 표와 버튼이 늘 같은 숫자다(2026-10-14).
 function cheapestBoxCta(code) {
   const a = F.sets[code].ask.en;
-  return a ? buyCta({ url: a.url, price: a.total, mid: a.mid, updated: a.updated, label: `sealed English ${code} box` }) : "";
+  return a ? buyCta({ url: a.url, price: a.total, mid: a.mid, updated: a.updated, label: `sealed English ${code} box`, spot: `set-${code.toLowerCase()}-en` }) : "";
 }
 
 function cheapestBox(code, m) {

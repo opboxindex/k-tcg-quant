@@ -974,7 +974,8 @@ function build(inputs) {
   }
 
   // ── 2026 시장 추이(market-2026.html) — 2026-10-19. 'one piece card market trend 2026' 질문은 4엔진 모두 우리 인용 0(10/19 실측), 받을 페이지가 없었다.
-  //   달마다: 일본판·영문판 박스 = 세트마다 그 달 마지막 주간 중앙값 점 → 세트 사이 중앙값(n = 세트 수) · 4주 등락 = 그 점의 boxChange28(세트 페이지와 같은 정의) ↑/↓ 세트 수 ·
+  //   달마다: 일본판·영문판 박스 = 세트마다 그 달 말일 점(box-sold-series monthEnd — 말일을 끝으로 하는 주간과 같은 창) → 세트 사이 중앙값(n = 세트 수) ·
+  //   4주 등락 = 그 말일 점 대 28일 넘게 앞선 말일 점(전달 말일) ↑/↓ 세트 수 · 이번 달(판매 기준일 sold.asOf 의 달, partial)은 세트마다 현재가·홈과 같은 등락 ·
   //   PSA 등급 증가 = 주간 증가(psaWeekly.weeks, 전 세트 합)의 그 달 합(n = 주 수) · 경매 = auction-series 월간 낙찰 수(n = 관측일 수). asOf = 그 칸 값의 마지막 관측일.
   const MARKET_MIN_SETS = 5;
   const market = (() => {
@@ -984,12 +985,20 @@ function build(inputs) {
     const months = [];
     for (let m = 1; m <= 12; m++) { const ym = `${year}-${String(m).padStart(2, "0")}`; if (ym <= lastMonth) months.push(ym); }
     const med = (xs) => { const s = [...xs].sort((a, b) => a - b); const k = s.length; return k ? (k % 2 ? s[(k - 1) / 2] : (s[k / 2 - 1] + s[k / 2]) / 2) : null; };
+    // 이번 달 = 판매 기준일(sold.asOf)의 달 — lastMonth 와 같은 원천. 2026-11-02: dataDate(packs.updated, UTC 기록)를 쓰면 매달 1일 08:57 KST 빌드에서
+    // 마감된 지난달 행에 현재가가 들어가고 새 달 행이 하루치 점으로 계산된다(11/01 빌드 재현: packs.updated 10-31, 'Sold Nov 1' 67건).
+    const curYm = lastMonth;
+    const endOf = (node, ed, ym) => ((node.monthEnd || {})[ed] || []).find((p) => p && p.d.slice(0, 7) === ym) || null;
     const boxOf = (ym, ed) => {
       const vals = [], dates = [];
       for (const c of seriesCodes) {
-        const pts = ((sold.sets[c] || {})[ed] || []).filter((p) => p && N.isPositive(p.median) && N.isDate(p.d) && p.d.slice(0, 7) === ym);
-        const last = pts[pts.length - 1];
-        if (last) { vals.push(last.median); dates.push(last.d); }
+        const node = sold.sets[c] || {};
+        // 이번 달(데이터 기준일의 달)은 세트마다 현재가(current — 마지막 점이 28일 안일 때)를 쓴다 — 2026-11-02.
+        // 그 달 안에 찍힌 점만 세면 월초엔 하루이틀 사이 팔린 세트만 남아(11/02 영문판 22 → 13세트) 세트 구성이 바뀐 것이
+        // 시세 하락($417 → $315)처럼 보였다. 홈·box-prices·compare 의 현재가와 같은 값 — 아래 4주 등락을 이번 달만 현재가로 맞춘 것과 같은 이유.
+        // 끝난 달은 말일 점 — 주간 격자 점은 판매가 늘 때마다 날짜·값이 바뀌어 공개한 달 값이 매일 달라졌다(10월 영문판 $380 → $417).
+        const last = ym === curYm ? node.current && node.current[ed] : endOf(node, ed, ym);
+        if (last && N.isPositive(last.median) && N.isDate(last.d)) { vals.push(last.median); dates.push(last.d); }
       }
       // 세트 5개 미만이면 "시장 중앙값"이 아니라 몇 세트의 값이다 — 칸을 비운다(n 은 남긴다).
       return vals.length >= MARKET_MIN_SETS ? { usd: Math.round(med(vals)), n: vals.length, asOf: dates.sort().pop() } : vals.length ? { usd: null, n: vals.length, asOf: dates.sort().pop() } : null;
@@ -997,10 +1006,9 @@ function build(inputs) {
     const chgOf = (ym) => {
       let up = 0, dn = 0, flat = 0; const dates = [];
       for (const c of seriesCodes) {
-        const all = ((sold.sets[c] || {}).jp || []).filter((p) => p && N.isPositive(p.median) && N.isDate(p.d));
-        const inM = all.filter((p) => p.d.slice(0, 7) === ym), cur = inM[inM.length - 1];
+        const ends = ((sold.sets[c] || {}).monthEnd || {}).jp || [], cur = ends.find((p) => p && p.d.slice(0, 7) === ym);
         if (!cur) continue;
-        const ch = N.boxChange28(all.filter((p) => p.d <= cur.d), cur);
+        const ch = N.boxChange28(ends.filter((p) => p.d < cur.d), cur);
         if (!ch) continue;
         if (ch.pct > 0) up++; else if (ch.pct < 0) dn++; else flat++;
         dates.push(cur.d);
@@ -1014,11 +1022,11 @@ function build(inputs) {
       const days = ((auctionSeries && auctionSeries.daily) || []).filter((r) => String(r.d).slice(0, 7) === ym).map((r) => r.d).sort();
       return { sold: mo.sold, n: mo.days, partialDays: mo.partialDays || 0, asOf: days.pop() || null };
     };
-    const rows = months.map((ym) => ({ month: ym, jp: boxOf(ym, "jp"), en: boxOf(ym, "en"), chg: chgOf(ym), psa: psaOf(ym), auction: aucOf(ym) }))
+    const rows = months.map((ym) => ({ month: ym, ...(ym === curYm ? { partial: true } : {}), jp: boxOf(ym, "jp"), en: boxOf(ym, "en"), chg: chgOf(ym), psa: psaOf(ym), auction: aucOf(ym) }))
       .filter((r) => r.jp || r.en || r.chg || r.psa || r.auction);
     // 이번 달(데이터 기준일의 달) 등락은 홈·box-prices·compare 와 같은 값이어야 한다(한 사실 한 값) — 2026-10-19 검증:
     // 시장 페이지 10월 '▲7·▼8 n=18'(그 달 마지막 점 기준) vs 홈 '7 up · 9 down of 19'(현재가 기준). 이번 달만 현재가 기준으로 맞춘다.
-    const curYm = String(dataDate || "").slice(0, 7), curRow = rows.find((r) => r.month === curYm);
+    const curRow = rows.find((r) => r.month === curYm);
     if (curRow && home && home.withChg) curRow.chg = { up: home.nUp, down: home.nDn, flat: home.withChg - home.nUp - home.nDn, n: home.withChg, asOf: dataDate };
     const asOf = N.latestDate(...rows.flatMap((r) => [r.jp && r.jp.asOf, r.en && r.en.asOf, r.chg && r.chg.asOf, r.psa && r.psa.asOf, r.auction && r.auction.asOf]));
     return { year, rows, asOf, minSets: MARKET_MIN_SETS };

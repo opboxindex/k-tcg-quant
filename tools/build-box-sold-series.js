@@ -110,11 +110,12 @@ function bucketSample(all, minN) {
   return clean.length < all.length && clean.length >= minN ? { use: clean, out: all.length - clean.length } : { use: all, out: 0 };
 }
 
-function seriesFor(rs, wave) {
+// thruMonth("YYYY-MM", 원장 갱신일의 달)를 주면 그 앞 달들의 말일 점(monthEnd)도 낸다 — 아래 'monthEnd' 주석.
+function seriesFor(rs, wave, thruMonth) {
   // 초판(Blue)은 몇 달에 4건뿐이라 일반 기준(6건)으로는 아무것도 안 나온다.
   // 이 계열만 3건으로 낮춘다 — 얇은 건 사실이라, 화면에 n 과 창 길이를 그대로 실어 보낸다.
   const minN = wave === "blue" ? 3 : MIN_N;
-  if (rs.length < minN) return { points: [], windowDays: null };
+  if (rs.length < minN) return { points: [], windowDays: null, monthEnd: [] };
 
   const first = rs[0].t, last = rs[rs.length - 1].t;
 
@@ -188,7 +189,20 @@ function seriesFor(rs, wave) {
   for (let i = points.length - 1; i > 0; i--) {
     if (Date.parse(points[i].d) - Date.parse(points[i - 1].d) > maxGap) { cut = i; break; }
   }
-  return { points: points.slice(cut), windowDays };
+  const kept = points.slice(cut);
+  // 말일 점(monthEnd) — 2026-11-02. 주간 격자는 마지막 판매일에서 7일씩 거꾸로 잡혀, 판매가 하나 늘 때마다 지난달 안의 점 날짜·값이 바뀐다.
+  // 시장 월간 표(market-2026.html)가 '그 달 마지막 주간 점'을 쓰자 이미 공개한 10월 영문판이 $380(10/31) → $417(11/02)로 바뀌었다.
+  // 다 끝난 달마다 말일을 끝으로 하는 같은 창·같은 규칙(at)의 점 하나를 따로 둔다 — 그 달 판매가 늦게 더 잡힐 때만 바뀐다.
+  const monthEnd = [];
+  if (thruMonth && kept.length) {
+    for (let m = kept[0].d.slice(0, 7); m < thruMonth; ) {
+      const [y, mo] = m.split("-").map(Number);
+      const p = at(Date.UTC(y, mo, 0));   // mo 는 1부터 — 다음 달 0일 = 이 달 말일
+      if (p) monthEnd.push({ d: p.d, median: p.median, n: p.n });
+      m = mo === 12 ? `${y + 1}-01` : `${y}-${String(mo + 1).padStart(2, "0")}`;
+    }
+  }
+  return { points: kept, windowDays, monthEnd };
 }
 
 // 월간은 롤링이 아니라 **그 달에 팔린 것 전부**의 중앙값이다.
@@ -203,18 +217,18 @@ function monthlyFor(rs) {
     if (!buckets.has(k)) buckets.set(k, []);
     buckets.get(k).push(r);
   }
-  // 진행 중인 달은 아직 다 안 팔렸으니 문턱을 낮춰 넣는다 — 안 그러면 8월 중순에 7월이 최신으로 보인다.
-  // 다만 한 단계만 낮춘다 — 3건짜리 중앙값을 넣었더니 OP-01 일본판 8월이 $275 → $176 으로
-  // 36% 급락한 것처럼 그려졌다. 표본 수(n)는 그대로 실어 보내 얼마나 얇은 값인지 화면에서 드러나게 한다.
-  const thisMonth = new Date().toISOString().slice(0, 7);
+  // 문턱은 모든 달 하나(MONTH_MIN_N) — 2026-11-02. 종전엔 진행 중인 달만 5건(UTC 오늘 기준)으로 낮췄는데,
+  // 달이 끝나는 순간 문턱이 6으로 올라 공개했던 칸이 사라졌다(EB-01 영문판 10월 $898·EB-02 일본판 10월 $200, 각 5건 — 11/01 빌드).
+  // UTC '이번 달'은 08:30 KST 수집·03:45 KST CI 에선 전날이라 매달 1일엔 지난달을 진행 중으로도 봤다.
+  // 진행 중인 달은 문턱을 낮추는 대신 화면(box-chart)이 '진행 중'으로 따로 그린다 — 원장 갱신일(counts.through) 기준.
   const monthGap = (a, b) => {
     const [ay, am] = a.split("-").map(Number), [by, bm] = b.split("-").map(Number);
     return (by * 12 + bm) - (ay * 12 + am);
   };
   const rows = [...buckets.entries()].sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([k, all]) => [k, all, k === thisMonth ? MONTH_MIN_N - 1 : MONTH_MIN_N])
-    .filter(([, all, minN]) => all.length >= minN)
-    .map(([k, all, minN]) => {
+    .filter(([, all]) => all.length >= MONTH_MIN_N)
+    .map(([k, all]) => {
+      const minN = MONTH_MIN_N;
       // 월간은 겹치지 않는 버킷이라 vol(그 달 거래량)은 이상치까지 센 전체 건수, n 은 중앙값 표본(이상치 뺀 건수)이다.
       const { use, out } = bucketSample(all, minN), u = use.map((r) => r.unit);
       return {
@@ -404,7 +418,8 @@ for (const [code, all] of Object.entries(ledger.sets || {})) {
   const preRelease = { jp: preReleaseFor(sJp.pre, release.jp), en: preReleaseFor(sEn.pre, release.en) };
   for (const ed of ["jp", "en"]) if (preRelease[ed]) preReleaseExcluded[`${code}.${ed}`] = preRelease[ed].sales;
   const sales = { jp: salesOf(eds.jp), en: salesOf(eds.en, "white"), enBlue: salesOf(eds.en, "blue") };
-  const jp = seriesFor(sales.jp), en = seriesFor(sales.en, "white"), enBlue = seriesFor(sales.enBlue, "blue");
+  const thruMonth = String(ledger.updated || today).slice(0, 7);
+  const jp = seriesFor(sales.jp, undefined, thruMonth), en = seriesFor(sales.en, "white", thruMonth), enBlue = seriesFor(sales.enBlue, "blue");
   // 발매 전 세트(점이 없고 예약판매만 있는 세트)도 남긴다 — 예약판매 요약과 발매일을 실어 보내야 화면이 "—" 와 건수를 낼 수 있다.
   if (!jp.points.length && !en.points.length && !preRelease.jp && !preRelease.en) continue;
   const mJp = monthlyFor(sales.jp), mEn = monthlyFor(sales.en), mEnBlue = monthlyFor(sales.enBlue);
@@ -421,6 +436,8 @@ for (const [code, all] of Object.entries(ledger.sets || {})) {
     jp: jp.points, en: en.points, enBlue: enBlue.points,
     windowDays: { jp: jp.windowDays, en: en.windowDays, enBlue: enBlue.windowDays },
     monthly: { jp: mJp, en: mEn, enBlue: mEnBlue },
+    // 다 끝난 달의 말일 점({d: 말일, median, n}) — 시장 월간 표가 쓴다. 진행 중인 달은 없다(그 달은 current).
+    monthEnd: { jp: jp.monthEnd, en: en.monthEnd },
     daily: { jp: dJp, en: dEn, enBlue: dEnBlue },
     // 판매일별 즉시구매 건수(거래량 막대 원천). through = 원장 갱신일 — 그 뒤는 아직 안 센 날이라 0 으로 그리지 않는다.
     counts: {

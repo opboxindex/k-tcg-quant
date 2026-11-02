@@ -287,7 +287,13 @@
     // 등락은 탭과 무관하게 하나 — 호출부가 주간 계열로 계산해 넘긴다(chgOf). 주간이 없을 때만 자기 점으로 센다:
     // 월간은 직전 달 대비라 "4주"가 아니라 "전월 대비"로 단다(같은 라벨에 다른 계산을 싣지 않는다).
     const fromWeekly = !!o.chg;
+    // 진행 중인 달(2026-11-02) — 월간 마지막 점의 달이 막대와 같은 기준일(원장 갱신일·오늘 중 이른 날)까지 다 차지 않았으면
+    // 그 점은 '지금까지'의 값이다. 빈 점·'진행 중' 꼬리표로 그리고, 다 찬 달과의 전월 대비는 내지 않는다
+    // (EB-05 일본판 11월 2일치 11건 vs 10월 1일치 6건이 '▼7.6% 전월 대비'로 나갔다).
+    const monthAsOf = asOf != null ? asOf : tNow;
+    const lastPart = grain === "month" && !!monthAsOf && nextMonth(tLast) - DAY > monthAsOf;
     let cg = o.chg || null;
+    if (!cg && grain === "month" && lastPart) cg = { pct: 0, tag: "", stale: true };
     if (!cg && grain === "month" && pts.length >= 2) {
       const prev = pts[pts.length - 2];
       const consec = monthNo(Date.parse(last.d)) - monthNo(Date.parse(prev.d)) === 1;
@@ -442,7 +448,8 @@
     // 스냅용으로 계속 쓰므로 요소 자체는 남기고 투명 처리한다. 앞뒤가 끊겨 홀로 남은 점은 선이 없으니 보이게 둔다.
     const dots = pts.map((p, i) =>
       '<circle class="opbcDot" cx="' + XY[i].x.toFixed(1) + '" cy="' + XY[i].y.toFixed(1) +
-      '" r="' + (i === pts.length - 1 ? 4.5 : solo.has(i) ? 3.5 : 3) + '" fill="' + color + '"' +
+      '" r="' + (i === pts.length - 1 ? 4.5 : solo.has(i) ? 3.5 : 3) + '"' +
+      (i === pts.length - 1 && lastPart ? ' fill="#0a0f14" stroke="' + color + '" stroke-width="2"' : ' fill="' + color + '"') +
       (i === pts.length - 1 || solo.has(i) ? "" : ' opacity="0"') + "/>").join("");
 
     // 툴팁 값은 data-* 속성에만 싣고 hover/스크럽 JS 가 읽는다(2026-10-19).
@@ -485,6 +492,7 @@
       '<figcaption class="opbcHead"><span class="opbcLabel">' + esc(label) + "</span>" +
       (badge ? '<span class="opbcBadge">' + esc(badge) + "</span>" : "") +
       '<span class="opbcNow' + (headStale ? " opbcNowStale" : "") + '">' + money(last.median) + "</span>" +
+      (lastPart && !headStale ? '<small class="opbcAsOf">' + (lang === "ko" ? "진행 중" : "in progress") + "</small>" : "") +
       (headStale ? '<small class="opbcAsOf">' + lab(last) + "</small>"
         : hideChg ? ""
         : '<span class="opbcChg ' + (chg > 0 ? "up" : chg < 0 ? "dn" : "flat") + '">' + (chg > 0 ? "▲" : chg < 0 ? "▼" : "–") + " " + Math.abs(chg) + '% <small class="opbcChgTag">' + chgTag + "</small></span>") +

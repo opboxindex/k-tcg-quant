@@ -59,7 +59,8 @@
       .hubTable td.when small { font-size: 11.5px; color: var(--muted); }
       .hubTable tr.stale td { opacity: .62; } .hubTable tr.stale td.when { opacity: 1; color: #f5c842; }
       .hubTable td.links { font-size: 12.5px; white-space: nowrap; }
-      @media (max-width: 640px) { .hubTable td.links { white-space: normal; } }
+      /* 2026-11-02: 폰에서 표가 465px(보이는 폭 354px)로 넘쳐 '4-wk change' 가 흐림 밑에 잘렸다 — box-prices 와 같은 모바일 꼴(코드 한 줄·이름 왼쪽·머리글 두 줄)에 '더 보기' 열을 뺀다 */
+      @media (max-width: 720px) { .hubTable th.links, .hubTable td.links { display: none; } }
       .ctaRow { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
       .ctaRow a { display: inline-flex; align-items: center; min-height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); font-weight: 800; }
       .ctaRow a.primary { background: rgba(var(--accent-rgb), .14); border-color: rgba(var(--accent-rgb), .5); color: var(--accent); }

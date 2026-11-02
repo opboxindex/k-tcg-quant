@@ -23,6 +23,8 @@ const DEFAULT_PAGES = [
   "/", "/box-prices.html", "/sets/index.html", "/sets/op-17.html", "/sets/op-01-english.html", "/sets/op-18.html", "/sets/eb-05.html",
   "/sets/op-17-card-list.html", "/ko/op-17-card-list.html", "/ko/", "/ja/release-dates.html",
   "/articles/one-piece-set-list-release-dates.html", "/articles/how-many-packs-one-piece-booster-box.html",
+  // 2026-11-02 모바일 점검에서 깨짐이 나온 페이지
+  "/psa-grading.html", "/compare.html", "/psa10-ranking.html", "/articles/japan-vs-english.html", "/cards/", "/sets/eb-05-english.html", "/sets/op-13-english.html", "/sets/op-13-card-list.html",
 ];
 // 인자는 저장소 상대 경로(sets/op-17.html) — 앞의 / 는 붙여 준다(Git Bash 는 /로 시작하는 인자를 윈도우 경로로 바꾼다).
 const pages = process.argv.slice(2).length ? process.argv.slice(2).map((a) => "/" + a.replace(/^\/+/, "")) : DEFAULT_PAGES;
@@ -60,7 +62,34 @@ http.createServer((q,s)=>{let u=decodeURIComponent(q.url.split("?")[0]);let p=pa
           for (let i = 0; wrap && i < 3; i++, wrap = wrap.parentElement) { const o = getComputedStyle(wrap).overflowX; if ((o === "auto" || o === "scroll") && wrap.scrollWidth > wrap.clientWidth + 1) { wrapOver = wrap.scrollWidth - wrap.clientWidth; break; } }
           return { cls: t.className || t.getAttribute("aria-label") || "(table)", sw: t.scrollWidth, cw: t.clientWidth, masked: mask !== "none", fit: t.classList.contains("tblFit"), wrapOver };
         });
-        return { sw: de.scrollWidth, cw: de.clientWidth, tables };
+        // ── 2026-11-02 추가 검사 — 가로 넘침만 재서 놓친 것들(모바일 점검에서 라이브로 확인된 사례).
+        //  ① 이베이 링크가 폰에서 안 보인다: 숨김(box-prices .rowLinks 가 720px 이하에서 display:none) · 가로 스크롤 표의 화면 밖 열(발매일 글 19개).
+        //     닫힌 <details> 안은 일부러 접은 것이라 뺀다.
+        //  ② 표 안 구매 링크(a.rowBuy)가 손가락으로 누르기엔 낮다(규칙이 없어 16px 이던 것).
+        //  ③ 머리글 칸 수 ≠ 첫 행 칸 수(psa-grading: 본문 EN 칸만 숨어 숫자가 다른 머리글 밑에 놓였다).
+        //  ④ 행 높이 중앙값이 200px 넘음(psa10-ranking 992px · psa-grading 386px — 글자가 한 줄에 한 자씩).
+        //  ⑤ 박스 차트가 빈 탭으로 열림(EB-05: 주간 격자가 없는데 '주간' 탭이 켜져 보이는 격자가 0개).
+        const vis = (el) => { if (el.closest("details:not([open])")) return null; const r = el.getBoundingClientRect(); return el.offsetParent !== null && r.width > 0 && r.height > 0 ? r : false; };
+        const ebay = { hidden: 0, offscreen: 0, lowTap: 0, total: 0 };
+        for (const a of document.querySelectorAll('a[href*="ebay."]')) {
+          const r = vis(a); if (r === null) continue; ebay.total++;
+          if (!r) { ebay.hidden++; continue; }
+          // 화면 밖 판정은 표 칸 안 링크만 — 옆으로 넘기는 카드 줄(홈 딜 카드)은 일부러 화면 밖에 둔 것이다.
+          if (!a.closest("td, th")) { if (a.classList.contains("rowBuy") && r.height < 24) ebay.lowTap++; continue; }
+          let box = a.parentElement;
+          for (; box && box !== document.body; box = box.parentElement) { const o = getComputedStyle(box).overflowX; if (o === "auto" || o === "scroll" || o === "hidden") break; }
+          const bx = box && box !== document.body ? box.getBoundingClientRect() : { left: 0, right: innerWidth };
+          if (r.left >= Math.min(bx.right, innerWidth) - 4 || r.right <= Math.max(bx.left, 0) + 4) ebay.offscreen++;
+          if (a.classList.contains("rowBuy") && r.height < 24) ebay.lowTap++;
+        }
+        const tableShape = [...document.querySelectorAll("table")].filter((t) => t.offsetParent !== null && !t.closest("details:not([open])")).map((t) => {
+          const shown = (cells) => [...cells].filter((c) => getComputedStyle(c).display !== "none").reduce((n, c) => n + (c.colSpan || 1), 0);
+          const hr = t.tHead && t.tHead.rows[t.tHead.rows.length - 1], br = t.tBodies[0] && t.tBodies[0].rows[0];
+          const hs = [...((t.tBodies[0] && t.tBodies[0].rows) || [])].map((r) => r.getBoundingClientRect().height).sort((x, y) => x - y);
+          return { cls: t.className || "(table)", head: hr ? shown(hr.cells) : null, body: br ? shown(br.cells) : null, rowMed: hs.length ? hs[Math.floor(hs.length / 2)] : 0 };
+        });
+        const charts = [...document.querySelectorAll(".opbcWrap")].filter((w) => w.querySelector(".opbcTabs")).map((w) => [...w.querySelectorAll(".opbcGridWrap[data-grain]")].filter((g) => !g.hidden && g.offsetParent !== null).length);
+        return { sw: de.scrollWidth, cw: de.clientWidth, tables, ebay, tableShape, charts };
       });
       if (m.sw > m.cw) problems.push(`${pg}: page overflows ${m.sw}px > ${m.cw}px`);
       for (const t of m.tables) {
@@ -68,7 +97,15 @@ http.createServer((q,s)=>{let u=decodeURIComponent(q.url.split("?")[0]);let p=pa
         if (t.fit && t.sw > t.cw + 1) problems.push(`${pg}: .tblFit table "${t.cls}" overflows (${t.sw}>${t.cw})`);
         if (t.fit && t.wrapOver) problems.push(`${pg}: .tblFit table "${t.cls}" overflows its scroll box by ${t.wrapOver}px — a column is hidden off-screen`);
       }
-      report.push({ page: pg, sw: m.sw, tables: process.env.AMT_VERBOSE ? m.tables : m.tables.length });
+      if (m.ebay.hidden) problems.push(`${pg}: ${m.ebay.hidden}/${m.ebay.total} eBay links are hidden on a 390px screen`);
+      if (m.ebay.offscreen) problems.push(`${pg}: ${m.ebay.offscreen}/${m.ebay.total} eBay links sit outside the visible part of a scroll box (off-screen column)`);
+      if (m.ebay.lowTap) problems.push(`${pg}: ${m.ebay.lowTap} in-table buy links (a.rowBuy) are under 24px tall — hard to tap`);
+      for (const t of m.tableShape) {
+        if (t.head != null && t.body != null && t.head !== t.body) problems.push(`${pg}: table "${t.cls}" shows ${t.head} header cells but ${t.body} cells in the first row — values sit under the wrong header`);
+        if (t.rowMed > 200) problems.push(`${pg}: table "${t.cls}" median row height ${Math.round(t.rowMed)}px — text is wrapping a few letters per line`);
+      }
+      m.charts.forEach((n, i) => { if (n !== 1) problems.push(`${pg}: box chart #${i + 1} shows ${n} grids on load (expected 1 — empty default tab?)`); });
+      report.push({ page: pg, sw: m.sw, tables: process.env.AMT_VERBOSE ? m.tables : m.tables.length, ebay: m.ebay });
       await page.close();
     }
   } finally { await browser.close(); srv.kill(); }

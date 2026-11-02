@@ -51,13 +51,17 @@ html = html.replace(trRe, (whole, code, rest) => {
   if (!series[code]) { untouched++; return whole; }
   const cur = curJp(code);
   // 값 옆에 그 중앙값 점의 날짜(<small>) — 열 하나에 기준일이 하나가 아니다.
-  // 값 뒤에 일본판 최저 실매물 링크(세트 페이지 구매 버튼과 같은 값 — 사실 파일 ask.jp) — 2026-11-02. 이 글은 검색 유입의 약 60%인데 구매 링크가 0개였다.
-  // 중앙값이 있는 행에만 단다 — 가드 D17 이 이 칸의 첫 $ 값을 중앙값으로 읽어서, 중앙값 없는 행("—")에 매물가를 두면 중앙값으로 읽힌다.
-  const ask = cur && F.sets[code] && F.sets[code].ask && F.sets[code].ask.jp;
+  // 이름 칸 아래 일본판 최저 실매물 링크(세트 페이지 구매 버튼과 같은 값 — 사실 파일 ask.jp) — 2026-11-02. 이 글은 검색 유입의 약 60%인데 구매 링크가 0개였다.
+  // 가격 칸이 아니라 이름 칸 — 가격 칸은 폰에서 가로 스크롤 표의 화면 밖 마지막 열이라 링크 19개가 안 보였고, 가드 D17 은 그 칸의 첫 $ 를 중앙값으로 읽는다.
+  // 이 함수는 매일 자기 출력 위에 다시 돈다 — 지난번 링크(slBuy)를 걷어 내고 단다.
+  const ask = F.sets[code] && F.sets[code].ask && F.sets[code].ask.jp;
   const buy = ask ? buyLink({ url: ask.url, price: ask.total, spot: `sl-${code.toLowerCase()}`, label: "eBay from" }) : "";
-  const cell = cur ? `$${Math.round(cur.median).toLocaleString("en-US")}<small> ${SHORT(cur.d)}</small>${buy ? ` <small>${buy}</small>` : ""}` : "—";
+  const cell = cur ? `$${Math.round(cur.median).toLocaleString("en-US")}<small> ${SHORT(cur.d)}</small>` : "—";
   // 치환 문자열이 아니라 함수로 쓴다 — cell 이 "$" 로 시작해서 $1·$& 같은 치환 패턴으로 오인된다.
-  const next = rest.replace(/<td class="num">(?:(?!<\/td>)[\s\S])*<\/td>/, () => `<td class="num">${cell}</td>`);
+  const next = rest
+    .replace(/<small class="slBuy"[^>]*>[\s\S]*?<\/small>/, "")
+    .replace(/^(<td>(?:(?!<\/td>)[\s\S])*)(<\/td>)/, (m, a, b) => `${a}${buy ? `<small class="slBuy" style="display:block;margin-top:2px;font-size:12px">${buy}</small>` : ""}${b}`)
+    .replace(/<td class="num">(?:(?!<\/td>)[\s\S])*<\/td>/, () => `<td class="num">${cell}</td>`);
   if (next === rest) { untouched++; return whole; }
   if (cur) updated++; else staled++;
   return `<tr><td>${code}</td>${next}</tr>`;

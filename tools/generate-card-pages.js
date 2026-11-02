@@ -641,6 +641,8 @@ const hub = `<!doctype html>
     <meta name="theme-color" content="#0a0c10" />
     <style>
       .cardGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 18px; }
+      /* 2026-11-02: 폰에서 2열이라 카드 119장 격자만 19,838px(페이지 29,116px)였다 — 3열로 줄인다 */
+      @media (max-width: 560px) { .cardGrid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; } .cardGrid a { padding: 6px; } .cardGrid b { font-size: 12px; } }
       .cardGrid a { display: block; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 10px; background: rgba(20,23,28,.6); text-align: center; }
       .cardGrid a:hover { border-color: var(--accent); }
       .cardGrid img { display: block; width: 100%; height: auto; border-radius: 8px; }

@@ -191,7 +191,7 @@ function compareTable(code, m, s) {
   return `
       <h2>English vs Japanese ${code} box</h2>
       <div class="chaseTableWrap">
-        <table class="chaseTable">
+        <table class="chaseTable tblFit">
           <thead><tr><th>Metric</th><th>English</th><th>Japanese</th></tr></thead>
           <tbody>
             ${rows}
@@ -346,6 +346,8 @@ ${KF_CSS}
       .chaseTable td { padding: 9px 10px; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: top; }
       .chaseTable .psaKind { color: var(--muted); font-size: 11.5px; }
       .chaseTable td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      /* 2026-11-02: 영문판·일본판 비교표가 폰에서 389px 로 넘쳐 배수 값이 화면 밖이었다 — 값 아래 꼬리말을 줄바꿈해 폭 안에 넣는다 */
+      @media (max-width: 720px) { .chaseTable td.num .psaKind { display: block; } }
       .priceNote { color: var(--muted); font-size: 12px; margin: 2px 0 0; }`;
 
 // ── 페이지 한 장 ----------------------------------------------------------------

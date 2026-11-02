@@ -139,7 +139,8 @@ const SET_PAGE_CSS = `      /* 제목 블록이 폭을 100% 잡고 있어 박스
       .hubTable td.when small { font-size: 11.5px; color: var(--muted); }
       .hubTable tr.stale td { opacity: .62; } .hubTable tr.stale td.when { opacity: 1; color: #f5c842; }
       .hubTable td.links { font-size: 12.5px; white-space: nowrap; }
-      @media (max-width: 640px) { .hubTable td.links { white-space: normal; } }
+      /* 2026-11-02: 폰에서 표가 465px(보이는 폭 354px)로 넘쳐 '4-wk change' 가 흐림 밑에 잘렸다 — box-prices 와 같은 모바일 꼴(코드 한 줄·이름 왼쪽·머리글 두 줄)에 '더 보기' 열을 뺀다 */
+      @media (max-width: 720px) { .hubTable th.links, .hubTable td.links { display: none; } }
       .ctaRow { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
       .ctaRow a { display: inline-flex; align-items: center; min-height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); font-weight: 800; }
       .ctaRow a.primary { background: rgba(var(--accent-rgb), .14); border-color: rgba(var(--accent-rgb), .5); color: var(--accent); }
@@ -621,7 +622,9 @@ function setPage(code, prev, next) {
 
     const m = s.metrics.jp || {};
     if (m.price != null) cell("Box price (JP)", usd(m.price), `${m.priceD ? `as of ${m.priceD} · ` : ""}${baseLabel("price")} ${usd(base.price.v)} ${cmp(m.price, base.price.v)}`);
-    else cell("Box price (JP)", "—", "no sold median dated within 28 days");   // current 가 없으면 큰 숫자도 "—"(표와 같은 규칙)
+    // current 가 없으면 큰 숫자도 "—"(표와 같은 규칙). 지표 자체가 없는 세트(주간 점 5개 미만 — 갓 발매된 EB-05)는 칸을 내지 않는다 —
+    // 2026-11-02: 위 Key facts 는 판매 중앙값 $110(17건)인데 이 칸만 '— no sold median dated within 28 days' 로 엇갈렸다.
+    else if (s.metrics.jp) cell("Box price (JP)", "—", "no sold median dated within 28 days");
     if (m.chg != null) {
       const cls = m.chg > 0 ? "statUp" : m.chg < 0 ? "statDown" : "statFlat";
       cell("4-week change", `<span class="${cls}">${m.chg > 0 ? "+" : ""}${m.chg}%</span>`, `${baseLabel("chg")} ${base.chg.v > 0 ? "+" : ""}${base.chg.v}%`);
@@ -787,7 +790,7 @@ function hubPage() {
     const cl = CARD_LISTS[code] ? `<a href="${slug(code)}-card-list.html">Card list</a>` : "";
     // 이름 칸 아래 일본판 최저 실매물(세트 페이지 구매 버튼과 같은 값) — 2026-11-02. 허브는 ChatGPT 랜딩(10월 22세션)인데 이베이 링크가 0개였다. 가격 칸은 그대로(가드 D17).
     const hubBuy = s.ask && s.ask.jp ? buyLink({ url: s.ask.jp.url, price: s.ask.jp.total, spot: `hub-${slug(code)}`, label: "eBay from" }) : "";
-    return `<tr${stale ? ' class="stale"' : ""}><td><a href="${slug(code)}.html"><strong>${code}</strong></a></td><td><a href="${slug(code)}.html">${esc(s.nameEn || "")}</a>${hubBuy ? `<small style="display:block;margin-top:2px;font-size:12px">${hubBuy}</small>` : ""}</td><td class="num">${b.nowUsd != null ? "$" + intl(b.nowUsd) : "—"}</td><td class="num when">${b.nowDate ? esc(b.nowDate.slice(5)) : "—"}${b.n != null ? `<small> n=${b.n}${b.windowDays ? `/${b.windowDays}d` : ""}</small>` : ""}</td><td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td><td class="links">${[en, cl, topLink].filter(Boolean).join(" · ")}</td></tr>`;
+    return `<tr${stale ? ' class="stale"' : ""}><td class="code"><a href="${slug(code)}.html"><strong>${code}</strong></a></td><td class="name"><a href="${slug(code)}.html">${esc(s.nameEn || "")}</a>${hubBuy ? `<small style="display:block;margin-top:2px;font-size:12px">${hubBuy}</small>` : ""}</td><td class="num">${b.nowUsd != null ? "$" + intl(b.nowUsd) : "—"}</td><td class="num when">${b.nowDate ? esc(b.nowDate.slice(5)) : "—"}${b.n != null ? `<small> n=${b.n}${b.windowDays ? `/${b.windowDays}d` : ""}</small>` : ""}</td><td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td><td class="links">${[en, cl, topLink].filter(Boolean).join(" · ")}</td></tr>`;
   }).join("\n        ");
   const items = rows;
   const ld = `<script type="application/ld+json">${JSON.stringify({
@@ -821,8 +824,8 @@ function hubPage() {
       ${AFF_TOP}
       <p class="priceNote">Japanese sealed booster box · Box price = rolling median of completed eBay sales · n = sales in its 28–56-day window · 4-wk change = vs the median 28 days earlier · — = no median dated within ${STALE_DAYS} days (6+ sales) · Data ${esc(hubDate)} · <a href="../methodology.html#box-median">How these are counted</a></p>
       <div style="overflow-x:auto">
-      <table class="homeSummaryTable hubTable">
-        <thead><tr><th>Set</th><th>Name</th><th>Box price</th><th>As of (n/window)</th><th>4-wk change</th><th>More</th></tr></thead>
+      <table class="homeSummaryTable hubTable tblFit">
+        <thead><tr><th>Set</th><th class="name">Name</th><th>Box price</th><th>As of <small>n / window</small></th><th>4-wk <small>change</small></th><th class="links">More</th></tr></thead>
         <tbody>
         ${items}
         </tbody>

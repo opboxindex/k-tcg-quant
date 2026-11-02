@@ -155,7 +155,7 @@ function preorderTable(page, ko = false) {
     const a = u.ask[ed];
     if (!a && !sold?.preRelease?.[ed] && !sold?.current?.[ed] && !edReleased(page, ed)) return null;
     // 모바일 390px 에서 4열은 마지막 열이 잘린다(실측) — 3열로 두고 보조 수치는 셀 안 둘째 줄(small)에.
-    const bestHtml = a?.best ? `<a href="${escapeHtml(epnUrl(a.best.url + (a.best.url.includes("?") ? "&" : "?") + `customid=preorder-${page.slug}-${ed}`))}" target="_blank" rel="noopener noreferrer sponsored">${usd(a.best.total)}</a>` : "—";
+    const bestHtml = a?.best ? `<a class="rowBuy" href="${escapeHtml(epnUrl(a.best.url + (a.best.url.includes("?") ? "&" : "?") + `customid=preorder-${page.slug}-${ed}`))}" target="_blank" rel="noopener noreferrer sponsored">${usd(a.best.total)}</a>` : "—";
     const askHtml = a && a.n ? `${bestHtml}<small data-ko="중앙값 ${usd(a.median)} · 매물 ${a.n}개">median ${usd(a.median)} · ${a.n} listing${a.n === 1 ? "" : "s"}</small>` : "—";
     return `<tr><td data-ko="${ko} 박스">${label} box</td><td>${askHtml}</td><td>${salesCell(page, ed)}</td></tr>`;
   }).filter(Boolean);

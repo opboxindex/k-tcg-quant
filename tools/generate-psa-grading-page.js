@@ -237,7 +237,7 @@ ${byAdd.map(addTr).join("\n")}
         <div class="chartHead"><h2>All ${rows.length} sets · PSA · CGC · TAG</h2><p class="sub">Cards in holders · change since last report · top-grade share (PSA 10 · TAG 10 + 10P) · JP and EN side by side</p></div>
         <div class="tblWrap"><table class="aTable">
           <caption class="sr-only">Graded population per set at PSA, CGC and TAG, Japanese and English printings</caption>
-          <thead><tr><th class="l">Set</th><th class="psa numH">PSA JP</th><th class="psa en">PSA EN</th><th class="cgc numH">CGC JP</th><th class="cgc en">CGC EN</th><th class="tag numH">TAG JP</th><th class="tag en">TAG EN</th></tr></thead>
+          <thead><tr><th class="l">Set</th><th class="psa numH">PSA JP</th><th class="psa en hideM">PSA EN</th><th class="cgc numH">CGC JP</th><th class="cgc en hideM">CGC EN</th><th class="tag numH">TAG JP</th><th class="tag en hideM">TAG EN</th></tr></thead>
           <tbody>
 ${rows.map(tr).join("\n")}
           </tbody>

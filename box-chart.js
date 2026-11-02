@@ -795,20 +795,22 @@
     };
 
     const da = (series && series.daily) || {};
-    const week = grid("week", series && series.jp, series && series.en, false);
-    const month = grid("month", mo.jp, mo.en, true);
-    const day = grid("day", da.jp, da.en, true);
+    // 기본 단위 = 그릴 게 있는 단위 중 주간 → 일간 → 월간 — 2026-11-02. 주간 점이 아직 없는 새 세트(EB-05)는 '주간' 탭이 켜진 채 빈 칸으로 열렸다.
+    const built = { week: grid("week", series && series.jp, series && series.en, false), month: grid("month", mo.jp, mo.en, false), day: grid("day", da.jp, da.en, false) };
+    const def = built.week ? "week" : built.day ? "day" : "month";
+    const hideIf = (g) => (built[g] && g !== def ? built[g].replace('data-grain="' + g + '">', 'data-grain="' + g + '" hidden>') : built[g]);
+    const week = hideIf("week"), month = hideIf("month"), day = hideIf("day");
     // 눌러도 아무것도 안 뜨는 버튼은 만들지 않는다 — 그릴 게 있는 단위만 탭으로 낸다.
     const tabDefs = [
       day ? ["day", lang === "ko" ? "일간" : "Daily"] : null,
-      ["week", lang === "ko" ? "주간" : "Weekly"],
+      week ? ["week", lang === "ko" ? "주간" : "Weekly"] : null,
       month ? ["month", lang === "ko" ? "월간" : "Monthly"] : null,
     ].filter(Boolean);
     const tabs = tabDefs.length > 1
       ? '<div class="opbcTabs" role="group" aria-label="' + (lang === "ko" ? "집계 단위" : "Time grain") + '">' +
         tabDefs.map(([g, label]) =>
-          '<button type="button" class="opbcTab' + (g === "week" ? " on" : "") + '" data-grain="' + g +
-          '" aria-pressed="' + (g === "week" ? "true" : "false") + '">' + label + "</button>").join("") + "</div>"
+          '<button type="button" class="opbcTab' + (g === def ? " on" : "") + '" data-grain="' + g +
+          '" aria-pressed="' + (g === def ? "true" : "false") + '">' + label + "</button>").join("") + "</div>"
       : "";
 
     // 3초 안에 읽혀야 하는 것: 두 판이 지금 얼마이고 몇 배 차이인가.

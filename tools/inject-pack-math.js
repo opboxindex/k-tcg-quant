@@ -111,7 +111,8 @@ const lead =
   `Sets without a sold median dated within ${STALE_DAYS} days (a median needs at least 6 sales in its 28–56-day window) are left blank rather than carried forward.`;
 
 const table =
-  `<div class="tblWrap" data-pack-math><table class="dataTable">\n` +
+  // 폰에선 MSRP 두 열을 숨겨 354px 에 맞춘다(styles.css .packMath) — 2026-11-02: 486px 표라 글의 핵심인 Box sold·Per pack 이 흐림 밑·화면 밖이었다.
+  `<div class="tblWrap" data-pack-math><table class="dataTable packMath tblFit">\n` +
   `        <thead><tr><th>Set</th><th class="num">Packs</th><th class="num">MSRP / pack</th><th class="num">MSRP / box</th><th class="num">Box sold</th><th class="num">Per pack</th><th class="num">vs MSRP</th></tr></thead>\n` +
   `        <tbody>\n${rows.join("\n")}\n        </tbody>\n` +
   `      </table></div>\n` +

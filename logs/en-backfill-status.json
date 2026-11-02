@@ -1,5 +1,5 @@
 {
- "ranAt": "2026-11-01T18:42:05.580Z",
+ "ranAt": "2026-11-02T18:57:05.286Z",
  "sets": [
   {
    "code": "OP-01",
@@ -108,6 +108,11 @@
   },
   {
    "code": "PRB-02",
+   "ok": false,
+   "error": "Finding API failed (418): "
+  },
+  {
+   "code": "EB-05",
    "ok": false,
    "error": "Finding API failed (418): "
   }

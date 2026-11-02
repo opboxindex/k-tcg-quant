@@ -134,7 +134,10 @@ function seriesFor(rs, wave) {
     if (raw.length < minN) return null;
     // 이상치(salesOf)를 뺀다. 빼고 나서 minN 이 안 되면 그 점만 창을 7일씩 cap 까지 늘려 깨끗한 판매 minN 건을 모은다 —
     // 점을 지우면 새 공백이 생기고(OP-07 9/17·9/24 는 6건 중 3건이 이상치였다), 그대로 두면 틀린 값이 남는다.
-    // cap 까지 늘려도 모자라면 원래 창의 판매를 그대로 쓴다(종전 값). out = 그 점에서 뺀 건수, win = 늘린 창(일).
+    // cap 까지 늘려도 깨끗한 판매가 minN 건이 안 되면 점을 찍지 않는다 — MIN_N 과 같은 원칙(빈 구간이 틀린 값보다 낫다).
+    // 2026-11-02: 종전엔 원래 창의 판매를 이상치째 그대로 썼다. 그 예비 규칙을 타는 점은 전 계열 4개뿐이었는데 전부 오염값이었다 —
+    // OP-07 일본판 9/27 $134(n 6 중 이상치 3건, 앞뒤 ~$80 · 가드 OL2)·OP-09 일본판 3/29~4/12 $99(2/20 $189·2/28 $172 포함, 사분위 상단 $154).
+    // out = 그 점에서 뺀 건수, win = 늘린 창(일).
     // 점마다 n + out = (t - win, t] 의 즉시구매 판매 수 — 원장과 sets[*].outliers 만으로 다시 셀 수 있다.
     let use = raw, out = 0, win = windowDays;
     if (raw.some((r) => r.out)) {
@@ -143,6 +146,7 @@ function seriesFor(rs, wave) {
         const clean = all.filter((r) => !r.out);
         if (clean.length >= minN) { use = clean; out = all.length - clean.length; win = w; break; }
       }
+      if (use === raw) return null;
     }
     const u = use.map((r) => r.unit);
     // vol = 그 점 **직전 한 주**에 실제로 팔린 건수. 중앙값을 만든 n(창 전체, 28~56일)과 다르다.
@@ -466,7 +470,7 @@ for (const node of Object.values(sets)) {
 }
 
 const store = {
-  note: `Rolling median of individual completed eBay sales of sealed One Piece booster boxes, sampled every ${STEP_DAYS} days and dated by SALE date (not collection date). The averaging window is chosen per series (${MIN_WINDOW}-${MAX_WINDOW} days) so that each point rests on roughly ${TARGET_N} sales, because sales volume differs more than tenfold between sets; each series records the window it used. Rebuilt from data/box-sold-ledger.json on every run, so a change in how listings are collected cannot show up as a price move. Windows with fewer than ${MIN_N} sales are omitted rather than estimated. Only fixed-price (Buy It Now) sales are included; auction results are collected separately and excluded, because an auction that draws no bidding closes far below the going rate. Sales dated before an edition's official release date (pre-orders) are excluded from the sold series and summarized separately per set under preRelease (median only when at least ${PRE_MIN_LISTINGS} different listings sold). current is the latest point when the edition is released and that point is within ${STALE_DAYS} days of asOf, otherwise null. Prices are per box in USD. A monthly view (median of every sale within each calendar month, minimum ${MONTH_MIN_N} sales) is included alongside, because sets with wide dispersion between individual sales are steadier when grouped by month. Outlier sales (listed per set under outliers) are left out of medians: a sale is an outlier when it lies more than ${OUT_K} x max(1.4826 x MAD, ${OUT_FLOOR * 100}% of median) from the median of both the ${OUT_REF_DAYS} days before and the ${OUT_REF_DAYS} days after its sale date, each side holding at least ${OUT_REF_MIN} sales. out = sales left out of that point; win = that point's window in days when it was lengthened (up to ${MAX_WINDOW} days, ${RARE_MAX_WINDOW} for the first-print series) to keep ${MIN_N} sales after leaving outliers out; when even that falls short, the point keeps all sales. vol and counts include outliers.`,
+  note: `Rolling median of individual completed eBay sales of sealed One Piece booster boxes, sampled every ${STEP_DAYS} days and dated by SALE date (not collection date). The averaging window is chosen per series (${MIN_WINDOW}-${MAX_WINDOW} days) so that each point rests on roughly ${TARGET_N} sales, because sales volume differs more than tenfold between sets; each series records the window it used. Rebuilt from data/box-sold-ledger.json on every run, so a change in how listings are collected cannot show up as a price move. Windows with fewer than ${MIN_N} sales are omitted rather than estimated. Only fixed-price (Buy It Now) sales are included; auction results are collected separately and excluded, because an auction that draws no bidding closes far below the going rate. Sales dated before an edition's official release date (pre-orders) are excluded from the sold series and summarized separately per set under preRelease (median only when at least ${PRE_MIN_LISTINGS} different listings sold). current is the latest point when the edition is released and that point is within ${STALE_DAYS} days of asOf, otherwise null. Prices are per box in USD. A monthly view (median of every sale within each calendar month, minimum ${MONTH_MIN_N} sales) is included alongside, because sets with wide dispersion between individual sales are steadier when grouped by month. Outlier sales (listed per set under outliers) are left out of medians: a sale is an outlier when it lies more than ${OUT_K} x max(1.4826 x MAD, ${OUT_FLOOR * 100}% of median) from the median of both the ${OUT_REF_DAYS} days before and the ${OUT_REF_DAYS} days after its sale date, each side holding at least ${OUT_REF_MIN} sales. out = sales left out of that point; win = that point's window in days when it was lengthened (up to ${MAX_WINDOW} days, ${RARE_MAX_WINDOW} for the first-print series) to keep ${MIN_N} sales after leaving outliers out; when even that falls short, the point is omitted. vol and counts include outliers.`,
   window: { targetSales: TARGET_N, minDays: MIN_WINDOW, maxDays: MAX_WINDOW, stepDays: STEP_DAYS, minSales: MIN_N, basis: "sold", datedBy: "saleDate", fromRelease: true },
   // 2026-10-15 — 판정 기준은 markOutliers 주석 참고. 숫자를 바꾸면 test-box-sold-filters.js 6절이 OP-07·발매 주 사례로 다시 검증한다.
   outlierRule: { method: "two-sided Hampel", k: OUT_K, madToSigma: MAD_TO_SIGMA, scaleFloor: OUT_FLOOR, refDays: OUT_REF_DAYS, refMinSales: OUT_REF_MIN },

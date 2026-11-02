@@ -189,7 +189,9 @@ function buyCta({ url, price, mid, updated, label }) {
 // 판매 중앙값은 current(28일 규칙)일 때만 — 없으면 조각을 빼고 최저 매물가가 앞에 선다(묵은 중앙값을 현재가로 내지 않는다).
 // 조각은 우선순위 순서: 판매 중앙값 · 최저 매물가 · 그 판 발매일 · 팩 수(일본판) → 들어가는 만큼 extras(페이지 지표 칸에 있는 값)·정가.
 // max 를 넘으면 뒤 조각부터 뺀다. 세트 코드가 들어가므로 페이지마다 다르다.
-function dataDesc(m, nameEn, extras = [], max = 155) {
+// 그래도 min(가드 MD1 하한 120자)보다 짧으면 Key facts 표의 다른 행 값(그 판 팩 정가 → 최고가 카드 → 카드 종류)을 하한에 닿을 때까지 잇는다 —
+// 2026-11-02(EB-05 승격): 갓 발매된 세트는 판매 중앙값·매물·팩 수·박스 정가가 없어 일본판 설명이 "JP release …" 하나(73자)였다.
+function dataDesc(m, nameEn, extras = [], max = 155, min = 120) {
   const head = `${m.code} ${nameEn} ${m.ed === "en" ? "English" : "Japanese"} booster box: `;
   const core = [];
   if (m.sold) core.push(`${m.sold.reprint ? "reprint (White) " : ""}sold median ${usd(m.sold.median)} (${m.sold.d}${m.sold.n != null ? `, n=${m.sold.n}` : ""})`);
@@ -203,6 +205,17 @@ function dataDesc(m, nameEn, extras = [], max = 155) {
   const parts = core.slice();
   while (parts.length > 1 && text(parts).length > max) parts.pop();
   for (const x of more) if (text([...parts, x]).length <= max) parts.push(x);
+  const ms = m.msrp || {}, ch = m.chase, ct = m.cardTypes;
+  const fill = [
+    m.ed === "en" ? (ms.enPack != null ? [`MSRP $${Number(ms.enPack).toFixed(2)} / pack`] : []) : (!ms.jpBox && ms.jpPack ? [`MSRP ¥${Number(ms.jpPack).toLocaleString("en-US")} / pack`] : []),
+    ch && ch.usd != null ? [ch.name && ch.number ? `top chase ${ch.name} (${ch.number}) ${usd(ch.usd)} raw NM` : null, ch.name ? `top chase ${ch.name} ${usd(ch.usd)} raw NM` : null, ch.number ? `top chase ${ch.number} ${usd(ch.usd)} raw NM` : null].filter(Boolean) : [],
+    ct && ct.official ? [`${ct.value} card types`] : [],
+  ];
+  for (const cands of fill) {
+    if (text(parts).length >= min) break;
+    const hit = cands.find((x) => text([...parts, x]).length <= max);
+    if (hit) parts.push(hit);
+  }
   return text(parts);
 }
 
@@ -306,4 +319,19 @@ const BUY_CTA_CSS = `      .ctaRow a.buyNow { flex-direction: column; align-item
       .ctaRow a.buyNow .buyAsOf { font-style: normal; font-size: 11.5px; color: rgba(255,255,255,.55); }
       .ctaRow a.buyNow .buyOff + .buyAsOf { margin-left: 8px; }`;
 
-module.exports = { ROOT, SITE, EPN, CSS_VER, BoxChart, esc, usd, intl, monthYear, AFF_TOP, FOOT, foot, pageHead, upsertSitemap, epnUrl, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc };
+// 영문판 페이지 차트에 넘기는 계열 — 영문판(+초판 Blue)만. 일본판 선은 일본판 페이지에 있다.
+// 생성기(generate-english-set-pages)와 가드 KF4(차트가 있어야 할 페이지인가)가 같은 판정을 쓰게 여기 한 곳에 둔다.
+function enOnlySeries(ser) {
+  return {
+    en: ser.en, enBlue: ser.enBlue,
+    windowDays: ser.windowDays,
+    monthly: { en: ser.monthly?.en, enBlue: ser.monthly?.enBlue },
+    daily: { en: ser.daily?.en, enBlue: ser.daily?.enBlue },
+    // 판매일별 건수 — 거래량 막대(달력 칸)의 원천. 없으면 막대가 통째로 빠진다.
+    counts: { through: ser.counts?.through, en: ser.counts?.en, enBlue: ser.counts?.enBlue },
+    supply: (ser.supply || []).map((p) => ({ d: p.d, en: p.en })),
+    reprintPct: ser.reprintPct,
+  };
+}
+
+module.exports = { ROOT, SITE, EPN, CSS_VER, BoxChart, enOnlySeries, esc, usd, intl, monthYear, AFF_TOP, FOOT, foot, pageHead, upsertSitemap, epnUrl, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, KF_CSS_ANY, kfTableAny, withChartCss, dataDesc };

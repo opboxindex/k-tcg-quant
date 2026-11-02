@@ -24,7 +24,7 @@
 // Run: node tools/generate-english-set-pages.js   (generate-set-pages.js 보다 먼저 — 허브·일본판 페이지가 이 파일 존재를 보고 링크를 건다)
 const fs = require("fs");
 const path = require("path");
-const { ROOT, SITE, EPN, BoxChart, esc, usd, intl, AFF_TOP, FOOT, pageHead, upsertSitemap, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, withChartCss, dataDesc } = require("./set-page-shared");
+const { ROOT, SITE, EPN, BoxChart, enOnlySeries, esc, usd, intl, AFF_TOP, FOOT, pageHead, upsertSitemap, buyCta, BUY_CTA_CSS, keyFactsHtml, KF_CSS, withChartCss, dataDesc } = require("./set-page-shared");
 
 const readJson = (rel, fallback) => {
   try { return JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8")); } catch { return fallback; }
@@ -95,7 +95,9 @@ function statGrid(code, m) {
   if (m.multiple != null) card("vs Japanese box", `${m.multiple}x`, `${m.reprint ? "EN reprint vs " : ""}JP ${usd(m.jpPrice)} as of ${esc(m.jpPriceD)} · ${baseLabel("multiple")} ${BASE.multiple.v}x`, "English sold median ÷ Japanese sold median");
   if (m.psa != null) card("PSA graded (EN)", intl(m.psa), `${baseLabel("psa")} ${intl(BASE.psa.v)} ${cmp(m.psa, BASE.psa.v)}`);
   if (m.gem != null) card("PSA 10 rate (EN)", `${m.gem}%`, `${baseLabel("gem")} ${BASE.gem.v}% ${cmp(m.gem, BASE.gem.v)}`, "PSA 10 grades ÷ all PSA grades, English printing");
-  if (cells.length < 3) return "";
+  // 칸이 하나라도 있으면 격자를 낸다 — 2026-11-02(EB-05 승격): 종전 "3칸 미만이면 생략"이라 갓 발매된 세트(판매 중앙값 하나뿐, 변동률·호가·재고일수·PSA 없음)는
+  // 판매 중앙값 칸까지 통째로 빠졌다(가드 D17 "Box price (EN)" 없음). 일본판 생성기는 Box price 칸을 늘 낸다.
+  if (!cells.length) return "";
   const gloss = hints.length ? `<details class="statGloss"><summary>Definitions</summary><dl>${hints.map(([l, t]) => `<dt>${l}</dt><dd>${t}</dd>`).join("")}</dl></details>` : "";
   return `<section aria-label="English box metrics"><div class="statGrid">${cells.join("")}</div>${gloss}</section>`;
 }
@@ -121,16 +123,7 @@ function keyFacts(code, nameEn, m, s) {
 function chartBlock(code) {
   const ser = SOLD.sets?.[code];
   if (!ser) return "";
-  const enOnly = {
-    en: ser.en, enBlue: ser.enBlue,
-    windowDays: ser.windowDays,
-    monthly: { en: ser.monthly?.en, enBlue: ser.monthly?.enBlue },
-    daily: { en: ser.daily?.en, enBlue: ser.daily?.enBlue },
-    // 판매일별 건수 — 거래량 막대(달력 칸)의 원천. 없으면 막대가 통째로 빠진다.
-    counts: { through: ser.counts?.through, en: ser.counts?.en, enBlue: ser.counts?.enBlue },
-    supply: (ser.supply || []).map((p) => ({ d: p.d, en: p.en })),
-    reprintPct: ser.reprintPct,
-  };
+  const enOnly = enOnlySeries(ser);
   if (!BoxChart.hasChart(enOnly)) return "";
   return BoxChart.chartHTML(enOnly, { lang: "en", title: `${code} English sealed booster box — median completed eBay sale` });
 }

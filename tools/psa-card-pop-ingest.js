@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // 카드별 PSA 인구 적재 — 2026-08-03.
 //
-// 입력: GemRate 공개 페이지(item-details-advanced)의 RowData 덤프.
+// 입력: GemRate 공개 페이지(표준 팝리포트 item-details — 2026-11-02 전엔 item-details-advanced)의 RowData 덤프.
 //   { grader:"psa", collectedAt, sets:{ "OP-13|jp":[{num,name,par,total,g10,g9,updated}] } }
 //   set URL 은 추측하지 않는다 — 이미 검증된 gemrate-psa-history / gemrate-psa-en-totals 의 url 에서
-//   경로만 item-details-advanced 로 바꿔 쓴다(세트명 규칙을 추측하다 OP-06·OP-02 에서 당한 적 있음).
+//   경로만 item-details 로 바꿔 쓴다(세트명 규칙을 추측하다 OP-06·OP-02 에서 당한 적 있음).
 // 출력: data/psa-card-pop.json — 카드·변형별 주간 점 [{d,total,g10,g9,par,seen}] append-only. CGC/TAG 원장과 같은 구조.
 //   d = GemRate 의 마지막 인구 변동일, seen = 그 값을 마지막으로 본 수집일(2026-09-16 추가. 감사가 관측일로 쓴다).
 //

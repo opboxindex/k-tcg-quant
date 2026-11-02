@@ -5,12 +5,13 @@
 //  R1 홈 정적 본문 하한 [2026-08-28 홈 노출 급감] · S2 robots AI/검색 접근 · F1 필수 파일 · T1 데이터 신선도
 //  U1/U2/CL2 수정일 ≥ 화면 날짜 [2026-09-30·감사 #4] · DS1 Dataset 수정일 ≥ 기간 끝, free-data Dataset = 내려주는 파일 [감사 #4·3차]
 //  SE1 제목·설명 길이·Dataset 필수 필드·Article image·Breadcrumb [2026-10-14 W6] · PL1 Product 가격은 화면에 [감사 #6] · PO1 카드 Product offers 꼴 [감사 #5]
-//  S3 세트 페이지 템플릿 껍데기 금지 [2026-08-07 애드센스 거절] · KF1(구조) Key facts 표 위치·월 단위 날짜 금지 [2026-10-14 W5a] · MD1/KO5(꼴) 설명문 꼴·길이·고유 [2026-10-15]
+//  S3 세트 페이지 템플릿 껍데기 금지 [2026-08-07 애드센스 거절] · KF1(구조) Key facts 표 위치·월 단위 날짜 금지 [2026-10-14 W5a] · KF4 차트가 있어야 할 세트 페이지에 차트 [2026-11-02 EB-05] · MD1/KO5(꼴) 설명문 꼴·길이·고유 [2026-10-15]
 //  RD1(구조) ItemList 에 Product 금지 [2026-10-14 QA] · AD1 글 날짜 = sync-article-dates 규칙 [2026-10-14 W3] · UP1(구조) 발매 전 페이지 바이라인 순서 [2026-10-14 W3]
 const { errors, read, exists, list, PUBLIC_HTML, ISO, money, unH, ldOf, ldFlat, shownText, descOf, strip, json, packs, facts } = require("./lib");
 const { KO_LABELS } = require("../site-nav");
+const { BoxChart, enOnlySeries } = require("../set-page-shared");
 
-const checks = ["C1", "C2", "N1", "H1", "L1", "L2", "L3", "I1", "I2", "R1", "S2", "F1", "T1", "U1", "U2", "CL2", "DS1", "SE1", "FQ2", "PL1", "PO1", "S3", "KF1", "KF2", "KF3", "MD1", "KO5", "RD1", "AD1", "UP1"];
+const checks = ["C1", "C2", "N1", "H1", "L1", "L2", "L3", "I1", "I2", "R1", "S2", "F1", "T1", "U1", "U2", "CL2", "DS1", "SE1", "FQ2", "PL1", "PO1", "S3", "KF1", "KF2", "KF3", "KF4", "MD1", "KO5", "RD1", "AD1", "UP1"];
 const SITE = "https://opboxindex.com";
 const toRel = (u) => { let p; try { p = new URL(u, SITE + "/").pathname; } catch { return null; } return p === "/" ? "index.html" : decodeURIComponent(p.slice(1)) + (p.endsWith("/") ? "index.html" : ""); };
 const noindex = (h) => /name="robots" content="[^"]*noindex/i.test(h);
@@ -227,7 +228,16 @@ function run() {
     seenDesc.set(d, f);
   }
   if (!s3) errors.push("S3: 카드가 있는 세트 페이지를 0장 읽었다");
-  // KF1(구조) — kfTable 은 H1 바로 아래(사이엔 nextLinks 만), 영어는 HTML 앞 25% 안·한국어는 본문 글자 앞 25% 안, eBay 링크·월 단위 날짜·"Card List" 제목 금지
+  // KF1(구조) — kfTable 은 H1 바로 아래(사이엔 nextLinks 만), 영어·일본판은 시작 바이트 상한 안·한국어는 본문 글자 앞 25% 안, eBay 링크·월 단위 날짜·"Card List" 제목 금지
+  // 위치 상한 — 2026-11-02(EB-05 승격). 종전 "HTML 앞 25%" 비율은 페이지 길이에 달려 있었다. 머리(CSS·구조화데이터)는 모든 세트 페이지가 같은 틀이라
+  // kfTable 은 늘 거의 같은 바이트(일본판 ~17.0KB · 영문판 ~11.9KB)에서 시작하는데, 갓 발매돼 본문(차트)이 짧은 세트는 비율만 28~54% 로 올라 막혔다.
+  // 지키려던 것(머리가 불어나 사실 표가 뒤로 밀리는 것)을 절대 위치로 직접 잰다. 상한은 종전 비율 규칙이 기존 페이지에 준 가장 빡빡한 여유
+  // (op-02 23,134 · eb-01-english 19,437 바이트) 이하라, 기존 페이지는 어느 것도 종전보다 느슨해지지 않는다.
+  // 비율이 우연히 잡던 "차트가 빠진 페이지"(페이지가 짧아져 비율이 오른다)는 아래 KF4 가 데이터로 직접 잡는다.
+  const KF1_MAX_AT = { jp: 23000, en: 19000 };
+  // KF4 — 박스 차트가 있어야 할 페이지에 차트가 있는가(데이터 기준). 생성기와 같은 계열·같은 판정(BoxChart.hasChart)을 쓴다:
+  // 일본판 페이지는 세트 계열 전체, 영문판 페이지는 enOnlySeries(set-page-shared). 어긋나면 생성기 회귀이거나 페이지가 데이터보다 낡았다.
+  const SOLD_SERIES = json("data/box-sold-series.json", { sets: {} });
   const bodyText = (h) => h.replace(/<head[\s\S]*?<\/head>/, " ").replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<svg[\s\S]*?<\/svg>/g, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
   for (const f of [...setPages, ...koSetPages]) {
     const html = read(f), at = html.indexOf('<table class="kfTable'), h1End = html.indexOf("</h1>");
@@ -240,8 +250,16 @@ function run() {
     if (!/^<table class="kfTable[^>]*><caption>/.test(html.slice(at, html.indexOf(">", at) + 10))) errors.push(`KF2: ${f} Key facts 표에 caption 이 없다`);
     // KF3(2026-10-19) — 차트 점마다 <title> 글자(과거 $값·날짜 수백 개)를 다시 넣지 않는다. 값은 data-* 속성 + hover JS.
     if (/<svg\b(?:(?!<\/svg>)[\s\S])*?<title>/.test(html)) errors.push(`KF3: ${f} SVG 안에 <title> — 차트 툴팁은 data-* 로(box-chart.js)`);
-    const ratio = f.startsWith("ko/") ? bodyText(html.slice(0, at)).length / bodyText(html).length : at / html.length;
-    if (ratio > 0.25) errors.push(`KF1: ${f} Key facts 표가 ${(ratio * 100).toFixed(1)}% 지점 — 앞쪽 25% 안이어야 한다`);
+    if (f.startsWith("ko/")) {
+      const ratio = bodyText(html.slice(0, at)).length / bodyText(html).length;
+      if (ratio > 0.25) errors.push(`KF1: ${f} Key facts 표가 본문 글자 ${(ratio * 100).toFixed(1)}% 지점 — 앞쪽 25% 안이어야 한다`);
+    } else {
+      const en = /-english\.html$/.test(f), cap = en ? KF1_MAX_AT.en : KF1_MAX_AT.jp;
+      if (at > cap) errors.push(`KF1: ${f} Key facts 표가 ${at} 바이트 지점 — ${cap} 바이트 안이어야 한다(머리 CSS·구조화데이터가 불었나)`);
+      const ser = SOLD_SERIES.sets && SOLD_SERIES.sets[f.slice(5).replace(/(?:-english)?\.html$/, "").toUpperCase()];
+      const want = !!ser && BoxChart.hasChart(en ? enOnlySeries(ser) : ser), has = html.includes('<div class="opbcWrap"');
+      if (want !== has) errors.push(`KF4: ${f} 박스 차트 ${want ? "가 있어야 하는데 없다" : "가 없어야 하는데 있다"} — 페이지가 data/box-sold-series.json 과 어긋난다(생성기 회귀 또는 재생성 누락)`);
+    }
     const tbl = html.slice(at, html.indexOf("</table>", at));
     if (/ebay\.com/i.test(tbl)) errors.push(`KF1: ${f} Key facts 표에 eBay 링크 — 제휴 고지(affTop)보다 앞이라 제휴 링크를 두지 않는다`);
     for (const k of ["sold", "ask", "release", "msrp", "packs", "cardlist"]) if (!tbl.includes(`<tr data-k="${k}">`)) errors.push(`KF1: ${f} Key facts 에 ${k} 행이 없다`);

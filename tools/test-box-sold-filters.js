@@ -271,11 +271,12 @@ let outlierCases = 0;
   assert.deepEqual(sSpike.filter((r) => r.out).map((r) => r.unit), [170], "고립된 튀는 값 판정");
   outlierCases++;
 
-  // 6-e. 빼면 문턱 아래인데 cap 까지 늘려도 못 채우면 원래 창 그대로(빈 칸을 만들지 않는다). 월간도 같다.
+  // 6-e. 빼면 문턱 아래인데 cap 까지 늘려도 못 채우면 주간 점은 찍지 않는다(빈 칸이 틀린 값보다 낫다 — 소유자 절대 규칙 3).
+  //      2026-11-02 전엔 원래 창 그대로(이상치 포함 중앙값 84)였다 — 그 예비 규칙을 타던 점 4개가 전부 오염값이었다(OP-07 9/27 $134 등).
+  //      월간은 종전대로 문턱 아래면 그대로 둔다(bucketSample).
   const thin = salesOf(["06-01", "06-04", "06-08", "06-11", "06-15", "06-20"].map((md, i) => ({ id: `t${i}`, d: `2026-${md}`, unit: i === 2 ? 300 : 80 + i, fmt: "bin" })));
   thin[2].out = true;   // 표본이 6건뿐이라 판정 자체는 안 되지만, 문턱 처리만 따로 본다
-  const tp = seriesFor(thin).points.pop();
-  assert.deepEqual([tp.n, tp.out, tp.win, tp.median], [6, undefined, undefined, 84], "문턱 아래면 그대로 둔다");   // 80·81·83·84·85·300 의 중앙값(300 포함)
+  assert.deepEqual(seriesFor(thin).points, [], "주간: 이상치를 빼고 cap 까지 늘려도 문턱 아래면 점을 찍지 않는다");
   const tm = monthlyFor(thin).pop();
   assert.deepEqual([tm.n, tm.out, tm.vol], [6, undefined, 6], "월간도 문턱 아래면 그대로 둔다");
   outlierCases++;

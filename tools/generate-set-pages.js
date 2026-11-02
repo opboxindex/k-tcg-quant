@@ -282,6 +282,16 @@ function faqItems(code, nameEn) {
       a: `${ask.updated ? `As of ${ask.updated}, the` : "The"} lowest verified eBay listing for the Japanese ${nameEn} box is ${usd(ask.total)} including shipping${ask.listings != null ? ` (${ask.listings} listings)` : ""}.`,
     });
   }
+  // 일본판 박스 값(판매 중앙값·최저 매물)이 둘 다 없을 때(갓 발매된 세트 — EB-05 승격 2026-11-02: 일본 발매 다음 날이라 일본판 주간 점·매물 0)는
+  // 가장 비싼 카드 문답 하나 — 값은 Key facts "Top chase (raw NM)" 행·"The most valuable …" 줄과 같은 사실 파일 top10.priciest(모르면 문답 없음).
+  const pc = !items.length ? fs0.top10.priciest : null;
+  if (pc) {
+    const names = pc.ties.map((t) => t.name), who = names.length <= 2 ? names.join(" and ") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+    items.push({
+      q: `What is the most valuable ${code} ${nameEn} card?`,
+      a: `${pc.date ? `As of ${pc.date}, the` : "The"} most valuable ${code} ${names.length > 1 ? `cards are ${who}, tied at about ${usd(pc.usd)} raw NM each` : `card is ${pc.name}${pc.number ? ` (${pc.number})` : ""} at about ${usd(pc.usd)} raw NM`} (Japanese near-mint retail ask, ¥ → USD).`,
+    });
+  }
   return items;
 }
 

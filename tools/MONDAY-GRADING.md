@@ -52,7 +52,9 @@ node tools/guard-invariants.js
 `var RowData = '...'` 를 파싱한다. 주의 세 가지:
  - **반드시 gemrate.com 페이지 위에서** 실행한다. 다른 탭(eBay 등)에서 fetch 하면
    교차 출처로 전부 실패한다 — 2026-08-18 에 이걸 "요청 한도"로 오진했다.
- - 필드명은 `card_total_grades` 다. `total_graded` 는 없다 — 그걸 찾으면 감정 수가 전부 0 이 된다.
+ - 페이지는 표준 팝리포트 `item-details` 다(2026-11-02~ — `item-details-advanced` 는 같은 세트명에 빈 RowData 를 준다).
+   필드는 `total`·`total_standard`(=`grades` 합, total 이 1~2 클 때가 있다 — 총량은 total)와 `grades[0..10]`(끝 두 칸이 9·10등급)이다. `total_graded` 는 없다 — 그걸 찾으면 감정 수가 전부 0 이 된다.
+ - 같은 오리진 fetch 를 몰아 보내면 Cloudflare 가 "Just a moment" 뒤 "Access denied" 로 막는다(2026-11-02). 세트 사이를 4초 이상 둔다.
  - `card_number` 는 세트 접두어 없는 `"069"` 형식이다. `"OP05-069"` 와 직접 대조하면 하나도 안 맞는다.
 
 **PSA10 등급 가격(실거래)** — eBay 가 sold 를 API 로 막아 브라우저로만 받는다.

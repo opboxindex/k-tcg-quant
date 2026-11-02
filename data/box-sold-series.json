@@ -1,5 +1,5 @@
 {
- "note": "Rolling median of individual completed eBay sales of sealed One Piece booster boxes, sampled every 7 days and dated by SALE date (not collection date). The averaging window is chosen per series (28-56 days) so that each point rests on roughly 12 sales, because sales volume differs more than tenfold between sets; each series records the window it used. Rebuilt from data/box-sold-ledger.json on every run, so a change in how listings are collected cannot show up as a price move. Windows with fewer than 6 sales are omitted rather than estimated. Only fixed-price (Buy It Now) sales are included; auction results are collected separately and excluded, because an auction that draws no bidding closes far below the going rate. Sales dated before an edition's official release date (pre-orders) are excluded from the sold series and summarized separately per set under preRelease (median only when at least 3 different listings sold). current is the latest point when the edition is released and that point is within 28 days of asOf, otherwise null. Prices are per box in USD. A monthly view (median of every sale within each calendar month, minimum 6 sales) is included alongside, because sets with wide dispersion between individual sales are steadier when grouped by month. Outlier sales (listed per set under outliers) are left out of medians: a sale is an outlier when it lies more than 3.5 x max(1.4826 x MAD, 20% of median) from the median of both the 90 days before and the 90 days after its sale date, each side holding at least 8 sales. out = sales left out of that point; win = that point's window in days when it was lengthened (up to 56 days, 120 for the first-print series) to keep 6 sales after leaving outliers out; when even that falls short, the point keeps all sales. vol and counts include outliers.",
+ "note": "Rolling median of individual completed eBay sales of sealed One Piece booster boxes, sampled every 7 days and dated by SALE date (not collection date). The averaging window is chosen per series (28-56 days) so that each point rests on roughly 12 sales, because sales volume differs more than tenfold between sets; each series records the window it used. Rebuilt from data/box-sold-ledger.json on every run, so a change in how listings are collected cannot show up as a price move. Windows with fewer than 6 sales are omitted rather than estimated. Only fixed-price (Buy It Now) sales are included; auction results are collected separately and excluded, because an auction that draws no bidding closes far below the going rate. Sales dated before an edition's official release date (pre-orders) are excluded from the sold series and summarized separately per set under preRelease (median only when at least 3 different listings sold). current is the latest point when the edition is released and that point is within 28 days of asOf, otherwise null. Prices are per box in USD. A monthly view (median of every sale within each calendar month, minimum 6 sales) is included alongside, because sets with wide dispersion between individual sales are steadier when grouped by month. Outlier sales (listed per set under outliers) are left out of medians: a sale is an outlier when it lies more than 3.5 x max(1.4826 x MAD, 20% of median) from the median of both the 90 days before and the 90 days after its sale date, each side holding at least 8 sales. out = sales left out of that point; win = that point's window in days when it was lengthened (up to 56 days, 120 for the first-print series) to keep 6 sales after leaving outliers out; when even that falls short, the point is omitted. vol and counts include outliers.",
  "window": {
   "targetSales": 12,
   "minDays": 28,
@@ -20,10 +20,10 @@
  },
  "builtFrom": {
   "ledger": "data/box-sold-ledger.json",
-  "updated": "2026-10-31"
+  "updated": "2026-11-02"
  },
- "updated": "2026-11-01",
- "asOf": "2026-10-31",
+ "updated": "2026-11-02",
+ "asOf": "2026-11-02",
  "staleDays": 28,
  "preReleaseMinListings": 3,
  "sets": {
@@ -192,15 +192,23 @@
    ],
    "en": [
     {
-     "d": "2026-06-05",
+     "d": "2026-05-31",
      "median": 1787,
      "low": 1671,
      "high": 1833,
      "n": 7,
-     "vol": 2
+     "vol": 4
     },
     {
-     "d": "2026-06-12",
+     "d": "2026-06-07",
+     "median": 1787,
+     "low": 1671,
+     "high": 1833,
+     "n": 7,
+     "vol": 0
+    },
+    {
+     "d": "2026-06-14",
      "median": 1752,
      "low": 1590,
      "high": 1828,
@@ -208,7 +216,7 @@
      "vol": 2
     },
     {
-     "d": "2026-06-19",
+     "d": "2026-06-21",
      "median": 1770,
      "low": 1636,
      "high": 1870,
@@ -216,7 +224,7 @@
      "vol": 3
     },
     {
-     "d": "2026-06-26",
+     "d": "2026-06-28",
      "median": 1802,
      "low": 1677,
      "high": 1901,
@@ -224,47 +232,47 @@
      "vol": 3
     },
     {
-     "d": "2026-07-03",
-     "median": 1787,
-     "low": 1590,
-     "high": 1838,
-     "n": 17,
-     "vol": 2
+     "d": "2026-07-05",
+     "median": 1770,
+     "low": 1605,
+     "high": 1836,
+     "n": 18,
+     "vol": 3
     },
     {
-     "d": "2026-07-10",
-     "median": 1727,
-     "low": 1589,
-     "high": 1827,
-     "n": 20,
-     "vol": 4
+     "d": "2026-07-12",
+     "median": 1745,
+     "low": 1603,
+     "high": 1828,
+     "n": 18,
+     "vol": 3
     },
     {
-     "d": "2026-07-17",
+     "d": "2026-07-19",
      "median": 1702,
-     "low": 1584,
-     "high": 1827,
-     "n": 16,
+     "low": 1603,
+     "high": 1820,
+     "n": 14,
      "vol": 0
     },
     {
-     "d": "2026-07-24",
+     "d": "2026-07-26",
      "median": 1702,
-     "low": 1584,
-     "high": 1808,
-     "n": 16,
-     "vol": 2
+     "low": 1576,
+     "high": 1802,
+     "n": 17,
+     "vol": 3
     },
     {
-     "d": "2026-07-31",
+     "d": "2026-08-02",
      "median": 1702,
      "low": 1403,
      "high": 1802,
      "n": 19,
-     "vol": 5
+     "vol": 4
     },
     {
-     "d": "2026-08-07",
+     "d": "2026-08-09",
      "median": 1560,
      "low": 1343,
      "high": 1702,
@@ -272,55 +280,55 @@
      "vol": 2
     },
     {
-     "d": "2026-08-14",
-     "median": 1509,
-     "low": 1329,
+     "d": "2026-08-16",
+     "median": 1544,
+     "low": 1342,
      "high": 1702,
-     "n": 16,
-     "vol": 1
-    },
-    {
-     "d": "2026-08-21",
-     "median": 1548,
-     "low": 1345,
-     "high": 1702,
-     "n": 16,
+     "n": 17,
      "vol": 2
     },
     {
-     "d": "2026-08-28",
-     "median": 1475,
-     "low": 1342,
-     "high": 1682,
-     "n": 13,
+     "d": "2026-08-23",
+     "median": 1544,
+     "low": 1344,
+     "high": 1692,
+     "n": 15,
      "vol": 1
     },
     {
-     "d": "2026-09-04",
-     "median": 1485,
-     "low": 1345,
-     "high": 1687,
-     "n": 16,
+     "d": "2026-08-30",
+     "median": 1475,
+     "low": 1344,
+     "high": 1692,
+     "n": 15,
      "vol": 3
     },
     {
-     "d": "2026-09-11",
+     "d": "2026-09-06",
      "median": 1475,
-     "low": 1379,
+     "low": 1346,
+     "high": 1682,
+     "n": 17,
+     "vol": 2
+    },
+    {
+     "d": "2026-09-13",
+     "median": 1475,
+     "low": 1395,
      "high": 1605,
      "n": 17,
      "vol": 3
     },
     {
-     "d": "2026-09-18",
+     "d": "2026-09-20",
      "median": 1475,
      "low": 1405,
      "high": 1578,
      "n": 15,
-     "vol": 3
+     "vol": 2
     },
     {
-     "d": "2026-09-25",
+     "d": "2026-09-27",
      "median": 1487,
      "low": 1405,
      "high": 1612,
@@ -328,15 +336,15 @@
      "vol": 2
     },
     {
-     "d": "2026-10-02",
-     "median": 1471,
-     "low": 1400,
-     "high": 1592,
-     "n": 14,
+     "d": "2026-10-04",
+     "median": 1455,
+     "low": 1395,
+     "high": 1552,
+     "n": 13,
      "vol": 0
     },
     {
-     "d": "2026-10-09",
+     "d": "2026-10-11",
      "median": 1424,
      "low": 1395,
      "high": 1495,
@@ -344,28 +352,28 @@
      "vol": 1
     },
     {
-     "d": "2026-10-16",
-     "median": 1424,
-     "low": 1395,
-     "high": 1495,
-     "n": 13,
-     "vol": 1
+     "d": "2026-10-18",
+     "median": 1397,
+     "low": 1358,
+     "high": 1479,
+     "n": 14,
+     "vol": 4
     },
     {
-     "d": "2026-10-23",
-     "median": 1395,
-     "low": 1357,
-     "high": 1455,
-     "n": 13,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-30",
-     "median": 1358,
-     "low": 1303,
-     "high": 1425,
+     "d": "2026-10-25",
+     "median": 1389,
+     "low": 1352,
+     "high": 1463,
      "n": 12,
-     "vol": 2
+     "vol": 0
+    },
+    {
+     "d": "2026-11-01",
+     "median": 1353,
+     "low": 1303,
+     "high": 1413,
+     "n": 12,
+     "vol": 3
     }
    ],
    "enBlue": [
@@ -655,7 +663,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-06-10": 1,
      "2026-06-11": 1,
@@ -737,7 +745,8 @@
      "2026-10-17": 1,
      "2026-10-18": 2,
      "2026-10-26": 1,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-11-01": 1
     },
     "enBlue": {
      "2026-05-26": 1,
@@ -1182,7 +1191,7 @@
    ],
    "reprintPct": {
     "jp": null,
-    "en": 93
+    "en": 91
    },
    "firstPrint": {
     "jp": null,
@@ -1210,7 +1219,7 @@
    },
    "sinceRelease": {
     "jp": 53,
-    "en": 78
+    "en": 79
    },
    "current": {
     "jp": {
@@ -1221,11 +1230,11 @@
      "d": "2026-10-27"
     },
     "en": {
-     "median": 1358,
+     "median": 1353,
      "low": 1303,
-     "high": 1425,
+     "high": 1413,
      "n": 12,
-     "d": "2026-10-30"
+     "d": "2026-11-01"
     }
    }
   },
@@ -1529,7 +1538,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-10-13": 2,
      "2026-10-15": 1
@@ -2385,7 +2394,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-06-27": 1,
      "2026-06-29": 1,
@@ -3250,7 +3259,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-06-21": 1,
      "2026-07-04": 1,
@@ -3935,196 +3944,204 @@
    ],
    "en": [
     {
-     "d": "2026-05-22",
-     "median": 1000,
-     "low": 969,
-     "high": 1050,
-     "n": 9,
-     "vol": 8
-    },
-    {
-     "d": "2026-05-29",
-     "median": 997,
-     "low": 968,
-     "high": 1033,
-     "n": 12,
+     "d": "2026-05-17",
+     "median": 981,
+     "low": 925,
+     "high": 1074,
+     "n": 6,
      "vol": 4
     },
     {
-     "d": "2026-06-05",
+     "d": "2026-05-24",
      "median": 994,
-     "low": 944,
-     "high": 1012,
-     "n": 21,
+     "low": 967,
+     "high": 1026,
+     "n": 12,
+     "vol": 7
+    },
+    {
+     "d": "2026-05-31",
+     "median": 994,
+     "low": 970,
+     "high": 1018,
+     "n": 17,
+     "vol": 6
+    },
+    {
+     "d": "2026-06-07",
+     "median": 1000,
+     "low": 964,
+     "high": 1075,
+     "n": 26,
      "vol": 9
     },
     {
-     "d": "2026-06-12",
-     "median": 1000,
-     "low": 963,
-     "high": 1067,
-     "n": 31,
+     "d": "2026-06-14",
+     "median": 1006,
+     "low": 964,
+     "high": 1064,
+     "n": 32,
      "vol": 10
     },
     {
-     "d": "2026-06-19",
-     "median": 1019,
-     "low": 964,
-     "high": 1087,
-     "n": 36,
-     "vol": 13
-    },
-    {
-     "d": "2026-06-26",
+     "d": "2026-06-21",
      "median": 1051,
      "low": 977,
      "high": 1101,
-     "n": 43,
-     "vol": 11
+     "n": 39,
+     "vol": 14
     },
     {
-     "d": "2026-07-03",
-     "median": 1084,
-     "low": 1016,
-     "high": 1126,
-     "n": 46,
-     "vol": 12
+     "d": "2026-06-28",
+     "median": 1062,
+     "low": 975,
+     "high": 1101,
+     "n": 39,
+     "vol": 6
     },
     {
-     "d": "2026-07-10",
-     "median": 1093,
-     "low": 1016,
-     "high": 1151,
+     "d": "2026-07-05",
+     "median": 1074,
+     "low": 1007,
+     "high": 1143,
      "n": 44,
-     "vol": 8
+     "vol": 14
     },
     {
-     "d": "2026-07-17",
+     "d": "2026-07-12",
+     "median": 1101,
+     "low": 1035,
+     "high": 1156,
+     "n": 44,
+     "vol": 10
+    },
+    {
+     "d": "2026-07-19",
      "median": 1101,
      "low": 1016,
-     "high": 1160,
-     "n": 39,
-     "vol": 8
+     "high": 1156,
+     "n": 36,
+     "vol": 6
     },
     {
-     "d": "2026-07-24",
+     "d": "2026-07-26",
      "median": 1121,
-     "low": 1042,
+     "low": 1032,
      "high": 1151,
-     "n": 36,
+     "n": 38,
      "vol": 8
     },
     {
-     "d": "2026-07-31",
-     "median": 1136,
-     "low": 1014,
-     "high": 1174,
-     "n": 34,
-     "vol": 10
-    },
-    {
-     "d": "2026-08-07",
-     "median": 1083,
-     "low": 1004,
-     "high": 1151,
-     "n": 36,
-     "vol": 10
-    },
-    {
-     "d": "2026-08-14",
-     "median": 1083,
-     "low": 997,
-     "high": 1151,
-     "n": 41,
-     "vol": 13
-    },
-    {
-     "d": "2026-08-21",
-     "median": 1080,
-     "low": 996,
-     "high": 1146,
-     "n": 36,
-     "vol": 3
-    },
-    {
-     "d": "2026-08-28",
-     "median": 1073,
-     "low": 995,
-     "high": 1140,
-     "n": 31,
-     "vol": 5
-    },
-    {
-     "d": "2026-09-04",
-     "median": 1099,
-     "low": 1043,
-     "high": 1143,
-     "n": 30,
+     "d": "2026-08-02",
+     "median": 1111,
+     "low": 1010,
+     "high": 1157,
+     "n": 33,
      "vol": 9
     },
     {
-     "d": "2026-09-11",
+     "d": "2026-08-09",
+     "median": 1083,
+     "low": 1004,
+     "high": 1151,
+     "n": 34,
+     "vol": 11
+    },
+    {
+     "d": "2026-08-16",
+     "median": 1083,
+     "low": 996,
+     "high": 1151,
+     "n": 40,
+     "vol": 12
+    },
+    {
+     "d": "2026-08-23",
+     "median": 1078,
+     "low": 995,
+     "high": 1143,
+     "n": 35,
+     "vol": 3
+    },
+    {
+     "d": "2026-08-30",
+     "median": 1083,
+     "low": 1006,
+     "high": 1143,
+     "n": 33,
+     "vol": 7
+    },
+    {
+     "d": "2026-09-06",
      "median": 1096,
-     "low": 1047,
-     "high": 1122,
-     "n": 24,
-     "vol": 7
-    },
-    {
-     "d": "2026-09-18",
-     "median": 1091,
-     "low": 1043,
-     "high": 1113,
-     "n": 26,
-     "vol": 5
-    },
-    {
-     "d": "2026-09-25",
-     "median": 1093,
-     "low": 1015,
-     "high": 1124,
+     "low": 1034,
+     "high": 1144,
      "n": 28,
+     "vol": 6
+    },
+    {
+     "d": "2026-09-13",
+     "median": 1099,
+     "low": 1048,
+     "high": 1133,
+     "n": 23,
      "vol": 7
     },
     {
-     "d": "2026-10-02",
-     "median": 1035,
-     "low": 989,
-     "high": 1098,
-     "n": 24,
+     "d": "2026-09-20",
+     "median": 1093,
+     "low": 1047,
+     "high": 1117,
+     "n": 25,
      "vol": 5
     },
     {
-     "d": "2026-10-09",
-     "median": 1003,
-     "low": 929,
-     "high": 1088,
-     "n": 25,
+     "d": "2026-09-27",
+     "median": 1076,
+     "low": 1014,
+     "high": 1102,
+     "n": 26,
      "vol": 8
     },
     {
-     "d": "2026-10-16",
-     "median": 1011,
-     "low": 932,
-     "high": 1093,
+     "d": "2026-10-04",
+     "median": 1044,
+     "low": 981,
+     "high": 1101,
      "n": 27,
      "vol": 7
     },
     {
-     "d": "2026-10-23",
-     "median": 994,
+     "d": "2026-10-11",
+     "median": 1001,
      "low": 923,
-     "high": 1088,
+     "high": 1064,
      "n": 25,
      "vol": 5
     },
     {
-     "d": "2026-10-30",
-     "median": 990,
-     "low": 943,
-     "high": 1094,
-     "n": 28,
-     "vol": 8
+     "d": "2026-10-18",
+     "median": 1017,
+     "low": 941,
+     "high": 1095,
+     "n": 26,
+     "vol": 6
+    },
+    {
+     "d": "2026-10-25",
+     "median": 974,
+     "low": 923,
+     "high": 1044,
+     "n": 25,
+     "vol": 7
+    },
+    {
+     "d": "2026-11-01",
+     "median": 984,
+     "low": 946,
+     "high": 1058,
+     "n": 25,
+     "vol": 7
     }
    ],
    "enBlue": [],
@@ -4387,7 +4404,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-25": 1,
      "2026-05-29": 1,
@@ -4536,7 +4553,8 @@
      "2026-10-25": 1,
      "2026-10-26": 2,
      "2026-10-28": 1,
-     "2026-10-30": 3
+     "2026-10-30": 3,
+     "2026-11-01": 1
     }
    },
    "supply": [
@@ -4982,7 +5000,7 @@
    },
    "sinceRelease": {
     "jp": 42,
-    "en": 200
+    "en": 201
    },
    "current": {
     "jp": {
@@ -4993,11 +5011,11 @@
      "d": "2026-10-26"
     },
     "en": {
-     "median": 990,
-     "low": 943,
-     "high": 1094,
-     "n": 28,
-     "d": "2026-10-30"
+     "median": 984,
+     "low": 946,
+     "high": 1058,
+     "n": 25,
+     "d": "2026-11-01"
     }
    }
   },
@@ -5094,57 +5112,66 @@
    ],
    "en": [
     {
-     "d": "2026-05-28",
-     "median": 304,
-     "low": 267,
-     "high": 379,
-     "n": 12,
-     "vol": 8
-    },
-    {
-     "d": "2026-06-04",
+     "d": "2026-05-24",
      "median": 267,
-     "low": 243,
-     "high": 363,
-     "n": 23,
-     "vol": 12
-    },
-    {
-     "d": "2026-06-11",
-     "median": 267,
-     "low": 267,
-     "high": 372,
-     "n": 34,
-     "vol": 11
-    },
-    {
-     "d": "2026-06-18",
-     "median": 268,
      "low": 264,
-     "high": 374,
-     "n": 36,
+     "high": 344,
+     "n": 8,
      "vol": 5
     },
     {
-     "d": "2026-06-25",
+     "d": "2026-05-31",
+     "median": 312,
+     "low": 267,
+     "high": 379,
+     "n": 16,
+     "vol": 8
+    },
+    {
+     "d": "2026-06-07",
+     "median": 267,
+     "low": 248,
+     "high": 366,
+     "n": 28,
+     "vol": 13
+    },
+    {
+     "d": "2026-06-14",
      "median": 267,
      "low": 267,
-     "high": 355,
-     "n": 35,
+     "high": 363,
+     "n": 33,
+     "vol": 7
+    },
+    {
+     "d": "2026-06-21",
+     "median": 268,
+     "low": 267,
+     "high": 380,
+     "n": 33,
+     "vol": 6,
+     "out": 1
+    },
+    {
+     "d": "2026-06-28",
+     "median": 267,
+     "low": 267,
+     "high": 347,
+     "n": 33,
      "vol": 8,
      "out": 1
     },
     {
-     "d": "2026-07-02",
-     "median": 268,
+     "d": "2026-07-05",
+     "median": 267,
      "low": 267,
-     "high": 367,
-     "n": 27,
-     "vol": 4,
+     "high": 376,
+     "n": 23,
+     "vol": 3,
      "out": 1
     },
     {
-     "d": "2026-07-09",
+     "d": "2026-07-12",
      "median": 286,
      "low": 267,
      "high": 381,
@@ -5153,132 +5180,131 @@
      "out": 1
     },
     {
-     "d": "2026-07-16",
+     "d": "2026-07-19",
      "median": 281,
      "low": 267,
      "high": 373,
      "n": 25,
-     "vol": 6,
-     "out": 1
-    },
-    {
-     "d": "2026-07-23",
-     "median": 289,
-     "low": 274,
-     "high": 389,
-     "n": 24,
      "vol": 6
     },
     {
-     "d": "2026-07-30",
-     "median": 290,
-     "low": 272,
-     "high": 381,
-     "n": 32,
-     "vol": 12
+     "d": "2026-07-26",
+     "median": 288,
+     "low": 276,
+     "high": 384,
+     "n": 26,
+     "vol": 9
     },
     {
-     "d": "2026-08-06",
-     "median": 287,
-     "low": 273,
-     "high": 353,
-     "n": 34,
+     "d": "2026-08-02",
+     "median": 288,
+     "low": 272,
+     "high": 373,
+     "n": 33,
      "vol": 10
     },
     {
-     "d": "2026-08-13",
-     "median": 293,
+     "d": "2026-08-09",
+     "median": 288,
+     "low": 274,
+     "high": 355,
+     "n": 35,
+     "vol": 10
+    },
+    {
+     "d": "2026-08-16",
+     "median": 291,
      "low": 275,
      "high": 375,
      "n": 33,
-     "vol": 5
+     "vol": 4
     },
     {
-     "d": "2026-08-20",
-     "median": 304,
-     "low": 280,
+     "d": "2026-08-23",
+     "median": 331,
+     "low": 282,
      "high": 374,
-     "n": 32,
-     "vol": 5
+     "n": 30,
+     "vol": 6
     },
     {
-     "d": "2026-08-27",
-     "median": 334,
-     "low": 285,
-     "high": 374,
-     "n": 22,
-     "vol": 2
-    },
-    {
-     "d": "2026-09-03",
-     "median": 366,
-     "low": 286,
-     "high": 385,
-     "n": 17,
-     "vol": 5
-    },
-    {
-     "d": "2026-09-10",
+     "d": "2026-08-30",
      "median": 314,
-     "low": 286,
-     "high": 385,
-     "n": 17,
+     "low": 285,
+     "high": 375,
+     "n": 23,
+     "vol": 3
+    },
+    {
+     "d": "2026-09-06",
+     "median": 341,
+     "low": 289,
+     "high": 395,
+     "n": 18,
      "vol": 5
     },
     {
-     "d": "2026-09-17",
-     "median": 312,
-     "low": 291,
-     "high": 383,
-     "n": 19,
-     "vol": 7
+     "d": "2026-09-13",
+     "median": 319,
+     "low": 299,
+     "high": 395,
+     "n": 18,
+     "vol": 4
     },
     {
-     "d": "2026-09-24",
-     "median": 337,
-     "low": 303,
+     "d": "2026-09-20",
+     "median": 319,
+     "low": 300,
+     "high": 388,
+     "n": 20,
+     "vol": 8
+    },
+    {
+     "d": "2026-09-27",
+     "median": 376,
+     "low": 305,
      "high": 399,
      "n": 24,
      "vol": 7
     },
     {
-     "d": "2026-10-01",
-     "median": 376,
-     "low": 308,
-     "high": 399,
-     "n": 22,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-08",
+     "d": "2026-10-04",
      "median": 381,
-     "low": 313,
-     "high": 399,
-     "n": 23,
-     "vol": 6
+     "low": 323,
+     "high": 400,
+     "n": 21,
+     "vol": 2
     },
     {
-     "d": "2026-10-15",
-     "median": 385,
-     "low": 338,
-     "high": 399,
-     "n": 19,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-22",
+     "d": "2026-10-11",
      "median": 381,
-     "low": 303,
-     "high": 398,
-     "n": 18,
-     "vol": 6
-    },
-    {
-     "d": "2026-10-29",
-     "median": 340,
      "low": 302,
-     "high": 388,
-     "n": 19,
+     "high": 398,
+     "n": 22,
+     "vol": 5
+    },
+    {
+     "d": "2026-10-18",
+     "median": 385,
+     "low": 335,
+     "high": 398,
+     "n": 17,
+     "vol": 3
+    },
+    {
+     "d": "2026-10-25",
+     "median": 341,
+     "low": 300,
+     "high": 396,
+     "n": 16,
+     "vol": 6
+    },
+    {
+     "d": "2026-11-01",
+     "median": 307,
+     "low": 301,
+     "high": 380,
+     "n": 18,
      "vol": 4
     }
    ],
@@ -5358,7 +5384,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-07-03": 1,
      "2026-07-15": 1,
@@ -5468,7 +5494,8 @@
      "2026-10-24": 1,
      "2026-10-27": 1,
      "2026-10-28": 1,
-     "2026-10-29": 1
+     "2026-10-29": 1,
+     "2026-11-01": 1
     }
    },
    "supply": [
@@ -5914,7 +5941,7 @@
    },
    "sinceRelease": {
     "jp": 22,
-    "en": 155
+    "en": 156
    },
    "outliers": {
     "en": [
@@ -5928,34 +5955,34 @@
    "current": {
     "jp": null,
     "en": {
-     "median": 340,
-     "low": 302,
-     "high": 388,
-     "n": 19,
-     "d": "2026-10-29"
+     "median": 307,
+     "low": 301,
+     "high": 380,
+     "n": 18,
+     "d": "2026-11-01"
     }
    }
   },
   "OP-07": {
    "jp": [
     {
-     "d": "2026-05-25",
+     "d": "2026-05-24",
      "median": 90,
      "low": 80,
      "high": 120,
      "n": 9,
-     "vol": 6
+     "vol": 7
     },
     {
-     "d": "2026-06-01",
-     "median": 87,
+     "d": "2026-05-31",
+     "median": 89,
      "low": 80,
-     "high": 102,
-     "n": 11,
+     "high": 115,
+     "n": 12,
      "vol": 3
     },
     {
-     "d": "2026-06-08",
+     "d": "2026-06-07",
      "median": 89,
      "low": 80,
      "high": 100,
@@ -5963,7 +5990,7 @@
      "vol": 1
     },
     {
-     "d": "2026-06-15",
+     "d": "2026-06-14",
      "median": 89,
      "low": 80,
      "high": 100,
@@ -5971,31 +5998,39 @@
      "vol": 0
     },
     {
-     "d": "2026-06-22",
-     "median": 86,
+     "d": "2026-06-21",
+     "median": 89,
      "low": 80,
-     "high": 94,
-     "n": 14,
+     "high": 98,
+     "n": 16,
      "vol": 4
     },
     {
-     "d": "2026-06-29",
-     "median": 95,
-     "low": 84,
-     "high": 98,
-     "n": 11,
+     "d": "2026-06-28",
+     "median": 90,
+     "low": 80,
+     "high": 99,
+     "n": 18,
      "vol": 3
     },
     {
-     "d": "2026-07-06",
+     "d": "2026-07-05",
+     "median": 95,
+     "low": 80,
+     "high": 99,
+     "n": 13,
+     "vol": 2
+    },
+    {
+     "d": "2026-07-12",
      "median": 98,
      "low": 87,
      "high": 104,
      "n": 11,
-     "vol": 3
+     "vol": 1
     },
     {
-     "d": "2026-07-13",
+     "d": "2026-07-19",
      "median": 96,
      "low": 80,
      "high": 102,
@@ -6003,66 +6038,76 @@
      "vol": 2
     },
     {
-     "d": "2026-07-20",
-     "median": 96,
-     "low": 80,
-     "high": 102,
-     "n": 12,
-     "vol": 0
-    },
-    {
-     "d": "2026-07-27",
+     "d": "2026-07-26",
      "median": 94,
      "low": 80,
-     "high": 100,
-     "n": 13,
+     "high": 99,
+     "n": 17,
      "vol": 5
     },
     {
-     "d": "2026-08-03",
+     "d": "2026-08-02",
+     "median": 94,
+     "low": 80,
+     "high": 101,
+     "n": 16,
+     "vol": 3
+    },
+    {
+     "d": "2026-08-09",
      "median": 81,
      "low": 79,
      "high": 99,
      "n": 14,
-     "vol": 4
-    },
-    {
-     "d": "2026-08-10",
-     "median": 80,
-     "low": 79,
-     "high": 96,
-     "n": 11,
-     "vol": 0
-    },
-    {
-     "d": "2026-08-17",
-     "median": 80,
-     "low": 76,
-     "high": 94,
-     "n": 10,
      "vol": 1
     },
     {
-     "d": "2026-08-24",
+     "d": "2026-08-16",
      "median": 80,
-     "low": 76,
-     "high": 94,
-     "n": 10,
+     "low": 79,
+     "high": 98,
+     "n": 13,
+     "vol": 1
+    },
+    {
+     "d": "2026-08-23",
+     "median": 80,
+     "low": 78,
+     "high": 95,
+     "n": 12,
      "vol": 1,
      "out": 1
     },
     {
-     "d": "2026-08-31",
+     "d": "2026-08-30",
      "median": 80,
      "low": 76,
      "high": 94,
      "n": 10,
      "vol": 1,
-     "out": 2,
-     "win": 42
+     "out": 2
     },
     {
-     "d": "2026-09-21",
+     "d": "2026-09-06",
+     "median": 80,
+     "low": 77,
+     "high": 102,
+     "n": 7,
+     "vol": 2,
+     "out": 2
+    },
+    {
+     "d": "2026-09-13",
+     "median": 80,
+     "low": 77,
+     "high": 102,
+     "n": 7,
+     "vol": 0,
+     "out": 2,
+     "win": 49
+    },
+    {
+     "d": "2026-09-20",
      "median": 80,
      "low": 78,
      "high": 101,
@@ -6072,230 +6117,247 @@
      "win": 56
     },
     {
-     "d": "2026-10-05",
+     "d": "2026-10-04",
      "median": 79,
      "low": 79,
      "high": 80,
-     "n": 8,
-     "vol": 5,
-     "out": 1
+     "n": 7,
+     "vol": 4,
+     "out": 2
     },
     {
-     "d": "2026-10-12",
+     "d": "2026-10-11",
      "median": 80,
      "low": 79,
      "high": 80,
-     "n": 10,
+     "n": 11,
      "vol": 4,
      "out": 1
     },
     {
-     "d": "2026-10-19",
+     "d": "2026-10-18",
      "median": 80,
      "low": 79,
      "high": 80,
      "n": 16,
-     "vol": 6,
+     "vol": 7,
      "out": 1
     },
     {
-     "d": "2026-10-26",
+     "d": "2026-10-25",
+     "median": 80,
+     "low": 79,
+     "high": 80,
+     "n": 16,
+     "vol": 0,
+     "out": 1
+    },
+    {
+     "d": "2026-11-01",
      "median": 80,
      "low": 80,
      "high": 80,
-     "n": 16,
-     "vol": 1
+     "n": 17,
+     "vol": 2
     }
    ],
    "en": [
     {
-     "d": "2026-05-27",
-     "median": 300,
-     "low": 211,
-     "high": 328,
-     "n": 13,
-     "vol": 11
-    },
-    {
-     "d": "2026-06-03",
-     "median": 300,
-     "low": 234,
-     "high": 325,
-     "n": 20,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-10",
-     "median": 273,
-     "low": 237,
-     "high": 320,
-     "n": 33,
-     "vol": 13
-    },
-    {
-     "d": "2026-06-17",
-     "median": 286,
-     "low": 241,
-     "high": 325,
-     "n": 42,
-     "vol": 11
-    },
-    {
-     "d": "2026-06-24",
-     "median": 267,
-     "low": 241,
-     "high": 320,
-     "n": 37,
-     "vol": 6
-    },
-    {
-     "d": "2026-07-01",
-     "median": 248,
-     "low": 240,
-     "high": 325,
-     "n": 37,
-     "vol": 7
-    },
-    {
-     "d": "2026-07-08",
-     "median": 248,
-     "low": 241,
-     "high": 338,
-     "n": 33,
-     "vol": 9
-    },
-    {
-     "d": "2026-07-15",
-     "median": 254,
-     "low": 241,
-     "high": 345,
-     "n": 27,
+     "d": "2026-05-23",
+     "median": 255,
+     "low": 203,
+     "high": 311,
+     "n": 6,
      "vol": 5
     },
     {
-     "d": "2026-07-22",
-     "median": 269,
-     "low": 243,
-     "high": 347,
-     "n": 34,
-     "vol": 13
+     "d": "2026-05-30",
+     "median": 300,
+     "low": 241,
+     "high": 325,
+     "n": 17,
+     "vol": 11
     },
     {
-     "d": "2026-07-29",
+     "d": "2026-06-06",
      "median": 300,
-     "low": 248,
-     "high": 349,
-     "n": 33,
+     "low": 213,
+     "high": 323,
+     "n": 27,
+     "vol": 10
+    },
+    {
+     "d": "2026-06-13",
+     "median": 286,
+     "low": 240,
+     "high": 321,
+     "n": 36,
+     "vol": 10
+    },
+    {
+     "d": "2026-06-20",
+     "median": 268,
+     "low": 241,
+     "high": 325,
+     "n": 41,
+     "vol": 10
+    },
+    {
+     "d": "2026-06-27",
+     "median": 241,
+     "low": 237,
+     "high": 315,
+     "n": 36,
      "vol": 6
     },
     {
-     "d": "2026-08-05",
-     "median": 259,
-     "low": 249,
-     "high": 345,
-     "n": 39,
-     "vol": 15
-    },
-    {
-     "d": "2026-08-12",
-     "median": 256,
-     "low": 252,
-     "high": 345,
-     "n": 42,
+     "d": "2026-07-04",
+     "median": 252,
+     "low": 241,
+     "high": 329,
+     "n": 34,
      "vol": 8
     },
     {
-     "d": "2026-08-19",
-     "median": 258,
+     "d": "2026-07-11",
+     "median": 248,
+     "low": 241,
+     "high": 343,
+     "n": 31,
+     "vol": 7
+    },
+    {
+     "d": "2026-07-18",
+     "median": 254,
+     "low": 241,
+     "high": 345,
+     "n": 29,
+     "vol": 8
+    },
+    {
+     "d": "2026-07-25",
+     "median": 315,
+     "low": 248,
+     "high": 349,
+     "n": 35,
+     "vol": 12
+    },
+    {
+     "d": "2026-08-01",
+     "median": 259,
+     "low": 248,
+     "high": 345,
+     "n": 39,
+     "vol": 12
+    },
+    {
+     "d": "2026-08-08",
+     "median": 259,
+     "low": 254,
+     "high": 343,
+     "n": 40,
+     "vol": 8
+    },
+    {
+     "d": "2026-08-15",
+     "median": 257,
+     "low": 254,
+     "high": 347,
+     "n": 38,
+     "vol": 6
+    },
+    {
+     "d": "2026-08-22",
+     "median": 257,
+     "low": 253,
+     "high": 300,
+     "n": 32,
+     "vol": 6
+    },
+    {
+     "d": "2026-08-29",
+     "median": 259,
      "low": 255,
-     "high": 317,
-     "n": 35,
-     "vol": 6
+     "high": 350,
+     "n": 28,
+     "vol": 8
     },
     {
-     "d": "2026-08-26",
+     "d": "2026-09-05",
      "median": 258,
-     "low": 251,
-     "high": 317,
-     "n": 35,
-     "vol": 6
-    },
-    {
-     "d": "2026-09-02",
-     "median": 258,
-     "low": 252,
+     "low": 238,
      "high": 354,
      "n": 27,
      "vol": 7
     },
     {
-     "d": "2026-09-09",
-     "median": 260,
+     "d": "2026-09-12",
+     "median": 259,
      "low": 237,
-     "high": 346,
+     "high": 334,
      "n": 26,
-     "vol": 7
-    },
-    {
-     "d": "2026-09-16",
-     "median": 268,
-     "low": 236,
-     "high": 350,
-     "n": 25,
      "vol": 5
     },
     {
-     "d": "2026-09-23",
+     "d": "2026-09-19",
+     "median": 260,
+     "low": 245,
+     "high": 341,
+     "n": 29,
+     "vol": 9
+    },
+    {
+     "d": "2026-09-26",
      "median": 268,
      "low": 247,
      "high": 337,
      "n": 28,
-     "vol": 9
+     "vol": 7
     },
     {
-     "d": "2026-09-30",
-     "median": 268,
-     "low": 247,
-     "high": 325,
+     "d": "2026-10-03",
+     "median": 274,
+     "low": 248,
+     "high": 333,
      "n": 27,
      "vol": 6
     },
     {
-     "d": "2026-10-07",
-     "median": 277,
-     "low": 247,
-     "high": 334,
-     "n": 26,
-     "vol": 6
+     "d": "2026-10-10",
+     "median": 291,
+     "low": 249,
+     "high": 339,
+     "n": 27,
+     "vol": 5
     },
     {
-     "d": "2026-10-14",
-     "median": 298,
-     "low": 250,
-     "high": 336,
-     "n": 24,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-21",
+     "d": "2026-10-17",
      "median": 325,
-     "low": 251,
+     "low": 276,
      "high": 338,
-     "n": 16,
+     "n": 20,
+     "vol": 2
+    },
+    {
+     "d": "2026-10-24",
+     "median": 325,
+     "low": 260,
+     "high": 337,
+     "n": 14,
      "vol": 1
     },
     {
-     "d": "2026-10-28",
-     "median": 329,
-     "low": 249,
+     "d": "2026-10-31",
+     "median": 325,
+     "low": 267,
      "high": 338,
-     "n": 12,
+     "n": 10,
      "vol": 2
     }
    ],
    "enBlue": [],
    "windowDays": {
-    "jp": 35,
+    "jp": 42,
     "en": 28,
     "enBlue": null
    },
@@ -6353,11 +6415,11 @@
      },
      {
       "d": "2026-10-01",
-      "median": 329,
-      "low": 249,
+      "median": 328,
+      "low": 250,
       "high": 338,
-      "n": 12,
-      "vol": 12
+      "n": 13,
+      "vol": 13
      }
     ],
     "enBlue": []
@@ -6522,7 +6584,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-18": 1,
      "2026-05-20": 1,
@@ -6568,7 +6630,8 @@
      "2026-10-13": 3,
      "2026-10-15": 2,
      "2026-10-17": 1,
-     "2026-10-26": 1
+     "2026-10-26": 1,
+     "2026-11-01": 1
     },
     "en": {
      "2026-05-16": 1,
@@ -6669,7 +6732,8 @@
      "2026-10-13": 1,
      "2026-10-15": 1,
      "2026-10-23": 1,
-     "2026-10-28": 1
+     "2026-10-28": 1,
+     "2026-10-31": 1
     }
    },
    "supply": [
@@ -7114,8 +7178,8 @@
     "en": null
    },
    "sinceRelease": {
-    "jp": 62,
-    "en": 177
+    "jp": 63,
+    "en": 178
    },
    "outliers": {
     "jp": [
@@ -7141,15 +7205,15 @@
      "median": 80,
      "low": 80,
      "high": 80,
-     "n": 16,
-     "d": "2026-10-26"
+     "n": 17,
+     "d": "2026-11-01"
     },
     "en": {
-     "median": 329,
-     "low": 249,
+     "median": 325,
+     "low": 267,
      "high": 338,
-     "n": 12,
-     "d": "2026-10-28"
+     "n": 10,
+     "d": "2026-10-31"
     }
    }
   },
@@ -7302,7 +7366,7 @@
    ],
    "en": [
     {
-     "d": "2026-05-23",
+     "d": "2026-05-24",
      "median": 225,
      "low": 201,
      "high": 236,
@@ -7310,7 +7374,7 @@
      "vol": 2
     },
     {
-     "d": "2026-05-30",
+     "d": "2026-05-31",
      "median": 225,
      "low": 219,
      "high": 236,
@@ -7318,7 +7382,7 @@
      "vol": 8
     },
     {
-     "d": "2026-06-06",
+     "d": "2026-06-07",
      "median": 220,
      "low": 205,
      "high": 230,
@@ -7326,7 +7390,7 @@
      "vol": 4
     },
     {
-     "d": "2026-06-13",
+     "d": "2026-06-14",
      "median": 225,
      "low": 213,
      "high": 234,
@@ -7334,103 +7398,103 @@
      "vol": 4
     },
     {
-     "d": "2026-06-20",
-     "median": 223,
-     "low": 209,
-     "high": 236,
-     "n": 20,
-     "vol": 4
-    },
-    {
-     "d": "2026-06-27",
-     "median": 223,
-     "low": 211,
-     "high": 248,
-     "n": 18,
-     "vol": 6
-    },
-    {
-     "d": "2026-07-04",
-     "median": 235,
-     "low": 220,
-     "high": 250,
-     "n": 19,
+     "d": "2026-06-21",
+     "median": 221,
+     "low": 210,
+     "high": 235,
+     "n": 21,
      "vol": 5
     },
     {
-     "d": "2026-07-11",
-     "median": 227,
+     "d": "2026-06-28",
+     "median": 225,
+     "low": 211,
+     "high": 249,
+     "n": 19,
+     "vol": 6
+    },
+    {
+     "d": "2026-07-05",
+     "median": 233,
+     "low": 217,
+     "high": 250,
+     "n": 20,
+     "vol": 5
+    },
+    {
+     "d": "2026-07-12",
+     "median": 230,
      "low": 213,
      "high": 250,
-     "n": 20,
+     "n": 21,
      "vol": 5
     },
     {
-     "d": "2026-07-18",
-     "median": 248,
-     "low": 220,
-     "high": 250,
-     "n": 22,
-     "vol": 6
-    },
-    {
-     "d": "2026-07-25",
+     "d": "2026-07-19",
      "median": 248,
      "low": 224,
-     "high": 274,
+     "high": 250,
+     "n": 21,
+     "vol": 5
+    },
+    {
+     "d": "2026-07-26",
+     "median": 247,
+     "low": 224,
+     "high": 264,
      "n": 23,
-     "vol": 7
+     "vol": 8
     },
     {
-     "d": "2026-08-01",
+     "d": "2026-08-02",
      "median": 248,
-     "low": 227,
-     "high": 261,
-     "n": 24,
-     "vol": 6
+     "low": 228,
+     "high": 262,
+     "n": 23,
+     "vol": 5
     },
     {
-     "d": "2026-08-08",
+     "d": "2026-08-09",
      "median": 254,
      "low": 239,
      "high": 278,
      "n": 26,
-     "vol": 7
+     "vol": 8
     },
     {
-     "d": "2026-08-15",
-     "median": 254,
-     "low": 236,
-     "high": 275,
-     "n": 24,
+     "d": "2026-08-16",
+     "median": 258,
+     "low": 238,
+     "high": 280,
+     "n": 25,
      "vol": 4
     },
     {
-     "d": "2026-08-22",
-     "median": 261,
-     "low": 236,
-     "high": 280,
-     "n": 20,
-     "vol": 3
-    },
-    {
-     "d": "2026-08-29",
-     "median": 260,
+     "d": "2026-08-23",
+     "median": 265,
      "low": 235,
      "high": 280,
-     "n": 21,
-     "vol": 7
+     "n": 19,
+     "vol": 2
     },
     {
-     "d": "2026-09-05",
+     "d": "2026-08-30",
+     "median": 257,
+     "low": 236,
+     "high": 278,
+     "n": 22,
+     "vol": 8
+    },
+    {
+     "d": "2026-09-06",
      "median": 248,
      "low": 232,
-     "high": 262,
+     "high": 257,
      "n": 19,
      "vol": 5
     },
     {
-     "d": "2026-09-12",
+     "d": "2026-09-13",
      "median": 249,
      "low": 230,
      "high": 260,
@@ -7438,39 +7502,39 @@
      "vol": 8
     },
     {
-     "d": "2026-09-19",
+     "d": "2026-09-20",
      "median": 247,
      "low": 230,
      "high": 257,
      "n": 23,
-     "vol": 3
+     "vol": 2
     },
     {
-     "d": "2026-09-26",
+     "d": "2026-09-27",
      "median": 250,
      "low": 230,
      "high": 260,
      "n": 21,
-     "vol": 5
+     "vol": 6
     },
     {
-     "d": "2026-10-03",
-     "median": 253,
+     "d": "2026-10-04",
+     "median": 257,
      "low": 247,
      "high": 260,
      "n": 17,
      "vol": 1
     },
     {
-     "d": "2026-10-10",
-     "median": 260,
-     "low": 252,
-     "high": 265,
-     "n": 11,
-     "vol": 2
+     "d": "2026-10-11",
+     "median": 259,
+     "low": 250,
+     "high": 260,
+     "n": 10,
+     "vol": 1
     },
     {
-     "d": "2026-10-17",
+     "d": "2026-10-18",
      "median": 258,
      "low": 249,
      "high": 260,
@@ -7478,16 +7542,16 @@
      "vol": 6
     },
     {
-     "d": "2026-10-24",
-     "median": 257,
+     "d": "2026-10-25",
+     "median": 258,
      "low": 249,
-     "high": 270,
+     "high": 273,
      "n": 11,
-     "vol": 2
+     "vol": 3
     },
     {
-     "d": "2026-10-31",
-     "median": 259,
+     "d": "2026-11-01",
+     "median": 263,
      "low": 249,
      "high": 277,
      "n": 14,
@@ -7602,7 +7666,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-28": 2,
      "2026-05-29": 1,
@@ -7725,7 +7789,8 @@
      "2026-10-21": 2,
      "2026-10-25": 1,
      "2026-10-29": 2,
-     "2026-10-31": 1
+     "2026-10-31": 1,
+     "2026-11-01": 1
     }
    },
    "supply": [
@@ -8171,7 +8236,7 @@
    },
    "sinceRelease": {
     "jp": 42,
-    "en": 125
+    "en": 126
    },
    "current": {
     "jp": {
@@ -8182,34 +8247,34 @@
      "d": "2026-10-09"
     },
     "en": {
-     "median": 259,
+     "median": 263,
      "low": 249,
      "high": 277,
      "n": 14,
-     "d": "2026-10-31"
+     "d": "2026-11-01"
     }
    }
   },
   "OP-09": {
    "jp": [
     {
-     "d": "2026-01-28",
-     "median": 86,
-     "low": 78,
-     "high": 98,
-     "n": 8,
+     "d": "2026-01-25",
+     "median": 82,
+     "low": 76,
+     "high": 90,
+     "n": 6,
+     "vol": 2
+    },
+    {
+     "d": "2026-02-01",
+     "median": 85,
+     "low": 75,
+     "high": 92,
+     "n": 9,
      "vol": 3
     },
     {
-     "d": "2026-02-04",
-     "median": 85,
-     "low": 75,
-     "high": 92,
-     "n": 9,
-     "vol": 1
-    },
-    {
-     "d": "2026-02-11",
+     "d": "2026-02-08",
      "median": 85,
      "low": 75,
      "high": 92,
@@ -8217,7 +8282,7 @@
      "vol": 0
     },
     {
-     "d": "2026-02-18",
+     "d": "2026-02-15",
      "median": 85,
      "low": 75,
      "high": 92,
@@ -8225,210 +8290,204 @@
      "vol": 0
     },
     {
-     "d": "2026-02-25",
-     "median": 86,
-     "low": 78,
-     "high": 98,
-     "n": 8,
+     "d": "2026-02-22",
+     "median": 85,
+     "low": 75,
+     "high": 92,
+     "n": 9,
      "vol": 1,
      "out": 1
     },
     {
-     "d": "2026-03-04",
-     "median": 89,
-     "low": 81,
-     "high": 109,
-     "n": 6,
+     "d": "2026-03-01",
+     "median": 86,
+     "low": 77,
+     "high": 103,
+     "n": 7,
      "vol": 1,
      "out": 2
     },
     {
-     "d": "2026-03-11",
-     "median": 89,
-     "low": 81,
-     "high": 109,
-     "n": 6,
+     "d": "2026-03-08",
+     "median": 86,
+     "low": 77,
+     "high": 103,
+     "n": 7,
      "vol": 0,
      "out": 2,
      "win": 56
     },
     {
-     "d": "2026-04-01",
-     "median": 99,
-     "low": 95,
-     "high": 154,
-     "n": 6,
-     "vol": 1
-    },
-    {
-     "d": "2026-04-08",
-     "median": 99,
-     "low": 95,
-     "high": 154,
-     "n": 6,
-     "vol": 0
-    },
-    {
-     "d": "2026-04-15",
-     "median": 99,
-     "low": 95,
-     "high": 114,
-     "n": 6,
-     "vol": 1
-    },
-    {
-     "d": "2026-04-22",
-     "median": 97,
-     "low": 95,
-     "high": 99,
-     "n": 6,
-     "vol": 1
-    },
-    {
-     "d": "2026-04-29",
-     "median": 97,
-     "low": 95,
-     "high": 99,
-     "n": 6,
-     "vol": 0
-    },
-    {
-     "d": "2026-05-27",
-     "median": 97,
-     "low": 95,
+     "d": "2026-03-15",
+     "median": 94,
+     "low": 88,
      "high": 110,
-     "n": 9,
-     "vol": 4
+     "n": 6,
+     "vol": 1,
+     "out": 2,
+     "win": 56
     },
     {
-     "d": "2026-06-03",
-     "median": 99,
+     "d": "2026-04-19",
+     "median": 97,
      "low": 95,
-     "high": 125,
-     "n": 11,
+     "high": 99,
+     "n": 6,
+     "vol": 1
+    },
+    {
+     "d": "2026-04-26",
+     "median": 97,
+     "low": 95,
+     "high": 99,
+     "n": 6,
+     "vol": 0
+    },
+    {
+     "d": "2026-05-24",
+     "median": 99,
+     "low": 96,
+     "high": 115,
+     "n": 7,
      "vol": 3
     },
     {
-     "d": "2026-06-10",
+     "d": "2026-05-31",
+     "median": 98,
+     "low": 95,
+     "high": 110,
+     "n": 10,
+     "vol": 4
+    },
+    {
+     "d": "2026-06-07",
      "median": 109,
      "low": 95,
      "high": 140,
      "n": 11,
-     "vol": 1
-    },
-    {
-     "d": "2026-06-17",
-     "median": 115,
-     "low": 96,
-     "high": 161,
-     "n": 14,
-     "vol": 3
-    },
-    {
-     "d": "2026-06-24",
-     "median": 115,
-     "low": 96,
-     "high": 141,
-     "n": 18,
-     "vol": 4
-    },
-    {
-     "d": "2026-07-01",
-     "median": 123,
-     "low": 98,
-     "high": 142,
-     "n": 20,
      "vol": 2
     },
     {
-     "d": "2026-07-08",
-     "median": 125,
-     "low": 106,
-     "high": 145,
-     "n": 18,
-     "vol": 1
+     "d": "2026-06-14",
+     "median": 110,
+     "low": 95,
+     "high": 141,
+     "n": 13,
+     "vol": 2
     },
     {
-     "d": "2026-07-15",
-     "median": 125,
-     "low": 120,
-     "high": 155,
-     "n": 17,
-     "vol": 4,
-     "out": 1
+     "d": "2026-06-21",
+     "median": 110,
+     "low": 95,
+     "high": 154,
+     "n": 15,
+     "vol": 2
     },
     {
-     "d": "2026-07-22",
-     "median": 125,
-     "low": 117,
+     "d": "2026-06-28",
+     "median": 120,
+     "low": 97,
      "high": 144,
      "n": 19,
+     "vol": 4
+    },
+    {
+     "d": "2026-07-05",
+     "median": 125,
+     "low": 100,
+     "high": 144,
+     "n": 19,
+     "vol": 2
+    },
+    {
+     "d": "2026-07-12",
+     "median": 125,
+     "low": 110,
+     "high": 153,
+     "n": 18,
+     "vol": 2
+    },
+    {
+     "d": "2026-07-19",
+     "median": 125,
+     "low": 120,
+     "high": 153,
+     "n": 18,
      "vol": 5,
      "out": 1
     },
     {
-     "d": "2026-07-29",
-     "median": 125,
-     "low": 120,
-     "high": 139,
-     "n": 27,
-     "vol": 9,
-     "out": 1
-    },
-    {
-     "d": "2026-08-05",
-     "median": 125,
+     "d": "2026-07-26",
+     "median": 123,
      "low": 119,
-     "high": 130,
-     "n": 25,
-     "vol": 1,
-     "out": 1
-    },
-    {
-     "d": "2026-08-12",
-     "median": 125,
-     "low": 119,
-     "high": 135,
+     "high": 138,
      "n": 22,
-     "vol": 1,
+     "vol": 6,
      "out": 1
     },
     {
-     "d": "2026-08-19",
+     "d": "2026-08-02",
      "median": 125,
      "low": 119,
      "high": 137,
+     "n": 25,
+     "vol": 5,
+     "out": 1
+    },
+    {
+     "d": "2026-08-09",
+     "median": 125,
+     "low": 119,
+     "high": 132,
+     "n": 24,
+     "vol": 1,
+     "out": 1
+    },
+    {
+     "d": "2026-08-16",
+     "median": 125,
+     "low": 119,
+     "high": 130,
      "n": 21,
      "vol": 1,
      "out": 1
     },
     {
-     "d": "2026-08-26",
+     "d": "2026-08-23",
      "median": 120,
-     "low": 117,
-     "high": 132,
-     "n": 24,
+     "low": 118,
+     "high": 134,
+     "n": 23,
      "vol": 4,
      "out": 1
     },
     {
-     "d": "2026-09-02",
-     "median": 125,
+     "d": "2026-08-30",
+     "median": 120,
      "low": 118,
-     "high": 134,
-     "n": 23,
-     "vol": 2
+     "high": 130,
+     "n": 22,
+     "vol": 1,
+     "out": 1
     },
     {
-     "d": "2026-09-09",
+     "d": "2026-09-06",
      "median": 126,
      "low": 119,
      "high": 141,
-     "n": 20,
-     "vol": 2
+     "n": 21,
+     "vol": 3
     },
     {
-     "d": "2026-09-16",
+     "d": "2026-09-13",
+     "median": 126,
+     "low": 117,
+     "high": 141,
+     "n": 16,
+     "vol": 1
+    },
+    {
+     "d": "2026-09-20",
      "median": 126,
      "low": 117,
      "high": 143,
@@ -8436,31 +8495,31 @@
      "vol": 1
     },
     {
-     "d": "2026-09-23",
-     "median": 126,
+     "d": "2026-09-27",
+     "median": 133,
      "low": 117,
      "high": 143,
-     "n": 11,
-     "vol": 0
+     "n": 12,
+     "vol": 1
     },
     {
-     "d": "2026-09-30",
+     "d": "2026-10-04",
      "median": 126,
      "low": 117,
      "high": 143,
      "n": 13,
-     "vol": 3
+     "vol": 2
     },
     {
-     "d": "2026-10-07",
-     "median": 127,
-     "low": 122,
+     "d": "2026-10-11",
+     "median": 134,
+     "low": 126,
      "high": 143,
-     "n": 15,
+     "n": 12,
      "vol": 3
     },
     {
-     "d": "2026-10-14",
+     "d": "2026-10-18",
      "median": 134,
      "low": 126,
      "high": 143,
@@ -8468,20 +8527,20 @@
      "vol": 1
     },
     {
-     "d": "2026-10-21",
-     "median": 127,
-     "low": 118,
-     "high": 143,
-     "n": 11,
-     "vol": 1
-    },
-    {
-     "d": "2026-10-28",
+     "d": "2026-10-25",
      "median": 127,
      "low": 109,
      "high": 141,
      "n": 12,
      "vol": 3
+    },
+    {
+     "d": "2026-11-01",
+     "median": 127,
+     "low": 109,
+     "high": 143,
+     "n": 13,
+     "vol": 2
     }
    ],
    "en": [
@@ -8675,11 +8734,11 @@
     },
     {
      "d": "2026-10-30",
-     "median": 549,
-     "low": 518,
-     "high": 601,
-     "n": 20,
-     "vol": 2
+     "median": 550,
+     "low": 521,
+     "high": 600,
+     "n": 21,
+     "vol": 3
     }
    ],
    "enBlue": [],
@@ -8784,11 +8843,11 @@
      },
      {
       "d": "2026-10-01",
-      "median": 549,
+      "median": 550,
       "low": 521,
-      "high": 602,
-      "n": 22,
-      "vol": 22
+      "high": 601,
+      "n": 23,
+      "vol": 23
      }
     ],
     "enBlue": []
@@ -8857,7 +8916,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-01-21": 1,
      "2026-01-25": 1,
@@ -8924,7 +8983,8 @@
      "2026-10-20": 1,
      "2026-10-24": 1,
      "2026-10-25": 1,
-     "2026-10-28": 1
+     "2026-10-28": 1,
+     "2026-11-01": 1
     },
     "en": {
      "2026-05-17": 1,
@@ -9038,7 +9098,7 @@
      "2026-10-20": 1,
      "2026-10-23": 1,
      "2026-10-28": 1,
-     "2026-10-30": 1
+     "2026-10-30": 2
     }
    },
    "supply": [
@@ -9483,8 +9543,8 @@
     "en": null
    },
    "sinceRelease": {
-    "jp": 80,
-    "en": 181
+    "jp": 81,
+    "en": 182
    },
    "outliers": {
     "jp": [
@@ -9516,15 +9576,15 @@
     "jp": {
      "median": 127,
      "low": 109,
-     "high": 141,
-     "n": 12,
-     "d": "2026-10-28"
+     "high": 143,
+     "n": 13,
+     "d": "2026-11-01"
     },
     "en": {
-     "median": 549,
-     "low": 518,
-     "high": 601,
-     "n": 20,
+     "median": 550,
+     "low": 521,
+     "high": 600,
+     "n": 21,
      "d": "2026-10-30"
     }
    }
@@ -9994,7 +10054,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-15": 2,
      "2026-05-17": 1,
@@ -10612,167 +10672,183 @@
   "OP-11": {
    "jp": [
     {
-     "d": "2026-05-28",
+     "d": "2026-05-23",
      "median": 124,
      "low": 98,
      "high": 156,
      "n": 6,
-     "vol": 1
-    },
-    {
-     "d": "2026-06-04",
-     "median": 124,
-     "low": 98,
-     "high": 156,
-     "n": 6,
-     "vol": 0
-    },
-    {
-     "d": "2026-06-11",
-     "median": 146,
-     "low": 105,
-     "high": 154,
-     "n": 11,
      "vol": 5
     },
     {
-     "d": "2026-06-18",
+     "d": "2026-05-30",
+     "median": 124,
+     "low": 98,
+     "high": 156,
+     "n": 6,
+     "vol": 0
+    },
+    {
+     "d": "2026-06-06",
+     "median": 124,
+     "low": 98,
+     "high": 156,
+     "n": 6,
+     "vol": 0
+    },
+    {
+     "d": "2026-06-13",
+     "median": 147,
+     "low": 107,
+     "high": 162,
+     "n": 12,
+     "vol": 6
+    },
+    {
+     "d": "2026-06-20",
      "median": 146,
-     "low": 105,
-     "high": 154,
-     "n": 11,
+     "low": 107,
+     "high": 151,
+     "n": 12,
      "vol": 1
     },
     {
-     "d": "2026-06-25",
-     "median": 149,
+     "d": "2026-06-27",
+     "median": 146,
+     "low": 109,
+     "high": 159,
+     "n": 13,
+     "vol": 1
+    },
+    {
+     "d": "2026-07-04",
+     "median": 148,
      "low": 146,
+     "high": 174,
+     "n": 8,
+     "vol": 0
+    },
+    {
+     "d": "2026-07-11",
+     "median": 146,
+     "low": 145,
      "high": 171,
      "n": 9,
-     "vol": 2
+     "vol": 1
     },
     {
-     "d": "2026-07-02",
-     "median": 148,
-     "low": 146,
-     "high": 174,
-     "n": 8,
-     "vol": 0
-    },
-    {
-     "d": "2026-07-09",
-     "median": 148,
-     "low": 146,
-     "high": 174,
-     "n": 8,
-     "vol": 0
-    },
-    {
-     "d": "2026-07-23",
+     "d": "2026-07-18",
      "median": 146,
-     "low": 140,
-     "high": 206,
-     "n": 6,
-     "vol": 3
+     "low": 145,
+     "high": 166,
+     "n": 10,
+     "vol": 1
     },
     {
-     "d": "2026-07-30",
+     "d": "2026-07-25",
      "median": 146,
      "low": 139,
-     "high": 177,
+     "high": 195,
      "n": 8,
      "vol": 4
     },
     {
-     "d": "2026-08-06",
-     "median": 146,
+     "d": "2026-08-01",
+     "median": 161,
      "low": 141,
-     "high": 182,
+     "high": 195,
      "n": 10,
-     "vol": 2
+     "vol": 3
     },
     {
-     "d": "2026-08-13",
+     "d": "2026-08-08",
      "median": 146,
      "low": 138,
      "high": 175,
      "n": 13,
-     "vol": 3
+     "vol": 4
     },
     {
-     "d": "2026-08-20",
+     "d": "2026-08-15",
+     "median": 146,
+     "low": 138,
+     "high": 180,
+     "n": 15,
+     "vol": 2
+    },
+    {
+     "d": "2026-08-22",
      "median": 146,
      "low": 140,
      "high": 182,
      "n": 14,
-     "vol": 2
-    },
-    {
-     "d": "2026-08-27",
-     "median": 145,
-     "low": 130,
-     "high": 175,
-     "n": 13,
-     "vol": 2
-    },
-    {
-     "d": "2026-09-03",
-     "median": 136,
-     "low": 120,
-     "high": 145,
-     "n": 11,
-     "vol": 2
-    },
-    {
-     "d": "2026-09-10",
-     "median": 120,
-     "low": 102,
-     "high": 137,
-     "n": 15,
-     "vol": 6
-    },
-    {
-     "d": "2026-09-17",
-     "median": 120,
-     "low": 99,
-     "high": 136,
-     "n": 13,
-     "vol": 1
-    },
-    {
-     "d": "2026-09-24",
-     "median": 120,
-     "low": 99,
-     "high": 136,
-     "n": 13,
-     "vol": 2
-    },
-    {
-     "d": "2026-10-01",
-     "median": 104,
-     "low": 99,
-     "high": 136,
-     "n": 11,
      "vol": 0
     },
     {
-     "d": "2026-10-08",
-     "median": 104,
+     "d": "2026-08-29",
+     "median": 145,
+     "low": 128,
+     "high": 177,
+     "n": 16,
+     "vol": 3
+    },
+    {
+     "d": "2026-09-05",
+     "median": 136,
+     "low": 120,
+     "high": 146,
+     "n": 15,
+     "vol": 3
+    },
+    {
+     "d": "2026-09-12",
+     "median": 120,
      "low": 99,
      "high": 137,
-     "n": 10,
+     "n": 17,
+     "vol": 5
+    },
+    {
+     "d": "2026-09-19",
+     "median": 125,
+     "low": 100,
+     "high": 137,
+     "n": 14,
      "vol": 1
     },
     {
-     "d": "2026-10-15",
-     "median": 125,
-     "low": 104,
-     "high": 134,
-     "n": 8,
-     "vol": 4
+     "d": "2026-09-26",
+     "median": 120,
+     "low": 99,
+     "high": 136,
+     "n": 13,
+     "vol": 1
     },
     {
-     "d": "2026-10-22",
+     "d": "2026-10-03",
+     "median": 120,
+     "low": 99,
+     "high": 136,
+     "n": 13,
+     "vol": 0
+    },
+    {
+     "d": "2026-10-10",
+     "median": 117,
+     "low": 99,
+     "high": 137,
+     "n": 12,
+     "vol": 2
+    },
+    {
+     "d": "2026-10-17",
+     "median": 112,
+     "low": 102,
+     "high": 132,
+     "n": 12,
+     "vol": 3
+    },
+    {
+     "d": "2026-10-24",
      "median": 125,
      "low": 108,
      "high": 142,
@@ -10780,215 +10856,215 @@
      "vol": 3
     },
     {
-     "d": "2026-10-29",
+     "d": "2026-10-31",
      "median": 120,
-     "low": 112,
+     "low": 104,
      "high": 130,
-     "n": 11,
-     "vol": 3
+     "n": 13,
+     "vol": 4
     }
    ],
    "en": [
     {
-     "d": "2026-05-22",
-     "median": 450,
-     "low": 439,
+     "d": "2026-05-24",
+     "median": 445,
+     "low": 425,
      "high": 455,
-     "n": 9,
+     "n": 10,
+     "vol": 10
+    },
+    {
+     "d": "2026-05-31",
+     "median": 450,
+     "low": 413,
+     "high": 472,
+     "n": 19,
      "vol": 9
     },
     {
-     "d": "2026-05-29",
-     "median": 445,
-     "low": 398,
-     "high": 459,
-     "n": 16,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-05",
-     "median": 450,
-     "low": 417,
-     "high": 480,
-     "n": 24,
+     "d": "2026-06-07",
+     "median": 454,
+     "low": 430,
+     "high": 495,
+     "n": 27,
      "vol": 8
     },
     {
-     "d": "2026-06-12",
-     "median": 469,
-     "low": 439,
+     "d": "2026-06-14",
+     "median": 462,
+     "low": 435,
      "high": 500,
-     "n": 31,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-19",
-     "median": 485,
-     "low": 440,
-     "high": 500,
-     "n": 29,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-26",
-     "median": 500,
-     "low": 450,
-     "high": 515,
-     "n": 27,
+     "n": 32,
      "vol": 5
     },
     {
-     "d": "2026-07-03",
-     "median": 498,
-     "low": 440,
-     "high": 510,
+     "d": "2026-06-21",
+     "median": 487,
+     "low": 443,
+     "high": 507,
      "n": 30,
-     "vol": 11
-    },
-    {
-     "d": "2026-07-10",
-     "median": 496,
-     "low": 434,
-     "high": 540,
-     "n": 32,
-     "vol": 9
-    },
-    {
-     "d": "2026-07-17",
-     "median": 534,
-     "low": 472,
-     "high": 596,
-     "n": 33,
      "vol": 8
     },
     {
-     "d": "2026-07-24",
-     "median": 554,
-     "low": 472,
-     "high": 617,
-     "n": 30,
-     "vol": 2
+     "d": "2026-06-28",
+     "median": 498,
+     "low": 450,
+     "high": 507,
+     "n": 26,
+     "vol": 5
     },
     {
-     "d": "2026-07-31",
-     "median": 609,
-     "low": 568,
-     "high": 686,
-     "n": 25,
+     "d": "2026-07-05",
+     "median": 496,
+     "low": 444,
+     "high": 524,
+     "n": 31,
+     "vol": 13
+    },
+    {
+     "d": "2026-07-12",
+     "median": 498,
+     "low": 447,
+     "high": 551,
+     "n": 32,
      "vol": 6
     },
     {
-     "d": "2026-08-07",
-     "median": 638,
-     "low": 609,
-     "high": 686,
+     "d": "2026-07-19",
+     "median": 535,
+     "low": 472,
+     "high": 600,
+     "n": 32,
+     "vol": 8
+    },
+    {
+     "d": "2026-07-26",
+     "median": 568,
+     "low": 472,
+     "high": 645,
+     "n": 29,
+     "vol": 2
+    },
+    {
+     "d": "2026-08-02",
+     "median": 619,
+     "low": 586,
+     "high": 691,
+     "n": 23,
+     "vol": 7
+    },
+    {
+     "d": "2026-08-09",
+     "median": 645,
+     "low": 610,
+     "high": 691,
+     "n": 23,
+     "vol": 7,
+     "out": 1
+    },
+    {
+     "d": "2026-08-16",
+     "median": 636,
+     "low": 604,
+     "high": 646,
      "n": 21,
      "vol": 6,
      "out": 1
     },
     {
-     "d": "2026-08-14",
-     "median": 630,
-     "low": 599,
-     "high": 646,
-     "n": 22,
-     "vol": 9,
-     "out": 1
-    },
-    {
-     "d": "2026-08-21",
-     "median": 623,
-     "low": 599,
+     "d": "2026-08-23",
+     "median": 619,
+     "low": 593,
      "high": 646,
      "n": 23,
-     "vol": 3,
+     "vol": 4,
      "out": 1
     },
     {
-     "d": "2026-08-28",
-     "median": 608,
-     "low": 575,
+     "d": "2026-08-30",
+     "median": 604,
+     "low": 576,
      "high": 646,
-     "n": 20,
-     "vol": 3,
+     "n": 21,
+     "vol": 5,
      "out": 1
     },
     {
-     "d": "2026-09-04",
-     "median": 599,
+     "d": "2026-09-06",
+     "median": 598,
      "low": 574,
-     "high": 624,
+     "high": 617,
      "n": 22,
      "vol": 7
     },
     {
-     "d": "2026-09-11",
-     "median": 591,
-     "low": 573,
-     "high": 612,
-     "n": 17,
-     "vol": 4
-    },
-    {
-     "d": "2026-09-18",
+     "d": "2026-09-13",
      "median": 591,
      "low": 557,
-     "high": 607,
-     "n": 27,
-     "vol": 13
+     "high": 611,
+     "n": 23,
+     "vol": 7
     },
     {
-     "d": "2026-09-25",
+     "d": "2026-09-20",
      "median": 598,
      "low": 571,
      "high": 633,
      "n": 31,
-     "vol": 7
+     "vol": 12
     },
     {
-     "d": "2026-10-02",
+     "d": "2026-09-27",
      "median": 594,
-     "low": 554,
-     "high": 629,
-     "n": 26,
-     "vol": 2
-    },
-    {
-     "d": "2026-10-09",
-     "median": 594,
-     "low": 545,
-     "high": 609,
-     "n": 26,
-     "vol": 4
-    },
-    {
-     "d": "2026-10-16",
-     "median": 575,
-     "low": 526,
-     "high": 605,
-     "n": 16,
+     "low": 570,
+     "high": 630,
+     "n": 29,
      "vol": 3
     },
     {
-     "d": "2026-10-23",
-     "median": 526,
-     "low": 520,
-     "high": 579,
-     "n": 13,
+     "d": "2026-10-04",
+     "median": 594,
+     "low": 551,
+     "high": 623,
+     "n": 23,
+     "vol": 1
+    },
+    {
+     "d": "2026-10-11",
+     "median": 594,
+     "low": 540,
+     "high": 612,
+     "n": 20,
      "vol": 4
     },
     {
-     "d": "2026-10-30",
-     "median": 551,
+     "d": "2026-10-18",
+     "median": 531,
+     "low": 523,
+     "high": 587,
+     "n": 11,
+     "vol": 3
+    },
+    {
+     "d": "2026-10-25",
+     "median": 526,
+     "low": 520,
+     "high": 566,
+     "n": 13,
+     "vol": 5
+    },
+    {
+     "d": "2026-11-01",
+     "median": 550,
      "low": 526,
      "high": 579,
-     "n": 17,
+     "n": 18,
      "vol": 6
     }
    ],
    "enBlue": [],
    "windowDays": {
-    "jp": 35,
+    "jp": 42,
     "en": 28,
     "enBlue": null
    },
@@ -11037,10 +11113,10 @@
      {
       "d": "2026-10-01",
       "median": 120,
-      "low": 112,
+      "low": 116,
       "high": 130,
-      "n": 11,
-      "vol": 11
+      "n": 12,
+      "vol": 12
      }
     ],
     "en": [
@@ -11151,7 +11227,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-09": 1,
      "2026-05-17": 1,
@@ -11196,7 +11272,8 @@
      "2026-10-21": 2,
      "2026-10-25": 1,
      "2026-10-26": 1,
-     "2026-10-29": 1
+     "2026-10-29": 1,
+     "2026-10-31": 1
     },
     "en": {
      "2026-05-18": 2,
@@ -11290,7 +11367,8 @@
      "2026-10-24": 1,
      "2026-10-27": 2,
      "2026-10-29": 2,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-11-01": 1
     }
    },
    "supply": [
@@ -11735,8 +11813,8 @@
     "en": null
    },
    "sinceRelease": {
-    "jp": 61,
-    "en": 157
+    "jp": 62,
+    "en": 158
    },
    "outliers": {
     "en": [
@@ -11750,17 +11828,17 @@
    "current": {
     "jp": {
      "median": 120,
-     "low": 112,
+     "low": 104,
      "high": 130,
-     "n": 11,
-     "d": "2026-10-29"
+     "n": 13,
+     "d": "2026-10-31"
     },
     "en": {
-     "median": 551,
+     "median": 550,
      "low": 526,
      "high": 579,
-     "n": 17,
-     "d": "2026-10-30"
+     "n": 18,
+     "d": "2026-11-01"
     }
    }
   },
@@ -11929,195 +12007,195 @@
    ],
    "en": [
     {
-     "d": "2026-05-22",
-     "median": 245,
+     "d": "2026-05-24",
+     "median": 243,
      "low": 235,
-     "high": 258,
-     "n": 7,
+     "high": 254,
+     "n": 8,
      "vol": 5
     },
     {
-     "d": "2026-05-29",
+     "d": "2026-05-31",
      "median": 245,
      "low": 235,
      "high": 250,
-     "n": 13,
-     "vol": 6
+     "n": 15,
+     "vol": 7
     },
     {
-     "d": "2026-06-05",
-     "median": 237,
-     "low": 221,
-     "high": 250,
-     "n": 22,
-     "vol": 10
-    },
-    {
-     "d": "2026-06-12",
+     "d": "2026-06-07",
      "median": 239,
      "low": 227,
      "high": 250,
      "n": 24,
+     "vol": 10
+    },
+    {
+     "d": "2026-06-14",
+     "median": 237,
+     "low": 223,
+     "high": 250,
+     "n": 24,
+     "vol": 2
+    },
+    {
+     "d": "2026-06-21",
+     "median": 239,
+     "low": 220,
+     "high": 250,
+     "n": 22,
      "vol": 3
     },
     {
-     "d": "2026-06-19",
-     "median": 240,
-     "low": 222,
-     "high": 250,
-     "n": 23,
-     "vol": 4
-    },
-    {
-     "d": "2026-06-26",
+     "d": "2026-06-28",
      "median": 238,
-     "low": 218,
+     "low": 225,
      "high": 250,
      "n": 21,
-     "vol": 4
+     "vol": 6
     },
     {
-     "d": "2026-07-03",
+     "d": "2026-07-05",
      "median": 250,
-     "low": 236,
-     "high": 256,
+     "low": 227,
+     "high": 258,
      "n": 16,
      "vol": 5
     },
     {
-     "d": "2026-07-10",
+     "d": "2026-07-12",
      "median": 250,
-     "low": 231,
+     "low": 240,
      "high": 260,
-     "n": 22,
-     "vol": 9
+     "n": 21,
+     "vol": 7
     },
     {
-     "d": "2026-07-17",
+     "d": "2026-07-19",
      "median": 258,
-     "low": 249,
-     "high": 261,
-     "n": 26,
-     "vol": 8
+     "low": 250,
+     "high": 262,
+     "n": 28,
+     "vol": 10
     },
     {
-     "d": "2026-07-24",
+     "d": "2026-07-26",
      "median": 260,
-     "low": 250,
-     "high": 271,
-     "n": 27,
-     "vol": 5
-    },
-    {
-     "d": "2026-07-31",
-     "median": 260,
-     "low": 250,
+     "low": 251,
      "high": 279,
      "n": 26,
      "vol": 4
     },
     {
-     "d": "2026-08-07",
+     "d": "2026-08-02",
      "median": 260,
-     "low": 254,
-     "high": 281,
-     "n": 24,
-     "vol": 7
-    },
-    {
-     "d": "2026-08-14",
-     "median": 265,
-     "low": 256,
-     "high": 285,
-     "n": 20,
-     "vol": 4
-    },
-    {
-     "d": "2026-08-21",
-     "median": 273,
-     "low": 256,
-     "high": 289,
-     "n": 24,
-     "vol": 9
-    },
-    {
-     "d": "2026-08-28",
-     "median": 270,
-     "low": 259,
-     "high": 288,
-     "n": 24,
-     "vol": 4
-    },
-    {
-     "d": "2026-09-04",
-     "median": 273,
-     "low": 264,
-     "high": 288,
-     "n": 24,
-     "vol": 7
-    },
-    {
-     "d": "2026-09-11",
-     "median": 272,
-     "low": 264,
-     "high": 283,
+     "low": 250,
+     "high": 279,
      "n": 26,
+     "vol": 5
+    },
+    {
+     "d": "2026-08-09",
+     "median": 260,
+     "low": 255,
+     "high": 282,
+     "n": 25,
      "vol": 6
     },
     {
-     "d": "2026-09-18",
-     "median": 272,
+     "d": "2026-08-16",
+     "median": 273,
+     "low": 258,
+     "high": 287,
+     "n": 22,
+     "vol": 7
+    },
+    {
+     "d": "2026-08-23",
+     "median": 273,
+     "low": 256,
+     "high": 288,
+     "n": 24,
+     "vol": 6
+    },
+    {
+     "d": "2026-08-30",
+     "median": 275,
+     "low": 260,
+     "high": 288,
+     "n": 25,
+     "vol": 6
+    },
+    {
+     "d": "2026-09-06",
+     "median": 270,
      "low": 264,
      "high": 283,
+     "n": 24,
+     "vol": 5
+    },
+    {
+     "d": "2026-09-13",
+     "median": 267,
+     "low": 263,
+     "high": 279,
      "n": 22,
      "vol": 5
     },
     {
-     "d": "2026-09-25",
-     "median": 275,
-     "low": 265,
+     "d": "2026-09-20",
+     "median": 272,
+     "low": 264,
      "high": 284,
      "n": 22,
-     "vol": 4
+     "vol": 6
     },
     {
-     "d": "2026-10-02",
-     "median": 275,
+     "d": "2026-09-27",
+     "median": 271,
+     "low": 265,
+     "high": 282,
+     "n": 21,
+     "vol": 5
+    },
+    {
+     "d": "2026-10-04",
+     "median": 277,
      "low": 267,
      "high": 284,
-     "n": 19,
+     "n": 20,
      "vol": 4
     },
     {
-     "d": "2026-10-09",
+     "d": "2026-10-11",
      "median": 275,
      "low": 268,
      "high": 285,
-     "n": 21,
-     "vol": 8
+     "n": 22,
+     "vol": 7
     },
     {
-     "d": "2026-10-16",
-     "median": 275,
+     "d": "2026-10-18",
+     "median": 274,
      "low": 267,
      "high": 283,
      "n": 19,
      "vol": 3
     },
     {
-     "d": "2026-10-23",
-     "median": 274,
-     "low": 267,
-     "high": 284,
-     "n": 17,
+     "d": "2026-10-25",
+     "median": 275,
+     "low": 260,
+     "high": 285,
+     "n": 16,
      "vol": 2
     },
     {
-     "d": "2026-10-30",
+     "d": "2026-11-01",
      "median": 276,
-     "low": 268,
-     "high": 287,
-     "n": 17,
+     "low": 266,
+     "high": 290,
+     "n": 16,
      "vol": 4
     }
    ],
@@ -12247,7 +12325,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-14": 1,
      "2026-05-15": 1,
@@ -12380,7 +12458,8 @@
      "2026-10-19": 1,
      "2026-10-24": 1,
      "2026-10-29": 1,
-     "2026-10-30": 2
+     "2026-10-30": 2,
+     "2026-11-01": 1
     }
    },
    "supply": [
@@ -12826,7 +12905,7 @@
    },
    "sinceRelease": {
     "jp": 40,
-    "en": 139
+    "en": 140
    },
    "outliers": {
     "jp": [
@@ -12841,33 +12920,25 @@
     "jp": null,
     "en": {
      "median": 276,
-     "low": 268,
-     "high": 287,
-     "n": 17,
-     "d": "2026-10-30"
+     "low": 266,
+     "high": 290,
+     "n": 16,
+     "d": "2026-11-01"
     }
    }
   },
   "OP-13": {
    "jp": [
     {
-     "d": "2026-05-25",
-     "median": 149,
-     "low": 146,
-     "high": 149,
-     "n": 6,
-     "vol": 5
-    },
-    {
-     "d": "2026-06-01",
+     "d": "2026-05-31",
      "median": 145,
      "low": 145,
      "high": 149,
      "n": 9,
-     "vol": 3
+     "vol": 4
     },
     {
-     "d": "2026-06-08",
+     "d": "2026-06-07",
      "median": 145,
      "low": 136,
      "high": 149,
@@ -12876,34 +12947,34 @@
      "out": 1
     },
     {
-     "d": "2026-06-15",
+     "d": "2026-06-14",
      "median": 145,
      "low": 129,
      "high": 149,
-     "n": 15,
+     "n": 16,
      "vol": 5,
      "out": 1
     },
     {
-     "d": "2026-06-22",
+     "d": "2026-06-21",
      "median": 129,
-     "low": 128,
-     "high": 145,
+     "low": 129,
+     "high": 149,
      "n": 17,
-     "vol": 7,
+     "vol": 6,
      "out": 1
     },
     {
-     "d": "2026-06-29",
+     "d": "2026-06-28",
      "median": 129,
      "low": 129,
      "high": 142,
      "n": 15,
-     "vol": 2,
+     "vol": 3,
      "out": 2
     },
     {
-     "d": "2026-07-06",
+     "d": "2026-07-05",
      "median": 129,
      "low": 129,
      "high": 154,
@@ -12912,34 +12983,34 @@
      "out": 1
     },
     {
-     "d": "2026-07-13",
+     "d": "2026-07-12",
      "median": 143,
      "low": 129,
      "high": 201,
      "n": 12,
-     "vol": 3,
-     "out": 2
+     "vol": 2,
+     "out": 1
     },
     {
-     "d": "2026-07-20",
-     "median": 156,
-     "low": 135,
+     "d": "2026-07-19",
+     "median": 155,
+     "low": 131,
      "high": 198,
      "n": 9,
      "vol": 4,
      "out": 2
     },
     {
-     "d": "2026-07-27",
+     "d": "2026-07-26",
      "median": 158,
      "low": 149,
      "high": 198,
      "n": 13,
-     "vol": 5,
+     "vol": 6,
      "out": 1
     },
     {
-     "d": "2026-08-03",
+     "d": "2026-08-02",
      "median": 152,
      "low": 129,
      "high": 158,
@@ -12948,16 +13019,17 @@
      "out": 1
     },
     {
-     "d": "2026-08-10",
-     "median": 134,
+     "d": "2026-08-09",
+     "median": 135,
      "low": 128,
      "high": 158,
-     "n": 18,
-     "vol": 4
+     "n": 17,
+     "vol": 3,
+     "out": 1
     },
     {
-     "d": "2026-08-17",
-     "median": 132,
+     "d": "2026-08-16",
+     "median": 134,
      "low": 129,
      "high": 159,
      "n": 20,
@@ -12965,264 +13037,272 @@
      "out": 1
     },
     {
-     "d": "2026-08-24",
+     "d": "2026-08-23",
      "median": 129,
      "low": 128,
-     "high": 140,
-     "n": 20,
+     "high": 147,
+     "n": 19,
      "vol": 5,
      "out": 1
     },
     {
-     "d": "2026-08-31",
+     "d": "2026-08-30",
      "median": 130,
      "low": 129,
      "high": 141,
-     "n": 20,
+     "n": 19,
      "vol": 5,
      "out": 1
     },
     {
-     "d": "2026-09-07",
+     "d": "2026-09-06",
      "median": 130,
      "low": 129,
      "high": 143,
-     "n": 19,
-     "vol": 3,
+     "n": 20,
+     "vol": 4,
      "out": 1
     },
     {
-     "d": "2026-09-14",
+     "d": "2026-09-13",
      "median": 129,
      "low": 129,
      "high": 141,
      "n": 16,
-     "vol": 3
+     "vol": 2
     },
     {
-     "d": "2026-09-21",
+     "d": "2026-09-20",
      "median": 129,
      "low": 129,
-     "high": 142,
+     "high": 138,
      "n": 18,
      "vol": 7
     },
     {
-     "d": "2026-09-28",
+     "d": "2026-09-27",
      "median": 129,
-     "low": 129,
+     "low": 128,
      "high": 156,
      "n": 18,
      "vol": 5
     },
     {
-     "d": "2026-10-05",
+     "d": "2026-10-04",
+     "median": 129,
+     "low": 128,
+     "high": 162,
+     "n": 24,
+     "vol": 10
+    },
+    {
+     "d": "2026-10-11",
      "median": 129,
      "low": 128,
      "high": 163,
      "n": 26,
-     "vol": 11
+     "vol": 4
     },
     {
-     "d": "2026-10-12",
+     "d": "2026-10-18",
      "median": 129,
      "low": 127,
      "high": 164,
      "n": 25,
-     "vol": 2
+     "vol": 6
     },
     {
-     "d": "2026-10-19",
-     "median": 129,
-     "low": 126,
-     "high": 164,
-     "n": 26,
-     "vol": 8
-    },
-    {
-     "d": "2026-10-26",
+     "d": "2026-10-25",
      "median": 128,
      "low": 125,
      "high": 155,
      "n": 26,
-     "vol": 5
+     "vol": 6
+    },
+    {
+     "d": "2026-11-01",
+     "median": 127,
+     "low": 125,
+     "high": 129,
+     "n": 20,
+     "vol": 4
     }
    ],
    "en": [
     {
-     "d": "2026-06-20",
-     "median": 439,
-     "low": 397,
-     "high": 444,
-     "n": 9,
-     "vol": 8
-    },
-    {
-     "d": "2026-06-27",
-     "median": 439,
-     "low": 414,
-     "high": 480,
-     "n": 11,
-     "vol": 2
-    },
-    {
-     "d": "2026-07-04",
+     "d": "2026-06-21",
      "median": 436,
      "low": 406,
      "high": 443,
      "n": 10,
-     "vol": 0
+     "vol": 8
     },
     {
-     "d": "2026-07-11",
-     "median": 499,
-     "low": 439,
-     "high": 529,
-     "n": 34,
-     "vol": 24
+     "d": "2026-06-28",
+     "median": 439,
+     "low": 414,
+     "high": 480,
+     "n": 11,
+     "vol": 1
     },
     {
-     "d": "2026-07-18",
-     "median": 486,
+     "d": "2026-07-05",
+     "median": 439,
+     "low": 414,
+     "high": 480,
+     "n": 11,
+     "vol": 1
+    },
+    {
+     "d": "2026-07-12",
+     "median": 500,
+     "low": 443,
+     "high": 534,
+     "n": 36,
+     "vol": 26
+    },
+    {
+     "d": "2026-07-19",
+     "median": 458,
      "low": 427,
-     "high": 522,
-     "n": 53,
-     "vol": 28,
+     "high": 500,
+     "n": 61,
+     "vol": 34,
      "out": 1
     },
     {
-     "d": "2026-07-25",
-     "median": 447,
+     "d": "2026-07-26",
+     "median": 449,
      "low": 425,
      "high": 500,
-     "n": 105,
-     "vol": 54,
+     "n": 109,
+     "vol": 49,
      "out": 1
     },
     {
-     "d": "2026-08-01",
-     "median": 450,
+     "d": "2026-08-02",
+     "median": 451,
      "low": 427,
      "high": 497,
-     "n": 142,
-     "vol": 38,
+     "n": 148,
+     "vol": 41,
      "out": 2
     },
     {
-     "d": "2026-08-08",
+     "d": "2026-08-09",
      "median": 456,
      "low": 437,
      "high": 475,
-     "n": 179,
-     "vol": 61,
+     "n": 184,
+     "vol": 62,
      "out": 2
     },
     {
-     "d": "2026-08-15",
-     "median": 460,
-     "low": 442,
-     "high": 483,
-     "n": 193,
-     "vol": 41,
-     "out": 1
+     "d": "2026-08-16",
+     "median": 465,
+     "low": 447,
+     "high": 492,
+     "n": 189,
+     "vol": 39,
+     "out": 2
     },
     {
-     "d": "2026-08-22",
-     "median": 470,
+     "d": "2026-08-23",
+     "median": 471,
      "low": 451,
      "high": 498,
      "n": 171,
-     "vol": 33,
+     "vol": 31,
      "out": 2
     },
     {
-     "d": "2026-08-29",
-     "median": 478,
-     "low": 457,
+     "d": "2026-08-30",
+     "median": 479,
+     "low": 458,
      "high": 501,
-     "n": 167,
+     "n": 164,
      "vol": 33,
      "out": 1
     },
     {
-     "d": "2026-09-05",
-     "median": 490,
-     "low": 473,
-     "high": 507,
-     "n": 131,
-     "vol": 26,
-     "out": 2
-    },
-    {
-     "d": "2026-09-12",
+     "d": "2026-09-06",
      "median": 491,
-     "low": 479,
-     "high": 506,
-     "n": 113,
-     "vol": 23,
+     "low": 476,
+     "high": 507,
+     "n": 128,
+     "vol": 27,
      "out": 2
     },
     {
-     "d": "2026-09-19",
-     "median": 487,
+     "d": "2026-09-13",
+     "median": 489,
+     "low": 478,
+     "high": 505,
+     "n": 111,
+     "vol": 21,
+     "out": 1
+    },
+    {
+     "d": "2026-09-20",
+     "median": 486,
      "low": 478,
      "high": 504,
-     "n": 97,
-     "vol": 16,
+     "n": 94,
+     "vol": 14,
      "out": 1
     },
     {
-     "d": "2026-09-26",
-     "median": 482,
+     "d": "2026-09-27",
+     "median": 481,
      "low": 471,
      "high": 499,
      "n": 83,
-     "vol": 19,
+     "vol": 22,
      "out": 1
     },
     {
-     "d": "2026-10-03",
+     "d": "2026-10-04",
      "median": 477,
-     "low": 457,
-     "high": 490,
-     "n": 83,
-     "vol": 26,
+     "low": 455,
+     "high": 488,
+     "n": 79,
+     "vol": 23,
      "out": 1
     },
     {
-     "d": "2026-10-10",
-     "median": 472,
-     "low": 452,
+     "d": "2026-10-11",
+     "median": 471,
+     "low": 451,
      "high": 485,
-     "n": 68,
+     "n": 66,
      "vol": 8,
      "out": 1
     },
     {
-     "d": "2026-10-17",
+     "d": "2026-10-18",
      "median": 463,
-     "low": 446,
+     "low": 445,
      "high": 480,
-     "n": 70,
-     "vol": 18,
+     "n": 73,
+     "vol": 21,
      "out": 1
     },
     {
-     "d": "2026-10-24",
-     "median": 456,
+     "d": "2026-10-25",
+     "median": 454,
      "low": 440,
-     "high": 479,
-     "n": 67,
-     "vol": 16,
+     "high": 476,
+     "n": 64,
+     "vol": 13,
      "out": 1
     },
     {
-     "d": "2026-10-31",
+     "d": "2026-11-01",
      "median": 450,
-     "low": 427,
-     "high": 474,
-     "n": 50,
-     "vol": 8
+     "low": 426,
+     "high": 469,
+     "n": 55,
+     "vol": 13
     }
    ],
    "enBlue": [],
@@ -13281,8 +13361,8 @@
       "median": 128,
       "low": 125,
       "high": 164,
-      "n": 24,
-      "vol": 24
+      "n": 25,
+      "vol": 25
      }
     ],
     "en": [
@@ -13324,10 +13404,10 @@
      {
       "d": "2026-10-01",
       "median": 450,
-      "low": 434,
-      "high": 476,
-      "n": 62,
-      "vol": 62
+      "low": 430,
+      "high": 475,
+      "n": 65,
+      "vol": 65
      }
     ],
     "enBlue": []
@@ -13970,12 +14050,28 @@
       "high": 458,
       "n": 4,
       "vol": 4
+     },
+     {
+      "d": "2026-10-31",
+      "median": 425,
+      "low": 402,
+      "high": 435,
+      "n": 4,
+      "vol": 4
+     },
+     {
+      "d": "2026-11-01",
+      "median": 425,
+      "low": 412,
+      "high": 436,
+      "n": 3,
+      "vol": 3
      }
     ],
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-18": 1,
      "2026-05-19": 1,
@@ -14059,7 +14155,9 @@
      "2026-10-20": 1,
      "2026-10-21": 1,
      "2026-10-25": 2,
-     "2026-10-26": 1
+     "2026-10-26": 1,
+     "2026-10-31": 1,
+     "2026-11-01": 2
     },
     "en": {
      "2026-06-01": 1,
@@ -14177,7 +14275,8 @@
      "2026-10-25": 1,
      "2026-10-26": 2,
      "2026-10-27": 4,
-     "2026-10-31": 1
+     "2026-10-31": 4,
+     "2026-11-01": 3
     }
    },
    "supply": [
@@ -14628,8 +14727,8 @@
     "en": null
    },
    "sinceRelease": {
-    "jp": 127,
-    "en": 491
+    "jp": 130,
+    "en": 497
    },
    "outliers": {
     "jp": [
@@ -14684,18 +14783,18 @@
    },
    "current": {
     "jp": {
-     "median": 128,
+     "median": 127,
      "low": 125,
-     "high": 155,
-     "n": 26,
-     "d": "2026-10-26"
+     "high": 129,
+     "n": 20,
+     "d": "2026-11-01"
     },
     "en": {
      "median": 450,
-     "low": 427,
-     "high": 474,
-     "n": 50,
-     "d": "2026-10-31"
+     "low": 426,
+     "high": 469,
+     "n": 55,
+     "d": "2026-11-01"
     }
    }
   },
@@ -14893,198 +14992,199 @@
    ],
    "en": [
     {
-     "d": "2026-05-22",
-     "median": 230,
-     "low": 227,
-     "high": 254,
-     "n": 11,
-     "vol": 8
-    },
-    {
-     "d": "2026-05-29",
-     "median": 250,
-     "low": 230,
-     "high": 260,
-     "n": 19,
-     "vol": 9
-    },
-    {
-     "d": "2026-06-05",
-     "median": 243,
-     "low": 231,
-     "high": 260,
-     "n": 23,
-     "vol": 5
-    },
-    {
-     "d": "2026-06-12",
-     "median": 231,
+     "d": "2026-05-24",
+     "median": 241,
      "low": 229,
-     "high": 260,
-     "n": 25,
-     "vol": 3
-    },
-    {
-     "d": "2026-06-19",
-     "median": 243,
-     "low": 229,
-     "high": 260,
-     "n": 22,
-     "vol": 5
-    },
-    {
-     "d": "2026-06-26",
-     "median": 231,
-     "low": 221,
-     "high": 250,
-     "n": 25,
-     "vol": 12
-    },
-    {
-     "d": "2026-07-03",
-     "median": 231,
-     "low": 220,
-     "high": 250,
-     "n": 23,
-     "vol": 3
-    },
-    {
-     "d": "2026-07-10",
-     "median": 236,
-     "low": 228,
-     "high": 248,
-     "n": 38,
-     "vol": 18
-    },
-    {
-     "d": "2026-07-17",
-     "median": 243,
-     "low": 229,
-     "high": 256,
-     "n": 47,
-     "vol": 14
-    },
-    {
-     "d": "2026-07-24",
-     "median": 245,
-     "low": 231,
-     "high": 260,
-     "n": 45,
+     "high": 263,
+     "n": 14,
      "vol": 10
     },
     {
-     "d": "2026-07-31",
-     "median": 245,
+     "d": "2026-05-31",
+     "median": 247,
      "low": 230,
      "high": 260,
-     "n": 54,
-     "vol": 12
+     "n": 22,
+     "vol": 9
     },
     {
-     "d": "2026-08-07",
-     "median": 257,
-     "low": 240,
-     "high": 272,
-     "n": 49,
+     "d": "2026-06-07",
+     "median": 241,
+     "low": 230,
+     "high": 260,
+     "n": 22,
+     "vol": 2
+    },
+    {
+     "d": "2026-06-14",
+     "median": 238,
+     "low": 230,
+     "high": 260,
+     "n": 25,
+     "vol": 4
+    },
+    {
+     "d": "2026-06-21",
+     "median": 243,
+     "low": 226,
+     "high": 260,
+     "n": 24,
+     "vol": 9
+    },
+    {
+     "d": "2026-06-28",
+     "median": 231,
+     "low": 219,
+     "high": 250,
+     "n": 22,
+     "vol": 7
+    },
+    {
+     "d": "2026-07-05",
+     "median": 233,
+     "low": 221,
+     "high": 248,
+     "n": 30,
+     "vol": 10
+    },
+    {
+     "d": "2026-07-12",
+     "median": 237,
+     "low": 228,
+     "high": 249,
+     "n": 40,
+     "vol": 14
+    },
+    {
+     "d": "2026-07-19",
+     "median": 240,
+     "low": 230,
+     "high": 252,
+     "n": 44,
      "vol": 13
     },
     {
-     "d": "2026-08-14",
-     "median": 258,
-     "low": 235,
-     "high": 268,
-     "n": 47,
-     "vol": 12
-    },
-    {
-     "d": "2026-08-21",
-     "median": 259,
-     "low": 239,
-     "high": 271,
+     "d": "2026-07-26",
+     "median": 245,
+     "low": 230,
+     "high": 259,
      "n": 48,
      "vol": 11
     },
     {
-     "d": "2026-08-28",
-     "median": 266,
-     "low": 251,
-     "high": 277,
-     "n": 41,
+     "d": "2026-08-02",
+     "median": 249,
+     "low": 231,
+     "high": 263,
+     "n": 51,
+     "vol": 13
+    },
+    {
+     "d": "2026-08-09",
+     "median": 258,
+     "low": 240,
+     "high": 268,
+     "n": 49,
+     "vol": 12
+    },
+    {
+     "d": "2026-08-16",
+     "median": 258,
+     "low": 239,
+     "high": 269,
+     "n": 48,
+     "vol": 12
+    },
+    {
+     "d": "2026-08-23",
+     "median": 260,
+     "low": 245,
+     "high": 272,
+     "n": 46,
+     "vol": 9
+    },
+    {
+     "d": "2026-08-30",
+     "median": 268,
+     "low": 252,
+     "high": 276,
+     "n": 38,
      "vol": 5
     },
     {
-     "d": "2026-09-04",
-     "median": 266,
-     "low": 250,
+     "d": "2026-09-06",
+     "median": 267,
+     "low": 249,
      "high": 270,
-     "n": 39,
-     "vol": 11
+     "n": 38,
+     "vol": 12
     },
     {
-     "d": "2026-09-11",
+     "d": "2026-09-13",
      "median": 270,
      "low": 254,
-     "high": 270,
-     "n": 35,
+     "high": 271,
+     "n": 34,
      "vol": 8
     },
     {
-     "d": "2026-09-18",
+     "d": "2026-09-20",
      "median": 270,
-     "low": 258,
-     "high": 274,
-     "n": 28,
+     "low": 260,
+     "high": 272,
+     "n": 29,
      "vol": 4
     },
     {
-     "d": "2026-09-25",
+     "d": "2026-09-27",
      "median": 270,
-     "low": 256,
-     "high": 281,
-     "n": 28,
-     "vol": 5
-    },
-    {
-     "d": "2026-10-02",
-     "median": 268,
-     "low": 260,
+     "low": 255,
      "high": 276,
-     "n": 28,
-     "vol": 11
+     "n": 31,
+     "vol": 7
     },
     {
-     "d": "2026-10-09",
+     "d": "2026-10-04",
+     "median": 270,
+     "low": 263,
+     "high": 282,
+     "n": 28,
+     "vol": 9
+    },
+    {
+     "d": "2026-10-11",
      "median": 270,
      "low": 263,
      "high": 283,
      "n": 24,
-     "vol": 4
-    },
-    {
-     "d": "2026-10-16",
-     "median": 267,
-     "low": 257,
-     "high": 280,
-     "n": 26,
-     "vol": 7,
-     "out": 1
-    },
-    {
-     "d": "2026-10-23",
-     "median": 265,
-     "low": 245,
-     "high": 275,
-     "n": 27,
-     "vol": 6,
-     "out": 1
-    },
-    {
-     "d": "2026-10-30",
-     "median": 254,
-     "low": 245,
-     "high": 275,
-     "n": 21,
      "vol": 5,
+     "out": 1
+    },
+    {
+     "d": "2026-10-18",
+     "median": 266,
+     "low": 251,
+     "high": 281,
+     "n": 25,
+     "vol": 5,
+     "out": 1
+    },
+    {
+     "d": "2026-10-25",
+     "median": 264,
+     "low": 245,
+     "high": 277,
+     "n": 23,
+     "vol": 5,
+     "out": 1
+    },
+    {
+     "d": "2026-11-01",
+     "median": 252,
+     "low": 245,
+     "high": 273,
+     "n": 22,
+     "vol": 8,
      "out": 1
     }
    ],
@@ -15191,9 +15291,9 @@
       "d": "2026-10-01",
       "median": 254,
       "low": 245,
-      "high": 275,
-      "n": 21,
-      "vol": 22,
+      "high": 278,
+      "n": 22,
+      "vol": 23,
       "out": 1
      }
     ],
@@ -15223,7 +15323,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-09": 1,
      "2026-05-16": 1,
@@ -15393,7 +15493,9 @@
      "2026-10-27": 1,
      "2026-10-28": 1,
      "2026-10-29": 2,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-10-31": 1,
+     "2026-11-01": 2
     }
    },
    "supply": [
@@ -15848,7 +15950,7 @@
    },
    "sinceRelease": {
     "jp": 71,
-    "en": 217
+    "en": 220
    },
    "outliers": {
     "jp": [
@@ -15875,11 +15977,11 @@
      "d": "2026-10-27"
     },
     "en": {
-     "median": 254,
+     "median": 252,
      "low": 245,
-     "high": 275,
-     "n": 21,
-     "d": "2026-10-30"
+     "high": 273,
+     "n": 22,
+     "d": "2026-11-01"
     }
    }
   },
@@ -16363,7 +16465,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-31": 1,
      "2026-06-03": 1,
@@ -17023,354 +17125,354 @@
   "OP-16": {
    "jp": [
     {
-     "d": "2026-06-05",
-     "median": 145,
+     "d": "2026-06-07",
+     "median": 146,
      "low": 129,
-     "high": 148,
-     "n": 7,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-12",
-     "median": 145,
-     "low": 125,
-     "high": 155,
-     "n": 15,
+     "high": 152,
+     "n": 12,
      "vol": 8
     },
     {
-     "d": "2026-06-19",
+     "d": "2026-06-14",
      "median": 145,
      "low": 125,
      "high": 155,
      "n": 15,
-     "vol": 0
-    },
-    {
-     "d": "2026-06-26",
-     "median": 137,
-     "low": 122,
-     "high": 150,
-     "n": 18,
      "vol": 3
     },
     {
-     "d": "2026-07-03",
-     "median": 120,
-     "low": 114,
-     "high": 147,
-     "n": 21,
-     "vol": 10
+     "d": "2026-06-21",
+     "median": 129,
+     "low": 120,
+     "high": 150,
+     "n": 17,
+     "vol": 2
     },
     {
-     "d": "2026-07-10",
-     "median": 118,
-     "low": 110,
-     "high": 129,
+     "d": "2026-06-28",
+     "median": 129,
+     "low": 120,
+     "high": 148,
      "n": 17,
      "vol": 4
     },
     {
-     "d": "2026-07-17",
+     "d": "2026-07-05",
+     "median": 118,
+     "low": 114,
+     "high": 126,
+     "n": 17,
+     "vol": 8
+    },
+    {
+     "d": "2026-07-12",
      "median": 118,
      "low": 110,
      "high": 128,
      "n": 18,
-     "vol": 1
+     "vol": 4
     },
     {
-     "d": "2026-07-24",
+     "d": "2026-07-19",
      "median": 118,
-     "low": 109,
-     "high": 126,
-     "n": 20,
+     "low": 108,
+     "high": 128,
+     "n": 18,
+     "vol": 2
+    },
+    {
+     "d": "2026-07-26",
+     "median": 114,
+     "low": 93,
+     "high": 130,
+     "n": 19,
      "vol": 5
     },
     {
-     "d": "2026-07-31",
-     "median": 120,
-     "low": 110,
+     "d": "2026-08-02",
+     "median": 110,
+     "low": 108,
      "high": 128,
      "n": 15,
-     "vol": 5
+     "vol": 4
     },
     {
-     "d": "2026-08-07",
-     "median": 113,
+     "d": "2026-08-09",
+     "median": 110,
      "low": 107,
-     "high": 124,
-     "n": 14,
-     "vol": 3
+     "high": 123,
+     "n": 15,
+     "vol": 4
     },
     {
-     "d": "2026-08-14",
+     "d": "2026-08-16",
      "median": 113,
-     "low": 107,
+     "low": 108,
      "high": 121,
      "n": 16,
      "vol": 3
     },
     {
-     "d": "2026-08-21",
+     "d": "2026-08-23",
      "median": 110,
-     "low": 107,
+     "low": 108,
      "high": 116,
-     "n": 13,
-     "vol": 2
+     "n": 11,
+     "vol": 0
     },
     {
-     "d": "2026-08-28",
+     "d": "2026-08-30",
      "median": 115,
      "low": 108,
      "high": 116,
      "n": 11,
-     "vol": 3
+     "vol": 4
     },
     {
-     "d": "2026-09-04",
-     "median": 109,
+     "d": "2026-09-06",
+     "median": 111,
      "low": 107,
      "high": 115,
-     "n": 10,
-     "vol": 2
+     "n": 8,
+     "vol": 1
     },
     {
-     "d": "2026-09-11",
-     "median": 108,
-     "low": 107,
-     "high": 116,
-     "n": 10,
-     "vol": 3
-    },
-    {
-     "d": "2026-09-18",
+     "d": "2026-09-13",
      "median": 107,
-     "low": 94,
+     "low": 99,
      "high": 111,
-     "n": 15,
-     "vol": 7
+     "n": 11,
+     "vol": 6
     },
     {
-     "d": "2026-09-25",
-     "median": 96,
-     "low": 93,
-     "high": 107,
+     "d": "2026-09-20",
+     "median": 106,
+     "low": 94,
+     "high": 109,
+     "n": 16,
+     "vol": 5
+    },
+    {
+     "d": "2026-09-27",
+     "median": 95,
+     "low": 90,
+     "high": 102,
      "n": 20,
      "vol": 8
     },
     {
-     "d": "2026-10-02",
-     "median": 97,
-     "low": 90,
-     "high": 100,
-     "n": 21,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-09",
+     "d": "2026-10-04",
      "median": 96,
      "low": 92,
-     "high": 97,
-     "n": 27,
-     "vol": 9
-    },
-    {
-     "d": "2026-10-16",
-     "median": 96,
-     "low": 91,
-     "high": 97,
-     "n": 22,
-     "vol": 2
-    },
-    {
-     "d": "2026-10-23",
-     "median": 96,
-     "low": 91,
-     "high": 97,
-     "n": 18,
+     "high": 100,
+     "n": 23,
      "vol": 4
     },
     {
-     "d": "2026-10-30",
+     "d": "2026-10-11",
+     "median": 96,
+     "low": 93,
+     "high": 97,
+     "n": 24,
+     "vol": 7
+    },
+    {
+     "d": "2026-10-18",
+     "median": 96,
+     "low": 90,
+     "high": 97,
+     "n": 22,
+     "vol": 3
+    },
+    {
+     "d": "2026-10-25",
      "median": 96,
      "low": 94,
      "high": 97,
-     "n": 18,
+     "n": 17,
      "vol": 3
+    },
+    {
+     "d": "2026-11-01",
+     "median": 97,
+     "low": 94,
+     "high": 99,
+     "n": 17,
+     "vol": 4
     }
    ],
    "en": [
     {
-     "d": "2026-06-12",
-     "median": 239,
-     "low": 233,
+     "d": "2026-06-14",
+     "median": 236,
+     "low": 232,
      "high": 245,
-     "n": 7,
-     "vol": 7
+     "n": 19,
+     "vol": 19
     },
     {
-     "d": "2026-06-19",
-     "median": 229,
-     "low": 219,
-     "high": 243,
-     "n": 68,
-     "vol": 61
-    },
-    {
-     "d": "2026-06-26",
+     "d": "2026-06-21",
      "median": 225,
-     "low": 215,
-     "high": 238,
-     "n": 118,
-     "vol": 50
+     "low": 217,
+     "high": 239,
+     "n": 85,
+     "vol": 66
     },
     {
-     "d": "2026-07-03",
-     "median": 220,
+     "d": "2026-06-28",
+     "median": 224,
      "low": 214,
-     "high": 232,
-     "n": 169,
-     "vol": 52,
-     "out": 1
+     "high": 238,
+     "n": 130,
+     "vol": 45
     },
     {
-     "d": "2026-07-10",
+     "d": "2026-07-05",
      "median": 219,
+     "low": 214,
+     "high": 231,
+     "n": 180,
+     "vol": 51,
+     "out": 1
+    },
+    {
+     "d": "2026-07-12",
+     "median": 218,
      "low": 209,
-     "high": 229,
-     "n": 202,
-     "vol": 40,
-     "out": 1
-    },
-    {
-     "d": "2026-07-17",
-     "median": 215,
-     "low": 208,
-     "high": 225,
-     "n": 173,
-     "vol": 32,
-     "out": 1
-    },
-    {
-     "d": "2026-07-24",
-     "median": 214,
-     "low": 202,
-     "high": 221,
-     "n": 159,
+     "high": 228,
+     "n": 197,
      "vol": 36,
      "out": 1
     },
     {
-     "d": "2026-07-31",
-     "median": 210,
-     "low": 200,
-     "high": 221,
-     "n": 140,
-     "vol": 32
+     "d": "2026-07-19",
+     "median": 215,
+     "low": 204,
+     "high": 225,
+     "n": 161,
+     "vol": 30,
+     "out": 1
     },
     {
-     "d": "2026-08-07",
+     "d": "2026-07-26",
+     "median": 214,
+     "low": 200,
+     "high": 221,
+     "n": 153,
+     "vol": 37,
+     "out": 1
+    },
+    {
+     "d": "2026-08-02",
+     "median": 209,
+     "low": 200,
+     "high": 222,
+     "n": 136,
+     "vol": 33
+    },
+    {
+     "d": "2026-08-09",
      "median": 209,
      "low": 199,
      "high": 227,
-     "n": 135,
-     "vol": 35
+     "n": 130,
+     "vol": 30
     },
     {
-     "d": "2026-08-14",
+     "d": "2026-08-16",
      "median": 209,
      "low": 199,
      "high": 228,
-     "n": 126,
-     "vol": 23
-    },
-    {
-     "d": "2026-08-21",
-     "median": 210,
-     "low": 199,
-     "high": 231,
-     "n": 118,
+     "n": 128,
      "vol": 28
     },
     {
-     "d": "2026-08-28",
-     "median": 213,
-     "low": 200,
+     "d": "2026-08-23",
+     "median": 210,
+     "low": 199,
      "high": 231,
-     "n": 105,
+     "n": 115,
+     "vol": 24
+    },
+    {
+     "d": "2026-08-30",
+     "median": 213,
+     "low": 201,
+     "high": 232,
+     "n": 106,
+     "vol": 24
+    },
+    {
+     "d": "2026-09-06",
+     "median": 216,
+     "low": 202,
+     "high": 235,
+     "n": 109,
+     "vol": 33
+    },
+    {
+     "d": "2026-09-13",
+     "median": 226,
+     "low": 210,
+     "high": 239,
+     "n": 104,
+     "vol": 23
+    },
+    {
+     "d": "2026-09-20",
+     "median": 230,
+     "low": 214,
+     "high": 240,
+     "n": 99,
      "vol": 19
     },
     {
-     "d": "2026-09-04",
-     "median": 213,
-     "low": 201,
-     "high": 235,
-     "n": 101,
-     "vol": 31
-    },
-    {
-     "d": "2026-09-11",
-     "median": 225,
-     "low": 209,
-     "high": 239,
-     "n": 105,
-     "vol": 27
-    },
-    {
-     "d": "2026-09-18",
-     "median": 230,
-     "low": 212,
-     "high": 239,
-     "n": 95,
+     "d": "2026-09-27",
+     "median": 231,
+     "low": 225,
+     "high": 249,
+     "n": 93,
      "vol": 18
     },
     {
-     "d": "2026-09-25",
-     "median": 231,
-     "low": 222,
-     "high": 244,
-     "n": 95,
-     "vol": 19
-    },
-    {
-     "d": "2026-10-02",
-     "median": 234,
-     "low": 229,
+     "d": "2026-10-04",
+     "median": 233,
+     "low": 228,
      "high": 250,
-     "n": 76,
-     "vol": 12
+     "n": 70,
+     "vol": 10
     },
     {
-     "d": "2026-10-09",
+     "d": "2026-10-11",
      "median": 234,
      "low": 225,
      "high": 252,
-     "n": 64,
-     "vol": 15
+     "n": 61,
+     "vol": 14
     },
     {
-     "d": "2026-10-16",
-     "median": 231,
+     "d": "2026-10-18",
+     "median": 235,
      "low": 224,
-     "high": 251,
-     "n": 59,
+     "high": 250,
+     "n": 55,
      "vol": 13
     },
     {
-     "d": "2026-10-23",
-     "median": 234,
+     "d": "2026-10-25",
+     "median": 233,
      "low": 224,
-     "high": 250,
-     "n": 59,
-     "vol": 19
+     "high": 249,
+     "n": 58,
+     "vol": 21
     },
     {
-     "d": "2026-10-30",
+     "d": "2026-11-01",
      "median": 235,
      "low": 224,
      "high": 245,
      "n": 56,
-     "vol": 9
+     "vol": 8
     }
    ],
    "enBlue": [],
@@ -17460,9 +17562,9 @@
       "d": "2026-10-01",
       "median": 235,
       "low": 224,
-      "high": 246,
-      "n": 59,
-      "vol": 59
+      "high": 248,
+      "n": 61,
+      "vol": 61
      }
     ],
     "enBlue": []
@@ -18220,7 +18322,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-30": 2,
      "2026-05-31": 2,
@@ -18292,7 +18394,8 @@
      "2026-10-22": 1,
      "2026-10-26": 1,
      "2026-10-29": 1,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-11-01": 1
     },
     "en": {
      "2026-06-12": 7,
@@ -18426,7 +18529,9 @@
      "2026-10-25": 1,
      "2026-10-26": 2,
      "2026-10-28": 1,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-10-31": 2,
+     "2026-11-01": 2
     }
    },
    "supply": [
@@ -18889,8 +18994,8 @@
     }
    },
    "sinceRelease": {
-    "jp": 95,
-    "en": 578
+    "jp": 96,
+    "en": 582
    },
    "outliers": {
     "en": [
@@ -18903,18 +19008,18 @@
    },
    "current": {
     "jp": {
-     "median": 96,
+     "median": 97,
      "low": 94,
-     "high": 97,
-     "n": 18,
-     "d": "2026-10-30"
+     "high": 99,
+     "n": 17,
+     "d": "2026-11-01"
     },
     "en": {
      "median": 235,
      "low": 224,
      "high": 245,
      "n": 56,
-     "d": "2026-10-30"
+     "d": "2026-11-01"
     }
    }
   },
@@ -19189,7 +19294,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-06-30": 1,
      "2026-07-01": 1,
@@ -19840,178 +19945,186 @@
    ],
    "en": [
     {
-     "d": "2026-06-03",
-     "median": 626,
+     "d": "2026-06-01",
+     "median": 643,
      "low": 596,
      "high": 650,
-     "n": 11,
-     "vol": 7
-    },
-    {
-     "d": "2026-06-10",
-     "median": 611,
-     "low": 586,
-     "high": 644,
-     "n": 16,
+     "n": 9,
      "vol": 5
     },
     {
-     "d": "2026-06-17",
-     "median": 606,
+     "d": "2026-06-08",
+     "median": 623,
      "low": 596,
-     "high": 643,
-     "n": 21,
+     "high": 648,
+     "n": 14,
      "vol": 5
     },
     {
-     "d": "2026-06-24",
-     "median": 638,
-     "low": 600,
-     "high": 695,
-     "n": 34,
-     "vol": 15
+     "d": "2026-06-15",
+     "median": 603,
+     "low": 591,
+     "high": 636,
+     "n": 20,
+     "vol": 6
     },
     {
-     "d": "2026-07-01",
-     "median": 642,
+     "d": "2026-06-22",
+     "median": 635,
+     "low": 599,
+     "high": 661,
+     "n": 32,
+     "vol": 13
+    },
+    {
+     "d": "2026-06-29",
+     "median": 641,
      "low": 600,
      "high": 701,
-     "n": 34,
-     "vol": 2
-    },
-    {
-     "d": "2026-07-08",
-     "median": 661,
-     "low": 621,
-     "high": 723,
-     "n": 31,
+     "n": 33,
      "vol": 4
     },
     {
-     "d": "2026-07-15",
+     "d": "2026-07-06",
+     "median": 656,
+     "low": 614,
+     "high": 712,
+     "n": 32,
+     "vol": 4
+    },
+    {
+     "d": "2026-07-13",
      "median": 701,
-     "low": 651,
-     "high": 751,
-     "n": 29,
+     "low": 637,
+     "high": 749,
+     "n": 30,
      "vol": 3
     },
     {
-     "d": "2026-07-22",
-     "median": 743,
-     "low": 680,
-     "high": 859,
-     "n": 29,
-     "vol": 5
-    },
-    {
-     "d": "2026-07-29",
-     "median": 877,
-     "low": 799,
-     "high": 915,
-     "n": 17,
-     "vol": 3
-    },
-    {
-     "d": "2026-08-05",
-     "median": 897,
-     "low": 865,
-     "high": 976,
-     "n": 19,
+     "d": "2026-07-20",
+     "median": 723,
+     "low": 675,
+     "high": 808,
+     "n": 28,
      "vol": 4
     },
     {
-     "d": "2026-08-12",
-     "median": 895,
-     "low": 875,
-     "high": 1001,
-     "n": 16,
-     "vol": 1
-    },
-    {
-     "d": "2026-08-19",
-     "median": 893,
-     "low": 865,
-     "high": 964,
-     "n": 15,
-     "vol": 2
-    },
-    {
-     "d": "2026-08-26",
-     "median": 895,
-     "low": 876,
-     "high": 1001,
-     "n": 12,
-     "vol": 2
-    },
-    {
-     "d": "2026-09-02",
-     "median": 888,
-     "low": 834,
-     "high": 976,
-     "n": 10,
-     "vol": 1
-    },
-    {
-     "d": "2026-09-09",
-     "median": 829,
-     "low": 821,
-     "high": 867,
-     "n": 7,
-     "vol": 1
-    },
-    {
-     "d": "2026-09-16",
-     "median": 829,
-     "low": 808,
-     "high": 842,
-     "n": 11,
+     "d": "2026-07-27",
+     "median": 865,
+     "low": 756,
+     "high": 904,
+     "n": 20,
      "vol": 5
     },
     {
-     "d": "2026-09-23",
+     "d": "2026-08-03",
+     "median": 895,
+     "low": 854,
+     "high": 964,
+     "n": 20,
+     "vol": 4
+    },
+    {
+     "d": "2026-08-10",
+     "median": 893,
+     "low": 870,
+     "high": 1001,
+     "n": 17,
+     "vol": 1
+    },
+    {
+     "d": "2026-08-17",
+     "median": 892,
+     "low": 856,
+     "high": 946,
+     "n": 16,
+     "vol": 2
+    },
+    {
+     "d": "2026-08-24",
+     "median": 893,
+     "low": 886,
+     "high": 1001,
+     "n": 13,
+     "vol": 1
+    },
+    {
+     "d": "2026-08-31",
+     "median": 890,
+     "low": 848,
+     "high": 1002,
+     "n": 9,
+     "vol": 1
+    },
+    {
+     "d": "2026-09-07",
+     "median": 838,
+     "low": 828,
+     "high": 876,
+     "n": 6,
+     "vol": 1
+    },
+    {
+     "d": "2026-09-14",
+     "median": 832,
+     "low": 817,
+     "high": 845,
+     "n": 10,
+     "vol": 5
+    },
+    {
+     "d": "2026-09-21",
      "median": 829,
      "low": 803,
      "high": 837,
      "n": 9,
-     "vol": 0
+     "vol": 1
     },
     {
-     "d": "2026-09-30",
+     "d": "2026-09-28",
      "median": 814,
-     "low": 797,
+     "low": 799,
      "high": 834,
      "n": 9,
-     "vol": 2
+     "vol": 1
     },
     {
-     "d": "2026-10-07",
-     "median": 803,
-     "low": 771,
-     "high": 827,
-     "n": 11,
+     "d": "2026-10-05",
+     "median": 808,
+     "low": 784,
+     "high": 831,
+     "n": 12,
+     "vol": 4
+    },
+    {
+     "d": "2026-10-12",
+     "median": 797,
+     "low": 735,
+     "high": 818,
+     "n": 14,
      "vol": 3
     },
     {
-     "d": "2026-10-14",
-     "median": 796,
-     "low": 731,
-     "high": 820,
-     "n": 13,
-     "vol": 3
-    },
-    {
-     "d": "2026-10-21",
-     "median": 731,
-     "low": 726,
-     "high": 796,
-     "n": 13,
+     "d": "2026-10-19",
+     "median": 738,
+     "low": 727,
+     "high": 797,
+     "n": 14,
      "vol": 5
     },
     {
-     "d": "2026-10-28",
+     "d": "2026-10-26",
+     "median": 738,
+     "low": 727,
+     "high": 797,
+     "n": 14,
+     "vol": 1
+    },
+    {
+     "d": "2026-11-02",
      "median": 731,
      "low": 723,
-     "high": 797,
+     "high": 774,
      "n": 15,
      "vol": 2
     }
@@ -20118,7 +20231,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-06-28": 1,
      "2026-07-02": 1,
@@ -20209,7 +20322,8 @@
      "2026-10-18": 1,
      "2026-10-19": 2,
      "2026-10-22": 1,
-     "2026-10-28": 1
+     "2026-10-28": 1,
+     "2026-11-02": 1
     }
    },
    "supply": [
@@ -20655,7 +20769,7 @@
    },
    "sinceRelease": {
     "jp": 52,
-    "en": 87
+    "en": 88
    },
    "outliers": {
     "jp": [
@@ -20677,48 +20791,48 @@
     "en": {
      "median": 731,
      "low": 723,
-     "high": 797,
+     "high": 774,
      "n": 15,
-     "d": "2026-10-28"
+     "d": "2026-11-02"
     }
    }
   },
   "EB-03": {
    "jp": [
     {
-     "d": "2026-06-05",
+     "d": "2026-06-07",
      "median": 125,
      "low": 114,
      "high": 135,
      "n": 7,
-     "vol": 4
-    },
-    {
-     "d": "2026-06-12",
-     "median": 128,
-     "low": 115,
-     "high": 134,
-     "n": 9,
-     "vol": 2
-    },
-    {
-     "d": "2026-06-19",
-     "median": 127,
-     "low": 114,
-     "high": 133,
-     "n": 11,
      "vol": 3
     },
     {
-     "d": "2026-06-26",
+     "d": "2026-06-14",
+     "median": 128,
+     "low": 120,
+     "high": 135,
+     "n": 11,
+     "vol": 4
+    },
+    {
+     "d": "2026-06-21",
      "median": 127,
      "low": 113,
      "high": 134,
      "n": 13,
-     "vol": 2
+     "vol": 3
     },
     {
-     "d": "2026-07-03",
+     "d": "2026-06-28",
+     "median": 126,
+     "low": 112,
+     "high": 132,
+     "n": 12,
+     "vol": 0
+    },
+    {
+     "d": "2026-07-05",
      "median": 127,
      "low": 113,
      "high": 132,
@@ -20727,16 +20841,16 @@
      "out": 1
     },
     {
-     "d": "2026-07-10",
-     "median": 127,
-     "low": 115,
-     "high": 132,
-     "n": 12,
+     "d": "2026-07-12",
+     "median": 128,
+     "low": 119,
+     "high": 133,
+     "n": 11,
      "vol": 0,
      "out": 1
     },
     {
-     "d": "2026-07-17",
+     "d": "2026-07-19",
      "median": 130,
      "low": 127,
      "high": 134,
@@ -20745,51 +20859,52 @@
      "out": 1
     },
     {
-     "d": "2026-07-24",
+     "d": "2026-07-26",
      "median": 132,
-     "low": 126,
+     "low": 122,
      "high": 142,
-     "n": 10,
+     "n": 8,
      "vol": 3,
      "out": 1
     },
     {
-     "d": "2026-07-31",
-     "median": 134,
-     "low": 128,
-     "high": 143,
-     "n": 7,
-     "vol": 0,
-     "out": 1
-    },
-    {
-     "d": "2026-08-07",
-     "median": 134,
-     "low": 128,
-     "high": 143,
-     "n": 7,
+     "d": "2026-08-02",
+     "median": 132,
+     "low": 122,
+     "high": 142,
+     "n": 8,
      "vol": 0,
      "out": 1,
      "win": 49
     },
     {
-     "d": "2026-08-21",
-     "median": 127,
-     "low": 115,
-     "high": 143,
-     "n": 9,
-     "vol": 4
+     "d": "2026-08-09",
+     "median": 132,
+     "low": 122,
+     "high": 142,
+     "n": 8,
+     "vol": 0,
+     "out": 1,
+     "win": 56
     },
     {
-     "d": "2026-08-28",
+     "d": "2026-08-23",
+     "median": 126,
+     "low": 115,
+     "high": 142,
+     "n": 11,
+     "vol": 6
+    },
+    {
+     "d": "2026-08-30",
      "median": 124,
      "low": 115,
      "high": 139,
      "n": 10,
-     "vol": 2
+     "vol": 0
     },
     {
-     "d": "2026-09-04",
+     "d": "2026-09-06",
      "median": 118,
      "low": 115,
      "high": 122,
@@ -20797,7 +20912,7 @@
      "vol": 1
     },
     {
-     "d": "2026-09-11",
+     "d": "2026-09-13",
      "median": 118,
      "low": 115,
      "high": 122,
@@ -20805,7 +20920,7 @@
      "vol": 0
     },
     {
-     "d": "2026-09-18",
+     "d": "2026-09-20",
      "median": 118,
      "low": 115,
      "high": 122,
@@ -20813,23 +20928,23 @@
      "vol": 0
     },
     {
-     "d": "2026-09-25",
+     "d": "2026-09-27",
      "median": 115,
      "low": 115,
      "high": 121,
-     "n": 11,
-     "vol": 4
+     "n": 12,
+     "vol": 5
     },
     {
-     "d": "2026-10-02",
+     "d": "2026-10-04",
      "median": 115,
      "low": 115,
-     "high": 119,
-     "n": 10,
-     "vol": 3
+     "high": 117,
+     "n": 8,
+     "vol": 2
     },
     {
-     "d": "2026-10-09",
+     "d": "2026-10-11",
      "median": 115,
      "low": 115,
      "high": 115,
@@ -20837,7 +20952,7 @@
      "vol": 1
     },
     {
-     "d": "2026-10-16",
+     "d": "2026-10-18",
      "median": 114,
      "low": 109,
      "high": 115,
@@ -20845,20 +20960,20 @@
      "vol": 4
     },
     {
-     "d": "2026-10-23",
-     "median": 114,
-     "low": 109,
-     "high": 115,
-     "n": 14,
-     "vol": 2
-    },
-    {
-     "d": "2026-10-30",
+     "d": "2026-10-25",
      "median": 115,
      "low": 109,
+     "high": 116,
+     "n": 16,
+     "vol": 4
+    },
+    {
+     "d": "2026-11-01",
+     "median": 115,
+     "low": 110,
      "high": 120,
-     "n": 17,
-     "vol": 3
+     "n": 18,
+     "vol": 2
     }
    ],
    "en": [
@@ -21147,7 +21262,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-26": 1,
      "2026-05-31": 1,
@@ -21185,7 +21300,8 @@
      "2026-10-19": 2,
      "2026-10-24": 1,
      "2026-10-25": 1,
-     "2026-10-30": 1
+     "2026-10-30": 1,
+     "2026-11-01": 1
     },
     "en": {
      "2026-05-16": 1,
@@ -21712,7 +21828,7 @@
     }
    },
    "sinceRelease": {
-    "jp": 56,
+    "jp": 57,
     "en": 110
    },
    "outliers": {
@@ -21727,10 +21843,10 @@
    "current": {
     "jp": {
      "median": 115,
-     "low": 109,
+     "low": 110,
      "high": 120,
-     "n": 17,
-     "d": "2026-10-30"
+     "n": 18,
+     "d": "2026-11-01"
     },
     "en": {
      "median": 326,
@@ -22213,7 +22329,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-16": 3,
      "2026-05-17": 1,
@@ -22760,7 +22876,7 @@
     "en": null
    },
    "sinceRelease": {
-    "jp": 74,
+    "jp": 76,
     "en": 60
    },
    "outliers": {
@@ -22981,195 +23097,195 @@
    ],
    "en": [
     {
-     "d": "2026-05-23",
+     "d": "2026-05-25",
      "median": 335,
-     "low": 327,
-     "high": 343,
-     "n": 8,
-     "vol": 7
+     "low": 315,
+     "high": 340,
+     "n": 9,
+     "vol": 6
     },
     {
-     "d": "2026-05-30",
+     "d": "2026-06-01",
      "median": 330,
      "low": 315,
      "high": 340,
      "n": 13,
-     "vol": 5
+     "vol": 4
     },
     {
-     "d": "2026-06-06",
-     "median": 324,
-     "low": 320,
-     "high": 335,
-     "n": 18,
-     "vol": 5
-    },
-    {
-     "d": "2026-06-13",
+     "d": "2026-06-08",
      "median": 320,
      "low": 320,
      "high": 335,
-     "n": 20,
-     "vol": 3
-    },
-    {
-     "d": "2026-06-20",
-     "median": 324,
-     "low": 320,
-     "high": 359,
-     "n": 18,
-     "vol": 5
-    },
-    {
-     "d": "2026-06-27",
-     "median": 333,
-     "low": 320,
-     "high": 375,
-     "n": 18,
-     "vol": 5
-    },
-    {
-     "d": "2026-07-04",
-     "median": 375,
-     "low": 320,
-     "high": 382,
      "n": 19,
      "vol": 6
     },
     {
-     "d": "2026-07-11",
-     "median": 380,
-     "low": 360,
-     "high": 390,
+     "d": "2026-06-15",
+     "median": 320,
+     "low": 320,
+     "high": 340,
      "n": 21,
      "vol": 5
     },
     {
-     "d": "2026-07-18",
-     "median": 388,
-     "low": 345,
-     "high": 399,
-     "n": 22,
+     "d": "2026-06-22",
+     "median": 330,
+     "low": 320,
+     "high": 375,
+     "n": 21,
      "vol": 6
     },
     {
-     "d": "2026-07-25",
+     "d": "2026-06-29",
+     "median": 337,
+     "low": 320,
+     "high": 380,
+     "n": 20,
+     "vol": 3
+    },
+    {
+     "d": "2026-07-06",
+     "median": 375,
+     "low": 331,
+     "high": 384,
+     "n": 20,
+     "vol": 6
+    },
+    {
+     "d": "2026-07-13",
+     "median": 380,
+     "low": 340,
+     "high": 397,
+     "n": 21,
+     "vol": 6
+    },
+    {
+     "d": "2026-07-20",
      "median": 397,
-     "low": 385,
+     "low": 369,
+     "high": 400,
+     "n": 19,
+     "vol": 4
+    },
+    {
+     "d": "2026-07-27",
+     "median": 397,
+     "low": 387,
+     "high": 400,
+     "n": 24,
+     "vol": 8
+    },
+    {
+     "d": "2026-08-03",
+     "median": 397,
+     "low": 396,
+     "high": 400,
+     "n": 23,
+     "vol": 5
+    },
+    {
+     "d": "2026-08-10",
+     "median": 397,
+     "low": 392,
+     "high": 400,
+     "n": 21,
+     "vol": 4
+    },
+    {
+     "d": "2026-08-17",
+     "median": 397,
+     "low": 376,
      "high": 400,
      "n": 24,
      "vol": 7
     },
     {
-     "d": "2026-08-01",
-     "median": 398,
-     "low": 395,
-     "high": 400,
-     "n": 20,
+     "d": "2026-08-24",
+     "median": 385,
+     "low": 371,
+     "high": 397,
+     "n": 19,
+     "vol": 3
+    },
+    {
+     "d": "2026-08-31",
+     "median": 379,
+     "low": 365,
+     "high": 397,
+     "n": 16,
      "vol": 2
     },
     {
-     "d": "2026-08-08",
-     "median": 397,
-     "low": 394,
-     "high": 400,
-     "n": 23,
-     "vol": 8
-    },
-    {
-     "d": "2026-08-15",
-     "median": 397,
-     "low": 381,
-     "high": 400,
-     "n": 23,
-     "vol": 6
-    },
-    {
-     "d": "2026-08-22",
-     "median": 394,
-     "low": 371,
-     "high": 398,
-     "n": 20,
+     "d": "2026-09-07",
+     "median": 375,
+     "low": 348,
+     "high": 395,
+     "n": 16,
      "vol": 4
     },
     {
-     "d": "2026-08-29",
-     "median": 385,
-     "low": 366,
-     "high": 397,
-     "n": 20,
-     "vol": 2
+     "d": "2026-09-14",
+     "median": 370,
+     "low": 337,
+     "high": 385,
+     "n": 19,
+     "vol": 10
     },
     {
-     "d": "2026-09-05",
-     "median": 375,
-     "low": 356,
-     "high": 397,
-     "n": 14,
-     "vol": 2
-    },
-    {
-     "d": "2026-09-12",
-     "median": 375,
-     "low": 339,
-     "high": 387,
-     "n": 16,
+     "d": "2026-09-21",
+     "median": 357,
+     "low": 338,
+     "high": 386,
+     "n": 24,
      "vol": 8
     },
     {
-     "d": "2026-09-19",
-     "median": 358,
-     "low": 338,
-     "high": 387,
+     "d": "2026-09-28",
+     "median": 357,
+     "low": 335,
+     "high": 386,
      "n": 24,
-     "vol": 12
+     "vol": 2
     },
     {
-     "d": "2026-09-26",
-     "median": 361,
-     "low": 337,
-     "high": 388,
-     "n": 23,
-     "vol": 1
-    },
-    {
-     "d": "2026-10-03",
-     "median": 361,
-     "low": 337,
-     "high": 387,
+     "d": "2026-10-05",
+     "median": 370,
+     "low": 341,
+     "high": 393,
      "n": 27,
-     "vol": 6
+     "vol": 7
     },
     {
-     "d": "2026-10-10",
-     "median": 374,
-     "low": 345,
+     "d": "2026-10-12",
+     "median": 378,
+     "low": 354,
      "high": 398,
-     "n": 24,
-     "vol": 5
+     "n": 20,
+     "vol": 3
     },
     {
-     "d": "2026-10-17",
-     "median": 374,
-     "low": 364,
+     "d": "2026-10-19",
+     "median": 377,
+     "low": 368,
      "high": 386,
      "n": 16,
      "vol": 4
     },
     {
-     "d": "2026-10-24",
-     "median": 378,
-     "low": 370,
-     "high": 391,
+     "d": "2026-10-26",
+     "median": 380,
+     "low": 374,
+     "high": 398,
      "n": 20,
-     "vol": 5
+     "vol": 6
     },
     {
-     "d": "2026-10-31",
-     "median": 380,
+     "d": "2026-11-02",
+     "median": 376,
      "low": 370,
-     "high": 398,
-     "n": 19,
+     "high": 384,
+     "n": 18,
      "vol": 5
     }
    ],
@@ -23270,8 +23386,8 @@
       "median": 380,
       "low": 372,
       "high": 398,
-      "n": 22,
-      "vol": 22
+      "n": 23,
+      "vol": 23
      }
     ],
     "enBlue": []
@@ -23316,7 +23432,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-05-25": 1,
      "2026-05-28": 1,
@@ -23463,7 +23579,8 @@
      "2026-10-25": 1,
      "2026-10-26": 1,
      "2026-10-28": 2,
-     "2026-10-31": 1
+     "2026-10-31": 2,
+     "2026-11-02": 1
     }
    },
    "supply": [
@@ -23909,7 +24026,7 @@
    },
    "sinceRelease": {
     "jp": 80,
-    "en": 129
+    "en": 131
    },
    "outliers": {
     "jp": [
@@ -23944,177 +24061,177 @@
      "d": "2026-10-30"
     },
     "en": {
-     "median": 380,
+     "median": 376,
      "low": 370,
-     "high": 398,
-     "n": 19,
-     "d": "2026-10-31"
+     "high": 384,
+     "n": 18,
+     "d": "2026-11-02"
     }
    }
   },
   "OP-17": {
    "jp": [
     {
-     "d": "2026-08-28",
-     "median": 162,
-     "low": 145,
-     "high": 179,
-     "n": 18,
-     "vol": 18
+     "d": "2026-08-29",
+     "median": 156,
+     "low": 137,
+     "high": 176,
+     "n": 23,
+     "vol": 21
     },
     {
-     "d": "2026-09-04",
-     "median": 141,
-     "low": 135,
+     "d": "2026-09-05",
+     "median": 140,
+     "low": 133,
      "high": 169,
-     "n": 38,
+     "n": 39,
+     "vol": 16
+    },
+    {
+     "d": "2026-09-12",
+     "median": 135,
+     "low": 130,
+     "high": 156,
+     "n": 59,
      "vol": 20
     },
     {
-     "d": "2026-09-11",
-     "median": 136,
-     "low": 130,
-     "high": 156,
-     "n": 54,
-     "vol": 16
-    },
-    {
-     "d": "2026-09-18",
+     "d": "2026-09-19",
      "median": 135,
      "low": 130,
      "high": 152,
-     "n": 70,
-     "vol": 16
+     "n": 69,
+     "vol": 12
     },
     {
-     "d": "2026-09-25",
+     "d": "2026-09-26",
      "median": 131,
      "low": 125,
      "high": 136,
-     "n": 65,
-     "vol": 13
-    },
-    {
-     "d": "2026-10-02",
-     "median": 129,
-     "low": 125,
-     "high": 135,
-     "n": 58,
-     "vol": 13
-    },
-    {
-     "d": "2026-10-09",
-     "median": 125,
-     "low": 124,
-     "high": 131,
-     "n": 59,
-     "vol": 17
-    },
-    {
-     "d": "2026-10-16",
-     "median": 125,
-     "low": 107,
-     "high": 129,
-     "n": 49,
-     "vol": 6
-    },
-    {
-     "d": "2026-10-23",
-     "median": 117,
-     "low": 102,
-     "high": 125,
-     "n": 51,
+     "n": 63,
      "vol": 15
     },
     {
-     "d": "2026-10-30",
+     "d": "2026-10-03",
+     "median": 129,
+     "low": 124,
+     "high": 135,
+     "n": 61,
+     "vol": 14
+    },
+    {
+     "d": "2026-10-10",
+     "median": 125,
+     "low": 115,
+     "high": 130,
+     "n": 55,
+     "vol": 14
+    },
+    {
+     "d": "2026-10-17",
+     "median": 125,
+     "low": 107,
+     "high": 126,
+     "n": 52,
+     "vol": 9
+    },
+    {
+     "d": "2026-10-24",
      "median": 117,
      "low": 102,
      "high": 125,
-     "n": 48,
+     "n": 50,
+     "vol": 13
+    },
+    {
+     "d": "2026-10-31",
+     "median": 117,
+     "low": 103,
+     "high": 125,
+     "n": 46,
      "vol": 10
     }
    ],
    "en": [
     {
-     "d": "2026-08-29",
-     "median": 354,
-     "low": 338,
-     "high": 375,
-     "n": 80,
-     "vol": 80
+     "d": "2026-08-31",
+     "median": 360,
+     "low": 342,
+     "high": 380,
+     "n": 155,
+     "vol": 155
     },
     {
-     "d": "2026-09-05",
-     "median": 356,
+     "d": "2026-09-07",
+     "median": 357,
      "low": 340,
      "high": 377,
-     "n": 270,
-     "vol": 190
+     "n": 304,
+     "vol": 149
     },
     {
-     "d": "2026-09-12",
+     "d": "2026-09-14",
      "median": 359,
      "low": 340,
-     "high": 378,
-     "n": 379,
-     "vol": 109
-    },
-    {
-     "d": "2026-09-19",
-     "median": 359,
-     "low": 340,
-     "high": 378,
-     "n": 448,
-     "vol": 69
-    },
-    {
-     "d": "2026-09-26",
-     "median": 356,
-     "low": 338,
      "high": 377,
-     "n": 438,
-     "vol": 70
+     "n": 401,
+     "vol": 97
     },
     {
-     "d": "2026-10-03",
-     "median": 340,
-     "low": 309,
-     "high": 367,
-     "n": 348,
-     "vol": 100
+     "d": "2026-09-21",
+     "median": 359,
+     "low": 340,
+     "high": 377,
+     "n": 460,
+     "vol": 59
     },
     {
-     "d": "2026-10-10",
-     "median": 324,
+     "d": "2026-09-28",
+     "median": 351,
+     "low": 330,
+     "high": 374,
+     "n": 391,
+     "vol": 86
+    },
+    {
+     "d": "2026-10-05",
+     "median": 335,
+     "low": 304,
+     "high": 364,
+     "n": 329,
+     "vol": 87
+    },
+    {
+     "d": "2026-10-12",
+     "median": 317,
      "low": 298,
-     "high": 354,
-     "n": 294,
-     "vol": 55
+     "high": 349,
+     "n": 285,
+     "vol": 53
     },
     {
-     "d": "2026-10-17",
+     "d": "2026-10-19",
      "median": 315,
      "low": 296,
-     "high": 338,
-     "n": 272,
-     "vol": 47
+     "high": 335,
+     "n": 276,
+     "vol": 50
     },
     {
-     "d": "2026-10-24",
+     "d": "2026-10-26",
      "median": 311,
      "low": 295,
-     "high": 330,
-     "n": 236,
-     "vol": 34
+     "high": 329,
+     "n": 223,
+     "vol": 33
     },
     {
-     "d": "2026-10-31",
-     "median": 313,
-     "low": 297,
-     "high": 331,
-     "n": 168,
-     "vol": 32
+     "d": "2026-11-02",
+     "median": 315,
+     "low": 295,
+     "high": 330,
+     "n": 166,
+     "vol": 30
     }
    ],
    "enBlue": [],
@@ -24146,8 +24263,8 @@
       "median": 117,
       "low": 102,
       "high": 125,
-      "n": 53,
-      "vol": 53
+      "n": 55,
+      "vol": 55
      }
     ],
     "en": [
@@ -24169,11 +24286,19 @@
      },
      {
       "d": "2026-10-01",
-      "median": 312,
+      "median": 311,
       "low": 296,
       "high": 330,
-      "n": 211,
-      "vol": 211
+      "n": 216,
+      "vol": 216
+     },
+     {
+      "d": "2026-11-01",
+      "median": 272,
+      "low": 256,
+      "high": 303,
+      "n": 8,
+      "vol": 8
      }
     ],
     "enBlue": []
@@ -24877,12 +25002,28 @@
       "high": 308,
       "n": 4,
       "vol": 4
+     },
+     {
+      "d": "2026-10-31",
+      "median": 308,
+      "low": 268,
+      "high": 324,
+      "n": 6,
+      "vol": 6
+     },
+     {
+      "d": "2026-11-01",
+      "median": 288,
+      "low": 270,
+      "high": 311,
+      "n": 6,
+      "vol": 6
      }
     ],
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
     "jp": {
      "2026-08-22": 2,
      "2026-08-23": 6,
@@ -24944,7 +25085,8 @@
      "2026-10-26": 1,
      "2026-10-27": 2,
      "2026-10-29": 1,
-     "2026-10-30": 3
+     "2026-10-30": 3,
+     "2026-10-31": 2
     },
     "en": {
      "2026-08-28": 29,
@@ -25011,7 +25153,9 @@
      "2026-10-28": 7,
      "2026-10-29": 3,
      "2026-10-30": 4,
-     "2026-10-31": 1
+     "2026-10-31": 6,
+     "2026-11-01": 6,
+     "2026-11-02": 2
     }
    },
    "supply": [
@@ -25335,60 +25479,119 @@
     }
    },
    "sinceRelease": {
-    "jp": 144,
-    "en": 786
+    "jp": 146,
+    "en": 799
    },
    "current": {
     "jp": {
      "median": 117,
-     "low": 102,
+     "low": 103,
      "high": 125,
-     "n": 48,
-     "d": "2026-10-30"
+     "n": 46,
+     "d": "2026-10-31"
     },
     "en": {
-     "median": 313,
-     "low": 297,
-     "high": 331,
-     "n": 168,
-     "d": "2026-10-31"
+     "median": 315,
+     "low": 295,
+     "high": 330,
+     "n": 166,
+     "d": "2026-11-02"
     }
    }
   },
   "EB-05": {
-   "jp": [],
+   "jp": [
+    {
+     "d": "2026-11-02",
+     "median": 110,
+     "low": 107,
+     "high": 124,
+     "n": 17,
+     "vol": 17
+    }
+   ],
    "en": [
     {
-     "d": "2026-10-31",
-     "median": 307,
-     "low": 284,
-     "high": 332,
-     "n": 10,
-     "vol": 10
+     "d": "2026-11-02",
+     "median": 294,
+     "low": 282,
+     "high": 326,
+     "n": 19,
+     "vol": 19
     }
    ],
    "enBlue": [],
    "windowDays": {
-    "jp": null,
+    "jp": 28,
     "en": 28,
     "enBlue": null
    },
    "monthly": {
-    "jp": [],
+    "jp": [
+     {
+      "d": "2026-10-01",
+      "median": 118,
+      "low": 110,
+      "high": 136,
+      "n": 6,
+      "vol": 6
+     },
+     {
+      "d": "2026-11-01",
+      "median": 109,
+      "low": 103,
+      "high": 113,
+      "n": 11,
+      "vol": 11
+     }
+    ],
     "en": [
      {
       "d": "2026-10-01",
-      "median": 307,
-      "low": 284,
+      "median": 296,
+      "low": 285,
       "high": 332,
-      "n": 10,
-      "vol": 10
+      "n": 11,
+      "vol": 11
+     },
+     {
+      "d": "2026-11-01",
+      "median": 292,
+      "low": 281,
+      "high": 305,
+      "n": 8,
+      "vol": 8
      }
     ],
     "enBlue": []
    },
    "daily": {
-    "jp": [],
+    "jp": [
+     {
+      "d": "2026-10-31",
+      "median": 118,
+      "low": 110,
+      "high": 136,
+      "n": 6,
+      "vol": 6
+     },
+     {
+      "d": "2026-11-01",
+      "median": 109,
+      "low": 107,
+      "high": 115,
+      "n": 5,
+      "vol": 5
+     },
+     {
+      "d": "2026-11-02",
+      "median": 109,
+      "low": 101,
+      "high": 110,
+      "n": 6,
+      "vol": 6
+     }
+    ],
     "en": [
      {
       "d": "2026-10-30",
@@ -25400,20 +25603,35 @@
      },
      {
       "d": "2026-10-31",
-      "median": 283,
-      "low": 272,
-      "high": 289,
-      "n": 3,
-      "vol": 3
+      "median": 285,
+      "low": 278,
+      "high": 290,
+      "n": 4,
+      "vol": 4
+     },
+     {
+      "d": "2026-11-01",
+      "median": 290,
+      "low": 281,
+      "high": 310,
+      "n": 7,
+      "vol": 7
      }
     ],
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31",
+    "through": "2026-11-02",
+    "jp": {
+     "2026-10-31": 6,
+     "2026-11-01": 5,
+     "2026-11-02": 6
+    },
     "en": {
      "2026-10-30": 7,
-     "2026-10-31": 3
+     "2026-10-31": 4,
+     "2026-11-01": 7,
+     "2026-11-02": 1
     }
    },
    "supply": [],
@@ -25446,11 +25664,11 @@
    "preRelease": {
     "jp": {
      "release": "2026-10-31",
-     "sales": 89,
+     "sales": 90,
      "listings": 24,
      "median": 132,
      "low": 130,
-     "high": 136,
+     "high": 137,
      "first": "2026-09-28",
      "last": "2026-10-30"
     },
@@ -25466,17 +25684,23 @@
     }
    },
    "sinceRelease": {
-    "jp": 0,
-    "en": 10
+    "jp": 17,
+    "en": 19
    },
    "current": {
-    "jp": null,
+    "jp": {
+     "median": 110,
+     "low": 107,
+     "high": 124,
+     "n": 17,
+     "d": "2026-11-02"
+    },
     "en": {
-     "median": 307,
-     "low": 284,
-     "high": 332,
-     "n": 10,
-     "d": "2026-10-31"
+     "median": 294,
+     "low": 282,
+     "high": 326,
+     "n": 19,
+     "d": "2026-11-02"
     }
    }
   },
@@ -25500,7 +25724,7 @@
     "enBlue": []
    },
    "counts": {
-    "through": "2026-10-31"
+    "through": "2026-11-02"
    },
    "supply": [],
    "reprintPct": {
@@ -25532,23 +25756,23 @@
    "preRelease": {
     "jp": {
      "release": "2026-11-21",
-     "sales": 20,
+     "sales": 22,
      "listings": 5,
      "median": 129,
-     "low": 124,
-     "high": 137,
+     "low": 122,
+     "high": 135,
      "first": "2026-09-27",
-     "last": "2026-10-30"
+     "last": "2026-11-02"
     },
     "en": {
      "release": "2026-11-20",
-     "sales": 53,
-     "listings": 17,
+     "sales": 56,
+     "listings": 18,
      "median": 301,
      "low": 295,
      "high": 324,
      "first": "2026-10-02",
-     "last": "2026-10-30"
+     "last": "2026-11-02"
     }
    },
    "sinceRelease": {

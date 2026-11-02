@@ -166,10 +166,12 @@ function latestSets(facts, codes, asOf) {
 }
 
 // 세트 페이지 수정일 = 이 페이지가 읽는 원장 기준일 중 가장 늦은 날(packs.updated · box-sold-series.asOf · 경매 집계 창 끝 ·
-// 그 세트의 호가 수집일(일본판·영문판) · Key facts 출처 확인일). 미래 날짜인 발매일은 데이터 날짜가 아니라 넣지 않는다(감사 #4).
-function setPageDate(src, code, kfJp) {
+// 그 세트의 호가 수집일(일본판·영문판) · Key facts 출처 확인일 · 화면에 찍히는 카드 NM 관측일(최고가 카드 줄·한국어 "관측일")).
+// 미래 날짜인 발매일은 데이터 날짜가 아니라 넣지 않는다(감사 #4). 카드 NM 관측일(2026-11-02, EB-05 승격): 새 세트 카드를 packs.updated 다음 날
+// 시드하면 Key facts "Top chase" 날짜가 수정일보다 늦었다(가드 U2).
+function setPageDate(src, code, kfJp, cardDates = []) {
   const bm = ((src.packs.sets || {})[code] || {}).boxMarket || {};
-  return N.latestDate(src.packs.updated, src.sold.asOf, (src.auction.window || {}).to, bm.jp && bm.jp.ebayActive && bm.jp.ebayActive.updated, bm.en && bm.en.ebayActive && bm.en.ebayActive.updated, ...kfJp.sources.map((x) => x.checked))
+  return N.latestDate(src.packs.updated, src.sold.asOf, (src.auction.window || {}).to, bm.jp && bm.jp.ebayActive && bm.jp.ebayActive.updated, bm.en && bm.en.ebayActive && bm.en.ebayActive.updated, ...kfJp.sources.map((x) => x.checked), ...cardDates)
     || new Date().toISOString().slice(0, 10);
 }
 
@@ -573,7 +575,7 @@ function buildSet(src, code, datasetUpdatedOn) {
     },
     jpRelease: kfJp.jpRelease, enRelease: kfJp.enRelease,
     keyFacts: { jp: kfJp, en: kfEn },
-    pageDate: setPageDate(src, code, kfJp),
+    pageDate: setPageDate(src, code, kfJp, [chase && chase.date, ...cardFacts.filter((c) => c.nm.usable).map((c) => c.nm.date)]),
     current: { jp: current("jp"), en: current("en") },
     change28: { jp: N.boxChange28(jp, cur.jp || null), en: changeEn },
     lastPoint: { jp: point(jp[jp.length - 1] || null), en: point(en[en.length - 1] || null) },
@@ -828,11 +830,13 @@ function build(inputs) {
   const sets = {};
   for (const code of [...codes, ...seriesCodes.filter((c) => !codes.includes(c))]) sets[code] = buildSet(src, code, datasetUpdatedOn);
 
-  // ── 비교표(compare.html · best-one-piece-booster-box.html) 행 — 판매 원장에 일본판 점이 있거나 미발매인 세트. 가장 비싼 카드·4주 변동은 세트 사실과 같은 값.
+  // ── 비교표(compare.html · best-one-piece-booster-box.html) 행 — 추적 세트(packs) 전부 + 판매 원장에만 있는 세트 중 일본판 점이 있거나 미발매인 세트.
+  //    가장 비싼 카드·4주 변동은 세트 사실과 같은 값. 추적 세트는 일본판 점이 아직 없어도 싣는다(2026-11-02 EB-05 승격: 일본 발매 다음 날이라 일본판
+  //    주간 점 0 → 행이 빠져 "Sets compared 22" ≠ 다른 페이지 23, 가드 OV1). 일본판 칸은 값이 없으면 "—".
   const compareRows = seriesCodes.map((code) => {
     const eds = sold.sets[code];
     const jp = (eds.jp || []).filter((x) => Number.isFinite(x.median));
-    if (!jp.length && !sets[code].unreleased) return null;
+    if (!jp.length && !sets[code].unreleased && !codes.includes(code)) return null;
     const cur = eds.current || {};
     const now = cur.jp || { median: null, n: null };
     const enNow = cur.en || null;

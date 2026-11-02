@@ -114,7 +114,7 @@ function setPage(code, ed, f, lang) {
   } else {
     const pa = ans(faq, new RegExp(`^How much is a sealed .* ${ed === "jp" ? "Japanese" : "English"} booster box\\?$`));
     cmp("SF1", f, "가격 문답", pa, k.sold ? { present: true } : null);
-    if (pa && k.sold) { const pm = pa.match(/^As of (\d{4}-\d{2}-\d{2}), completed eBay sales[^.]*?median at about (\$[\d,]+) \((\d+) sales/); cmp("SF1", f, "가격 문답 날짜", pm && pm[1], k.sold.d); cmp("SF1", f, "가격 문답 금액", pm && pm[2], k.sold.median); cmp("SF1", f, "가격 문답 건수", pm && pm[3], k.sold.n); }
+    if (pa && k.sold) { const pm = pa.match(/^As of (\d{4}-\d{2}-\d{2}), completed eBay sales.*?median at about (\$[\d,]+) \((\d+) sales/); cmp("SF1", f, "가격 문답 날짜", pm && pm[1], k.sold.d); cmp("SF1", f, "가격 문답 금액", pm && pm[2], k.sold.median); cmp("SF1", f, "가격 문답 건수", pm && pm[3], k.sold.n); }
     if (pa && ed === "jp") { const em = pa.match(/The English .* box runs about (\$[\d,]+) \(as of (\d{4}-\d{2}-\d{2})\)/); cmp("SF1", f, "가격 문답 영문판 값", em ? em[1] : null, s.current.en ? s.current.en.median : null); if (em && s.current.en) cmp("SF1", f, "가격 문답 영문판 날짜", em[2], s.current.en.d); }
     const ca = ans(faq, /compare with the Japanese box\?$/), both = s.current.jp && s.current.en;
     cmp("SF1", f, "배수 문답", ca, both ? { present: true } : null);

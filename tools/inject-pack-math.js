@@ -19,6 +19,7 @@
 "use strict";
 const fs = require("fs");
 const path = require("path");
+const { buyLink } = require("./set-page-shared");
 
 const ROOT = path.join(__dirname, "..");
 const ART = path.join(ROOT, "articles/how-many-packs-one-piece-booster-box.html");
@@ -81,9 +82,12 @@ for (const rf of F.releaseFacts) {
   }
 
   const slug = code.toLowerCase();
-  const setCell = rf.pages.set
+  // 세트 칸 아래 일본판 최저 실매물(세트 페이지 구매 버튼과 같은 값, customid hmp-<세트>) — 2026-11-02. 이 글은 유입(10주 52명)이 있는데 이베이 링크가 0개였다.
+  const ask = F.sets[code] && F.sets[code].ask && F.sets[code].ask.jp;
+  const buy = ask ? buyLink({ url: ask.url, price: ask.total, spot: `hmp-${slug}`, label: "eBay from" }) : "";
+  const setCell = (rf.pages.set
     ? `<a href="/sets/${slug}.html">${esc(code)}</a>`
-    : esc(code);
+    : esc(code)) + (buy ? `<small style="display:block;font-size:12px">${buy}</small>` : "");
   rows.push(
     `          <tr><td>${setCell}</td>` +
       `<td class="num">${packs || "—"}</td>` +

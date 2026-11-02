@@ -39,6 +39,7 @@ if (!fs.existsSync(ART)) {
 }
 // 현재가(current)·기준일(asOf)·세트 이름·영문판 재판 판정은 사실 파일(data/derived/site-facts.json)에서 — 2026-10-15.
 const F = require("./build-site-facts").load();
+const { buyLink } = require("./set-page-shared");
 const S = Object.fromEntries(F.order.series.map((c) => [c, F.sets[c]]));
 let html = fs.readFileSync(ART, "utf8");
 const crlf = html.includes("\r\n");
@@ -87,7 +88,11 @@ const rows = pairs.map(({ code, j, e, pct }) => {
   const cell = fs.existsSync(path.join(ROOT, file)) ? `<a href="../${file}">${label}</a>` : label;
   // 영문 값이 재판(White) 박스면 라벨을 붙인다 — 세트 페이지와 같은 판정(사실 파일 reprint.enIsReprint, 2026-09-30).
   const rp = S[code].reprint.enIsReprint ? " <small>reprint (White)</small>" : "";
-  return `          <tr><td ${TD}>${cell}</td><td ${TDR}>${usd(j)}</td><td ${TDR}>${usd(e)}${rp}</td><td ${TDR}>${pctTxt(pct)}</td></tr>`;
+  // 세트 칸 아래 최저 실매물(일본판·영문판, 세트 페이지 구매 버튼과 같은 값, customid jve-<세트>-jp/en) — 2026-11-02. 유입(10주 61명)이 있는데 링크가 0개였다.
+  const a = (F.sets[code] || {}).ask || {}, sl = code.toLowerCase();
+  const buys = [a.jp && buyLink({ url: a.jp.url, price: a.jp.total, spot: `jve-${sl}-jp`, label: "JP" }), a.en && buyLink({ url: a.en.url, price: a.en.total, spot: `jve-${sl}-en`, label: "EN" })].filter(Boolean);
+  const buyRow = buys.length ? `<small style="display:block;font-size:12px">eBay ${buys.join(" · ")}</small>` : "";
+  return `          <tr><td ${TD}>${cell}${buyRow}</td><td ${TDR}>${usd(j)}</td><td ${TDR}>${usd(e)}${rp}</td><td ${TDR}>${pctTxt(pct)}</td></tr>`;
 });
 
 const byPct = pairs.slice().sort((a, b) => a.pct - b.pct);

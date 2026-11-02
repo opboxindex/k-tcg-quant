@@ -207,8 +207,8 @@ for (const { code, set: s, card: c } of cands) {
   // 가격 카드 아래 머리 줄 = 라벨만 — 2026-10-15 소유자 결정(데이터 페이지는 숫자·표·라벨만). 종전 문장 "… is the #1 chase card in …"·
   // "One raw … is currently worth about 63x a sealed … box" 는 라벨(세트·체이스 순위·박스 배수)로 바꾸고,
   // 해석 절("…which helps explain its raw-to-slab spread"·"…so PSA 10 supply is materially smaller …")은 지웠다 — 젬률은 위 가격 카드에 있다.
-  const ebayRaw = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${c.number} ${c.name} Japanese`)}&_sop=15&${EPN}`;
-  const ebayPsa = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${c.number} PSA 10 Japanese`)}&_sop=15&${EPN}`;
+  const ebayRaw = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${c.number} ${c.name} Japanese`)}&_sop=15&customid=card-${String(c.number || "").toLowerCase()}-raw&${EPN}`;   // customid: 검색결과 랜딩이 2026년 매출의 51%
+  const ebayPsa = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece ${c.number} PSA 10 Japanese`)}&_sop=15&customid=card-${String(c.number || "").toLowerCase()}-psa&${EPN}`;
   // PSA 10 최저 실매물 버튼. 검색 링크는 값이 없어 잘 안 눌린다(2026-09-16 실측).
   // 표시가가 sold 중앙값이어도 실매물 URL 은 따로 있으므로 항상 psa10Ask(사실 파일, psa10Active 의 최저 매물)에서 읽는다. buy = EPN 링크로 바꿀 수 있는 매물.
   const pa = c.psa10Ask;
@@ -606,7 +606,7 @@ const gradedTable = gradedRows.length ? `
 
 // dateModified = 화면 "As of"(DATA_DATE) — 2026-10-19. IndexNow 주간 전송과 함께 빙 사본 날짜를 맞춘다.
 const hubLd = JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", name: "One Piece card prices — top tracked cards", dateModified: DATA_DATE, itemListElement: hubItems.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: `${it.name} (${it.number})`, url: `${SITE}/cards/${it.slug}` })) });
-const ebayCardHub = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent("One Piece Card Game Japanese")}&_sop=15&${EPN}`;
+const ebayCardHub = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent("One Piece Card Game Japanese")}&_sop=15&customid=card-hub&${EPN}`;
 const hub = `<!doctype html>
 <html lang="en">
   <head>

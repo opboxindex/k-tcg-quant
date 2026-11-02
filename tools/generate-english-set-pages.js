@@ -368,7 +368,7 @@ function englishPage(code, prev, next) {
   // 종전 꼬리 "Weekly price history and auction results, updated daily."(페이지 소개)는 뺐고, 금액 표기는 표와 같은 usd()("$1,424") 하나.
   // 뒤 조각 = 지표 칸의 배수·영문판 PSA 10 비율 — 들어갈 때만. 배수는 JP·EN current 가 둘 다 있을 때만(m.multiple, 가드 D17 8c).
   const desc = fit([dataDesc(s.keyFacts.en, nameEn, [m.multiple != null ? `${m.multiple}x the JP box` : "", m.gem != null ? `English PSA 10 rate ${m.gem}%` : ""], DESC_MAX)], DESC_MAX, code);
-  const ebaySearch = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece Card Game ${code} ${nameEn} Booster Box English sealed`)}&LH_BIN=1&_sop=15&${EPN}`;
+  const ebaySearch = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece Card Game ${code} ${nameEn} Booster Box English sealed`)}&LH_BIN=1&_sop=15&customid=set-${code.toLowerCase()}-en-srch&${EPN}`;
   const enBuy = cheapestBoxCta(code);
   // 수정일 — JSON-LD dateModified·화면 "Data updated" 가 같은 날(일본판·한국어 생성기와 같은 값 sets[code].pageDate, 2026-10-15 감사 #4).
   const pageDate = s.pageDate;

@@ -10,14 +10,14 @@
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261019geo" />
-    <script defer src="lang-toggle.js?v=20261019geo"></script>
+    <link rel="stylesheet" href="styles.css?v=20261102epn" />
+    <script defer src="lang-toggle.js?v=20261102epn"></script>
     <script>
       // 2026-10-08: 첫 화면은 정적 선렌더(prerender-home.js)라 JSON 이 첫 그리기에 필요 없다. 1MB 를 첫 그리기 전에 받아 파싱하면
       // 느린 폰에서 그만큼 그리기가 늦어진다(라이트하우스 실측). load 뒤에 받고, 받으면 packs.js 가 같은 화면을 다시 그린다.
       window.__opPackData = new Promise(function (resolve) {
         var go = function () {
-          resolve(fetch("data/onepiece-packs.json?v=20261019geo", { cache: "default", priority: "low" })
+          resolve(fetch("data/onepiece-packs.json?v=20261102epn", { cache: "default", priority: "low" })
             .then(function (r) { return r.ok ? r.json() : null; })
             .catch(function () { return null; }));
         };
@@ -1230,7 +1230,7 @@
       <section class="todayDeals" id="todayDeals" aria-label="Today's box deals" aria-live="polite"><!--PRERENDER:todayDeals-->
     <div class="dealsHead"><span>Today's box deals</span><small>Verified listings under recent sold · incl. shipping · Japanese &amp; English</small></div>
     <div class="dealsRow">
-      <a class="dealCard" href="https://www.ebay.com/itm/366773954449?_skw=One+Piece+Card+Game+OP-01+Romance+Dawn+Booster+Box+English+sealed&amp;hash=item55656e6791%3Ag%3A0GoAAeSwJFBq5rUu&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="dealCard" href="https://www.ebay.com/itm/366773954449?_skw=One+Piece+Card+Game+OP-01+Romance+Dawn+Booster+Box+English+sealed&amp;hash=item55656e6791%3Ag%3A0GoAAeSwJFBq5rUu&amp;customid=home-deal-op-01-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/OP-01.webp" loading="eager" fetchpriority="high"><span class="dealLbl">OP-01 EN</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>OP-01</b> Romance Dawn<span class="dealEd">English</span></span>
@@ -1240,7 +1240,7 @@
         </span>
         <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
       </a>
-      <a class="dealCard" href="https://www.ebay.com/itm/800581235855?_skw=One+Piece+Card+Game+OP-07+500+Years+in+the+Future+Booster+Box+English+sealed&amp;hash=itemba665c348f%3Ag%3Aq6YAAeSwx%7EBplIoz&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="dealCard" href="https://www.ebay.com/itm/800581235855?_skw=One+Piece+Card+Game+OP-07+500+Years+in+the+Future+Booster+Box+English+sealed&amp;hash=itemba665c348f%3Ag%3Aq6YAAeSwx%7EBplIoz&amp;customid=home-deal-op-07-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/OP-07.webp" loading="eager" fetchpriority="high"><span class="dealLbl">OP-07 EN</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>OP-07</b> 500 Years in the Future<span class="dealEd">English</span></span>
@@ -1250,7 +1250,7 @@
         </span>
         <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
       </a>
-      <a class="dealCard" href="https://www.ebay.com/itm/178204874306?_skw=One+Piece+Card+Game+OP-01+Romance+Dawn+Booster+Box+Japanese+sealed&amp;hash=item297dd69642%3Ag%3A6T8AAeSw88dp74rL&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="dealCard" href="https://www.ebay.com/itm/178204874306?_skw=One+Piece+Card+Game+OP-01+Romance+Dawn+Booster+Box+Japanese+sealed&amp;hash=item297dd69642%3Ag%3A6T8AAeSw88dp74rL&amp;customid=home-deal-op-01-jp&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/OP-01.webp" loading="lazy"><span class="dealLbl">OP-01</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>OP-01</b> Romance Dawn<span class="dealEd">Japanese</span></span>
@@ -1260,7 +1260,7 @@
         </span>
         <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
       </a>
-      <a class="dealCard" href="https://www.ebay.com/itm/377413422217?_skw=One+Piece+Card+Game+OP-05+Awakening+of+the+New+Era+Booster+Box+Japanese+sealed&amp;hash=item57df97cc89%3Ag%3A2ekAAeSwvmNqfNDJ&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="dealCard" href="https://www.ebay.com/itm/377413422217?_skw=One+Piece+Card+Game+OP-05+Awakening+of+the+New+Era+Booster+Box+Japanese+sealed&amp;hash=item57df97cc89%3Ag%3A2ekAAeSwvmNqfNDJ&amp;customid=home-deal-op-05-jp&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/OP-05.webp" loading="lazy"><span class="dealLbl">OP-05</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>OP-05</b> Awakening of the New Era<span class="dealEd">Japanese</span></span>
@@ -1389,6 +1389,6 @@
       </nav>
     </footer>
 
-    <script data-home-js>(function(){function go(){["box-chart.js?v=20261019geo","packs.js?v=20261019geo"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
+    <script data-home-js>(function(){function go(){["box-chart.js?v=20261102epn","packs.js?v=20261102epn"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
   </body>
 </html>

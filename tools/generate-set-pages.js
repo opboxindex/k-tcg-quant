@@ -433,7 +433,7 @@ function setPage(code, prev, next) {
   // 종전엔 priority-set-seo description → 해설 desc → "…and a buy-or-skip verdict." 순이라 22장 중 21장이 사람이 쓴 소개 문장이었다.
   // 뒤 조각 = 지표 칸의 PSA 10 비율(세트 전체) — 들어갈 때만.
   const desc = fit([dataDesc(s.keyFacts.jp, nameEn, [fullPsaRate != null && fullPsaTotal ? `PSA 10 rate ${fullPsaRate}%` : ""], DESC_MAX)], DESC_MAX, code);
-  const ebaySearch = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece Card Game ${code} ${nameEn} Booster Box Japanese sealed`)}&LH_BIN=1&_sop=15&${EPN}`;
+  const ebaySearch = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(`One Piece Card Game ${code} ${nameEn} Booster Box Japanese sealed`)}&LH_BIN=1&_sop=15&customid=set-${code.toLowerCase()}-srch&${EPN}`;   // customid: 검색결과 랜딩이 2026년 매출의 51%(EPN 거래 상세) — 따로 잰다
   // 최저 실매물 버튼 — 검색 링크는 값이 없어 잘 안 눌린다(2026-09-16 실측). 검증된 최저 매물이 있을 때만 낸다.
   // 값은 Key facts 표의 "Lowest live ask" 와 같은 값(사실 파일 ask.jp — build-site-facts.lowestAsk)에서 — 표와 버튼이 늘 같은 숫자다.
   const jpAsk = s.ask.jp;
@@ -785,7 +785,9 @@ function hubPage() {
     const topHref = top && top.number ? CARD_MAP[top.number + "|" + String(top.name || "").toLowerCase().replace(/[^a-z0-9]/g, "")] : null;
     const topLink = topHref ? `<a href="../cards/${topHref}">${esc(top.name)}</a>` : (top ? esc(top.name) : "");
     const cl = CARD_LISTS[code] ? `<a href="${slug(code)}-card-list.html">Card list</a>` : "";
-    return `<tr${stale ? ' class="stale"' : ""}><td><a href="${slug(code)}.html"><strong>${code}</strong></a></td><td><a href="${slug(code)}.html">${esc(s.nameEn || "")}</a></td><td class="num">${b.nowUsd != null ? "$" + intl(b.nowUsd) : "—"}</td><td class="num when">${b.nowDate ? esc(b.nowDate.slice(5)) : "—"}${b.n != null ? `<small> n=${b.n}${b.windowDays ? `/${b.windowDays}d` : ""}</small>` : ""}</td><td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td><td class="links">${[en, cl, topLink].filter(Boolean).join(" · ")}</td></tr>`;
+    // 이름 칸 아래 일본판 최저 실매물(세트 페이지 구매 버튼과 같은 값) — 2026-11-02. 허브는 ChatGPT 랜딩(10월 22세션)인데 이베이 링크가 0개였다. 가격 칸은 그대로(가드 D17).
+    const hubBuy = s.ask && s.ask.jp ? buyLink({ url: s.ask.jp.url, price: s.ask.jp.total, spot: `hub-${slug(code)}`, label: "eBay from" }) : "";
+    return `<tr${stale ? ' class="stale"' : ""}><td><a href="${slug(code)}.html"><strong>${code}</strong></a></td><td><a href="${slug(code)}.html">${esc(s.nameEn || "")}</a>${hubBuy ? `<small style="display:block;margin-top:2px;font-size:12px">${hubBuy}</small>` : ""}</td><td class="num">${b.nowUsd != null ? "$" + intl(b.nowUsd) : "—"}</td><td class="num when">${b.nowDate ? esc(b.nowDate.slice(5)) : "—"}${b.n != null ? `<small> n=${b.n}${b.windowDays ? `/${b.windowDays}d` : ""}</small>` : ""}</td><td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td><td class="links">${[en, cl, topLink].filter(Boolean).join(" · ")}</td></tr>`;
   }).join("\n        ");
   const items = rows;
   const ld = `<script type="application/ld+json">${JSON.stringify({
@@ -816,6 +818,7 @@ function hubPage() {
         ["asof", "Data", "기준일", `<time datetime="${esc(hubDate)}">${esc(hubDate)}</time> <small><span data-ko="이베이 완료 거래 중앙값">eBay completed-sale medians</span></small>`],
       ], { label: "Set guides key facts", caption: `<span data-ko="원피스 일본판 부스터 박스 시세">One Piece Japanese booster box prices</span> · <time datetime="${esc(hubDate)}">${esc(hubDate)}</time>` })}
       ${/* 표 머리 설명을 라벨 조각으로(2026-10-15 소유자 결정) — 종전 "dated per row by its median point" 같은 방법 설명 문장을 정의 조각만 남겼다. */ ""}
+      ${AFF_TOP}
       <p class="priceNote">Japanese sealed booster box · Box price = rolling median of completed eBay sales · n = sales in its 28–56-day window · 4-wk change = vs the median 28 days earlier · — = no median dated within ${STALE_DAYS} days (6+ sales) · Data ${esc(hubDate)} · <a href="../methodology.html#box-median">How these are counted</a></p>
       <div style="overflow-x:auto">
       <table class="homeSummaryTable hubTable">
@@ -1057,6 +1060,10 @@ ${list.map((r, i) => rowHtml(r, i + offset)).join("\n")}
         .aTable th.psaH { width: 72px; }
         .aTable th.obsH { width: 46px; }
         .aTable th.mulH { width: 64px; }
+        /* 2026-11-02: 표 끝 'Lowest ask' 열이 고정 폭 표에서 카드 칸을 짓눌러 행 높이가 992px 까지 늘었다 — 폰에선 배수 열을 빼고 구매 열에 폭을 준다 */
+        .aTable .mulH, .aTable td.mul { display: none; }
+        .aTable th.buyH { width: 76px; }
+        .aTable td.buy { white-space: normal; font-size: 12px; line-height: 1.25; }
         .aTable td.rk { width: auto; padding-left: 0; }
         .aTable td.l { white-space: normal; overflow-wrap: anywhere; }
         .aTable td.psa { font-size: 13.5px; }

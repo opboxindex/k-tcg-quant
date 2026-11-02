@@ -62,7 +62,9 @@ const EBAY_COUPON = {
 };
 const couponLive = () => EBAY_COUPON.code && Date.now() < Date.parse(EBAY_COUPON.endsAt);
 const EPN_ROTATION = "711-53200-19255-0"; // ebay.com(US)
-function epnUrl(value) {
+// spot = EPN customid(자리 꼬리표) — 2026-11-02. 홈이 이베이 클릭의 70%인데 EPN 클릭 761건 중 735건·거래 23건 전부가 꼬리표 없음이라
+// 어느 자리가 파는지 몰랐다. 정적 페이지(set-*·card-*·bp-* 등)와 같은 방식으로 home-* 를 단다.
+function epnUrl(value, spot) {
   if (!value) return "";
   try {
     const url = new URL(value);
@@ -72,6 +74,7 @@ function epnUrl(value) {
     // 따옴표 등이 퍼센트 인코딩되어 속성 탈출도 함께 막힌다.
     if (url.protocol !== "https:" && url.protocol !== "http:") return "#";
     if (!/(^|\.)ebay\./i.test(url.hostname)) return url.href;
+    if (spot && !url.searchParams.get("customid")) url.searchParams.set("customid", spot);
     if (url.searchParams.get("campid")) return url.href; // 이미 부착됨
     url.searchParams.set("mkcid", "1");
     url.searchParams.set("mkrid", EPN_ROTATION);
@@ -200,7 +203,7 @@ const DATA_URLS = [
   "https://opboxindex.com/data/onepiece-packs.json",
 ];
 const SITE_BASE = "https://opboxindex.com";
-const DATA_VERSION = "20261019geo";
+const DATA_VERSION = "20261102epn";
 
 // 경매 중계기(Cloudflare Worker) 주소. 정적 호스팅이라 실시간 경매는 이 중계기를 통해서만 온다.
 // 비어 있으면 경매 섹션은 통째로 숨는다 — 빈 상자를 띄워 레이아웃만 밀어내지 않기 위함.
@@ -316,7 +319,7 @@ function ebayLinks(pack) {
   const base = `https://www.ebay.com/sch/i.html?_nkw=${q}`;
   const market = pack.set?.boxMarket?.jp?.ebayActive;
   const best = market?.bestListing;
-  const bestUrl = epnUrl(safeEbayUrl(best?.url));
+  const bestUrl = epnUrl(safeEbayUrl(best?.url), `home-detail-${String(pack.code).toLowerCase()}-jp`);
   const bestPrice = best?.total != null ? triMain(best.total, best.currency).main : "";
   // 실데이터 기반 할인 배지: 최저 매물이 중간 호가보다 3% 이상 싸면 표시(추정 금지)
   let dealChip = "";
@@ -330,7 +333,7 @@ function ebayLinks(pack) {
   // 영문판 최저가 버튼 — 표본 3건 이상 + 검수된 최저매물 있을 때만 (JP와 명확히 구분 표기)
   const enMarket = pack.set?.boxMarket?.en?.ebayActive;
   const enBest = enMarket && (enMarket.sampleSize || 0) >= 3 ? enMarket.bestListing : null;
-  const enBestUrl = epnUrl(safeEbayUrl(enBest?.url));
+  const enBestUrl = epnUrl(safeEbayUrl(enBest?.url), `home-detail-${String(pack.code).toLowerCase()}-en`);
   const enBestPrice = enBest?.total != null ? triMain(enBest.total, enBest.currency).main : "";
   let enDealChip = "";
   if (enBest?.total != null && enMarket?.middle != null) {
@@ -345,8 +348,8 @@ function ebayLinks(pack) {
       ${bestUrl ? `<a class="featured" href="${bestUrl}" target="_blank" rel="noopener noreferrer sponsored" title="${t(`${market?.updated || ""} 수집 · 매일 갱신`, `Captured ${market?.updated || ""} · daily refresh`)}"><em class="langTag">JP</em>${t("일본판 최저가 박스", "Lowest JP box")} · <b>${bestPrice}</b><span class="ctaArrow">↗</span>${dealChip}${market?.updated ? `<em class="asOf">${t(`${market.updated.slice(2).replace(/-/g, ".")} 기준`, `as of ${market.updated.slice(2).replace(/-/g, ".")}`)}</em>` : ""}</a>` : ""}
       ${enBestUrl ? `<a class="featured featuredEn" href="${enBestUrl}" target="_blank" rel="noopener noreferrer sponsored" title="${t(`${enMarket?.updated || ""} 수집 · 영문판 미개봉 박스`, `Captured ${enMarket?.updated || ""} · English sealed box`)}"><em class="langTag langTagEn">EN</em>${t("영문판 최저가 박스", "Lowest EN box")} · <b>${enBestPrice}</b><span class="ctaArrow">↗</span>${enDealChip}${enMarket?.updated ? `<em class="asOf">${t(`${enMarket.updated.slice(2).replace(/-/g, ".")} 기준`, `as of ${enMarket.updated.slice(2).replace(/-/g, ".")}`)}</em>` : ""}</a>` : ""}
       ${floorNote(market, best, "JP")}${floorNote(enMarket, enBest, "EN")}
-      <a href="${epnUrl(`${base}&LH_Sold=1&LH_Complete=1&_sop=13`)}" target="_blank" rel="noopener noreferrer sponsored">JP Sold</a>
-      <a href="${epnUrl(`${base}&LH_BIN=1&_sop=15`)}" target="_blank" rel="noopener noreferrer sponsored">JP Active</a>
+      <a href="${epnUrl(`${base}&LH_Sold=1&LH_Complete=1&_sop=13`, `home-srch-sold-${String(pack.code).toLowerCase()}`)}" target="_blank" rel="noopener noreferrer sponsored">JP Sold</a>
+      <a href="${epnUrl(`${base}&LH_BIN=1&_sop=15`, `home-srch-active-${String(pack.code).toLowerCase()}`)}" target="_blank" rel="noopener noreferrer sponsored">JP Active</a>
       <span class="paidLinkTag">Paid Link</span>
     </div>`;
 }
@@ -358,8 +361,9 @@ function cardPsaSearchUrl(card) {
 
 function cardBuyLinks(card) {
   const best = card.psa10Active?.bestListing;
-  const bestUrl = epnUrl(safeEbayUrl(best?.url));
-  const searchUrl = epnUrl(cardPsaSearchUrl(card));
+  const cardSpot = String(card.number || "x").toLowerCase();
+  const bestUrl = epnUrl(safeEbayUrl(best?.url), `home-card-${cardSpot}`);
+  const searchUrl = epnUrl(cardPsaSearchUrl(card), `home-card-srch-${cardSpot}`);
   if (bestUrl) {
     const price = best.total != null ? triMain(best.total, best.currency).main : "";
     const country = best.country ? ` · ${escapeHtml(best.country)}` : "";
@@ -1137,7 +1141,7 @@ function renderTodayDeals() {
       const ship = d.shipping > 0 ? t(`배송 ${fmt(d.shipping, d.currency)} 포함`, `incl. ${fmt(d.shipping, d.currency)} shipping`) : t("무료배송", "free shipping");
       const asks = d.mid ? ` · ${t(`호가 중간 ${fmt(d.mid, d.currency)}, ${d.asks}건`, `asks mid ${fmt(d.mid, d.currency)}, ${d.asks} listings`)}${vsMid > 0 ? ` (−${vsMid}%)` : ""}` : "";
       return `
-      <a class="dealCard" href="${epnUrl(d.url)}" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="dealCard" href="${epnUrl(d.url, `home-deal-${String(d.code).toLowerCase()}-${d.ed}`)}" target="_blank" rel="noopener noreferrer sponsored">
         ${art}
         <span class="dealBody">
           <span class="dealSet"><b>${d.code}</b> ${escapeHtml(d.name)}<span class="dealEd">${d.ed === "en" ? t("영문판", "English") : t("일본판", "Japanese")}</span></span>
@@ -1150,7 +1154,7 @@ function renderTodayDeals() {
     }).join("")}
     </div>
     ${couponLive() ? `<div class="couponRow">
-      <a class="couponChip" href="${epnUrl(EBAY_COUPON.url)}" target="_blank" rel="noopener noreferrer sponsored">
+      <a class="couponChip" href="${epnUrl(EBAY_COUPON.url, "home-coupon")}" target="_blank" rel="noopener noreferrer sponsored">
         <span class="couponPct">${EBAY_COUPON.pct}%</span>
         <span class="couponMeta"><b>${t("eBay 쿠폰 받기", "Get the eBay coupon")}</b>
           <small>${t("결제 시 코드 입력", "Apply the code at checkout")} · ${t(EBAY_COUPON.endLabel.ko, EBAY_COUPON.endLabel.en)}</small></span>
@@ -1163,7 +1167,7 @@ function renderTodayDeals() {
 function renderSuppliesStrip() {
   const el = document.querySelector("#suppliesStrip");
   if (!el) return;
-  const tile = (url, icon, name, sub) => `<a class="supplyCard" href="${epnUrl(url)}" target="_blank" rel="noopener noreferrer sponsored"><span class="supplyIcon" aria-hidden="true">${icon}</span><span><span class="supplyName">${name}</span><span class="supplySub">${sub}</span></span></a>`;
+  const tile = (url, icon, name, sub) => `<a class="supplyCard" href="${epnUrl(url, "home-supply")}" target="_blank" rel="noopener noreferrer sponsored"><span class="supplyIcon" aria-hidden="true">${icon}</span><span><span class="supplyName">${name}</span><span class="supplySub">${sub}</span></span></a>`;
   el.hidden = false;
   el.innerHTML = `<span class="suppliesLabel">${t("카드 보호", "Protect your cards")}</span>
     ${tile("https://www.ebay.com/sch/i.html?_nkw=card+sleeves&_sop=12", "🛡️", t("플레이 슬리브", "Play sleeves"), t("카드 슬리브 보기", "Browse card sleeves"))}
@@ -1206,7 +1210,7 @@ function renderLiveAuctions() {
       </div>
       <ul class="aucList">${items.map((it) => `
         <li class="aucRow${it.mins <= 90 ? " aucSoon" : ""}">
-          <a href="${epnUrl(it.url)}" target="_blank" rel="noopener noreferrer sponsored">
+          <a href="${epnUrl(it.url, "home-auc")}" target="_blank" rel="noopener noreferrer sponsored">
             ${it.image ? `<img class="aucThumb" width="64" height="64" src="${escapeHtml(aucThumbUrl(it.image))}" alt="" loading="lazy" decoding="async" onerror="this.style.visibility='hidden'">` : `<span class="aucThumb"></span>`}
             <span class="aucKind ${escapeHtml(String(it.kind || ""))}">${kindLabel[it.kind] || it.kind}</span>
             <span class="aucMain">

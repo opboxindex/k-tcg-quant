@@ -26,8 +26,8 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"OP Box Index","item":"https://opboxindex.com/"},{"@type":"ListItem","position":2,"name":"PSA 10 Value Ranking","item":"https://opboxindex.com/psa10-ranking.html"}]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the most expensive One Piece card in PSA 10?","acceptedAnswer":{"@type":"Answer","text":"Monkey D. Luffy 118 Red Manga Alternate Art (OP-13 OP13-118) — median $14,134 across 3 completed eBay sales as of 2026-07-10."}}]}</script>
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261019geo" />
-    <script defer src="lang-toggle.js?v=20261019geo"></script>
+    <link rel="stylesheet" href="styles.css?v=20261102epn" />
+    <script defer src="lang-toggle.js?v=20261102epn"></script>
     <style>
       .rankWrap { max-width: 980px; margin: 0 auto; padding: 20px clamp(14px,3vw,28px) 44px; }
       .rankWrap h1 { margin: 6px 0; font-size: clamp(23px,4vw,32px); line-height: 1.2; }
@@ -89,6 +89,10 @@
         .aTable th.psaH { width: 72px; }
         .aTable th.obsH { width: 46px; }
         .aTable th.mulH { width: 64px; }
+        /* 2026-11-02: 표 끝 'Lowest ask' 열이 고정 폭 표에서 카드 칸을 짓눌러 행 높이가 992px 까지 늘었다 — 폰에선 배수 열을 빼고 구매 열에 폭을 준다 */
+        .aTable .mulH, .aTable td.mul { display: none; }
+        .aTable th.buyH { width: 76px; }
+        .aTable td.buy { white-space: normal; font-size: 12px; line-height: 1.25; }
         .aTable td.rk { width: auto; padding-left: 0; }
         .aTable td.l { white-space: normal; overflow-wrap: anywhere; }
         .aTable td.psa { font-size: 13.5px; }

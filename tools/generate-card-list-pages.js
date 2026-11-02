@@ -17,7 +17,15 @@
 // Run: node tools/generate-card-list-pages.js   (generate-card-pages.js 뒤 — 사실 파일이 cards/card-map.json 을 읽는다)
 const fs = require("node:fs");
 const path = require("node:path");
-const { SITE, CSS_VER, esc, usd, pageHead, foot, kfTableAny, KF_CSS } = require("./set-page-shared");
+const { SITE, CSS_VER, esc, usd, pageHead, foot, kfTableAny, KF_CSS, buyLink, AFF_TOP } = require("./set-page-shared");
+// 영문 카드리스트의 구매 링크(2026-11-02) — 이 페이지들은 빙·검색 유입이 있는데(eb-05-card-list 10월 사용자 94명) 이베이 링크가 0개였다.
+// 값은 세트 페이지 구매 버튼과 같은 최저 실매물(사실 파일 ask·cards[i].psa10Ask)만, customid cl-<세트>-box-jp/en · cl-<번호>. 한국어 판은 그대로.
+const boxBuyLine = (code) => {
+  const a = (F.sets[code] || {}).ask || {}, slug = code.toLowerCase();
+  const bits = [a.jp && buyLink({ url: a.jp.url, price: a.jp.total, spot: `cl-${slug}-box-jp`, label: "JP box" }), a.en && buyLink({ url: a.en.url, price: a.en.total, spot: `cl-${slug}-box-en`, label: "EN box" })].filter(Boolean);
+  return bits.length ? `<p class="clBuy">eBay: ${bits.join(" · ")}</p>` : "";
+};
+const hasBuy = (code) => !!boxBuyLine(code) || ((F.sets[code] || {}).cards || []).some((c) => c.psa10Ask && c.psa10Ask.buy);
 const CL = require("./card-list-shared");
 const { addUrls } = require("./sitemap-detail-urls");
 const { navHtmlKo } = require("./site-nav");
@@ -166,7 +174,7 @@ function extraSections(code, rows, counts, ko) {
       <div style="overflow-x:auto"><table class="clMini">
         <thead><tr><th class="num">#</th><th>${T("Card", "카드")}</th><th class="num">NM (raw)</th><th class="num">PSA 10</th></tr></thead>
         <tbody>
-          ${top.map((c, i) => { const p = c.shown || {}; const h = href(c); const name = `<b>${esc(c.name)}</b>`; return `<tr><td class="num">${i + 1}</td><td>${h ? `<a href="${esc(h)}">${name}</a>` : name}<small>${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</small></td><td class="num">${p.nm != null ? `${usd(p.nm)}${p.nmSrc === "tcg" ? "<small>TCG</small>" : ""}` : "—"}</td><td class="num">${psaCell(p)}</td></tr>`; }).join("\n          ")}
+          ${top.map((c, i) => { const p = c.shown || {}; const h = href(c); const name = `<b>${esc(c.name)}</b>`; return `<tr><td class="num">${i + 1}</td><td>${h ? `<a href="${esc(h)}">${name}</a>` : name}<small>${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</small></td><td class="num">${p.nm != null ? `${usd(p.nm)}${p.nmSrc === "tcg" ? "<small>TCG</small>" : ""}` : "—"}</td><td class="num">${psaCell(p)}${!ko && c.psa10Ask && c.psa10Ask.buy ? `<small>${buyLink({ url: c.psa10Ask.url, price: c.psa10Ask.usd, spot: `cl-${String(c.number || "").toLowerCase()}`, label: "eBay" })}</small>` : ""}</td></tr>`; }).join("\n          ")}
         </tbody>
       </table></div>`);
   }
@@ -278,6 +286,7 @@ function pageEn(p, rows, nameEn, src, box, links) {
       ${summaryTable(code, n, src.jp.checked, false)}
       <p class="clMeta"><span data-ko="공식 목록(일본판):">Official list (Japanese):</span> <a href="${esc(src.jp.url)}" target="_blank" rel="noopener noreferrer">Bandai card list</a> checked <time datetime="${src.jp.checked}">${src.jp.checked}</time><br /><span data-ko="영문 이름:">English names:</span> Bandai English card list ${enSrc}<br />${boxBit("jp", "JP box sold median")} · ${boxBit("en", "EN box")}</p>
       <p class="clLinks">${linkBits.join("")}</p>
+      ${hasBuy(code) ? `${AFF_TOP} ${boxBuyLine(code)}` : ""}
       ${extraSections(code, rows, n, false)}
       <h2 class="clH2" id="all-cards" data-ko="전체 ${n.cards}장">All ${n.cards} cards</h2>
       ${LEGEND_EN}

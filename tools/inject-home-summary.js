@@ -59,11 +59,12 @@ const rowHtml = (withMsrp) => rows.map((b) => {
   // 구매 링크가 0개였다. 이름 칸 아래 링크 줄에 넣어 표 폭(390px 한 화면)은 그대로 둔다. 홈 요약표(봇용 접힘)는 그대로.
   const ask = withMsrp && s.ask && s.ask.jp;
   const buy = ask ? buyLink({ url: ask.url, price: ask.total, spot: `bp-${slug}`, label: "eBay from" }) : "";
-  const links = [buy, enLink, clLink, topLink].filter(Boolean).join(" · ");
+  // 구매 링크는 링크 줄(rowLinks)과 따로 한 줄 — 모바일(720px 이하)은 styles.css 가 rowLinks 를 통째로 숨겨 처음 단 23개가 폰에서 안 보였다(2026-11-02).
+  const links = [enLink, clLink, topLink].filter(Boolean).join(" · ");
   const when = b.nowDate
     ? `<td class="num when" title="Median point ${esc(b.nowDate)}${b.n != null ? ` · ${b.n} sales in its ${b.windowDays ? `${b.windowDays}-day ` : ""}window` : ""}">${esc(mmdd(b.nowDate))}${nCell(b)}</td>`
     : `<td class="num when" title="${esc(NO_MEDIAN)}">—</td>`;
-  return `<tr${none ? ' class="stale"' : ""}><td class="code"><a href="sets/${slug}.html">${esc(b.code)}</a></td><td class="name">${esc(s.nameFull || s.nameEn || "")}${links ? `<small class="rowLinks">${links}</small>` : ""}</td><td class="num">${usd(b.nowUsd)}${withMsrp && b.vsMsrp != null ? `<small class="msrpSub">${b.vsMsrp.toFixed(1)}× MSRP</small>` : ""}</td>${when}<td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td>${withMsrp ? msrpTds(b) : ""}</tr>`;
+  return `<tr${none ? ' class="stale"' : ""}><td class="code"><a href="sets/${slug}.html">${esc(b.code)}</a></td><td class="name">${esc(s.nameFull || s.nameEn || "")}${buy ? `<small class="rowBuyLine" style="display:block;margin-top:2px;font-size:12px">${buy}</small>` : ""}${links ? `<small class="rowLinks">${links}</small>` : ""}</td><td class="num">${usd(b.nowUsd)}${withMsrp && b.vsMsrp != null ? `<small class="msrpSub">${b.vsMsrp.toFixed(1)}× MSRP</small>` : ""}</td>${when}<td class="num ${chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat"}">${chg != null ? (chg > 0 ? "+" : "") + chg + "%" : "—"}</td>${withMsrp ? msrpTds(b) : ""}</tr>`;
 }).join("\n");
 const tr = rowHtml(false);
 const trBox = rowHtml(true);

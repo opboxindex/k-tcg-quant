@@ -17,7 +17,10 @@
     var href = a.getAttribute("href") || "";
     var label = (a.textContent || "").replace(/\s+/g, " ").trim().slice(0, 60);
     if (/^https?:\/\/(www\.)?ebay\./.test(href) || /^https?:\/\/ebay\.us\//.test(href)) {
-      send("ebay_click", { link_label: label, page_path: location.pathname });
+      // spot = 링크의 EPN customid(자리 꼬리표, 2026-11-02) — GA4 와 EPN 보고서를 같은 이름으로 맞춰 본다. 없으면 빈 값.
+      var m = href.match(/[?&]customid=([^&#]*)/), spot = m ? m[1] : "";
+      try { spot = decodeURIComponent(spot); } catch (e) { /* 깨진 인코딩은 원문 그대로 */ }
+      send("ebay_click", { link_label: label, page_path: location.pathname, spot: spot.slice(0, 60) });
     } else if (/^https?:\/\//.test(href) && a.hostname !== location.hostname) {
       send("outbound_click", { link_domain: a.hostname, link_label: label, page_path: location.pathname });
     } else if (/\/(sets|cards|articles)\//.test(href) || /\.html$/.test(href)) {

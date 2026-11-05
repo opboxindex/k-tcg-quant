@@ -2,7 +2,7 @@
  "schemaVersion": "1.0.0",
  "datasetId": "opbox-ai-auctions",
  "name": "OP Box Index — settled eBay auction results: One Piece daily/weekly/by set, and 13 trading card games",
- "datasetUpdatedOn": "2026-11-04",
+ "datasetUpdatedOn": "2026-11-05",
  "publisher": {
   "name": "OP Box Index",
   "url": "https://opboxindex.com/"
@@ -1799,61 +1799,61 @@
    {
     "date": "2026-11-04",
     "partialDay": true,
-    "ended": 819,
-    "sold": 308,
-    "unsold": 511,
-    "sellThroughPct": 37.61,
-    "amountUsd": 38596.26,
+    "ended": 1083,
+    "sold": 355,
+    "unsold": 728,
+    "sellThroughPct": 32.78,
+    "amountUsd": 46262.7,
     "byCategory": {
      "box": {
-      "ended": 9,
-      "sold": 8,
+      "ended": 11,
+      "sold": 9,
       "sellThroughPct": null,
-      "amountUsd": 21264.5
+      "amountUsd": 21508
      },
      "graded": {
-      "ended": 113,
-      "sold": 61,
-      "sellThroughPct": 54,
-      "amountUsd": 7932.93
+      "ended": 135,
+      "sold": 71,
+      "sellThroughPct": 52.6,
+      "amountUsd": 10968.22
      },
      "raw": {
-      "ended": 632,
-      "sold": 208,
-      "sellThroughPct": 32.9,
-      "amountUsd": 8442.53
+      "ended": 856,
+      "sold": 239,
+      "sellThroughPct": 27.9,
+      "amountUsd": 12707.38
      },
      "pack": {
-      "ended": 28,
-      "sold": 18,
-      "sellThroughPct": 64.3,
-      "amountUsd": 348.56
+      "ended": 32,
+      "sold": 21,
+      "sellThroughPct": 65.6,
+      "amountUsd": 431.86
      },
      "lot": {
-      "ended": 37,
-      "sold": 13,
-      "sellThroughPct": 35.1,
-      "amountUsd": 607.74
+      "ended": 49,
+      "sold": 15,
+      "sellThroughPct": 30.6,
+      "amountUsd": 647.24
      }
     },
     "byPrinting": {
      "jp": {
-      "ended": 183,
-      "sold": 68,
-      "sellThroughPct": 37.2,
-      "amountUsd": 1650.66
+      "ended": 252,
+      "sold": 76,
+      "sellThroughPct": 30.2,
+      "amountUsd": 1913.11
      },
      "en": {
-      "ended": 496,
-      "sold": 165,
-      "sellThroughPct": 33.3,
-      "amountUsd": 17052.6
+      "ended": 663,
+      "sold": 197,
+      "sellThroughPct": 29.7,
+      "amountUsd": 22984.14
      },
      "other": {
-      "ended": 140,
-      "sold": 75,
-      "sellThroughPct": 53.6,
-      "amountUsd": 19893
+      "ended": 168,
+      "sold": 82,
+      "sellThroughPct": 48.8,
+      "amountUsd": 21365.45
      }
     }
    }
@@ -2150,40 +2150,40 @@
     "weekStart": "2026-11-02",
     "days": 3,
     "partialDays": 0,
-    "ended": 3549,
-    "sold": 1164,
-    "sellThroughPct": 32.8,
-    "amountUsd": 160183.83,
+    "ended": 3813,
+    "sold": 1211,
+    "sellThroughPct": 31.76,
+    "amountUsd": 167850.27,
     "byCategory": {
      "box": {
-      "ended": 40,
-      "sold": 30,
-      "sellThroughPct": 75,
-      "amountUsd": 59889.88
+      "ended": 42,
+      "sold": 31,
+      "sellThroughPct": 73.8,
+      "amountUsd": 60133.38
      },
      "graded": {
-      "ended": 441,
-      "sold": 240,
-      "sellThroughPct": 54.4,
-      "amountUsd": 45322.58
+      "ended": 463,
+      "sold": 250,
+      "sellThroughPct": 54,
+      "amountUsd": 48357.87
      },
      "raw": {
-      "ended": 2718,
-      "sold": 782,
-      "sellThroughPct": 28.8,
-      "amountUsd": 48816.64
+      "ended": 2942,
+      "sold": 813,
+      "sellThroughPct": 27.6,
+      "amountUsd": 53081.49
      },
      "pack": {
-      "ended": 131,
-      "sold": 78,
-      "sellThroughPct": 59.5,
-      "amountUsd": 3789.53
+      "ended": 135,
+      "sold": 81,
+      "sellThroughPct": 60,
+      "amountUsd": 3872.83
      },
      "lot": {
-      "ended": 219,
-      "sold": 34,
-      "sellThroughPct": 15.5,
-      "amountUsd": 2365.2
+      "ended": 231,
+      "sold": 36,
+      "sellThroughPct": 15.6,
+      "amountUsd": 2404.7
      }
     }
    }

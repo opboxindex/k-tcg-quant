@@ -40,7 +40,7 @@
       .dataTable th { text-align: right; padding: 6px 8px; border-bottom: 1px solid #2a3140; color: #9aa4b6; font-weight: 600; }
       .dataTable th:first-child, .dataTable td:first-child { text-align: left; }
       .dataTable td { text-align: right; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.06); }
-      .dataTable .up { color: #26d07c; } .dataTable .dn { color: #ff7a7a; }
+      .dataTable .up { color: #26d07c; } .dataTable .dn { color: #ff7a7a; } .dataTable th small { display: block; font-weight: 400; font-size: 11px; color: #7d8698; }
       .tblWrap { overflow-x: auto; }
       .srcNoteA { color: #7d8698; font-size: 12.5px; margin: 4px 0 18px; }
     </style>
@@ -59,14 +59,14 @@
       <p>We tracked weekly market prices from January through mid-July 2026 — 21 Japanese sets and 17 English sets with continuous price history. In the matched sample, the English-to-Japanese price ratio ranged from 1.3x to 7.4x, Japanese boxes rose more on average over the window, and the two newest releases declined. These are observations from the stated period, not forecasts.</p>
 
       <h2>Finding 1: English premium and set age moved together in this sample</h2>
-      <p>As of July 14, 2026, every English booster box we track costs more than its Japanese counterpart — but the size of the gap is not random. The newest set, OP-16 The Time of Battle, trades at just 1.3x its Japanese version ($188 vs about $150). Move back one set at a time and the multiple climbs: OP-14 sits near 2.8x, OP-13 at 3.8x, OP-11 at 4.5x, OP-09 at 6.0x, and the oldest premium products — EB-01 Memorial Collection (7.4x) and OP-05 Awakening of the New Era (7.3x) — cost more than seven times their Japanese equivalents.</p>
+      <p>As of July 14, 2026, every English booster box we track costs more than its Japanese counterpart — but the size of the gap is not random. The newest set, OP-16 The Time of Battle, trades at just 1.3x its Japanese version ($188 market value vs about $150 eBay asking price). Move back one set at a time and the multiple climbs: OP-14 sits near 2.8x, OP-13 at 3.8x, OP-11 at 4.5x, OP-09 at 6.0x, and the oldest premium products — EB-01 Memorial Collection (7.4x) and OP-05 Awakening of the New Era (7.3x) — cost more than seven times their Japanese equivalents.</p>
       <p>The data establishes the price ratio and release age, not the cause. Bandai does not publish complete print-run totals by language, and buyer location, release timing, reprints and marketplace coverage can all affect the gap. Treat the age relationship as a correlation to monitor rather than a print-volume conclusion.</p>
 
       <h2>Finding 2: Japanese boxes rose more over six months</h2>
       <p>Averaged across the sets we track, Japanese boxes appreciated more than English boxes between early January and mid-July 2026. The strongest Japanese movers were PRB-01 Premium Booster (+113%, $68 to $145), OP-01 Romance Dawn (+109%, $150 to $313), OP-08 Two Legends (+81%), and EB-02 Anime 25th and OP-11 A Fist of Divine Speed (both +71%). On the English side the leaders were OP-11 (+62%), OP-02 Paramount War (+53%), and OP-10 Royal Blood (+50%) — solid, but a step behind.</p>
       <div class="tblWrap"><table class="dataTable">
-        <caption>Now = median completed sale as of November 6, 2026</caption>
-        <thead><tr><th>Set</th><th>JP Jan</th><th>JP Jul</th><th>JP 6mo</th><th>EN Jul</th><th>EN/JP ratio</th><th>JP now</th><th>EN now</th><th>EN/JP now</th></tr></thead>
+        <caption>Market value = weekly ungraded market value, Jan 7 – Jul 14, 2026 · sold median = median completed eBay sale as of November 6, 2026</caption>
+        <thead><tr><th>Set</th><th>JP Jan<small>market value</small></th><th>JP Jul<small>market value</small></th><th>JP 6mo<small>market value</small></th><th>EN Jul<small>market value</small></th><th>EN/JP ratio<small>market value</small></th><th>JP now<small>sold median</small></th><th>EN now<small>sold median</small></th><th>EN/JP now<small>sold median</small></th></tr></thead>
         <tbody>
           <tr><td>OP-01 Romance Dawn</td><td>$150</td><td>$313</td><td class="up">+109%</td><td>~$2,100†</td><td>~6.7x†</td><td>$261</td><td>$1,349</td><td>5.2x</td></tr>
           <tr><td>OP-02 Paramount War</td><td>$113</td><td>$136</td><td class="up">+20%</td><td>$599</td><td>4.4x</td><td>$131</td><td>$548</td><td>4.2x</td></tr>
@@ -83,7 +83,7 @@
           <tr><td>OP-13 Carrying on His Will</td><td>$78</td><td>$131</td><td class="up">+68%</td><td>$494</td><td>3.8x</td><td>$126</td><td>$448</td><td>3.6x</td></tr>
           <tr><td>OP-14 The Azure Sea's Seven</td><td>$63</td><td>$88</td><td class="up">+40%</td><td>$246</td><td>2.8x</td><td>$86</td><td>$254</td><td>3.0x</td></tr>
           <tr><td>OP-15 Adventure on Kami's Island</td><td>$112</td><td>$98</td><td class="dn">-13%</td><td>$252</td><td>2.6x</td><td>$96</td><td>$266</td><td>2.8x</td></tr>
-          <tr><td>OP-16 The Time of Battle</td><td>$220</td><td>$150</td><td class="dn">-32%</td><td>$188</td><td>1.3x</td><td>$96</td><td>$235</td><td>2.4x</td></tr>
+          <tr><td>OP-16 The Time of Battle</td><td>$220‡</td><td>$150‡</td><td class="dn">-32%</td><td>$188</td><td>1.3x</td><td>$96</td><td>$235</td><td>2.4x</td></tr>
           <tr><td>OP-17 The World's Strongest Warriors</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>$116</td><td>$311</td><td>2.7x</td></tr>
           <tr><td>OP-18</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
           <tr><td>EB-01 Memorial Collection</td><td>$90</td><td>$116</td><td class="up">+29%</td><td>$859</td><td>7.4x</td><td>—</td><td>$897</td><td>—</td></tr>
@@ -94,10 +94,10 @@
           <tr><td>PRB-02 Premium Booster — The Best vol.2</td><td>$58</td><td>$77</td><td class="up">+33%</td><td>$396</td><td>5.1x</td><td>$94</td><td>$376</td><td>4.0x</td></tr>
         </tbody>
       </table></div>
-      <p class="srcNoteA">Japanese January and July prices are weekly ungraded market values, rounded to whole dollars; six-month change computed from the same series. English July prices likewise, except rows marked † which reference recent eBay listing bands because no continuous English market series exists for that set. As of 2026-07-14.</p>
+      <p class="srcNoteA">Japanese January and July prices are weekly ungraded market values, rounded to whole dollars; six-month change computed from the same series. English July prices likewise, except rows marked † which reference recent eBay listing bands because no continuous English market series exists for that set. ‡ OP-16 (Japanese release May 30): JP Jan = completed eBay sales, week of Apr 27 (1 sale); JP Jul = middle of active eBay asking prices, Jul 14. As of 2026-07-14.</p>
 
       <h2>Finding 3: the two newest tracked releases declined</h2>
-      <p>English OP-16 fell 53% from its April pre-release level ($400 to $188), OP-15 declined 16%, and Japanese OP-16 declined 32% over the measured window. The sample contains too few comparable 2026 launches to declare a universal bottoming pattern. It does show that pre-release prices can differ sharply from prices after wider distribution.</p>
+      <p>English OP-16 fell 53% from its April pre-release level ($400 to $188 market value), OP-15 declined 16%, and Japanese OP-16 declined 32% ($220 pre-release sale to $150 asking price) over the measured window. The sample contains too few comparable 2026 launches to declare a universal bottoming pattern. It does show that pre-release prices can differ sharply from prices after wider distribution.</p>
 
       <h2>Case study: OP-13 Carrying on His Will</h2>
       <p>The Japanese OP-13 box started January near $78 and reached about $131 by mid-July (+68%). The move coincided with high tracked prices for its manga-art chase cards, but this dataset does not isolate causation. The English box moved from $430 to roughly $494 (+15%) over the same stretch, with a spike near $670 in early February that retraced. Japanese rose more in percentage terms during this window; English started and ended at the higher absolute price. You can see both series on our <a href="../?set=OP-13&amp;hl=en">OP-13 tracker page</a>.</p>

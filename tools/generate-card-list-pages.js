@@ -139,6 +139,7 @@ const CSS = `      .clSummary { display: flex; flex-wrap: wrap; gap: 4px 14px; m
       .bodyPage table.clMini :is(th, td):not(.num) { text-align: left; }
       .clMini td.num, .clMini th.num { text-align: right; white-space: nowrap; }
       .clMini td small { display: block; color: var(--muted); font-size: 11.5px; }
+      .clMini td.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 sold 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .bodyPage h2.clH2 { margin: 22px 0 2px; font-size: 18px; }
       @media (max-width: 900px) { .bodyPage table.clMini { display: table; overflow: visible; -webkit-mask-image: none; mask-image: none; } }
 ${KF_CSS}`;
@@ -170,11 +171,14 @@ function extraSections(code, rows, counts, ko) {
   if (top.length) {
     const href = (c) => { const pg = cardPageOf(c); return pg ? `../cards/${pg}` : null; };
     const psaCell = (p) => (p.psa != null ? `${usd(p.psa)}<small>${p.psaKind === "sold" ? `${ko ? "판매" : "sold"}${p.psaDate ? " · " + esc(p.psaDate.slice(5)) : ""}` : ko ? "호가" : "ask"}</small>` : "—");
+    // NM 칸 = 값 + 읽은 날(MM-DD), 낡은 값(NM 28일·PSA 10 sold 35일 — 사실 shown.nmStale·psaStale)은 흐린다 — 세트 Top 10 과 같은 꼴(2026-11-05).
+    const nmCell = (p) => (p.nm != null ? `${usd(p.nm)}${p.nmSrc === "tcg" ? "<small>TCG</small>" : p.nmDate ? `<small>${ko ? `${esc(p.nmDate.slice(5))} 기준` : `as of ${esc(p.nmDate.slice(5))}`}</small>` : ""}` : "—");
+    const numTd = (stale, title) => (stale ? `<td class="num stale" title="${esc(title)}">` : `<td class="num">`);
     out.push(`${h2("most-valuable", "Most valuable cards", "가장 비싼 카드")}
       <div style="overflow-x:auto"><table class="clMini">
         <thead><tr><th class="num">#</th><th>${T("Card", "카드")}</th><th class="num">NM (raw)</th><th class="num">PSA 10</th></tr></thead>
         <tbody>
-          ${top.map((c, i) => { const p = c.shown || {}; const h = href(c); const name = `<b>${esc(c.name)}</b>`; return `<tr><td class="num">${i + 1}</td><td>${h ? `<a href="${esc(h)}">${name}</a>` : name}<small>${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</small></td><td class="num">${p.nm != null ? `${usd(p.nm)}${p.nmSrc === "tcg" ? "<small>TCG</small>" : ""}` : "—"}</td><td class="num">${psaCell(p)}${!ko && c.psa10Ask && c.psa10Ask.buy ? `<small>${buyLink({ url: c.psa10Ask.url, price: c.psa10Ask.usd, spot: `cl-${String(c.number || "").toLowerCase()}`, label: "eBay" })}</small>` : ""}</td></tr>`; }).join("\n          ")}
+          ${top.map((c, i) => { const p = c.shown || {}; const h = href(c); const name = `<b>${esc(c.name)}</b>`; return `<tr><td class="num">${i + 1}</td><td>${h ? `<a href="${esc(h)}">${name}</a>` : name}<small>${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</small></td>${numTd(p.nmStale, `NM ${p.nmDate} > ${F.staleDays.nm}d`)}${nmCell(p)}</td>${numTd(p.psaKind === "sold" && p.psaStale, `PSA 10 ${p.psaDate} > ${F.staleDays.psa10}d`)}${psaCell(p)}${!ko && c.psa10Ask && c.psa10Ask.buy ? `<small>${buyLink({ url: c.psa10Ask.url, price: c.psa10Ask.usd, spot: `cl-${String(c.number || "").toLowerCase()}`, label: "eBay" })}</small>` : ""}</td></tr>`; }).join("\n          ")}
         </tbody>
       </table></div>`);
   }

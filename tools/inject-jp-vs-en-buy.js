@@ -54,6 +54,9 @@ const RE = {
   dateModified: /("dateModified": ")[^"]*(")/,
   // Key facts 표 자리(H1 바로 아래) — 2026-10-16. 인용 페이지에 값·기준일·표본만 담은 표(세트 페이지 kfTable 과 같은 꼴).
   keyFacts: /<!-- JP_EN_KEY_FACTS:START -->[\s\S]*?<!-- JP_EN_KEY_FACTS:END -->/,
+  // 관련 글 링크의 쌍 수 — 2026-11-05. 손으로 쓴 "(all 20 pairs)" 가 어느 표의 수와도 맞지 않았다(실제 19).
+  //   = 링크한 6개월 리포트 표에서 JP now·EN now 가 둘 다 있는 행 수(inject-jp-en-6mo 와 같은 current) = 이 글의 pairs. 가드 TX5.
+  reportLink: /(<a href="japanese-vs-english-box-price-data-2026\.html">Full JP vs EN data report \(all )\d+( pairs\)<\/a>)/,
 };
 const missing = Object.keys(RE).filter((k) => !RE[k].test(html));
 if (missing.length) {
@@ -164,6 +167,7 @@ html = html.replace(/<p><strong>Observed pattern:<\/strong>[\s\S]*?<\/p>/, () =>
 // 메타·OG·JSON-LD 설명의 프리미엄 범위
 const range = lo.pct > 0 ? `${pctTxt(lo.pct)} to ${pctTxt(hi.pct)}` : `up to ${pctTxt(hi.pct)}`;
 html = html.replace(/(English One Piece booster boxes cost )[^"<]*?( more than the same Japanese set)/g, (_m, a, b) => a + range + b);
+html = html.replace(RE.reportLink, (_m, a, b) => a + pairs.length + b);
 
 html = html.replace(RE.dateModified, (_m, a, b) => a + dataDate + b);
 // 화면 바이라인 "Updated" 도 dataDate 로 — JSON-LD dateModified 와 어긋나지 않게.

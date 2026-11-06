@@ -50,6 +50,24 @@ try {
   if (!withField.packsUntracked.some((p) => p.includes("__testFakeCollector"))) {
     fail("packs.json 의 새 수집 필드를 못 잡는다 — packs 그물이 죽었다(정규식의 \\d·\\. 이스케이프 확인)"); ok = false;
   }
+
+  // ── 3b) NMF1 — 유유테이 NM 행은 가장 오래 읽은 카드로 판정한다 — 2026-11-05 ──
+  // 종전엔 카드 nmUpdated 의 최댓값이라, 11-02 에 EB-05 11장만 새로 읽자 나머지 183장이 10-21(15일)인데 "3일 정상"이었다.
+  // 그 상황을 그대로 만든다: 화면에 나가는 NM 카드 전부를 15일 전으로, 한 세트만 오늘로 → 행은 15일 전·늦음이어야 한다.
+  const { nmUsable } = require("./market-data-normalizers");
+  const day = (n) => new Date(Date.parse(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`) - n * 86400000).toISOString().slice(0, 10);
+  const k = JSON.parse(original);
+  const nmSets = Object.keys(k.sets).filter((code) => Object.values(k.sets[code].cards || {}).some(nmUsable));
+  if (nmSets.length < 2) { fail("NMF1: 화면에 나가는 NM 카드가 있는 세트가 2개 미만 — 시험을 못 만든다"); ok = false; }
+  else {
+    for (const code of nmSets) for (const c of Object.values(k.sets[code].cards)) if (nmUsable(c)) c.nmUpdated = code === nmSets[0] ? day(0) : day(15);
+    fs.writeFileSync(PACKS, JSON.stringify(k), "utf8");
+    const nm = run().rows.find((r) => r.key === "nm");
+    if (!nm) { fail("NMF1: nm 행이 없다"); ok = false; }
+    else if (nm.last !== day(15) || nm.state !== "늦음") {
+      fail(`NMF1: 한 세트(${nmSets[0]})만 오늘 읽었는데 nm 행이 ${nm.last}·${nm.state} — 가장 오래 읽은 카드(${day(15)}·늦음)를 봐야 한다. 새 세트 갱신이 전체 지연을 가린다`); ok = false;
+    }
+  }
 } finally {
   // 원장은 무슨 일이 있어도 되돌린다. 시험 흔적이 데이터에 남으면 그게 더 큰 사고다.
   fs.writeFileSync(PACKS, original, "utf8");

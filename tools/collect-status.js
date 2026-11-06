@@ -24,6 +24,7 @@ const path = require("node:path");
 const ROOT = path.resolve(__dirname, "..");
 const R = (p) => path.join(ROOT, p);
 const readJSON = (p) => JSON.parse(fs.readFileSync(R(p), "utf8"));
+const { nmUsable } = require("./market-data-normalizers");   // 화면이 NM 을 싣는 술어 한 곳(nm 행이 같은 카드를 본다)
 const today = new Date().toISOString().slice(0, 10);
 const daysAgo = (d) => (d ? Math.round((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${d}T00:00:00Z`)) / 86400000) : null);
 // 영업일 기준 경과일 — (d, today] 구간의 평일(월~금) 수. 환율(ECB)은 주말·공휴일에 새 값이 없어서
@@ -90,7 +91,7 @@ const pick = {
     }
     return best;
   },
-  // 카드/세트 단위로 흩어진 갱신일(유유테이 NM 등) — packs.json 안을 훑는다.
+  // 카드/세트 단위로 흩어진 갱신일 — packs.json 안을 훑어 가장 늦은 날. (유유테이 NM 은 아래 nmOldest — 가장 이른 날)
   packsField: (kind) => () => {
     const j = readJSON("data/onepiece-packs.json");
     let best = null;
@@ -107,13 +108,23 @@ const pick = {
       if (kind === "psaweeklyset") take(set.psaWeekly && set.psaWeekly.updated);
       if (kind === "boxseries") { for (const key of ["boxSeries", "boxSeriesEn", "boxSeriesEbay", "boxSeriesEnEbay"]) take(set[key] && set[key].updated); }
       for (const c of Object.values(set.cards || {})) {
-        if (kind === "nm") take(c.nmUpdated);
         if (kind === "psa10active") take(c.psa10Active && c.psa10Active.updated);
         if (kind === "psa10sold") take(c.psa10Ebay && c.psa10Ebay.updated);
         if (kind === "graderpop") for (const g of Object.values(c.graderPop || {})) for (const ed of Object.values(g || {})) take(ed && ed.d);
       }
     }
     return best;
+  },
+  // 유유테이 NM — 화면에 나가는 카드 NM(nmUsable) 중 **가장 오래전에 읽은 날**. 하나만 밀려도 보이게(earliest 와 같은 원칙) — 2026-11-05.
+  //   종전엔 packsField("nm") 의 최댓값이라, 11-02 에 EB-05 11장만 새로 읽자 나머지 183장이 10-21(15일)인데도 "3일 정상"이었고
+  //   점수판 C8 도 이 행을 그대로 읽어 OK 였다. 카드는 세트마다 따로 읽히므로 새 세트 하나만 갱신해도 전체가 가려진다.
+  //   읽은 날이 없는 카드·숨김 카드는 화면에 안 나가므로 빼고(점수판 D1 이 따로 센다), 가드 NMF1(test-collect-status.js)이 지킨다.
+  nmOldest: () => {
+    let worst = null;
+    for (const set of Object.values(readJSON("data/onepiece-packs.json").sets || {})) {
+      for (const c of Object.values(set.cards || {})) if (nmUsable(c) && (!worst || c.nmUpdated < worst)) worst = c.nmUpdated;
+    }
+    return worst;
   },
 };
 
@@ -132,9 +143,6 @@ const SOURCES = [
   { key: "tcg", name: "TCG 경매(게임별)", mode: "auto", every: "6시간(스냅샷 1일 1회)", wf: "collect-tcg",
     warn: 1, late: 2, get: pick.archiveDir("data/tcg-archive"),
     files: ["tcg-archive", "tcg-snapshot.json", "tcg-series.json", "tcg-watch.json"] },
-  { key: "palworld-auction", name: "팰월드 경매", mode: "auto", every: "3시간마다", wf: "collect-auction-market",
-    warn: 2, late: 3, get: pick.field("data/palworld-auction-market.json", "updated"),
-    files: ["palworld-auction-archive", "palworld-auction-market.json", "palworld-auction-sold.json", "palworld-auction-watch.json"] },
   { key: "active", name: "진행 중 매물 관측", mode: "auto", every: "매일 03:00 KST", wf: "update-active-listings",
     warn: 2, late: 3, get: pick.field("data/active-listing-audit.json", "updated"),
     files: ["active-listing-audit.json", "supply-series.json", "listing-ids.json", "price-quality-audit.json",
@@ -188,8 +196,8 @@ const SOURCES = [
     note: "eBay 가 sold 검색을 API 로 막아 실브라우저로만 된다. **empties 가 0인지 반드시 확인** — 빈 응답을 '판매 없음'으로 삼킨 사고가 있었다(2026-09-02, 83페이지)." },
   // 주기 2~3개월 → 10일. 2026-09-02 소유자 지시("10일에 1회로 바꿔").
   { key: "nm", name: "유유테이 NM 시세(일본판 단품)", mode: "manual", every: "10일마다",
-    warn: 10, late: 14, get: pick.packsField("nm"), files: [],
-    how: "브라우저로 유유테이 카드별 NM 가격 수집 → packs.json 의 card.nmJpy/nmUpdated 갱신",
+    warn: 10, late: 14, get: pick.nmOldest, files: [],
+    how: "node tools/update-yuyutei-nm-prices.js (로컬 — 러너 IP 는 403) → 출력의 [수동검토 필요]·[큰 변동]·[파서 확인] 줄 확인 → packs.json 의 card.nmJpy/nmUpdated 갱신",
     note: "변형(패러렐·망가 등)별로 매칭해야 한다 — 번호만 보고 붙이면 값이 통째로 틀어진다." },
   // 수동으로 잘못 분류했었다(2026-09-02 정정) — update-ebay-pack-prices.js 는 eBay API 만 쓰고
   // update-active-listings·update-market-data 워크플로가 이미 돌린다. 사람이 할 일이 없다.
@@ -221,9 +229,6 @@ const SOURCES = [
   { key: "graderpop-card", name: "카드별 등급인구(PSA/CGC/TAG)", mode: "manual", every: "주 1회(월)",
     warn: 8, late: 14, get: pick.packsField("graderpop"), files: [],
     how: "psa-pop·tag-pop 수동 수집(과 CGC 자동 수집)이 packs.json 의 card.graderPop 에 반영된다(같은 작업)" },
-  { key: "palworld-box", name: "팰월드 박스 판매", mode: "manual", every: "주 1회",
-    warn: 8, late: 14, get: pick.boxLedger("data/palworld-sold-ledger.json"), files: ["palworld-sold-ledger.json"],
-    how: "node tools/palworld-sold-urls.js --setup → 브라우저 수집 → ingest" },
 ];
 
 // 시계열이 아니거나(설정·파생) 수집과 무관한 파일. **이유를 반드시 적는다** — 빈 무시는 곧 빠짐이다.
@@ -247,6 +252,13 @@ const IGNORE = {
   // 2026-06-29 에 한 번 돌린 감사 기록. 지금은 아무 스크립트도 쓰지 않는다(세부보기가 65일 정지로 찾아냈다).
   // 수집 고장이 아니라 잔재 — 지우지는 않는다(그때 무엇을 고쳤는지 남은 유일한 근거).
   "psa10-sold-audit.json": "2026-06-29 1회성 감사 기록(현재 미사용, 이력 보존용)",
+  // 2026-11-05 소유자 결정("팰월드만 수집했던 건 그냥 멈추자")으로 팰월드 전용 수집(경매 관측·정산, 박스 sold)을 지웠다.
+  // 원장은 append-only 라 지우지 않고 동결한다 — 수집원이 아니므로 신선도를 보지 않는다(가드 PW1). 팰월드는 tcg 행(13종 묶음)이 계속 본다.
+  "palworld-auction-archive": "동결 — 팰월드 전용 경매 정산 원장(2026-08-19~11-05, 수집 중단·append-only 보존)",
+  "palworld-auction-market.json": "동결 — 팰월드 전용 경매 관측(2026-08-19~11-05, 수집 중단·보존)",
+  "palworld-auction-sold.json": "동결 — 팰월드 전용 낙찰 일별 집계(2026-08-19~11-05, 수집 중단·보존)",
+  "palworld-auction-watch.json": "동결 — 팰월드 전용 정산 감시목록(수집 중단, 남은 대기는 정산하지 않는다·예산도 안 잡는다)",
+  "palworld-sold-ledger.json": "동결 — 팰월드 박스 sold 원장(2026-08-17~11-05, 수집 중단·append-only 보존)",
 };
 
 const rows = SOURCES.map((s) => {

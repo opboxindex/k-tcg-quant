@@ -15,7 +15,11 @@
 //    각주의 팩 수·팩당 엔과 FAQ 의 "about $N at MSRP" 도 같은 값으로 다시 쓴다. 정가나 환율을 못 읽으면 "—".
 //    (전에는 USD 칸의 손으로 쓴 "~$36"(7월 환율)을 읽어 곱했다 — 9/29 환율로 정의대로 계산한 값보다 1.8% 낮았다.)
 //  · 표기는 기존 표 형식 그대로: ₱·฿ 10단위, S$·RM 1단위, Rp 는 100만 이상 x.xxM / 미만 xxxK.
-//  · 필수 자리(tbody·표의 세트 행·환율 문장·기준일 두 곳·제목 줄·dateModified) 중 하나라도 없으면 글 구조가 바뀐 것이다 —
+//  · 본문 두 문장도 데이터로(2026-11-05 — 7월에 손으로 쓴 "The next set, OP-17 … August 22, 2026" 이 OP-17 발매 뒤 두 달 넘게
+//    남았고, "ranks all 21 Japanese boxes" 는 어느 값과도 맞지 않았다):
+//      <span data-next-set> = 사실 파일 releases.nextUp 의 일본 발매일(그날이 기준일 뒤일 때만, 아니면 빈 칸) — 발매일 글의 "Next release" 와 같은 세트.
+//      비교표 문장의 세트 수 = compare.html "Sets compared"(비교표 행 중 발매된 세트) 와 같은 정의.
+//  · 필수 자리(tbody·표의 세트 행·환율 문장·기준일 두 곳·제목 줄·dateModified·다음 세트 칸·비교표 문장) 중 하나라도 없으면 글 구조가 바뀐 것이다 —
 //    반쯤 고친 글을 쓰지 않고 {status:"error"} 로 exit 1.
 "use strict";
 const fs = require("fs");
@@ -56,6 +60,8 @@ const RE = {
   fx: /FX as of [A-Z][a-z]+ \d{1,2}, \d{4}/,
   heading: /(What Japanese boxes cost in your currency \()[A-Z][a-z]+ \d{4}(\))/,
   dateModified: /("dateModified": ")[^"]*(")/,
+  nextSet: /<span data-next-set>[\s\S]*?<\/span>/,
+  compareSets: /(<a href="\.\.\/compare\.html">comparison table<\/a> )(?:ranks|compares) all \d+ (?:Japanese boxes|sets)/,
 };
 const missing = Object.keys(RE).filter((k) => !RE[k].test(html));
 if (missing.length) fail("필수 자리 못 찾음", { missing });
@@ -126,6 +132,19 @@ if (mf.packsPerBox && mf.jpMsrpYenPerPack) {
     a + mf.packsPerBox + b + mf.jpMsrpYenPerPack.toLocaleString("en-US") + c);
 }
 html = html.replace(/(Japanese retail \(about )(?:\$[\d,]+|—)( at MSRP\))/, (_m, a, b) => a + (msrpUsd == null ? "—" : usd(msrpUsd)) + b);
+// 다음 세트(사실 파일 releases.nextUp — 발매일 글 "Next release" 와 같은 세트). 일본 발매일이 기준일(F.series.asOf) 뒤일 때만 쓴다.
+const nextCode = F.releases.nextUp;
+const nextRf = nextCode ? F.releaseFacts.find((r) => r.setCode === nextCode) : null;
+const nextJp = nextRf && nextRf.japanese.releaseDate;
+const nextName = nextCode && F.sets[nextCode] ? F.sets[nextCode].nameEn || F.sets[nextCode].nameFull || "" : "";
+const escH = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const nextTxt = nextJp && F.series.asOf && nextJp > F.series.asOf
+  ? ` The next set, ${escH(nextCode)}${nextName ? " " + escH(nextName) : ""}, is officially dated <strong>${longDate(nextJp)}</strong> in Japan (Bandai official).`
+  : "";
+html = html.replace(RE.nextSet, () => `<span data-next-set>${nextTxt}</span>`);
+// 비교표 세트 수 = compare.html "Sets compared"(사실 파일 compare.rows 중 발매된 세트 — inject-set-comparison 과 같은 정의).
+const compareSets = F.compare.rows.filter((r) => !(F.sets[r.code] || {}).unreleased).length;
+html = html.replace(RE.compareSets, (_m, a) => `${a}compares all ${compareSets} sets`);
 
 // 수정일은 이 글이 쓰는 두 데이터(시세·환율) 중 늦은 날짜. JSON-LD 와 화면 바이라인을 같이 맞춘다.
 const modDate = FX.date > dataDate ? FX.date : dataDate;
@@ -139,5 +158,5 @@ if (/Updated <time datetime="/.test(html)) {
 if (html === before) skip("바뀐 것 없음");
 fs.writeFileSync(ART, html);
 console.log(JSON.stringify({
-  status: "ok", dataDate, fxDate: FX.date, rows: order.length, fresh: freshRows, msrp: msrpUsd != null,
+  status: "ok", dataDate, fxDate: FX.date, rows: order.length, fresh: freshRows, msrp: msrpUsd != null, nextSet: nextTxt ? nextCode : null, compareSets,
 }));

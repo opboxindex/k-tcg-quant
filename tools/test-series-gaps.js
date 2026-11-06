@@ -38,8 +38,11 @@ try {
   write("tcg-series.json", { daily: ALL.map((d) => ({ d, games: Object.fromEntries(GAMES.map((k) => [k, { ended: 100 }])) })) });
   write("auction-watch.json", { pending: [] });
   write("tcg-watch.json", { pending: [] });
-  write("palworld-auction-market.json", { points: ALL.map((d) => ({ d })) });
-  write("palworld-auction-sold.json", { daily: ALL.map((d) => ({ d })) });
+  // 팰월드 전용 원장은 2026-11-05 수집 중단으로 동결됐다(가드 PW1) — 9/10 에 멈추고 중간도 빈 모양으로 둔다.
+  // 감사가 이걸 계속 보면 동결 다음 날부터 매일 새 공백이 떠 K1·자가치유가 헛돈다. 아래 평시 검사(problems 정확히 1건)가 막는다.
+  const FROZEN = ALL.filter((d) => d <= "2026-09-10" && d !== "2026-09-05");
+  write("palworld-auction-market.json", { points: FROZEN.map((d) => ({ d })) });
+  write("palworld-auction-sold.json", { daily: FROZEN.map((d) => ({ d })) });
   write("auction-market.json", { points: ALL.map((d) => ({ d })) });
   write("supply-series.json", { sets: { "OP-01": { points: ALL.map((d) => ({ d })) } } });
   // 박스 진행매물: JP 는 OP-01 이 Ebay 키, OP-16 이 원래 키(WM 원본 없는 세트) — 둘을 합쳐 본다. 9/20 은 진행매물 점이 없다.
@@ -49,7 +52,7 @@ try {
     "OP-16": { boxSeries: { points: [{ d: "2026-09-21", basis: "active" }] } },
   } });
   write("box-sold-ledger.json", { collectedDays: ALL, sets: {} });
-  write("palworld-sold-ledger.json", { collectedDays: ALL, sets: {} });
+  write("palworld-sold-ledger.json", { collectedDays: FROZEN, sets: {} });
   const mondays = ["2026-09-07", "2026-09-14", "2026-09-21", "2026-09-28"];
   // PSA 카드별: 9/14 수집은 값이 안 변해 d 는 9/12(W37) 그대로, seen 만 9/14(W38) — 실제 2026-09-14 모양.
   write("psa-card-pop.json", { sets: { "OP-01": { jp: { "OP01-001|base": [
@@ -69,6 +72,12 @@ try {
   // 그 밖엔 아무것도 안 떠야 한다(온전한 데이터에서 오탐 금지).
   assert.deepEqual(out.report.problems, ["박스 진행매물 시계열 JP — 최근 21일 중 1일 비었다: 2026-09-20"], out.result.stdout);
   assert.deepEqual(out.report.knownWrong, []);
+  assert.ok(![...out.report.problems, ...out.report.notes].some((x) => /팰월드/.test(x)), `동결된 팰월드 전용 원장을 감사하면 안 된다: ${out.result.stdout}`);
+  // 동결된 계열 이름으로 known-gaps 를 남겨 두면 아무것도 안 덮는 등록이다 — 오기재로 잡아 빼게 한다(K1).
+  write("known-gaps.json", { gaps: [{ series: "팰월드 경매 관측", dates: ["2026-09-05"], reason: "테스트 — 동결된 계열", confirmed: "2026-09-30" }] });
+  out = run("2026-09-30");
+  assert.ok(has(out.report.knownWrong, /^팰월드 경매 관측 — 날 단위로 감사하는 계열 이름이 아니다/), out.result.stdout);
+  write("known-gaps.json", { gaps: [] });
 
   // ③ 등록이 데이터와 맞으면 메모, 어긋나면 knownWrong.
   write("known-gaps.json", { gaps: [

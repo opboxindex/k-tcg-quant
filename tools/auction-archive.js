@@ -14,11 +14,9 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
-// 게임별 아카이브 — 2026-08-19. 기본은 원피스라 기존 호출부는 바꾸지 않아도 된다.
-// 팰월드는 data/palworld-auction-archive/ 로 따로 쌓는다. 한 디렉터리에 섞으면
-// 나중에 "이 낙찰이 어느 게임 것인가"를 제목으로 되짚어야 한다.
-const GAME = (process.argv.find((a) => a.startsWith("--game=")) || "--game=onepiece").split("=")[1];
-const DIR = path.join(ROOT, "data", GAME === "onepiece" ? "auction-archive" : `${GAME}-auction-archive`);
+// 원피스 원장 한 곳이다. 팰월드 전용 원장(data/palworld-auction-archive/, 2026-08-19~11-05)은 --game 플래그로 따로
+// 쌓았는데 2026-11-05 소유자 결정으로 수집을 멈추며 그 플래그를 지웠다 — 그 디렉터리는 동결(append-only, 지우지 않는다).
+const DIR = path.join(ROOT, "data", "auction-archive");
 
 const dayPath = (d) => path.join(DIR, `${d}.json`);
 

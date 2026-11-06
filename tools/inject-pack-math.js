@@ -102,8 +102,10 @@ for (const rf of F.releaseFacts) {
 const lead =
   `Japanese retail is fixed per pack, so every box has a printed baseline you can measure the market against. ` +
   `The table below puts Bandai's Japanese MSRP next to what a sealed box actually sold for, per set and per pack. ` +
+  // 세는 대상 = 배수(“vs MSRP”)가 계산된 세트 — 2026-11-05. 종전 문장은 "판매 중앙값이 있는 세트"라고 쓰고 배수 세트를 셌다
+  //   (판매 중앙값은 있지만 박스당 팩 수가 미공개인 EB-05 가 빠져 19 가 18 로 적혔다). 문장을 센 대상의 정의에 맞춘다(가드 TX4).
   (liveCount
-    ? `Across the ${liveCount} sets with a sold median dated within the last ${STALE_DAYS} days, the widest gap is ` +
+    ? `Across the ${liveCount} sets with a “vs MSRP” multiple in the table below, the widest gap is ` +
       `<strong>${esc(dearest.code)}</strong> at ${dearest.mult.toFixed(1)}× Japanese retail per pack ($${dearest.packUsd.toFixed(2)}), ` +
       `and the narrowest is <strong>${esc(cheapest.code)}</strong> at ${cheapest.mult.toFixed(1)}× ($${cheapest.packUsd.toFixed(2)}). `
     : "") +
@@ -138,7 +140,7 @@ let wrote = [];
     const boxYen = nf.msrpYenPerBox || nf.msrpYenPerPack * packs;
     const stated = nf.msrpYenPerBoxBasis == null && nf.msrpYenPerBox;
     const src = nf.specSource || nf.releaseSource;
-    jpLi = `<li><strong>Japanese booster pack:</strong> 6 cards per pack (Bandai official). A 24-pack box holds <strong>144 cards</strong>. For the newest set, ${esc(newest)}${nameEn ? ` ${esc(nameEn)}` : ""}, <a href="${esc(src)}" rel="noopener noreferrer" target="_blank">Bandai lists</a> an MSRP of <strong>${yen(nf.msrpYenPerPack)} per pack</strong> (tax included)${stated ? ` — <strong>${yen(boxYen)} per box</strong>` : `; its page states no box configuration — at the standard ${packs} packs that is <strong>${yen(boxYen)}</strong>`}, about <strong>$${jpyUsd(boxYen).toFixed(2)}</strong> at ¥1 = $${rate.toFixed(5)} (${longDate(FX.date)}). Earlier sets launched at lower pack prices, so check the official product page for a specific set's original MSRP.</li>`;
+    jpLi = `<li><strong>Japanese booster pack:</strong> 6 cards per pack (Bandai official). A 24-pack box holds <strong>144 cards</strong>. For the newest main set, ${esc(newest)}${nameEn ? ` ${esc(nameEn)}` : ""}, <a href="${esc(src)}" rel="noopener noreferrer" target="_blank">Bandai lists</a> an MSRP of <strong>${yen(nf.msrpYenPerPack)} per pack</strong> (tax included)${stated ? ` — <strong>${yen(boxYen)} per box</strong>` : `; its page states no box configuration — at the standard ${packs} packs that is <strong>${yen(boxYen)}</strong>`}, about <strong>$${jpyUsd(boxYen).toFixed(2)}</strong> at ¥1 = $${rate.toFixed(5)} (${longDate(FX.date)}). Earlier sets launched at lower pack prices, so check the official product page for a specific set's original MSRP.</li>`;
   }
   // 영문판 팩 구성(반다이 영문 상품 페이지) — 사실 파일 enPackContents(자연 정렬).
   const enFacts = Object.keys(F.enPackContents);

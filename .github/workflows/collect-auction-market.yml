@@ -60,13 +60,8 @@ jobs:
       - name: Collect
         run: node tools/collect-auction-market.js ${{ steps.mode.outputs.flag }}
 
-      # 팰월드도 같은 깊이로 본다(종류별·세트별·수량별) — 2026-08-19.
-      # 다른 TCG 16종은 collect-tcg-snapshot.js 가 개괄만 훑는다. 팰월드는 우리가 원장을
-      # 따로 쌓는 두 번째 게임이라 여기서 세분한다.
-      # 실패해도 원피스 수집을 막지 않는다: 팰월드가 없다고 원피스 관측을 버릴 이유가 없다.
-      - name: Collect (Palworld)
-        continue-on-error: true
-        run: node tools/collect-auction-market.js --game=palworld ${{ steps.mode.outputs.flag }}
+      # 팰월드 전용 관측 단계(2026-08-19~)는 2026-11-05 소유자 결정으로 지웠다. data/palworld-auction-* 은 동결 원장이라
+      # 커밋·병합 목록에서도 뺐다(가드 PW1). 팰월드는 collect-tcg 의 13종 묶음에서 계속 본다.
 
       # 경매 원장에서 "말할 수 있는 발견"을 매번 다시 계산한다(표본·신뢰구간 기준 미달이면 내놓지 않음).
       # 2026-09-02 에 collect-status 가 이 산출물을 이 워크플로 몫으로 기대하게 됐는데 실행이 빠져 있었다(2026-09-07 발견).
@@ -78,13 +73,13 @@ jobs:
 
       - name: Commit changes
         run: |
-          if git diff --quiet data/auction-market.json data/auction-watch.json data/palworld-auction-market.json data/palworld-auction-watch.json data/auction-findings.json; then
+          if git diff --quiet data/auction-market.json data/auction-watch.json data/auction-findings.json; then
             echo "No auction market changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/auction-market.json data/auction-watch.json data/palworld-auction-market.json data/palworld-auction-watch.json data/auction-findings.json
+          git add data/auction-market.json data/auction-watch.json data/auction-findings.json
           git commit -m "Collect auction market snapshot"
           # 야간 워크플로나 사람 커밋과 겹칠 수 있다. 실패하면 리베이스 후 재시도.
           for attempt in 1 2 3; do
@@ -101,7 +96,7 @@ jobs:
             if ! git pull --rebase; then
               for f in $(git diff --name-only --diff-filter=U); do
                 case "$f" in
-                  data/auction-watch.json|data/palworld-auction-watch.json|data/tcg-watch.json) node tools/merge-watch-json.js "$f" && git add "$f" ;;
+                  data/auction-watch.json|data/tcg-watch.json) node tools/merge-watch-json.js "$f" && git add "$f" ;;
                   *) echo "::error::병합 불가 충돌: $f"; git rebase --abort; exit 1 ;;
                 esac
               done
@@ -120,8 +115,6 @@ jobs:
           path: |
             data/auction-market.json
             data/auction-watch.json
-            data/palworld-auction-market.json
-            data/palworld-auction-watch.json
             data/auction-findings.json
           retention-days: 14
           if-no-files-found: warn

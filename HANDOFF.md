@@ -1,5 +1,19 @@
 # 인수인계 — OP Box Index (opboxindex.com)
 
+## 2026-11-05(목) — 외부 감사 확정 오류 정정 + 팰월드 전용 수집 중단(소유자 결정)
+
+- **PSA 10 최저 매물 판본**: 다른 판(OP-01 Romance Dawn 등)·두 카드가 함께 쓰던 매물을 숨긴다. 규칙은
+  `tools/ebay-psa10-listing-filter.js`(수집기·사실 빌더 공용), 표시는 `build-site-facts.js` 의 `src.psa10Rejected`.
+  `update-ebay-psa10-active-links.js --prune` 으로 저장 데이터 16장 정리. 가드 PSA10-SHARE·PSA10-AUDIT.
+- **유유테이 NM 파서**: 쪽마다 첫 상품이 메뉴와 묶여 사라지던 것 수정, 23세트 재수집(11-05). NM 신선도는 이제
+  가장 오래 읽은 화면 카드 기준(collect-status nm 행). 가드 NMP1·NMF1.
+- **낡은 값 표시**: 세트 NM 칸 'as of MM-DD', 대표 PSA 10·체크포인트 이월 칸은 흐림(28/35일). 가드 DSP1~DSP5.
+- **손으로 쓴 숫자**: 홈 세트·글 수, 동남아 글 다음 세트, 팩 산수 정의, 6개월·OP-16 리포트 기준 라벨, changelog 9/24 이후 기록. 가드 TX1~TX9.
+- **팰월드 전용 수집 중단**: 경매 관측·정산(--game=palworld)·박스 sold 적재를 지웠다. `data/palworld-*` 는 동결(append-only 보존,
+  collect-status IGNORE). 가드 PW1. TCG 13종 묶음 안의 팰월드는 그대로다.
+  **남은 순서 주의**: `tools/palworld-sold-urls.js` 삭제 커밋(fix-1105-palworld 0fc7cafa5)은 아직 안 합쳤다 —
+  `box-sold-cdp/runner.js` 36행이 이 파일을 최상단에서 require 하므로, runner.js·daily.ps1 의 팰월드 부분을 먼저 지운 뒤에만 합친다.
+
 ## 2026-08-12(수) — EPN 제휴 고지 위반 대응(기한 8/19)·배포·감사
 
 - **EPN 위반 통지를 받았다(2026-08-10).** Participation Requirements I.G. 위반. 지적 내용은

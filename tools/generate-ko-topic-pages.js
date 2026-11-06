@@ -59,7 +59,13 @@ function psa10Krw(c) {
 // 2026-10-20: 나이·배수는 사실 계층(build-site-facts psa10.ageDays·multiple) 값을 그대로 쓴다. 여기서 날짜만 잘라 다시 세면
 //   관측 시각이 빠져 하루 차이로 35일 경계가 갈렸다(무인 수집 가드 CX2 FAIL — OP06-118 등 5장 "—" vs 사실 2.2).
 const p10AgeOf = (r) => (Number.isFinite(r.p10Age) ? r.p10Age : NaN);
-const p10Cell = (r) => `${won(r.p10Krw)}${p10AgeOf(r) > 28 ? `<small>(${esc(r.p10Date)})</small>` : ""}`;
+// 35일 넘은 표본(사실 psa10.stale)은 날짜를 붙인 채 흐린다 — 영문 랭킹·카드 상세와 같은 "날짜 + 흐림" 규칙(2026-11-05).
+const p10Cell = (r) => `${r.p10Stale ? `<span class="stale" title="PSA 10 관측일 ${esc(r.p10Date)} — ${F.staleDays.psa10}일 넘음">` : ""}${won(r.p10Krw)}${p10AgeOf(r) > 28 ? `<small>(${esc(r.p10Date)})</small>` : ""}${r.p10Stale ? "</span>" : ""}`;
+// NM 칸 — 28일 넘게 다시 읽지 못한 값(사실 nm.stale)은 흐린다(관측일은 표 아래 라벨). cls = 그 칸의 기존 class.
+const nmTd = (r, cls = "") => {
+  const c = [cls, r.nmStale ? "stale" : ""].filter(Boolean).join(" ");
+  return `<td${c ? ` class="${c}"` : ""}${r.nmStale ? ` title="NM 관측일 ${esc(r.nmDate || "")} — ${F.staleDays.nm}일 넘음"` : ""}>${won(r.nmKrw)}</td>`;
+};
 const multCell = (r) => (r.mult != null ? "×" + r.mult.toFixed(1) : "—");
 
 // ── 카드명 한글 병기 — 사전은 tools/ko-labels.js 한 곳(영문 auction.html 의 토글 data-ko 와 같은 사전). 2026-10-13 분리.
@@ -145,6 +151,7 @@ ${koHeadTags({ file, title, desc, breadcrumbName, enHref })}
         .koBoard td.l .cardCell { gap: 7px; min-width: 0; }
       }
       .koBoard th.w, .koBoard td.w { white-space: normal; }
+      .koBoard td.stale, .koBoard span.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koBoard td.l a { color: var(--accent); }
       .koSteps { color: #cfd6e4; font-size: 13.5px; line-height: 1.8; max-width: 760px; padding-left: 20px; margin: 8px 0 14px; }
     </style>
@@ -180,8 +187,8 @@ function cardsPage() {
       if (!c.nm.usable || !c.number) continue;   // 읽은 날 없는 NM·숨김 표시 NM 은 싣지 않는다(2026-10-15)
       const p10 = psa10Krw(c);
       rows.push({
-        code, name: c.name, number: String(c.number), nmKrw: c.nm.krw,
-        p10Krw: p10 ? p10.krw : null, n: p10 ? p10.n : null, p10Date: p10 ? p10.d : null, p10Age: p10 ? p10.age : null, mult: p10 ? p10.mult : null,
+        code, name: c.name, number: String(c.number), nmKrw: c.nm.krw, nmDate: c.nm.date, nmStale: !!c.nm.stale,
+        p10Krw: p10 ? p10.krw : null, n: p10 ? p10.n : null, p10Date: p10 ? p10.d : null, p10Age: p10 ? p10.age : null, mult: p10 ? p10.mult : null, p10Stale: !!(p10 && c.psa10.stale),
         thumb: thumbHtml(c), ko: koCharOf(c.name),
       });
     }
@@ -189,12 +196,16 @@ function cardsPage() {
   rows.sort((a, b) => b.nmKrw - a.nmKrw);
   const top = rows.slice(0, 30);
   const sold = rows.filter((r) => r.p10Krw != null).sort((a, b) => b.p10Krw - a.p10Krw).slice(0, 20);
+  // NM 관측일 범위(라벨) — 종전엔 이 페이지 어디에도 NM 날짜가 없어 표 아래 "마지막 갱신"(데이터 날짜)이 NM 값의 날짜처럼 읽혔다(2026-11-05).
+  const nmDays = rows.map((r) => r.nmDate).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d || "")).sort();
+  const nmSpan = nmDays.length ? (nmDays[0] === nmDays.at(-1) ? nmDays[0] : `${nmDays[0]}~${nmDays.at(-1)}`) : "";
+  const anyStale = rows.some((r) => r.nmStale || r.p10Stale);
 
   // 카드 셀 — 한글 캐릭터명이 잡히면 [한글 / 영문 원본] 두 줄, 안 잡히면 영문만.
   const cell = (r) => `<td class="l"><span class="cardCell">${r.thumb}<span>${r.ko ? `${esc(r.ko)}<small>${esc(r.name)}</small>` : esc(r.name)}<small>${esc(r.number)} · ${esc(r.code)} ${esc(nameKo(r.code))}</small></span></span></td>`;
 
-  const tr = top.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}<td class="hideM">${won(r.nmKrw)}</td><td>${r.p10Krw != null ? p10Cell(r) : '<span style="color:#6a7182;font-size:12px">집계중</span>'}</td><td>${multCell(r)}</td></tr>`).join("\n");
-  const sTr = sold.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}<td>${p10Cell(r)}</td><td class="hideM">${num(r.n)}</td><td class="hideM">${won(r.nmKrw)}</td><td>${multCell(r)}</td></tr>`).join("\n");
+  const tr = top.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}${nmTd(r, "hideM")}<td>${r.p10Krw != null ? p10Cell(r) : '<span style="color:#6a7182;font-size:12px">집계중</span>'}</td><td>${multCell(r)}</td></tr>`).join("\n");
+  const sTr = sold.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}<td>${p10Cell(r)}</td><td class="hideM">${num(r.n)}</td>${nmTd(r, "hideM")}<td>${multCell(r)}</td></tr>`).join("\n");
 
   const soldBlock = sold.length ? `
       <h2>PSA 10 실낙찰가 상위 ${sold.length} (일판)</h2>
@@ -222,7 +233,7 @@ ${bySet.map((g) => `      <h3 id="set-${g.code.toLowerCase()}"><a href="${g.code
       <table class="koBoard">
         <thead><tr><th>#</th><th class="l">카드 (번호)</th><th>일판 NM 시세</th><th class="hideM">PSA 10 실낙찰</th></tr></thead>
         <tbody>
-${g.list.map((r, i) => `<tr><td>${i + 1}</td>${cellShort(r)}<td>${won(r.nmKrw)}</td><td class="hideM">${r.p10Krw != null ? p10Cell(r) : "—"}</td></tr>`).join("\n")}
+${g.list.map((r, i) => `<tr><td>${i + 1}</td>${cellShort(r)}${nmTd(r)}<td class="hideM">${r.p10Krw != null ? p10Cell(r) : "—"}</td></tr>`).join("\n")}
         </tbody>
       </table>
       </div>`).join("\n")}`;
@@ -236,7 +247,7 @@ ${tr}
         </tbody>
       </table>
       </div>
-      <p class="koNote">일판 NM = 일본 리테일 무등급 재고가 · PSA 10 실낙찰 = 이베이 낙찰 중앙값(표본 3건 이상) · 집계중 = 표본 3건 미만 · 배수 = PSA 10 ÷ NM(PSA 10 표본 35일 이내) · 정발(한글판) 미수록</p>${soldBlock}${allBlock}
+      <p class="koNote">일판 NM = 일본 리테일 무등급 재고가${nmSpan ? ` · NM 관측일 ${esc(nmSpan)}` : ""} · PSA 10 실낙찰 = 이베이 낙찰 중앙값(표본 3건 이상) · 집계중 = 표본 3건 미만 · 배수 = PSA 10 ÷ NM(PSA 10 표본 35일 이내)${anyStale ? ` · 흐림 = NM ${F.staleDays.nm}일·PSA 10 ${F.staleDays.psa10}일 넘은 값` : ""} · 정발(한글판) 미수록</p>${soldBlock}${allBlock}
       <h2>표기 — 일판 · 정발 · 패러렐 · 망가 아트</h2>
       <div style="overflow-x:auto">
       <table class="koBoard">

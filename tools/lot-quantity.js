@@ -36,10 +36,9 @@ const PACK_COUNT = /(?<![A-Za-z0-9.-])(\d{1,2})[\s-]*(?:booster\s*)?pack(?:s)?\b
 const PLURAL_BOXES = /\bbox(?:es)\b/i;
 const PLURAL_PACKS = /\bpacks\b/i;
 
-// opts.perBox: 박스당 팩 수를 밖에서 지정한다(기본은 아래 원피스 규칙 — 일반 24, 프리미엄 20).
-// 팰월드 BP-01 은 12팩/박스라 24 로 나누면 "12 packs" 짜리 정상 1박스가 통째로 버려진다.
-// 원피스 판정은 guard Q1 코퍼스가 지키고 있으므로 기본 동작은 건드리지 않고 옵션으로만 연다.
-function parseLotQuantity(title, kind, opts) {
+// 박스당 팩 수는 원피스 규칙(일반 24, 프리미엄 20) 하나다. 팰월드 BP-01(12팩/박스)용 opts.perBox 는
+// 그 유일한 호출부(palworld-sold-ingest.js)를 2026-11-05 팰월드 전용 수집 중단으로 지우며 함께 뺐다.
+function parseLotQuantity(title, kind) {
   const t = String(title || "").replace(SET_CODE_STRIP, " ").replace(VOLUME_STRIP, " ");   // 세트/카드코드·연도·권 번호 오인 방지
   const counts = new Set();
   const pats = [...MULT_PATTERNS];
@@ -66,7 +65,7 @@ function parseLotQuantity(title, kind, opts) {
       //    24 로만 나누면 "PRB-01 Premium Booster Box 20 Packs" 같은 정상 1박스가 통째로 버려진다
       //    (2026-08-13: 실제로 PRB 영문판 7건이 그렇게 빠질 뻔했다).
       // 원 제목에서 본다 — VOLUME_STRIP 이 "Premium Booster 2" 를 지우면 t 에는 이 말이 안 남는다.
-      const perBox = (opts && opts.perBox) || (/premium\s*booster/i.test(String(title || "")) ? 20 : 24);
+      const perBox = /premium\s*booster/i.test(String(title || "")) ? 20 : 24;
       // 여럿 적혀 충돌하거나 박스 단위로 안 떨어지면 모름.
       // 안 떨어지는 수(17·16·18팩)는 박스가 아니라 낱팩 묶음이다 — 박스 시세에 넣으면 안 된다.
       if (packs.length > 1 || packs[0] % perBox !== 0) return null;

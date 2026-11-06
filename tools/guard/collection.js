@@ -4,10 +4,13 @@
 //  Q1 다수량 개당가·sold 판정·판매일 표시일 [2026-07-22·10-01] · Q2 경매 분류(팩·카톤·개봉) · Q3 TAG 세트명 매핑 · Q4 변형(tier) 매칭 [2026-07-24 박스토퍼 오염]
 //  Q5 시리즈 이름 충돌(EB-03/EB-05) [2026-09-30] · W1 산출물 커밋 누락 [2026-07-20 rebase 실패] · W2 건강검사 !cancelled() [2026-09-30] · W3 러너 0건 성공 금지 [2026-09-30]
 //  W4 전역 신선도 감사는 커밋 뒤 [2026-09-30 CGC W39 영구 공백] · G9(워크플로) CGC 덤프 → 세트 합 적재 + 화면 블록 [2026-09-30]
+//  PW1 팰월드 전용 수집이 되살아나지 않는다 [2026-11-05 소유자 결정으로 중단·원장 동결]
 //  외부(external, 러너가 병렬로 돌린다): R4·Q1 회귀·G9 적재 테스트·R5 수집 신뢰성 테스트 5개·K1/K2 known-gaps [2026-09-30]·A4 애드센스 준비도 감사
 const { errors, read, exists, list, packs } = require("./lib");
 
-const checks = ["D14", "R3", "R4", "Q1", "Q2", "Q3", "Q4", "Q5", "W1", "W2", "W3", "W4", "G9", "R5", "K1", "K2", "A4"];
+//  NMP1 유유테이 파서 첫 상품이 메뉴(MENU·収録弾)와 묶여 사라짐 [2026-11-05, 23쪽 전부 — 4장 NM '—'] (외부: test-yuyutei-parser.js)
+//  NMF1 유유테이 NM 행이 최댓값이라 새 세트 하나만 갱신해도 전체 지연이 가려짐 [2026-11-05] — test-collect-status.js 안(R4 가 돌린다)
+const checks = ["D14", "R3", "R4", "Q1", "Q2", "Q3", "Q4", "Q5", "W1", "W2", "W3", "W4", "G9", "R5", "K1", "K2", "A4", "NMP1", "PW1"];
 const tail = (r) => (r.stderr || r.stdout || "unknown").trim().slice(0, 500);
 const testFail = (id, name) => ({ id, args: [`tools/${name}`], judge: (r) => (r.status !== 0 ? [`${id}: ${name} 실패 — ${tail(r)}`] : []) });
 // 러너(guard-invariants.js)가 모듈 실행 전에 전부 띄우고 끝에 결과를 받는다 — 직렬 4초가 병렬 1.3초.
@@ -18,6 +21,7 @@ const external = [
   ...["test-auction-continuity.js", "test-ebay-budget-schedule.js", "test-self-heal-policy.js", "test-workflow-dispatch.js", "test-tcg-trend-model.js"].map((t) => testFail("R5", t)),
   { id: "K1", args: ["tools/audit-series-gaps.js", "--json"], judge: (r) => { let j = null; try { j = JSON.parse(r.stdout); } catch {} return !j || !Array.isArray(j.knownWrong) ? [`K1: 공백 감사가 결과를 못 냈다 — ${tail(r).slice(0, 300)}`] : j.knownWrong.map((m) => `K1: data/known-gaps.json 오기재 — ${m}`); } },
   testFail("K2", "test-series-gaps.js"),
+  testFail("NMP1", "test-yuyutei-parser.js"),
   { id: "A4", args: ["tools/audit-adsense-readiness.js"], judge: (r) => { if (r.status === 0) return []; let j = null; try { j = JSON.parse(r.stdout || ""); } catch {} return Array.isArray(j?.errors) && j.errors.length ? j.errors.map((e) => `A4: ${e}`) : [`A4: AdSense readiness 감사 실패 — ${tail(r)}`]; } },
 ];
 
@@ -94,6 +98,29 @@ function run() {
     [() => ourTier("Boa Hancock Box Topper"), "boxtopper"], [() => ourTier("Silvers Rayleigh Parallel Manga"), "super"], [() => ourTier("Marshall D. Teach SP Silver"), "silver"],
   ]) { let got; try { got = fn(); } catch (e) { got = "ERR:" + e.message; } if (got !== want) errors.push(`Q4: tier 매칭 회귀 — ${fn.toString().slice(10, 80)} → ${got} (기대 ${want})`); }
   workflows();
+  palworldStopped();
+}
+
+// PW1 — 팰월드 전용 수집(경매 관측·정산 --game=palworld, 박스 sold 적재)은 2026-11-05 소유자 결정("팰월드만 수집했던 건 그냥
+// 멈추자")으로 지웠고 원장 data/palworld-* 은 append-only 라 동결했다. 되살아나면 감시 없이 동결 원장이 몰래 다시 자라고,
+// 그 콜만큼 eBay 한도가 TCG 13종(남는 몫은 같은 몫)에서 빠진다. 반대로 감시·예산만 남으면 동결 원장 때문에 매일 FAIL 하거나
+// 아무도 안 읽을 몫을 잡는다. 팰월드는 TCG 13종 묶음(tcg-config.js·collect-tcg)에서만 본다 — 그쪽은 이 검사 대상이 아니다.
+function palworldStopped() {
+  const code = (f) => read(f).replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");   // 주석(중단 이력)은 본다고 치지 않는다
+  for (const wf of list(".github/workflows", /\.ya?ml$/)) {
+    read(`.github/workflows/${wf}`).split(/\r?\n/).forEach((line, i) => {
+      if (!/^\s*#/.test(line) && /palworld-(auction|sold)|--game=/.test(line)) errors.push(`PW1: ${wf}:${i + 1} 가 팰월드 전용 수집을 다시 돌리거나 동결 원장을 커밋한다 — ${line.trim().slice(0, 100)}`);
+    });
+  }
+  for (const f of ["tools/palworld-sold-urls.js", "tools/palworld-sold-ingest.js"]) if (exists(f)) errors.push(`PW1: ${f} 가 다시 생겼다 — 팰월드 박스 sold 수집은 멈췄다(palworld-sold-ledger.json 동결)`);
+  for (const f of ["tools/collect-auction-market.js", "tools/settle-auctions.js", "tools/auction-archive.js"]) {
+    if (/--game|palworld/i.test(code(f))) errors.push(`PW1: ${f} 에 게임 전환(--game)·팰월드 경로가 다시 생겼다 — 원피스 전용이다`);
+  }
+  if (/palworld/i.test(code("tools/ebay-budget.js"))) errors.push("PW1: ebay-budget.js 가 팰월드 몫을 다시 잡는다 — 동결된 감시목록은 세지 않는다(남는 몫은 TCG 13종이 같은 몫)");
+  for (const f of ["tools/audit-collection-health.js", "tools/audit-series-gaps.js"]) {
+    if (/palworld-(auction|sold)/.test(code(f))) errors.push(`PW1: ${f} 가 동결된 팰월드 원장의 신선도·공백을 다시 본다 — 수집이 없으니 매일 FAIL 한다`);
+  }
+  if (/key:\s*"palworld/.test(code("tools/collect-status.js"))) errors.push("PW1: collect-status.js 에 팰월드 수집원 행이 다시 생겼다 — 동결 원장은 IGNORE 에 둔다");
 }
 
 // W1 — 워크플로가 돌리는 도구가 쓰는 data/*.json·루트 산출물은 전부 커밋 목록(git add·git diff --quiet 동일)에 있어야 한다

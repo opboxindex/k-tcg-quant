@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-// 시계열 공백 감사 — 2026-08-26 신설. 원피스 · 팰월드 · TCG 시장 전부.
+// 시계열 공백 감사 — 2026-08-26 신설. 원피스 · TCG 시장 전부.
+// 팰월드 전용 계열(경매 관측·낙찰 일별·박스 sold)은 2026-11-05 소유자 결정으로 수집을 멈추고 원장을 동결해 여기서 뺐다 —
+// 동결 원장을 계속 보면 날마다 새 공백이 떠 가드·자가치유가 헛돈다. 팰월드는 'TCG 정산 일별'(13종 묶음)에서 계속 본다(가드 PW1).
 //
 // 왜: 기존 audit-collection-health.js 는 **가장 최근 날짜**만 본다. 어제 것이 있으면 OK 다.
 // 그래서 중간에 며칠이 통째로 빠져도 통과한다. 실거래·경매 관측은 **소급 수집이 안 된다** —
@@ -63,9 +65,9 @@ const knownWeek = (label, w) => KNOWN.byWeek.has(`${label}|${w}`);
 
 // 계열별 "그날·그 주가 비었나" 판정 — 감사와 D) 검증이 같은 기준을 쓴다. 한 계열에 규칙이 여럿이면(빠진 날 +
 // 부분수집) 하나라도 비었다고 하면 빈 것이다.
-// 남아 있는 첫 점보다 앞은 반박할 근거가 없으니 빈 것으로 본다 — 2026-09-30. 시장 스캔·팰월드 관측은 180점,
+// 남아 있는 첫 점보다 앞은 반박할 근거가 없으니 빈 것으로 본다 — 2026-09-30. 시장 스캔은 180점,
 // 공급은 180일, 스냅샷은 730일만 남기고 앞을 잘라낸다. 잘린 날을 "비어 있지 않다"고 하면 날짜가 지나는 것만으로
-// 가드 K1 이 FAIL 해 가드를 도는 수집 워크플로 7개가 멈춘다(9/26 R4 사고와 같은 모양, 팰월드 8/27 등록은 2027-02 말).
+// 가드 K1 이 FAIL 해 가드를 도는 수집 워크플로 7개가 멈춘다(9/26 R4 사고와 같은 모양).
 const dayRules = new Map(), weekRules = new Map();
 const addRule = (rules, label, fn) => rules.set(label, [...(rules.get(label) || []), fn]);
 
@@ -185,13 +187,6 @@ if (tcgSeries) {
   addRule(dayRules, SAMPLE_LABEL, (d) => !firstSampleDay || d < firstSampleDay || sampleShortfall(d).length > 0);
 }
 
-const pw = read("data/palworld-auction-market.json");
-if (pw) checkDaily("팰월드 경매 관측", (pw.points || []).map((r) => r.d));
-else problems.push("팰월드 경매 관측 파일을 못 읽었다");
-
-const pwSold = read("data/palworld-auction-sold.json");
-if (pwSold) checkDaily("팰월드 낙찰 일별", (pwSold.daily || []).map((r) => r.d));
-
 if (DAILY_ONLY) process.exit(finish());
 
 // ── A2) 진행 매물·시장 스캔(매일) — 2026-09-30 편입 ─────────────────────
@@ -255,7 +250,6 @@ function checkManual(label, ledgerPath) {
   if (!missed.length && !covered.length) notes.push(`${label} — 최근 ${WINDOW}일 수집일 전부 실행됨(마지막 ${days[days.length - 1]})`);
 }
 checkManual("원피스 박스 sold", "data/box-sold-ledger.json");
-checkManual("팰월드 sold", "data/palworld-sold-ledger.json");
 
 // ── C) 주간 수집(등급) ──────────────────────────────────────────────
 // 등급 인구는 누적값이라 하루 늦어도 값이 사라지진 않는다. 다만 주가 통째로 빠지면

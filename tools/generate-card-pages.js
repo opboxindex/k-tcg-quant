@@ -227,7 +227,11 @@ for (const { code, set: s, card: c } of cands) {
   // 못 쓰는 NM 빼기는 사실 파일 cards[i].checkpoints 가 한다(2026-10-15).
   const ser = c.checkpoints;
   // 체크포인트 캡션 = 열 정의만(2026-10-15 소유자 결정) — "… checkpoints use …; missing cells remain unestimated" 설명 절은 지웠다.
-  const serRows = ser.length >= 2 ? ser.slice(-6).map((p) => `<tr><td>${esc(p.d)}</td><td class="num">${p.nm != null ? usd(p.nm) : "—"}</td><td class="num">${p.psa != null ? usd(p.psa) : "—"}</td></tr>`).join("") : "";
+  // 이월 칸(2026-11-05) — 그 날짜에 새로 읽은 값이 아니라 앞선 관측을 다시 적은 칸(사실 nmAsOf·psaAsOf = 실제 관측일)은 흐리고 관측일을 붙인다.
+  //   종전엔 OP13-118 의 07-10 PSA 10 · 10-21 NM 관측이 10-28~11-04 여섯 행에 새 행처럼 반복됐다. 행은 그대로 둔다.
+  const cpCell = (v, asOf) => (v == null ? `<td class="num">—</td>` : asOf ? `<td class="num carried" title="Observed ${esc(asOf)} — carried forward">${usd(v)} <small>as of ${esc(asOf.slice(5))}</small></td>` : `<td class="num">${usd(v)}</td>`);
+  const serRows = ser.length >= 2 ? ser.slice(-6).map((p) => `<tr><td>${esc(p.d)}</td>${cpCell(p.nm, p.nmAsOf)}${cpCell(p.psa, p.psaAsOf)}</tr>`).join("") : "";
+  const serCarried = ser.slice(-6).some((p) => p.nmAsOf || p.psaAsOf);
 
   // PSA10 sold 값의 나이. 홈(packs.js PSA10_STALE_DAYS=35)과 같은 기준 — 35일 넘은 sold 중앙값으로는 프리미엄을 계산하지 않는다(사실 파일 psa10.stale).
   const p10Stale = !!(p10 && p10.kind === "sold" && c.psa10.stale);
@@ -418,6 +422,8 @@ for (const { code, set: s, card: c } of cands) {
       .pc b { font-size: 21px; color: #eef2ff; font-variant-numeric: tabular-nums; }
       .pc small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 3px; }
       .pc.hl b { color: var(--accent); }
+      .pc.stale b, .dataTable td.carried, .dataTable td.stale { opacity: .62; }   /* 낡은 값·이월 칸 — 세트 표 psaStale 과 같은 흐림(2026-11-05) */
+      .dataTable td.carried small { display: block; color: var(--muted); font-size: 11.5px; }
       .dataTable { width: 100%; max-width: 560px; border-collapse: collapse; margin: 10px 0 6px; font-size: 14px; }
       .dataTable th { text-align: right; padding: 6px 8px; border-bottom: 1px solid #2a3140; color: #9aa4b6; font-weight: 600; }
       .dataTable th:first-child, .dataTable td:first-child { text-align: left; }
@@ -448,8 +454,10 @@ ${BUY_CTA_CSS}
           <div class="priceCards">
             <!-- 표기는 달러 하나로 통일한다(2026-08-17). 엔화 원본은 화면에서 빼고 데이터(CSV/JSON)에 남긴다 —
                  한 줄에 통화가 둘이면 정작 비교해야 할 달러 값이 묻힌다. -->
-            <div class="pc hl"><span>Japanese NM (raw)</span><b>${nmUsd != null ? usd(nmUsd) : "—"}</b><small>Japanese retail${nmDate ? ` · as of ${esc(nmDate)}` : ""}</small></div>
-            ${p10 ? `<div class="pc"><span>PSA 10 ${p10.kind === "sold" ? "(sold median)" : "(lowest listing)"}</span><b>${usd(p10.v)}</b><small>${p10.kind === "sold" ? `${p10.n} sales` : "ask, not a sale"} · ${esc(p10.date || "")}</small></div>` : ""}
+            ${/* 낡은 값은 날짜를 붙인 채 흐린다(2026-11-05): NM 은 읽은 날이 28일 넘으면(사실 nm.stale), PSA 10 sold 는 35일 넘으면(psa10.stale) —
+                 OP13-118 은 118일 된 3건 표본 $14,134 가 흐림 없이 머리 숫자로 나갔다. */ ""}
+            <div class="pc hl${nmUsd != null && c.nm.stale ? " stale" : ""}"${nmUsd != null && c.nm.stale ? ` title="NM observed ${esc(nmDate || "")} — older than ${F.staleDays.nm} days"` : ""}><span>Japanese NM (raw)</span><b>${nmUsd != null ? usd(nmUsd) : "—"}</b><small>Japanese retail${nmDate ? ` · as of ${esc(nmDate)}` : ""}</small></div>
+            ${p10 ? `<div class="pc${p10Stale ? " stale" : ""}"${p10Stale ? ` title="PSA 10 sales observed ${esc(p10.date || "")} — older than ${PSA10_STALE_DAYS} days"` : ""}><span>PSA 10 ${p10.kind === "sold" ? "(sold median)" : "(lowest listing)"}</span><b>${usd(p10.v)}</b><small>${p10.kind === "sold" ? `${p10.n} sales` : "ask, not a sale"} · ${esc(p10.date || "")}</small></div>` : ""}
             ${pop ? `<div class="pc"><span>PSA population</span><b>${intl(pop.total)}</b><small>${intl(pop.psa10)} in PSA 10 · ${pop.gem}% gem rate</small></div>` : ""}
           </div>
           <p>Set: <a href="../sets/${setSlug}.html">${esc(`${code} ${s.nameEn || ""}`.trim())}</a>${CARD_LISTS[code] ? ` · <a href="../sets/${setSlug}-card-list.html">${esc(code)} card list</a>` : ""}${c.rankShown ? ` · chase rank <b>#${rank}</b>` : ""}${boxMult && boxMult > 0.8 ? ` · raw NM ÷ sealed ${esc(code)} JP box: <b>${boxMult >= 10 ? Math.round(boxMult) : boxMult.toFixed(1)}x</b> (${usd(boxUsd)} sold median, week of ${esc(boxAsOf)})` : ""}</p>
@@ -463,7 +471,7 @@ ${BUY_CTA_CSS}
 
       ${serRows ? `<h2>Recent price checkpoints</h2>
       <table class="dataTable"><thead><tr><th>Date</th><th>NM (raw)</th><th>PSA 10</th></tr></thead><tbody>${serRows}</tbody></table>
-      <p class="srcNoteA">NM = Japanese retail, raw · PSA 10 = exact-variant eBay sold median</p>` : ""}
+      <p class="srcNoteA">NM = Japanese retail, raw · PSA 10 = exact-variant eBay sold median${serCarried ? " · dimmed = earlier observation carried forward (as of = observed)" : ""}</p>` : ""}
 
       ${gradeSection}
       ${graderSection(c)}
@@ -496,7 +504,9 @@ ${BUY_CTA_CSS}
           .map((x) => ({ card: x.card, nm: x.card.nm.usd, p10: psa10Of(x.card) }))
           .sort((a, b) => (b.nm || 0) - (a.nm || 0));
         if (!sib.length) return "";
-        const rows = sib.map((x) => `<tr><td><a href="${slugify(x.card.number + "-" + x.card.name)}.html">${esc(seoName(x.card).short)}</a></td><td class="num">${x.nm != null ? usd(x.nm) : "—"}</td><td class="num">${x.p10 ? `${usd(x.p10.v)}${x.p10.kind === "ask" ? " ask" : ""}` : "—"}</td></tr>`).join("");
+        // 낡은 값은 흐린다(2026-11-05) — NM 28일·PSA 10 sold 35일, 머리 가격 칸·세트 Top 10 과 같은 사실(nm.stale·psa10.stale).
+        const numTd = (stale, title) => (stale ? `<td class="num stale" title="${esc(title)}">` : `<td class="num">`);
+        const rows = sib.map((x) => `<tr><td><a href="${slugify(x.card.number + "-" + x.card.name)}.html">${esc(seoName(x.card).short)}</a></td>${numTd(x.nm != null && x.card.nm.stale, `NM observed ${x.card.nm.date} — older than ${F.staleDays.nm} days`)}${x.nm != null ? usd(x.nm) : "—"}</td>${numTd(x.p10 && x.p10.kind === "sold" && x.card.psa10.stale, `PSA 10 sales observed ${x.p10 && x.p10.date} — older than ${PSA10_STALE_DAYS} days`)}${x.p10 ? `${usd(x.p10.v)}${x.p10.kind === "ask" ? " ask" : ""}` : "—"}</td></tr>`).join("");
         // 캡션 = 열 정의만 — 2026-10-15 소유자 결정. "Same figures as the … set guide" 문장은 지웠다(세트 링크는 머리 줄·푸터에 있다).
         return `<h2>More ${esc(code)} cards tracked here</h2>
       <div class="tableWrap" style="overflow-x:auto"><table class="dataTable"><thead><tr><th>Card</th><th class="num">Japanese NM</th><th class="num">PSA 10</th></tr></thead><tbody>${rows}</tbody></table></div>
@@ -576,6 +586,7 @@ const gradedRows = (() => {
       rows.push({
         // 배수 = 사실 파일 psa10.multiple(35일·40배 규칙 한 곳, 2026-10-19)
         code, number: c.number, name: c.name, rawUsd, psaUsd: p10.v, mult: c.psa10.multiple, n: p10.n, psaDate: p10.date, nmDate: c.nm.date,
+        stale: !!c.psa10.stale,   // 35일 넘은 표본 — 행·Key facts 최고값을 흐린다(2026-11-05, 사실 psa10.stale)
         slug: cardMap[c.key] || null,
         setHref: fs.existsSync(path.join(ROOT, "sets", setFile)) ? `../sets/${setFile}` : null,
       });
@@ -596,7 +607,7 @@ const gradedTable = gradedRows.length ? `
       <table class="dataTable">
         <thead><tr><th>Card</th><th>Set</th><th>Raw NM</th><th>PSA 10</th><th>Premium</th><th>Sales</th><th>PSA 10 data</th></tr></thead>
         <tbody>
-          ${gradedRows.map((r) => `<tr><td>${r.slug ? `<a href="${esc(r.slug)}">${esc(r.name)}</a>` : esc(r.name)} <small style="color:var(--muted)">${esc(r.number)}</small></td><td>${r.setHref ? `<a href="${esc(r.setHref)}">${esc(r.code)}</a>` : esc(r.code)}</td><td>${money(r.rawUsd)}</td><td>${money(r.psaUsd)}</td><td>${r.mult != null ? `${r.mult.toFixed(1)}x` : "—"}</td><td>${r.n}</td><td>${esc(r.psaDate || "—")}</td></tr>`).join("\n          ")}
+          ${gradedRows.map((r) => `<tr${r.stale ? ' class="stale"' : ""}><td>${r.slug ? `<a href="${esc(r.slug)}">${esc(r.name)}</a>` : esc(r.name)} <small style="color:var(--muted)">${esc(r.number)}</small></td><td>${r.setHref ? `<a href="${esc(r.setHref)}">${esc(r.code)}</a>` : esc(r.code)}</td><td>${money(r.rawUsd)}</td><td>${money(r.psaUsd)}</td><td>${r.mult != null ? `${r.mult.toFixed(1)}x` : "—"}</td><td>${r.n}</td><td>${esc(r.psaDate || "—")}</td></tr>`).join("\n          ")}
         </tbody>
       </table>
       </div>
@@ -653,6 +664,7 @@ const hub = `<!doctype html>
       .clList li { break-inside: avoid; }
       @media (max-width: 560px) { .clList { columns: 1; } }
 ${KF_CSS}
+      .kfTable b.stale, .dataTable tr.stale td { opacity: .62; } .dataTable tr.stale td:last-child { opacity: 1; color: #f5c842; }   /* 35일 넘은 PSA 10 표본 — 랭킹 표와 같은 흐림·노란 날짜(2026-11-05) */
     </style>
   </head>
   <body>
@@ -666,7 +678,7 @@ ${KF_CSS}
       <h1>PSA 10 vs raw price: One Piece card value list</h1>
       ${/* Key facts(2026-10-16) — 머리 줄("Cards with raw NM and PSA 10: N … as of")을 표 꼴로: 같은 N·같은 날짜에 최고 PSA 10 값·관측일 범위를 더한다(값은 gradedRows 그대로). */ ""}
       ${kfTableAny([
-        gradedRows[0] ? ["highest", "Highest PSA 10 (sold median)", "최고 PSA 10 (판매 중앙값)", `<b>${money(gradedRows[0].psaUsd)}</b> <small>${esc(gradedRows[0].name)} · ${esc(gradedRows[0].number)} · ${gradedRows[0].n} <span data-ko="건">sales</span>${gradedRows[0].psaDate ? ` · <time datetime="${esc(gradedRows[0].psaDate)}">${esc(gradedRows[0].psaDate)}</time>` : ""}</small>`] : null,
+        gradedRows[0] ? ["highest", "Highest PSA 10 (sold median)", "최고 PSA 10 (판매 중앙값)", `<b${gradedRows[0].stale ? ` class="stale" title="Observed ${esc(gradedRows[0].psaDate || "")} — older than ${F.staleDays.psa10} days"` : ""}>${money(gradedRows[0].psaUsd)}</b> <small>${esc(gradedRows[0].name)} · ${esc(gradedRows[0].number)} · ${gradedRows[0].n} <span data-ko="건">sales</span>${gradedRows[0].psaDate ? ` · <time datetime="${esc(gradedRows[0].psaDate)}">${esc(gradedRows[0].psaDate)}</time>` : ""}</small>`] : null,
         ["cards", "Cards with raw NM and PSA 10", "NM·PSA 10 둘 다 있는 카드", `<b>${gradedRows.length}</b> <small><span data-ko="인쇄 변형당 한 행">one row per printing variant</span></small>`],
         psaDates.length ? ["psadates", "PSA 10 sold dates", "PSA 10 판매일 범위", `<time datetime="${esc(psaDates[0])}">${esc(psaDates[0])}</time> – <time datetime="${esc(psaDates.at(-1))}">${esc(psaDates.at(-1))}</time>`] : null,
         nmDates.length ? ["nmdates", "Raw NM observed", "NM 관측일", `<time datetime="${esc(nmDates[0])}">${esc(nmDates[0])}</time>${nmDates[0] !== nmDates.at(-1) ? ` – <time datetime="${esc(nmDates.at(-1))}">${esc(nmDates.at(-1))}</time>` : ""}`] : null,

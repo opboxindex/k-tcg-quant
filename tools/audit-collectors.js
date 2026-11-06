@@ -18,9 +18,9 @@ const ROOT = path.resolve(__dirname, "..");
 const problems = [], notes = [];
 
 // 브라우저에 심는 스크립트를 만드는 모듈들. 새 수집기를 추가하면 여기에도 넣을 것.
+// palworld-sold-urls.js 는 2026-11-05 팰월드 전용 수집 중단으로 뺐다(가드 PW1).
 const TARGETS = [
   "box-sold-urls.js",
-  "palworld-sold-urls.js",
   "tag-pop.js",
   "tag-card-pop.js",
 ];

@@ -383,7 +383,8 @@ function setPageKo(b) {
   const thumbCell = (i, c) => (hasThumb
     ? `<td class="thumb">${cardThumbs[i] ? `<img src="${esc((variant("../" + cardThumbs[i], "thumb") || { src: "../" + cardThumbs[i] }).src)}" alt="${esc(c.number)} ${esc(c.name)}" width="40" height="56" loading="lazy" decoding="async" />` : ""}</td>`
     : "");
-  const cardRows = topCards.map((c, i) => `<tr>${thumbCell(i, c)}<td class="nm">${esc(c.name)}</td><td class="code">${esc(c.number)}</td><td>${esc(c.rarity || "—")}</td><td class="num">${won(c.nm.krw)}</td></tr>`).join("\n");
+  const cardRows = topCards.map((c, i) => `<tr>${thumbCell(i, c)}<td class="nm">${esc(c.name)}</td><td class="code">${esc(c.number)}</td><td>${esc(c.rarity || "—")}</td>${c.nm.stale ? `<td class="num stale" title="NM 관측일 ${esc(c.nm.date || "")} — ${F.staleDays.nm}일 넘음">` : `<td class="num">`}${won(c.nm.krw)}</td></tr>`).join("\n");
+  // 28일 넘게 다시 읽지 못한 NM(사실 nm.stale)은 흐린다 — 영문 세트 Top 10·카드 상세와 같은 기준(2026-11-05). 관측일은 표 위 라벨(관측일 …)에 있다.
   // 경매 실적 — 종료 후 재조회해 쌓은 원장(set-auction-stats)의 숫자. 2026-10-15 소유자 결정: 문장 대신 표·라벨.
   // 지운 문장: "우리가 종료 후 다시 조회해 결과를 확인했습니다"·"호가가 아니라 실제 낙찰 결과입니다"·"낙찰 여부가 확인된 건이 적어 비율은 싣지 않습니다"
   // ·"경매만 집계합니다 — 즉시구매는 따로 셉니다. 유찰된 경매도 분모에 그대로 둡니다"(→ 라벨 "이베이 경매(즉시구매 제외)"·"낙찰률 = 낙찰 ÷ 종료(유찰 포함)").
@@ -446,7 +447,8 @@ function setPageKo(b) {
     const mult = soldKrw != null && nmKrw && sold.ageDays != null && !sold.stale ? soldKrw / nmKrw : null;
     if (soldKrw != null) {
       const soldWhen = [sold.date, `표본 ${sold.n}건`].filter(Boolean).join(", ");
-      cardFacts.push(`PSA 10 실거래 중앙값 (${esc(t0.name)}) <strong>${won(soldKrw)}</strong>(${esc(soldWhen)})${mult != null ? ` · NM 대비 ×${mult.toFixed(1)}` : ""}`);
+      // 35일 넘은 표본(사실 psa10.stale)은 날짜를 붙인 채 흐린다 — 영문 랭킹·카드 상세 대표 칸과 같은 표시(2026-11-05).
+      cardFacts.push({ stale: !!sold.stale, html: `PSA 10 실거래 중앙값 (${esc(t0.name)}) <strong>${won(soldKrw)}</strong>(${esc(soldWhen)})${mult != null ? ` · NM 대비 ×${mult.toFixed(1)}` : ""}` });
     }
   }
   // 설명 문장("…NM 카드 N장을 비교합니다(…)")은 라벨로 — 판·관측일·환율 날짜(2026-10-15).
@@ -454,7 +456,7 @@ function setPageKo(b) {
       <section aria-label="인기 카드 시세">
         <h2>${esc(code)} 인기 카드 NM 시세 (원화)</h2>
         <p class="koNote">일본판 NM · ${nmSpan ? `관측일 ${esc(nmSpan)} · ` : ""}환율 ${esc(fx.date)} 기준</p>
-        ${cardFacts.length ? `<ul class="koFacts">${cardFacts.map((f) => `<li>${f}</li>`).join("")}</ul>` : ""}
+        ${cardFacts.length ? `<ul class="koFacts">${cardFacts.map((f) => (typeof f === "string" ? `<li>${f}</li>` : `<li${f.stale ? ' class="stale"' : ""}>${f.html}</li>`)).join("")}</ul>` : ""}
         <div style="overflow-x:auto">
         <table class="koBoard">
           <thead><tr>${hasThumb ? `<th class="l">이미지</th>` : ""}<th class="l">카드</th><th class="l">번호</th><th class="l">레어도</th><th>NM 시세</th></tr></thead>
@@ -642,6 +644,7 @@ ${cardRows}
       .koBoard td.thumb img { width: 40px; height: 56px; object-fit: cover; border-radius: 4px; display: block; background: #12161d; }
       .koFacts { margin: 14px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.8; }
       .koFacts strong { color: var(--accent); }
+      .koFacts li.stale strong, .koBoard td.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koNote { color: var(--muted); font-size: 12.5px; max-width: 760px; margin: 8px 0 14px; line-height: 1.6; }
       .faqItem { max-width: 760px; border-bottom: 1px solid rgba(255,255,255,.08); padding: 4px 0; }
       .faqItem summary { cursor: pointer; font-weight: 700; padding: 8px 0; font-size: 14.5px; }

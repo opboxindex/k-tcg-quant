@@ -52,6 +52,10 @@ const INPUTS = [
   "data/auction-card-stats.json", "data/card-series.json", "data/preorder-series.json", "data/psa-edition-weekly.json",
   // 반다이 상품 페이지 확인(2026-10-19, tools/check-bandai-product-pages.js) — 발매 전 페이지의 "Bandai product page checked" 날짜
   "data/bandai-product-check.json",
+  // PSA 10 매물 자체 감사(2026-11-05, tools/audit-psa10-mismatches.js) — SET 불일치 표시가 psa10Ask 숨김 규칙의 입력. 감사 파일만 바뀐 날에도 다시 굽는다.
+  "data/psa10-mismatch-audit.json",
+  // 빌더 자신(2026-11-05) — 규칙·필드를 바꾸면 데이터가 같아도 캐시를 다시 굽는다. 종전엔 새 필드(nm.stale 등)를 더해도 묵은 캐시가 그대로 읽혔다.
+  "tools/build-site-facts.js", "tools/market-data-normalizers.js",
 ];
 // 사이트의 "현재" 기준(일) — 마지막 관측이 이보다 오래되면 현재값으로 쓰지 않는다(가드 D17). 카드 페이지의 박스 배수 분모·Product 호가 신선도가 같은 값.
 const CURRENT_DAYS = 28;
@@ -319,15 +323,23 @@ function cardAuctionRows(variants, c) {
 // 시세 체크포인트(카드 상세 "Recent price checkpoints") — data/card-series.json 의 이 카드 이력을 달러로. NM 은 각 시점 환율(fx-history),
 // PSA 10 점은 KRW 로만 저장되므로 현재 관측(psa10Ebay.updated) 뒤의 점은 같은 관측을 매일 다시 적은 것이라 머리와 같은 관측일 환산값을 쓴다
 // (2026-09-30 실측: OP09-119 이력 $2,027 / 머리 $1,822). 쓸 수 없는 NM(nmUsable 거짓)은 이력 칸에서도 뺀다(읽은 날이 없는 값은 날짜가 관측일이 아니다).
+// 이월 칸(2026-11-05) — 이력은 환율이 바뀌는 날마다 점이 생겨, 현재 관측일(NM nmUpdated · PSA 10 psa10Ebay.updated) 뒤의 점은 새로 읽은 값이 아니라
+//   같은 관측을 다시 적은 것이다(OP13-118: PSA 10 07-10 · NM 10-21 관측이 10-28~11-04 여섯 행에 새 행처럼 반복). 그런 칸은 nmAsOf·psaAsOf 에
+//   실제 관측일을 담는다(아니면 null) — 카드 상세가 그 칸을 흐리게 하고 관측일을 붙인다. 행은 지우지 않는다. 관측일 이전 점은 그날 기록 그대로 둔다.
 function checkpoints(series, code, c, nmUsd, fx) {
   const toUsdAt = (v, cur, date) => (v == null ? null : cur === "USD" ? v : cur === "KRW" ? v / (N.fxAt(date) || fx.usdKrw) : null);
   const pts = (CS.seriesOf(series, code, c)?.points || []).map((p) => (nmUsd != null ? p : { ...p, nm: null })).filter((p) => p.nm != null || p.psa != null);
   const g10 = c.psa10Ebay && c.psa10Ebay.soldBased && c.psa10Ebay.middle != null ? c.psa10Ebay : null;
   const g10Usd = g10 ? toUsdAt(g10.middle, g10.currency, g10.updated) : null;
+  const day = (d) => (isDate(String(d || "").slice(0, 10)) ? String(d).slice(0, 10) : null);
+  const nmObs = nmUsd != null ? day(c.nmUpdated) : null;
+  const psaObs = g10 ? day(g10.updated) : null;
   return pts.map((p) => ({
     d: p.d || null,
     nm: p.nm != null ? toUsdAt(p.nm, "KRW", p.d) : null,
     psa: p.psa != null ? (g10Usd != null && g10.updated && p.d > g10.updated ? g10Usd : toUsdAt(p.psa, "KRW", p.d)) : null,
+    nmAsOf: p.nm != null && nmObs && p.d > nmObs ? nmObs : null,
+    psaAsOf: p.psa != null && psaObs && p.d > psaObs ? psaObs : null,
   }));
 }
 
@@ -367,7 +379,8 @@ function buildCard(src, code, c, i, spikes, datasetUpdatedOn, ctx = {}) {
   }
   // PSA 10 최저 실매물(호가) — 카드 상세 구매 버튼·Product Offer·세트 표의 "ask" 값. buy = 버튼을 낼 수 있는 매물(EPN 링크로 바꿀 수 있고 값이 있다).
   // fresh = 관측일이 CURRENT_DAYS 이내(Product Offer 는 지금 나와 있는 매물만 — 2026-10-15 감사 #5).
-  const pa = c.psa10Active || null;
+  // 판본이 다른 매물·여러 카드가 함께 쓰는 매물(src.psa10Rejected)은 없는 것으로 — 값·버튼·ask·Premium 이 함께 숨는다.
+  const pa = src.psa10Rejected && src.psa10Rejected.has(`${code}|${i}`) ? null : (c.psa10Active || null);
   const bl = pa && pa.bestListing;
   const askUsd = bl && bl.total != null ? (bl.currency === "USD" ? bl.total : bl.currency === "KRW" && fx.usdKrw ? bl.total / fx.usdKrw : null) : null;
   const askAge = pa ? ageOf(pa.updated) : null;
@@ -379,8 +392,11 @@ function buildCard(src, code, c, i, spikes, datasetUpdatedOn, ctx = {}) {
   const psa = psa10 ? psa10.usd : psa10Ask ? psa10Ask.usd : null;
   const popJp = c.graderPop?.psa?.jp || null;
   const nmAge = ageOf(c.nmUpdated);
+  const nmFresh = Number.isFinite(nmAge) && nmAge <= CURRENT_DAYS;
   const nm0 = { usable, jpy: N.isPositive(c.nmJpy) ? c.nmJpy : null, date: isDate(c.nmUpdated) ? c.nmUpdated : null, usd: nmUsd, krw: usable && fx.jpyKrw ? c.nmJpy * fx.jpyKrw : null, hiddenReason: c.nmHiddenReason || null, stock: N.stockStatus(c.nmStock),
-    ageDays: nmAge, fresh: Number.isFinite(nmAge) && nmAge <= CURRENT_DAYS };   // fresh = 실제로 다시 본 날이 CURRENT_DAYS 이내(Product Offer ①)
+    ageDays: nmAge, fresh: nmFresh,   // fresh = 실제로 다시 본 날이 CURRENT_DAYS 이내(Product Offer ①)
+    // stale = 화면에 나가는(쓸 수 있는) NM 인데 읽은 날이 CURRENT_DAYS 를 넘었다 — 값은 두고 날짜를 붙여 흐리게(PSA 10 sold 35일 규칙과 같은 표시, 2026-11-05).
+    stale: usable && !nmFresh };
   // 카드 상세 전용 사실 — 박스 배수(쓸 수 있는 NM ÷ 그 세트 일본판 박스 sold 중앙값, 분모는 ctx.cardBox)·등급사 표·PSA 인구 이력·경매 변형 행·시세 체크포인트.
   const rows = gradingRows(c);
   const popHist = psaPopHistory(pop, code, c);
@@ -400,7 +416,9 @@ function buildCard(src, code, c, i, spikes, datasetUpdatedOn, ctx = {}) {
     image: c.image || null, img: c.img || null,   // 원장 이미지 주소 그대로(자체 호스팅 판정은 페이지 쪽 — 외부 CDN 은 가드 I1 이 막는다)
     nm: nm0,
     raw: rp, tcgOutlier,
-    shown: { nm, nmSrc, psa, psaKind: psa10 ? "sold" : psa10Ask ? "ask" : "", psaDate: psa10 ? psa10.date : null, psaStale: !!(psa10 && psa10.stale), psaN: psa10 ? psa10.n : null },
+    // nmDate·nmStale(2026-11-05) — 세트 Top 10·카드리스트 NM 칸이 행마다 관측일을 붙이고 28일 넘으면 흐린다. 표 아래엔 데이터 날짜(DATA_DATE)만 있어
+    //   EB-05 의 11-02 값이 오늘 시세처럼 읽혔다. TCG 값은 날짜 없는 1회 스냅샷이라 null(칸에 "TCG" 꼬리표).
+    shown: { nm, nmSrc, nmDate: nmSrc === "jp" ? nm0.date : null, nmStale: nmSrc === "jp" && nm0.stale, psa, psaKind: psa10 ? "sold" : psa10Ask ? "ask" : "", psaDate: psa10 ? psa10.date : null, psaStale: !!(psa10 && psa10.stale), psaN: psa10 ? psa10.n : null },
     psa10, psa10Ask,
     pop: popJp ? { total: popJp.total ?? null, g10: popJp.g10 ?? null, g9: popJp.g9 ?? null, d: popJp.d || null, gem: popJp.total ? Math.round(((popJp.g10 || 0) / popJp.total) * 100) : null } : null,   // gem = PSA 10 ÷ 전체
     grades: gradeTrio(pop, code, c),
@@ -736,6 +754,8 @@ function build(inputs) {
   const psaEdWeekly = readJson("data/psa-edition-weekly.json", { sets: {}, weeks: [] });
   const edWeeks = (psaEdWeekly.weeks || []).slice(-2);
   const src = { packs, sold, facts, auction, pop, fx, dataDate, cardAuction, cardSeries, preorder, psaEdWeekly, psaWeeks: edWeeks.length === 2 ? edWeeks : null };
+  // PSA 10 최저 매물 판본 규칙(2026-11-05) — 다른 판·공유 매물로 판정된 카드("세트|카드순번")는 buildCard 가 psa10Ask 를 내지 않는다.
+  src.psa10Rejected = N.psa10AskRejections({ packs, setFacts: facts, officialCardlist: readJson("data/official-cardlist.json", null), audit: readJson("data/psa10-mismatch-audit.json", null) });
   const yenUsd = (yen) => (fx.jpyKrw && fx.usdKrw ? (yen * fx.jpyKrw) / fx.usdKrw : null);
 
   // ── 성적표(board) — 홈 요약표·한국어 허브·세트 허브·packs.marketIndex(build-market-index 가 그대로 쓴다). 변화율은 최근 4주.
@@ -1045,6 +1065,8 @@ function build(inputs) {
     //   따로 나가 같은 날 홈 10-18 · 세트 허브 10-19 · ko 제목 10-18 / 본문 10-19 로 갈렸다. 표에 보이는 어느 행 날짜보다도 이르지 않다(판매 원장 asOf 이상).
     dataDate: N.latestDate(dataDate, sold.asOf),
     fx: { date: fx.date || null, jpyKrw: fx.jpyKrw ?? null, usdKrw: fx.usdKrw ?? null, jpyUsd: fx.jpyKrw && fx.usdKrw ? fx.jpyKrw / fx.usdKrw : null },
+    // 낡음 기준(일) — 판정(nm.stale·psa10.stale)과 화면 라벨("older than N days")이 같은 숫자를 쓰게(2026-11-05).
+    staleDays: { nm: CURRENT_DAYS, psa10: PSA10_STALE_DAYS },
     // builtFromUpdated = 판매 원장 마지막 날(발매 예정 페이지 "through") · preReleaseMinListings = 예약판매 중앙값에 필요한 서로 다른 매물 수(없으면 3)
     series: { asOf: sold.asOf || null, updated: sold.updated || null, staleDays: sold.staleDays || 28, builtFromUpdated: sold.builtFrom?.updated || null, preReleaseMinListings: sold.preReleaseMinListings || 3 },
     auctionWindow: { days: auction.window?.days ?? null, from: auction.window?.from || null, to: auction.window?.to || null, minDecided: auction.window?.minDecided ?? null, updated: auction.updated || null },

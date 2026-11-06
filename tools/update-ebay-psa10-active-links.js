@@ -3,11 +3,16 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { isExcludedEbaySellerOrLocation } = require("./ebay-listing-filters");
-const { isPsa10JapaneseCardListing, listingSetConflicts } = require("./ebay-psa10-listing-filter");
+const {
+  isPsa10JapaneseCardListing, loadEditionIndex, editionVerdict, editionSiblings, pickEditionListing, psa10ListingRejections,
+} = require("./ebay-psa10-listing-filter");
 
 const projectRoot = path.resolve(__dirname, "..");
 const dataPath = path.join(projectRoot, "data", "onepiece-packs.json");
+const auditPath = path.join(projectRoot, "data", "psa10-mismatch-audit.json");
 const envPath = path.join(projectRoot, ".env");
+// 판본 확인용 Set 속성 조회(getItem)는 카드당 이만큼까지 — 싼 매물부터 읽다가 이 카드 판이 확인되면 멈춘다.
+const MAX_ASPECT_LOOKUPS = 3;
 
 function loadEnv(filePath) {
   if (!fs.existsSync(filePath)) return {};
@@ -150,11 +155,13 @@ function supplySignals(items) {
   };
 }
 
-function analyzeItems(items, setCode, card) {
+function analyzeItems(items, setCode, card, index) {
   const kept = [];
   let excludedCount = 0;
   for (const item of items) {
     if (!isPsa10JapaneseCardListing(item, setCode, card)) continue;
+    // 제목만으로 다른 판(다른 세트 코드·세트명·발매 전 연도)이면 이 카드의 매물이 아니다 — 표본·신호에서도 뺀다.
+    if (editionVerdict({ title: item.title || "" }, setCode, card, index).verdict === "conflict") continue;
     if (isExcludedSeller(item)) {
       excludedCount += 1;
       continue;
@@ -177,15 +184,13 @@ function analyzeItems(items, setCode, card) {
     currency,
     sampleSize: selected.length,
     excludedCount,
-    // raw 는 신호 계산 전용이므로 저장 전에 떼어낸다(데이터 파일 비대화 방지)
-    bestListing: selected[0] ? (({ raw, ...rest }) => rest)(selected[0]) : null,
-    bestId: selected[0]?.raw?.itemId || null,   // Set 속성 교차검증용 eBay itemId (저장 안 함)
     // 카드 단위 수요 대용 신호 — 박스와 동일 기준(매물 나이·재등록률·협상허용률·셀러집중도)
     supplySignals: supplySignals(selected),
+    candidates: selected,   // 싼 순서. 최저 매물은 판본 확인(pickEditionListing) 뒤에 정한다 — 저장 전에 뗀다
   };
 }
 
-// 선택된 최저 매물의 Set 속성 조회 — 교차세트(PRB 재판 등) 오매칭 판별용.
+// 매물의 Set 속성 조회 — 교차세트(PRB 재수록·후속 세트 SP) 판본 판별용.
 async function fetchSetAspect(token, itemId) {
   try {
     const r = await fetch(`https://api.ebay.com/buy/browse/v1/item/${encodeURIComponent(itemId)}`,
@@ -205,20 +210,47 @@ function targetCards(data, requestedCodes) {
     : [...data.jp.list, ...data.extra.list].filter((code) => data.sets[code]?.cards?.length);
   return codes.flatMap((code) =>
     (data.sets[code]?.cards || [])
-      .filter((card) => card.number && card.number !== "-")
-      .map((card) => ({ code, card })),
+      .map((card, i) => ({ code, card, i }))
+      .filter(({ card }) => card.number && card.number !== "-"),
   );
 }
 
+function readAudit() {
+  try { return JSON.parse(fs.readFileSync(auditPath, "utf8")); } catch { return null; }
+}
+
+// 쓰기 직전 마지막 관문 — 사실 빌더(표시)와 같은 함수(psa10ListingRejections)로 저장된 매물 전부를 다시 본다.
+// 같은 매물을 두 카드가 나눠 가진 경우(OP-14 버기 금/은)는 카드 한 장씩 보는 위 고르기로는 못 잡는다. 걸린 카드는 매물을 비운다(버튼 숨김).
+function pruneEditionMismatches(data, index) {
+  const rejected = psa10ListingRejections({ packs: data, index, audit: readAudit() });
+  for (const [key, reason] of rejected) {
+    const [code, i] = key.split("|");
+    const card = data.sets[code].cards[Number(i)];
+    console.log(`  edition-prune ${code} ${card.number} ${card.name}: ${reason}`);
+    delete card.psa10Active;
+  }
+  return rejected.size;
+}
+
 async function main() {
-  requireCredentials();
-  const requestedCodes = process.argv.slice(2);
+  const args = process.argv.slice(2);
   const data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  const index = loadEditionIndex(projectRoot, data);
+  // --prune: eBay 조회 없이 저장된 매물에 판본 규칙만 다시 건다(규칙을 고친 날 다음 수집을 기다리지 않고 데이터를 맞출 때).
+  if (args.includes("--prune")) {
+    const n = pruneEditionMismatches(data, index);
+    fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 1)}\n`, "utf8");
+    console.log(`PSA10 active links edition-pruned=${n}`);
+    return;
+  }
+  requireCredentials();
+  const requestedCodes = args.filter((a) => !a.startsWith("--"));
+  const siblings = editionSiblings(data);
   const token = (await getApplicationToken()).access_token;
   let updated = 0;
   let empty = 0;
 
-  for (const { code, card } of targetCards(data, requestedCodes)) {
+  for (const { code, card, i } of targetCards(data, requestedCodes)) {
     const number = normalizeNumber(card.number, code);
     const queries = [
       buildQuery(code, card),
@@ -229,10 +261,21 @@ async function main() {
     let market = null;
     for (const candidateQuery of queries) {
       const result = await searchActiveListings(token, candidateQuery);
-      market = analyzeItems(result.itemSummaries || [], code, card);
+      market = analyzeItems(result.itemSummaries || [], code, card, index);
       query = candidateQuery;
-      if (market.bestListing) break;
+      if (market.candidates.length) break;
     }
+    const { candidates, ...rest } = market;
+    market = rest;
+    const pick = await pickEditionListing(candidates, {
+      code, card, siblings: siblings.get(`${code}|${i}`), index, maxLookups: MAX_ASPECT_LOOKUPS,
+      fetchAspect: (itemId) => fetchSetAspect(token, itemId),
+      log: (msg) => console.log(`  edition-skip ${code} ${card.number}: ${msg}`),
+    });
+    // raw(원본 아이템)는 신호 계산 전용 — 저장 전에 뗀다. setAspect = 판본 확인에 쓴 Set 속성(사실 빌더가 같은 증거로 다시 본다).
+    market.bestListing = pick ? (({ raw, setAspect, ...listing }) => listing)(pick) : null;
+    market.bestId = pick?.raw?.itemId || null;
+    market.setAspect = pick?.setAspect || null;
     // 안전장치: 최저 매물이 판매완료(Sold) 중간값의 35% 미만이면 변형 오매칭 의심 → 버튼 숨김(검색링크로 폴백)
     if (market?.bestListing && card.psa10Ebay?.soldBased && card.psa10Ebay.middle != null) {
       const fx = data.fx || {};
@@ -260,16 +303,6 @@ async function main() {
         market.sampleSize = 0;
       }
     }
-    // 교차세트 방어(2026-07-22 실사고): 최저 매물의 Set 속성이 카드 세트와 다르면 버린다.
-    // PRB/EB 재판은 원본 번호(OP01-024)를 제목에 달아 제목필터로는 못 걸러지고, Set 속성으로만 판별된다.
-    if (market?.bestListing && market.bestId) {
-      const setAspect = await fetchSetAspect(token, market.bestId);
-      if (listingSetConflicts(setAspect, code)) {
-        console.log(`  set-mismatch ${code} ${card.number}: listing Set="${setAspect}" ≠ ${code} — drop (재판 오매칭)`);
-        market.bestListing = null;
-        market.sampleSize = 0;
-      }
-    }
     if (market.bestListing) {
       card.psa10Active = { ...market, query };
       updated += 1;
@@ -280,9 +313,10 @@ async function main() {
     console.log(`${code} #${card.rank} ${card.number || "-"}: active=${market.sampleSize}`);
   }
 
+  const pruned = pruneEditionMismatches(data, index);
   data.updated = new Date().toISOString().slice(0, 10);
   fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 1)}\n`, "utf8");
-  console.log(`PSA10 active links updated=${updated} empty=${empty}`);
+  console.log(`PSA10 active links updated=${updated} empty=${empty} edition-pruned=${pruned}`);
 }
 
 main().catch((error) => {

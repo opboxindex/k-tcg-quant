@@ -10,7 +10,7 @@
 const { errors, read, exists } = require("./lib");
 
 const checks = ["FACTS-SOURCE"];
-const FORBIDDEN = ["priciest", "rawValues", "countedValues", "boxChange28", "nmUsable", "nmUsd", "rawPrice", "tcgSpikes", "psa10Usd", "toUsd", "fxAt", "latestDate", "splitReprints", "enIsReprint", "buildBoxMarket", "rawNmAsk", "psa10Sold", "psaPopulation", "withUsd", "ageDays", "keyFactsModel", "lowestAsk", "liveAsk", "setPageDate", "rarityCode", "gradingPageRows", "cardListNumbers", "buildGrading", "build"];
+const FORBIDDEN = ["priciest", "rawValues", "countedValues", "boxChange28", "nmUsable", "nmUsd", "rawPrice", "tcgSpikes", "psa10Usd", "toUsd", "fxAt", "latestDate", "splitReprints", "enIsReprint", "buildBoxMarket", "rawNmAsk", "psa10Sold", "psaPopulation", "withUsd", "psa10AskRejections", "ageDays", "keyFactsModel", "lowestAsk", "liveAsk", "setPageDate", "rarityCode", "gradingPageRows", "cardListNumbers", "buildGrading", "build"];
 const PURE_LIBS = ["market-data-normalizers", "build-site-facts", "card-list-shared", "free-data-records", "card-series-store", "ai-data-extras"];
 // packs 에만 있는 이름(사실 파일은 nm·psa10·grading·market·reprint 로 바꿔 담는다). set-facts.json 의 공식 사실(발매일·정가)은 파생이 아니라 여기 없다.
 const RAW_FIELDS = ["nmJpy", "nmUpdated", "nmHiddenReason", "nmStock", "priceUsd", "psa10Ebay", "psa10Active", "ebaySold", "psaFull", "psaFullEn", "graders", "graderPop", "marketIndex", "_imgSuffix", "reprintRecords"];

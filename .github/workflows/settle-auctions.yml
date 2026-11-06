@@ -58,12 +58,8 @@ jobs:
       - name: Settle
         run: node tools/settle-auctions.js
 
-      # 팰월드 정산 — 2026-08-19. 감시목록·아카이브가 원피스와 분리돼 있다.
-      # 종료된 경매가 없으면 exit 2 ("nothing due")로 끝나므로 그걸 실패로 보지 않는다.
-      # continue-on-error 로 덮지 않는 이유: 진짜 실패(자격증명·API 오류)는 여기서 멈춰야 한다.
-      - name: Settle (Palworld)
-        run: |
-          node tools/settle-auctions.js --game=palworld || [ $? -eq 2 ]
+      # 팰월드 전용 정산 단계(2026-08-19~)는 2026-11-05 소유자 결정으로 지웠다. data/palworld-auction-* 은 동결 원장이라
+      # 커밋·병합·아티팩트 목록에서도 뺐다(가드 PW1). 팰월드 낙찰은 collect-tcg 의 13종 묶음 정산(tcg-archive)이 계속 본다.
 
       # 카드 이름표(번호→이름). 카드 집계가 참조하므로 그보다 먼저 돈다. 수동 > 카탈로그 > 원장 제목 추정.
       - name: Build card names
@@ -84,13 +80,13 @@ jobs:
           # 원장은 data/auction-archive/ 의 새 파일로 생긴다(추적되지 않는 파일).
           # git diff 는 추적 안 된 파일을 못 보므로 status 로 판단해야 한다 —
           # diff 로만 보면 "Nothing settled" 로 빠져나가 원장이 영영 커밋되지 않는다.
-          if [ -z "$(git status --porcelain -- data/auction-sold.json data/auction-watch.json data/auction-card-stats.json data/card-names.json data/auction-series.json data/auction-archive data/palworld-auction-sold.json data/palworld-auction-watch.json data/palworld-auction-archive)" ]; then
+          if [ -z "$(git status --porcelain -- data/auction-sold.json data/auction-watch.json data/auction-card-stats.json data/card-names.json data/auction-series.json data/auction-archive)" ]; then
             echo "Nothing settled."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/auction-sold.json data/auction-watch.json data/auction-card-stats.json data/card-names.json data/auction-series.json data/auction-archive data/palworld-auction-sold.json data/palworld-auction-watch.json data/palworld-auction-archive
+          git add data/auction-sold.json data/auction-watch.json data/auction-card-stats.json data/card-names.json data/auction-series.json data/auction-archive
           git commit -m "Settle completed auctions"
           for attempt in 1 2 3; do
             if git push; then
@@ -105,7 +101,7 @@ jobs:
             if ! git pull --rebase; then
               for f in $(git diff --name-only --diff-filter=U); do
                 case "$f" in
-                  data/auction-watch.json|data/palworld-auction-watch.json|data/tcg-watch.json) node tools/merge-watch-json.js "$f" && git add "$f" ;;
+                  data/auction-watch.json|data/tcg-watch.json) node tools/merge-watch-json.js "$f" && git add "$f" ;;
                   *) echo "::error::병합 불가 충돌: $f"; git rebase --abort; exit 1 ;;
                 esac
               done
@@ -137,10 +133,5 @@ jobs:
             data/auction-archive/${{ env.D0 }}.json
             data/auction-archive/${{ env.D1 }}.json
             data/auction-archive/${{ env.D2 }}.json
-            data/palworld-auction-sold.json
-            data/palworld-auction-watch.json
-            data/palworld-auction-archive/${{ env.D0 }}.json
-            data/palworld-auction-archive/${{ env.D1 }}.json
-            data/palworld-auction-archive/${{ env.D2 }}.json
           retention-days: 14
           if-no-files-found: warn

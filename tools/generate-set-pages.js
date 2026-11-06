@@ -185,7 +185,7 @@ ${KF_CSS}
       .chaseTable td:first-child { color: var(--muted); font-variant-numeric: tabular-nums; }
       .chaseTable .cNum { display: block; color: var(--muted); font-size: 11.5px; margin-top: 1px; }
       .chaseTable .psaKind { color: var(--muted); font-size: 11.5px; }
-      .chaseTable td.psaStale { opacity: .62; }   /* 35일 넘은 PSA10 sold — 값은 두되 흐리게(2026-09-24) */
+      .chaseTable td.psaStale, .chaseTable td.nmStale { opacity: .62; }   /* 35일 넘은 PSA10 sold(2026-09-24)·28일 넘은 NM(2026-11-05) — 값은 두되 흐리게 */
       .chaseTable td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
       /* 카드명은 왼쪽 — styles.css 기사 표 기본(.bodyPage table 2열부터 오른쪽)보다 구체적으로 이긴다 */
       .bodyPage table.chaseTable :is(th, td).cn:not(:first-child) { text-align: left; }
@@ -462,7 +462,10 @@ function setPage(code, prev, next) {
     // 모바일(≤640px)은 등급 열(gCol)을 숨기고 같은 값을 카드명 아래 줄(gSub)로 접는다 — 2026-10-13 QA: 390px 에서 표가 458px 로
     // 가로 스크롤되고 카드명이 4~5줄로 접혔다(경매 페이지 표와 같은 방식).
     const grade = gradeCell(c);
-    return `<tr><td>${i + 1}</td><td class="cn">${nameCell}<span class="cNum">${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</span>${grade !== "—" ? `<span class="gSub">PSA / CGC / TAG ${grade}</span>` : ""}</td><td class="num">${p.nm != null ? `${usd(p.nm)}${p.nmSrc === "tcg" ? ` <span class="psaKind">TCG</span>` : ""}` : "—"}</td><td class="num${p.psaStale ? " psaStale" : ""}"${p.psaStale ? ` title="Last PSA 10 sales observed ${esc(p.psaDate || "")} (n=${p.psaN || "?"}) — older than 35 days"` : ""}>${p.psa != null ? `${usd(p.psa)} <span class="psaKind">${p.psaKind === "sold" ? `sold${p.psaDate ? " · " + esc(p.psaDate.slice(5)) : ""}` : "ask"}</span>` : "—"}</td><td class="num gCol">${grade}</td></tr>`;
+    // NM 칸 = 값 + 그 값을 읽은 날(MM-DD) — 2026-11-05. 표 아래엔 데이터 날짜만 있어 EB-05 의 11-02 값(신작은 매일 내린다)이 오늘 시세처럼 읽혔다.
+    //   PSA 10 칸의 "sold · 07-10" 과 같은 꼴. 28일 넘은 값(사실 nmStale)은 PSA 10 35일 규칙처럼 흐리게. TCG 1회 스냅샷은 날짜 대신 "TCG".
+    const nmTag = p.nmSrc === "tcg" ? "TCG" : p.nmDate ? `as of ${esc(p.nmDate.slice(5))}` : "";
+    return `<tr><td>${i + 1}</td><td class="cn">${nameCell}<span class="cNum">${esc(c.number || "")}${c.rarityEn ? ` · ${esc(c.rarityEn)}` : ""}</span>${grade !== "—" ? `<span class="gSub">PSA / CGC / TAG ${grade}</span>` : ""}</td><td class="num${p.nmStale ? " nmStale" : ""}"${p.nmStale ? ` title="NM observed ${esc(p.nmDate || "")} — older than ${F.staleDays.nm} days"` : ""}>${p.nm != null ? `${usd(p.nm)}${nmTag ? ` <span class="psaKind">${nmTag}</span>` : ""}` : "—"}</td><td class="num${p.psaStale ? " psaStale" : ""}"${p.psaStale ? ` title="Last PSA 10 sales observed ${esc(p.psaDate || "")} (n=${p.psaN || "?"}) — older than 35 days"` : ""}>${p.psa != null ? `${usd(p.psa)} <span class="psaKind">${p.psaKind === "sold" ? `sold${p.psaDate ? " · " + esc(p.psaDate.slice(5)) : ""}` : "ask"}</span>` : "—"}</td><td class="num gCol">${grade}</td></tr>`;
   }).join("\n            ");
 
   // 세트 요약 줄(dataSummary)은 Key facts 표로 바뀌었다 — 2026-10-14(W5a). 그 줄의 카드 수(s.cardCount)는 공식 목록과 달랐고
@@ -1025,6 +1028,7 @@ ${list.map((r, i) => rowHtml(r, i + offset)).join("\n")}
       .aTable td.rng { color: var(--muted); }
       .aTable td.obs { color: var(--muted); }
       .aTable tr.stale td { opacity: .62; } .aTable tr.stale td.obs { opacity: 1; color: #f5c842; }
+      .kfTable b.stale, .stat.stale b { opacity: .62; }   /* 대표 칸도 표 행과 같은 35일 흐림(2026-11-05) */
       .aTable td.mul { font-weight: 700; }
       .aTable td.pop small, .aTable td.l small { color: var(--muted); margin-left: 4px; }
       .aTable td.l a { color: inherit; text-decoration: none; }
@@ -1094,7 +1098,8 @@ ${KF_CSS_ANY}
       <h1>Top 10 most valuable One Piece cards — PSA 10 sold prices</h1>
       ${/* Key facts(2026-10-16) — 아래 statRow 와 같은 값(한 사실 한 값)을 표 꼴로 H1 바로 아래: 최고값·관측일·표본이 첫 화면에 날짜와 함께 보이게. */ ""}
       ${kfTableAny([
-        ["highest", "Highest PSA 10 (sold median)", "최고 PSA 10 (판매 중앙값)", `<b>${usd(t1.psa)}</b> <small>${esc(t1.name)}${t1.number ? ` · ${esc(t1.number)}` : ""} · ${t1.n} <span data-ko="건">sales</span>${t1.updated ? ` · <time datetime="${esc(t1.updated)}">${esc(t1.updated)}</time>` : ""}</small>`],
+        // 35일 넘은 표본이면 값을 흐린다(2026-11-05) — 날짜는 붙어 있었지만 118일 된 3건 표본($14,134)이 맨 위 대표 숫자로 흐림 없이 나갔다(표 행은 흐렸다).
+        ["highest", "Highest PSA 10 (sold median)", "최고 PSA 10 (판매 중앙값)", `<b${t1.stale ? ` class="stale" title="Observed ${esc(t1.updated || "")} — older than ${F.staleDays.psa10} days"` : ""}>${usd(t1.psa)}</b> <small>${esc(t1.name)}${t1.number ? ` · ${esc(t1.number)}` : ""} · ${t1.n} <span data-ko="건">sales</span>${t1.updated ? ` · <time datetime="${esc(t1.updated)}">${esc(t1.updated)}</time>` : ""}</small>`],
         ["ranked", "Cards ranked", "순위 카드 수", `<b>${rows.length}</b> <small><span data-ko="일본판 · 카드당 판매 3건 이상">Japanese printing · 3+ sales per card</span></small>`],
         ["over1k", "Sold above $1,000", "$1,000 이상", `<b>${over1k}</b>`],
         ["multiple", "PSA 10 ÷ ungraded (median)", "PSA 10 ÷ 미등급 (중앙값)", medMult ? `<b>${medMult.toFixed(1)}×</b>` : "—"],
@@ -1105,7 +1110,7 @@ ${KF_CSS_ANY}
       ${AFF_TOP}
 
       <div class="statRow">
-        <div class="stat hi"><b>${usd(t1.psa)}</b><span>highest PSA 10 · ${esc(t1.name)}${t1.updated ? ` · sold as of ${esc(t1.updated)}` : ""}</span></div>
+        <div class="stat hi${t1.stale ? " stale" : ""}"${t1.stale ? ` title="Observed ${esc(t1.updated || "")} — older than ${F.staleDays.psa10} days"` : ""}><b>${usd(t1.psa)}</b><span>highest PSA 10 · ${esc(t1.name)}${t1.updated ? ` · sold as of ${esc(t1.updated)}` : ""}</span></div>
         <div class="stat"><b>${rows.length}</b><span>cards ranked</span></div>
         <div class="stat"><b>${over1k}</b><span>sold above $1,000</span></div>
         <div class="stat"><b>${medMult ? medMult.toFixed(1) + "×" : "—"}</b><span>PSA 10 vs ungraded (median)</span></div>

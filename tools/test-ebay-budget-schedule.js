@@ -48,9 +48,11 @@ fs.writeFileSync(path.join(root, "data", "auction-watch.json"), JSON.stringify({
   { id: "b", endsAt: "2026-09-04T06:59:00Z" },
   { id: "c", endsAt: "2026-09-04T07:30:00Z" },
 ] }));
+// 팰월드 전용 감시목록은 2026-11-05 수집 중단으로 동결됐다(가드 PW1). 대기가 남아 있어도 아무도 정산하지 않으니
+// 몫을 잡으면 그만큼 TCG 13종이 영구히 굶는다 — 세면 안 된다.
 fs.writeFileSync(path.join(root, "data", "palworld-auction-watch.json"), JSON.stringify({ pending: [{ id: "p", endsAt: "2026-09-04T01:00:00Z" }] }));
 try {
-  assert.equal(auctionNeed(reset, root), 3);
+  assert.equal(auctionNeed(reset, root), 2, "원피스 감시목록 중 리셋 전 종료분만 센다(동결된 팰월드 감시목록·리셋 뒤 종료분 제외)");
 } finally {
   fs.rmSync(root, { recursive: true, force: true });
 }

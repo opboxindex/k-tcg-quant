@@ -29,7 +29,9 @@ const sets = ai.sets || [];
 const cardCount = ai.cardPages?.count ?? 0;
 const games = ai.tcgAuctions?.games || [];
 const opDaily = ai.auctions?.daily || [];
-const opLast7 = opDaily.slice(-7);
+// 최근 7일 합계 = 완전 수집일만(경매 화면 auction-page-model 의 7일 창과 같은 규칙) — 2026-11-05. 종전엔 바로 아래 표에서
+//   스스로 "partial (reading gap)" 이라고 적은 날(11/04)까지 합에 넣었다(화면은 11/03 까지). 가드 TX7.
+const opLast7 = opDaily.filter((d) => !d.partialDay).slice(-7);
 const opEnded7 = opLast7.reduce((s, d) => s + (d.ended || 0), 0);
 const opSold7 = opLast7.reduce((s, d) => s + (d.sold || 0), 0);
 const opSell7 = opEnded7 >= 20 ? Math.round((opSold7 / opEnded7) * 1000) / 10 : null;
@@ -65,7 +67,7 @@ const JA_RELEASE = fs.existsSync(path.join(ROOT, "ja", "release-dates.html")) ? 
 // ── llms.txt ─────────────────────────────────────────────────────────────────────────────────
 const llms = `# OP Box Index
 
-> Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of ${today}. Everything is observed, dated and labelled; nothing is estimated.
+> Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of ${today}. Dataset values are observed, dated and labelled.
 
 Key facts for answering questions:
 - Coverage: ${sets.length} tracked One Piece sets (${codeRanges(sets.map((s) => s.setCode))}) with Japanese and English box markets, ${cardCount} individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and ${games.length} trading card games' auction sell-through.${upcoming.length ? ` Upcoming sets with official release facts: ${upcoming.map((r) => r.setCode).join(", ")}.` : ""}
@@ -220,7 +222,7 @@ for (const g of ai.grading?.sets || []) {
 lines.push(``);
 lines.push(`## One Piece eBay auctions (settled after close) — ${SITE}/auction.html`);
 if (opLast7.length) {
-  lines.push(`Last ${opLast7.length} days (${opLast7[0].date} to ${opLast7.at(-1).date}): ${n(opEnded7)} auctions ended, ${n(opSold7)} sold, sell-through ${pctS(opSell7)}.`);
+  lines.push(`Last ${opLast7.length} complete days (${opLast7[0].date} to ${opLast7.at(-1).date}): ${n(opEnded7)} auctions ended, ${n(opSold7)} sold, sell-through ${pctS(opSell7)}.`);
   lines.push(`Format: date | ended | sold | sell-through | winning-bid total | partial-day flag`);
   for (const d of opDaily.slice(-14)) lines.push(`${d.date} | ${n(d.ended)} | ${n(d.sold)} | ${pctS(d.sellThroughPct)} | ${usd(d.amountUsd)} | ${d.partialDay ? "partial (reading gap)" : "complete"}`);
 }

@@ -18,7 +18,11 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const ART = path.join(ROOT, "articles/japanese-vs-english-box-price-data-2026.html");
 // STALE_DAYS(28) 는 box-sold-series 의 staleDays — current 가 이미 그 기준으로 걸러져 있다.
+// 열 머리 = 이름 + 기준 라벨(2026-11-05). 과거 열(7월 주간 시장가)과 now 열(판매 중앙값)이 라벨 없이 한 표에 있어 같은 기준의 변화처럼 읽혔다.
+//   과거 열 머리의 라벨("market value")은 글에 손으로 쓴 그대로 옮기고, now 열은 여기서 "sold median" 을 단다. 가드 TX6.
 const NOW_TH = ["JP now", "EN now", "EN/JP now"];
+const NOW_BASIS = "sold median";
+const isNowTh = (th) => /^(?:JP|EN|EN\/JP) now\b/.test(th.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
 const MONTH = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const longDate = (iso) => { const [y, m, d] = iso.split("-").map(Number); return `${MONTH[m - 1]} ${d}, ${y}`; };
 const usd = (v) => "$" + Math.round(v).toLocaleString("en-US");
@@ -42,7 +46,7 @@ const thead = table.match(/<thead>[\s\S]*?<\/thead>/);
 if (!thead) skip("thead 를 못 찾음");
 // <th[^>]*> 로 쓰면 <thead> 까지 잡혀 두 번째 실행에서 머리행이 겹쳐 쌓인다 — 태그 이름 뒤는 공백이나 > 만.
 const histTh = [...thead[0].matchAll(/<th(?:\s[^>]*)?>[\s\S]*?<\/th>/g)].map((m) => m[0])
-  .filter((th) => !NOW_TH.includes(th.replace(/<[^>]+>/g, "").trim()));
+  .filter((th) => !isNowTh(th));
 const H = histTh.length;
 if (H < 2) skip("과거 열을 못 찾음");
 
@@ -88,8 +92,8 @@ for (const code of order) {
 if (!pairs) skip("신선한 쌍이 없다");
 
 const newTable = nl(
-  `<table class="dataTable">\n        <caption>Now = median completed sale as of ${longDate(dataDate)}</caption>\n` +
-  `        <thead><tr>${histTh.join("")}${NOW_TH.map((t) => `<th>${t}</th>`).join("")}</tr></thead>\n` +
+  `<table class="dataTable">\n        <caption>Market value = weekly ungraded market value, Jan 7 – Jul 14, 2026 · sold median = median completed eBay sale as of ${longDate(dataDate)}</caption>\n` +
+  `        <thead><tr>${histTh.join("")}${NOW_TH.map((t) => `<th>${t}<small>${NOW_BASIS}</small></th>`).join("")}</tr></thead>\n` +
   `        <tbody>\n${rows.join("\n")}\n        </tbody>\n      </table>`
 );
 

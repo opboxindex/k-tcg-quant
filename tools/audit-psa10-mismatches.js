@@ -3,14 +3,14 @@
 //
 // 플래그 규칙(정확도 최우선 — 감정 PSA10 은 생카드보다 비싸야 정상):
 //  RAW  : 활성 PSA10 < 생NM(nmJpy/priceUsd) × 0.9  → PSA10 이 생카드보다 쌈 = 다른(싼) 카드에 물림
-//  SET  : 매물 Set 속성이 카드 세트와 다름(PRB/EB 재판 등)
+//  SET  : 매물 판본(Set 속성·제목의 세트 코드·세트명·연도)이 카드 세트와 다름(PRB/EB 재판 등) — editionVerdict, 수집기·사실 빌더와 같은 함수
 //  VAR  : 카드명 변형(red/gold/silver/manga/super/sp/parallel/tr/signature)이 제목과 불일치
 //  SOLD : 활성 < sold 중앙값 × 0.5 (참고)
 //
 // Run: node tools/audit-psa10-mismatches.js
 const fs = require("fs");
 const path = require("path");
-const { setCodeFromText } = require("./ebay-psa10-listing-filter");
+const { loadEditionIndex, editionVerdict } = require("./ebay-psa10-listing-filter");
 
 const ROOT = path.join(__dirname, "..");
 const dataPath = path.join(ROOT, "data", "onepiece-packs.json");
@@ -53,6 +53,7 @@ const SUBVARIANTS = [
 (async () => {
   if (!env.EBAY_CLIENT_ID) throw new Error("Missing eBay credentials");
   const data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  const editionIndex = loadEditionIndex(ROOT, data);
   const fx = data.fx || {};
   const toUsd = (v, cur) => (cur === "USD" ? v : cur === "KRW" ? v / (fx.usdKrw || 1388) : cur === "JPY" ? (v * (fx.jpyKrw || 9.1)) / (fx.usdKrw || 1388) : v);
   const jpyUsd = (jpy) => (Number.isFinite(jpy) && fx.jpyKrw && fx.usdKrw ? (jpy * fx.jpyKrw) / fx.usdKrw : null);
@@ -84,11 +85,10 @@ const SUBVARIANTS = [
 
     // RAW 는 nmJpy(유유테이 검증값)일 때만 신뢰. priceUsd(TCGplayer 폴백)는 밈/트롤가 섞여 분모로 못 씀.
     if (t.card.nmJpy != null && rawUsd != null && bestUsd != null && bestUsd < rawUsd * 0.9) reasons.push(`RAW: PSA10 $${bestUsd.toFixed(0)} < 생NM $${rawUsd.toFixed(0)}`);
-    // SET 은 카드 "번호"에서 유도한 세트와 비교(파일된 세트가 아니라). SP는 번호=예전세트, 박스=나중세트라
-    // 파일세트로 비교하면 정상 매물을 오탐한다. 번호에 접두어 없으면(예 "119") 판정 보류.
-    const numberSet = setCodeFromText(t.card.number);
-    const listingSet = setCodeFromText(setA) || setCodeFromText(title);
-    if (numberSet && listingSet && listingSet !== numberSet) reasons.push(`SET: 매물 ${listingSet} ≠ 번호세트 ${numberSet} (${setA || "제목"})`);
+    // SET 은 카드가 실린 세트(t.code)와 비교한다. 2026-11-05 까지는 카드 "번호"의 세트와 비교해 OP-05 나미 SP 의 'OP05' 매물(맞는 매물)도
+    // 'OP-05 ≠ 번호세트 OP-01' 로 찍었고, 제목의 카드 번호 앞머리(OP01-016 의 OP01)를 매물 세트로 읽었다. 세트명('Paramount War')은 못 읽었다.
+    const ev = editionVerdict({ title, setAspect: setA }, t.code, t.card, editionIndex);
+    if (ev.verdict === "conflict") reasons.push(`SET: ${ev.reason} (${setA || "제목"})`);
     for (const [name, re] of SUBVARIANTS) {
       const inCard = re.test(t.card.name || "");
       const inTitle = re.test(title);

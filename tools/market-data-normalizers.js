@@ -1,5 +1,7 @@
 "use strict";
 
+const ED = require("./ebay-psa10-listing-filter");   // PSA 10 매물 판본 판정(psa10AskRejections) — 수집기와 같은 함수
+
 const SITE = "https://opboxindex.com";
 const MIN_SAMPLE = 3;
 const isDate = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value || "");
@@ -330,4 +332,15 @@ function withUsd(p, fx) {
   return { ...p, medianUsd: usd(p.median), rangeLowUsd: usd(p.rangeLow), rangeHighUsd: usd(p.rangeHigh), fxObservedOn: histKrw ? p.sampleCollectedOn : (fx?.date || null) };
 }
 
-module.exports = { SITE, ageDays, buildBoxMarket, isDate, isPositive, stockStatus, toUsd, fxAt, psa10Usd, nmUsable, nmUsd, rawPrice, tcgSpikes, rawValues, priciest, countedValues, boxChange28, latestDate, EPN, epnUrl, splitReprints, enIsReprint, rawNmAsk, psa10Sold, psaPopulation, withUsd };
+// PSA 10 최저 매물 판본 규칙 — 2026-11-05. 사실 빌더가 카드마다 psa10Ask 를 만들기 전에 한 번 부른다: 돌려준 Map 에 든 카드("세트|카드순번")는
+// psa10Ask 를 null 로 둔다(값·버튼·ask 표기·Premium 모두 숨김). 데이터(packs.json)는 지우지 않는다 — 다음 수집이 같은 규칙으로 다시 고른다.
+//   ① 판본: 제목·Set 속성의 세트 코드·세트명·연도로 그 카드 세트의 판인지. PRB 카드는 PRB 판 표시가 있어야 한다(재수록 각인판 ≠ 원판).
+//      실사고: PRB-01 샹크스 망가 $1,756 = OP-01 판('2022 Romance Dawn') · EB-05 나미 SP $295 = OP-05 판 · PRB-01 에이스 망가 $850 = OP-02 판.
+//   ② 자체 감사(data/psa10-mismatch-audit.json)가 SET 불일치로 표시한 매물은 감사가 읽어 둔 증거(제목·Set 속성)로 카드 세트와 대조해 다른 판이면 숨긴다.
+//   ③ 같은 매물 id 를 여러 카드가 쓰면 판본(과 금·은·레드)이 제목으로 확인된 한 장만 남긴다(OP05-069 OP-05/PRB-01, OP-14 버기 금/은).
+// 규칙 본문은 tools/ebay-psa10-listing-filter.js psa10ListingRejections — 수집기(update-ebay-psa10-active-links.js)가 쓰기 직전에 같은 함수를 부른다.
+function psa10AskRejections({ packs, setFacts, officialCardlist, audit } = {}) {
+  return ED.psa10ListingRejections({ packs, index: ED.buildEditionIndex({ packs, setFacts, officialCardlist }), audit });
+}
+
+module.exports = { SITE, ageDays, buildBoxMarket, isDate, isPositive, stockStatus, toUsd, fxAt, psa10Usd, nmUsable, nmUsd, rawPrice, tcgSpikes, rawValues, priciest, countedValues, boxChange28, latestDate, EPN, epnUrl, splitReprints, enIsReprint, rawNmAsk, psa10Sold, psaPopulation, withUsd, psa10AskRejections };

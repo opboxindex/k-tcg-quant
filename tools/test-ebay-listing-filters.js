@@ -2,7 +2,8 @@
 
 const assert = require("node:assert/strict");
 const { isExcludedEbaySellerOrLocation, isJapaneseSealedBoosterBoxTitle } = require("./ebay-listing-filters");
-const { isPsa10JapaneseCardListing, setCodeFromText, listingSetConflicts, characterMatches, colorConflict } = require("./ebay-psa10-listing-filter");
+const path = require("node:path");
+const { isPsa10JapaneseCardListing, setCodeFromText, editionVerdict, loadEditionIndex, characterMatches, colorConflict } = require("./ebay-psa10-listing-filter");
 
 assert.equal(
   isJapaneseSealedBoosterBoxTitle("Sealed Japanese EB-02 Anime 25th Collection Booster Box [US Seller] One Piece", "EB-02"),
@@ -71,24 +72,27 @@ assert.equal(
 );
 
 // 교차세트 오매칭(2026-07-22 실사고): PRB-01 재판 알트아트가 OP-01 원본에 물림.
-// Set 속성으로 세트코드를 뽑아 카드 세트와 다르면 걸러야 한다.
+// Set 속성으로 세트코드를 뽑아 카드 세트와 다르면 걸러야 한다. 판본 판정 전체(세트명·연도·형제 카드)는 test-psa10-edition.js.
 assert.equal(setCodeFromText("ONE PIECE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST-"), "PRB-01");
 assert.equal(setCodeFromText("ONE PIECE OP01-ROMANCE DAWN"), "OP-01");
 assert.equal(setCodeFromText("Pokemon nonsense"), null);
+const editionIndex = loadEditionIndex(path.join(__dirname, ".."));
+const op01Shanks = { number: "OP01-120", name: "Shanks Parallel" };
+const plainTitle = "PSA 10 Shanks OP01-120 SEC Parallel Japanese One Piece";
 assert.equal(
-  listingSetConflicts("ONE PIECE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST-", "OP-01"),
-  true,
+  editionVerdict({ title: plainTitle, setAspect: "ONE PIECE PRB01-PREMIUM BOOSTER -ONE PIECE CARD THE BEST-" }, "OP-01", op01Shanks, editionIndex).verdict,
+  "conflict",
   "PRB-01 reprint listing must be flagged as a set mismatch for an OP-01 card",
 );
 assert.equal(
-  listingSetConflicts("ONE PIECE OP01-ROMANCE DAWN", "OP-01"),
-  false,
+  editionVerdict({ title: plainTitle, setAspect: "ONE PIECE OP01-ROMANCE DAWN" }, "OP-01", op01Shanks, editionIndex).verdict,
+  "match",
   "A matching OP-01 Set aspect must not be flagged",
 );
 assert.equal(
-  listingSetConflicts(null, "OP-01"),
-  false,
-  "Missing Set aspect must not over-reject (keep, do not guess)",
+  editionVerdict({ title: plainTitle, setAspect: null }, "OP-01", op01Shanks, editionIndex).verdict,
+  "unknown",
+  "Missing Set aspect is not a conflict (the caller decides by PRB/sibling rules)",
 );
 
 // 캐릭터명 불일치(2026-07-22 실사고): Luffy 카드에 Perona 매물이 물림.

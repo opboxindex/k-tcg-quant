@@ -26,17 +26,15 @@ const { settleBudget } = require("./ebay-budget");
 const { categorize } = require("./auction-classify");
 
 const ROOT = path.join(__dirname, "..");
-// 게임별 정산 — 2026-08-19. collect-auction-market.js --game=palworld 가 쌓은 감시목록을
-// 같은 플래그로 정산한다. 기본은 원피스라 기존 실행(인자 없음)은 그대로다.
-const GAME = (process.argv.find((a) => a.startsWith("--game=")) || "--game=onepiece").split("=")[1];
-const pre = GAME === "onepiece" ? "" : `${GAME}-`;
-const watchPath = path.join(ROOT, "data", `${pre}auction-watch.json`);
-const soldPath = path.join(ROOT, "data", `${pre}auction-sold.json`);
+// 원피스만 정산한다. 팰월드 전용 정산(--game=palworld, 2026-08-19~)은 2026-11-05 소유자 결정으로 지웠다 —
+// 그 원장 data/palworld-auction-archive·palworld-auction-sold.json 은 append-only 라 동결해 둔다(가드 PW1).
+const watchPath = path.join(ROOT, "data", "auction-watch.json");
+const soldPath = path.join(ROOT, "data", "auction-sold.json");
 
 // 개별 낙찰 기록은 data/auction-archive/<날짜>.json 이 원장이다(하루가 지나면 다시 안 쓰임).
 // auction-sold.json 은 파생 집계 + 최근 창만 담는 얇은 파일로 남긴다 — 2시간마다 재작성되므로
 // 여기에 45일치를 넣으면 저장소가 하루 수십 MB씩 불어난다(2026-07-29 실측: 8일치로 blob 20.8MB).
-// ── data/<game>auction-sold.json 은 **집계 전용 파일**이다(개별 판매는 안 담는다).
+// ── data/auction-sold.json 은 **집계 전용 파일**이다(개별 판매는 안 담는다).
 //
 // 이력: 14일치 → 3일치(2026-08-19) → 1일치(2026-08-28) → 아예 안 담음(2026-08-31).
 // 14일치이던 시절 이 파일 하나가 저장소 이력에서 1.19GB(전체 .git 204MB 중 1위)를 차지했다.
@@ -45,7 +43,7 @@ const soldPath = path.join(ROOT, "data", `${pre}auction-sold.json`);
 // 이 파일은 2시간마다 통째로 재작성·커밋되므로, 여기 실은 바이트 × 12 가 하루 저장소 증가분이다.
 // 전수 수집 전환(하루 1,000→12,000건) 뒤 1일치만 담아도 1.2MB 가 되어 하루 14MB 씩 불어났다.
 // 그런데 개별 판매를 읽는 소비자는 하나도 없다 — 생성기·집계·통계는 전부
-// data/<game>auction-archive/<날짜>.json(하루 한 번 쓰고 다시 안 건드리는 원장)을 직접 읽는다.
+// data/auction-archive/<날짜>.json(하루 한 번 쓰고 다시 안 건드리는 원장)을 직접 읽는다.
 // 유일한 소비처였던 가드 A1 의 "파생이 원장보다 많지 않은가" 대조는
 // daily 마지막 날의 건수와 그 날 아카이브 파일의 건수를 맞춰보는 것으로 같은 일을 한다.
 const KEEP_SALES_DAYS = 45;    // 아카이브 기준 집계 재계산 범위
@@ -209,7 +207,7 @@ let rateLimited = false;   // 429 로 조기 종료했는가 — 로그에 남�
   const priorDaily = (out.daily || []).filter((p) => p.d >= cutDaily && !days.includes(p.d));
   out.daily = [...priorDaily, ...daily].sort((a, b) => a.d.localeCompare(b.d));
 
-  out.note = `Completed eBay auction results for ${GAME === "onepiece" ? "One Piece Card Game" : "Palworld Card Game"} items. The full ledger lives in data/${pre}auction-archive/<date>.json (one file per day, written once and not rewritten); this file carries only the aggregate series ('daily'). Each record is read from the listing AFTER the auction closed, so 'price' is the final winning bid, not an asking price or a mid-auction bid. 'sold' is taken from eBay's sold-quantity field; where eBay does not report it we store null rather than guessing, and null rows are excluded from the sell-through denominator. Multi-item lots are handled by 'qty' parsed from the title: 'price' is always the lot total, 'unitPrice' is per item, and where the count cannot be determined (case/lot/bulk) qty is null and the record is excluded from price aggregates rather than counted as a single item. Aggregated medPrice/maxPrice are per-unit figures. Sellers and locations excluded from our price data are excluded here too.`;
+  out.note = `Completed eBay auction results for One Piece Card Game items. The full ledger lives in data/auction-archive/<date>.json (one file per day, written once and not rewritten); this file carries only the aggregate series ('daily'). Each record is read from the listing AFTER the auction closed, so 'price' is the final winning bid, not an asking price or a mid-auction bid. 'sold' is taken from eBay's sold-quantity field; where eBay does not report it we store null rather than guessing, and null rows are excluded from the sell-through denominator. Multi-item lots are handled by 'qty' parsed from the title: 'price' is always the lot total, 'unitPrice' is per item, and where the count cannot be determined (case/lot/bulk) qty is null and the record is excluded from price aggregates rather than counted as a single item. Aggregated medPrice/maxPrice are per-unit figures. Sellers and locations excluded from our price data are excluded here too.`;
   out.updated = new Date(now).toISOString();
   fs.writeFileSync(soldPath, JSON.stringify(out) + "\n", "utf8");
 

@@ -158,7 +158,7 @@ function setPage(code, ed, f, lang) {
     const pc = s.top10.priciest, pl = h.match(/<li>최고가 카드 \(일본판 NM\) <strong>([^<]*)<\/strong>(?:\(([^)]*)\))? · (?:각 )?<strong>([\d,]+)원<\/strong>(?:\((\d{4}-\d{2}-\d{2})\))?<\/li>/);
     cmp("PC1", f, "최고가 카드 줄", pl ? pl[0] : (/<li>최고가 카드/.test(h) ? "못 읽음" : null), pc ? { present: true } : null);
     if (pl && pc) { cmp("PC1", f, "최고가 카드 이름", unH(pl[1]), pc.ties.map((t) => t.name).join(" · ")); if (pc.ties.length === 1) cmp("PC1", f, "최고가 카드 번호", pl[2], pc.number); cmp("PC1", f, "최고가 카드 원화", pl[3], s.cards[pc.i].nm.krw); cmp("PC1", f, "최고가 카드 관측일", pl[4], pc.date); }
-    const p10 = pc ? s.cards[pc.i].psa10 : null, pm = h.match(/<li>PSA 10 실거래 중앙값 \(([^)]*)\) <strong>([\d,]+)원<\/strong>\((\d{4}-\d{2}-\d{2}), 표본 (\d+)건\)/);
+    const p10 = pc ? s.cards[pc.i].psa10 : null, pm = h.match(/<li(?: class="stale")?>PSA 10 실거래 중앙값 \(([^)]*)\) <strong>([\d,]+)원<\/strong>\((\d{4}-\d{2}-\d{2}), 표본 (\d+)건\)/);
     cmp("PK1", f, "PSA 10 줄", pm ? pm[0] : null, p10 ? { present: true } : null);
     if (pm && p10) { cmp("PK1", f, "PSA 10 카드", unH(pm[1]), pc.name); cmp("PK1", f, "PSA 10 원화", pm[2], p10.krw); cmp("PK1", f, "PSA 10 날짜", pm[3], p10.date); cmp("PK1", f, "PSA 10 표본", pm[4], p10.n); }
     koAuction(f, h, s); koCards(f, h, s); koGrading(f, h, s);
@@ -194,7 +194,7 @@ function koAuction(f, h, s) {
 }
 function koCards(f, h, s) {
   const sec = (h.match(/<section aria-label="인기 카드 시세">[\s\S]*?<\/section>/) || [""])[0], seen = [];
-  for (const m of sec.matchAll(/<td class="nm">([^<]*)<\/td><td class="code">([^<]*)<\/td><td>([^<]*)<\/td><td class="num">([^<]*)<\/td>/g)) {
+  for (const m of sec.matchAll(/<td class="nm">([^<]*)<\/td><td class="code">([^<]*)<\/td><td>([^<]*)<\/td><td class="num(?: stale)?"(?: title="[^"]*")?>([^<]*)<\/td>/g)) {   // stale = 28일 넘은 NM 흐림(2026-11-05)
     const c = s.cards.find((x) => x.number === unH(m[2]) && x.name === unH(m[1]));
     if (!c) { cmp("NM2", f, `인기 카드 ${unH(m[2])} ${unH(m[1])}`, "있음", null); continue; }
     seen.push(c); cmp("RY1", f, `인기 카드 ${c.number} 레어도`, unH(m[3]), c.rarity || null); cmp("NM2", f, `인기 카드 ${c.number} NM 원화`, m[4], c.nm.usable ? c.nm.krw : null);
@@ -254,14 +254,14 @@ function cardPages() {
     const auc = rows((h.match(/at auction — by print and variant<\/h2>[\s\S]*?<\/table>/) || [""])[0]).slice(1);
     cmp("D9", f, "경매 변형 행 수", String(auc.length), String(c.auctionRows.length));
     auc.forEach((r, i) => { const t = cells(r).map(strip), a = c.auctionRows[i]; if (!a) return; cmp("D9", f, `경매 행 ${i + 1} 종료`, t[2], a.n); cmp("D9", f, `경매 행 ${i + 1} 낙찰`, t[3], a.sold); cmp("D9", f, `경매 행 ${i + 1} 중앙값`, t[5], a.medPrice); });
-    for (const r of (h.match(/<h2>More [^<]* cards tracked here<\/h2>[\s\S]*?<\/table>/) || [""])[0].matchAll(/<tr><td><a href="([^"]+\.html)">[^<]*<\/a><\/td><td class="num">([^<]*)<\/td><td class="num">([^<]*)<\/td>/g)) {
+    for (const r of (h.match(/<h2>More [^<]* cards tracked here<\/h2>[\s\S]*?<\/table>/) || [""])[0].matchAll(/<tr><td><a href="([^"]+\.html)">[^<]*<\/a><\/td><td class="num(?: stale)?"(?: title="[^"]*")?>([^<]*)<\/td><td class="num(?: stale)?"(?: title="[^"]*")?>([^<]*)<\/td>/g)) {
       const o = byFile.get(r[1]); if (!o) continue;
       cmp("NM2", f, `형제 ${o.number} NM`, r[2], o.shown.nm); cmp("PK1", f, `형제 ${o.number} PSA 10`, dollars(r[3]), o.shown.psa);
     }
   }
   if (exists("cards/index.html")) {
     const h = read("cards/index.html");
-    for (const r of h.matchAll(/<tr><td><a href="([^"]+\.html)">[^<]*<\/a> <small[^>]*>[^<]*<\/small><\/td><td>(?:<a [^>]*>)?[^<]*(?:<\/a>)?<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td>/g)) {
+    for (const r of h.matchAll(/<tr(?: class="stale")?><td><a href="([^"]+\.html)">[^<]*<\/a> <small[^>]*>[^<]*<\/small><\/td><td>(?:<a [^>]*>)?[^<]*(?:<\/a>)?<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td>/g)) {
       const c = byFile.get(r[1]); if (!c) continue;
       const w = `cards/index.html ${c.number}`;
       cmp("NM2", w, "NM", r[2], c.shown.nm); cmp("PK1", w, "PSA 10", r[3], c.psa10 ? c.psa10.usd : null); cmp("CX2", w, "Premium", r[4], c.psa10 && !c.psa10.stale && c.nm.usable ? c.psa10.multiple : null); cmp("PK1", w, "PSA 10 표본", r[5], c.psa10 ? c.psa10.n : null); cmp("PK1", w, "PSA 10 날짜", r[6], c.psa10 ? c.psa10.date : null);
@@ -270,7 +270,7 @@ function cardPages() {
   }
   if (exists("ko/cards.html")) {
     const byKey = new Map(F.cardPages.map((p) => [p.key, cardOf(p)]));
-    for (const m of read("ko/cards.html").matchAll(/<tr><td>\d+<\/td><td class="l"><span class="cardCell">(?:<img[^>]*>)?<span>(?:[^<]*<small>([^<]*)<\/small>|([^<]*))<small>([A-Z0-9]+-\d+) · [A-Z]+-\d+[^<]*<\/small><\/span><\/span><\/td><td class="hideM">([^<]*)<\/td><td>([\s\S]*?)<\/td><td>([^<]*)<\/td><\/tr>/g)) {
+    for (const m of read("ko/cards.html").matchAll(/<tr><td>\d+<\/td><td class="l"><span class="cardCell">(?:<img[^>]*>)?<span>(?:[^<]*<small>([^<]*)<\/small>|([^<]*))<small>([A-Z0-9]+-\d+) · [A-Z]+-\d+[^<]*<\/small><\/span><\/span><\/td><td class="hideM(?: stale)?"(?: title="[^"]*")?>([^<]*)<\/td><td>([\s\S]*?)<\/td><td>([^<]*)<\/td><\/tr>/g)) {
       const name = unH(m[1] ?? m[2]), c = byKey.get(`${m[3]}|${name.toLowerCase().replace(/[^a-z0-9]/g, "")}`); if (!c) continue;
       const w = `ko/cards.html ${m[3]}`;
       cmp("NM2", w, "NM 원화", m[4], c.nm.usable ? c.nm.krw : null); cmp("PK1", w, "PSA 10 원화", first(m[5], /([\d,]+)원/), c.psa10 ? c.psa10.krw : null);
@@ -435,7 +435,7 @@ function articles() {
     const pf = first(h, /<!-- PACK-FACTS:START -->([\s\S]*?)<!-- PACK-FACTS:END -->/) || "";
     for (const m of pf.matchAll(/>((?:OP|EB|PRB)-\d{2})<\/a> page (?:lists <strong>(\d+) cards per pack<\/strong>|states no per-pack card count)/g)) cmp("SE1", `${HMP} ${m[1]}`, "영문 팩 장수", m[2] ?? "—", (F.enPackContents[m[1]] || {}).cardsPerPack ?? null);
     const nw = F.releases.newestOp && S[F.releases.newestOp];
-    if (nw) { const nm = pf.match(/For the newest set, ([A-Z]+-\d+) [^<]*<a [^>]*>Bandai lists<\/a> an MSRP of <strong>¥([\d,]+) per pack<\/strong>/); cmp("RD1", HMP, "newest set", nm && nm[1], F.releases.newestOp); cmp("KF1", HMP, "newest 팩 정가", nm && nm[2], nw.keyFacts.jp.msrp.jpPack); }
+    if (nw) { const nm = pf.match(/For the newest main set, ([A-Z]+-\d+)[^<]*<a [^>]*>Bandai lists<\/a> an MSRP of <strong>¥([\d,]+) per pack<\/strong>/); cmp("RD1", HMP, "newest set", nm && nm[1], F.releases.newestOp); cmp("KF1", HMP, "newest 팩 정가", nm && nm[2], nw.keyFacts.jp.msrp.jpPack); }
   }
   for (const [f, pick] of [["articles/one-piece-booster-box-price-guide.html", (cs) => [cs[1], cs[2], cs[3]]], ["articles/japan-vs-english.html", (cs) => [cs[1], cs[2], null]], ["articles/japanese-vs-english-box-price-data-2026.html", (cs) => [cs[cs.length - 3], cs[cs.length - 2], cs[cs.length - 1]]]]) {
     if (!exists(f)) continue;

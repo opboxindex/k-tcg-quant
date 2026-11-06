@@ -137,20 +137,21 @@ function isLastRunBeforeReset(key, nowMs = Date.now(), resetMs = nextReset(nowMs
 }
 
 /**
- * 이 창에서 끝나는 원피스·팰월드 감시 건수 — TCG 가 정산 전에 남겨 둬야 하는 몫.
+ * 이 창에서 끝나는 원피스 감시 건수 — TCG 가 정산 전에 남겨 둬야 하는 몫.
  * 감시목록에 endsAt 이 다 있으니 추정이 아니라 실제 개수다. 리셋 뒤에 끝나는 건 다음 창 몫이다.
+ * 팰월드 전용 감시목록(data/palworld-auction-watch.json)은 2026-11-05 수집 중단으로 동결됐다 — 세지 않는다.
+ * 그 몫(팰월드 검색·정산이 쓰던 콜)은 따로 배정하지 않는다: 남는 쿼터는 순서 ④ TCG 정산·여유분으로 흘러가고,
+ * 여유분은 topup-tcg-watch.js 가 13개 게임에 같은 몫으로 나눈다.
  */
 function auctionNeed(resetMs, root = ROOT) {
   let need = 0;
-  for (const f of ["auction-watch.json", "palworld-auction-watch.json"]) {
-    try {
-      const w = JSON.parse(fs.readFileSync(path.join(root, "data", f), "utf8"));
-      for (const p of w.pending || []) {
-        const t = Date.parse(p.endsAt || p.end || 0);
-        if (Number.isFinite(t) && t < resetMs) need += 1;
-      }
-    } catch {}
-  }
+  try {
+    const w = JSON.parse(fs.readFileSync(path.join(root, "data", "auction-watch.json"), "utf8"));
+    for (const p of w.pending || []) {
+      const t = Date.parse(p.endsAt || p.end || 0);
+      if (Number.isFinite(t) && t < resetMs) need += 1;
+    }
+  } catch {}
   return need;
 }
 

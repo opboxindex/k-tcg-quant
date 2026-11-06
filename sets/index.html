@@ -118,7 +118,7 @@
       .chaseTable td:first-child { color: var(--muted); font-variant-numeric: tabular-nums; }
       .chaseTable .cNum { display: block; color: var(--muted); font-size: 11.5px; margin-top: 1px; }
       .chaseTable .psaKind { color: var(--muted); font-size: 11.5px; }
-      .chaseTable td.psaStale { opacity: .62; }   /* 35일 넘은 PSA10 sold — 값은 두되 흐리게(2026-09-24) */
+      .chaseTable td.psaStale, .chaseTable td.nmStale { opacity: .62; }   /* 35일 넘은 PSA10 sold(2026-09-24)·28일 넘은 NM(2026-11-05) — 값은 두되 흐리게 */
       .chaseTable td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
       /* 카드명은 왼쪽 — styles.css 기사 표 기본(.bodyPage table 2열부터 오른쪽)보다 구체적으로 이긴다 */
       .bodyPage table.chaseTable :is(th, td).cn:not(:first-child) { text-align: left; }

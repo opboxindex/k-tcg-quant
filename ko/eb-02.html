@@ -47,6 +47,7 @@
       .koBoard td.thumb img { width: 40px; height: 56px; object-fit: cover; border-radius: 4px; display: block; background: #12161d; }
       .koFacts { margin: 14px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.8; }
       .koFacts strong { color: var(--accent); }
+      .koFacts li.stale strong, .koBoard td.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koNote { color: var(--muted); font-size: 12.5px; max-width: 760px; margin: 8px 0 14px; line-height: 1.6; }
       .faqItem { max-width: 760px; border-bottom: 1px solid rgba(255,255,255,.08); padding: 4px 0; }
       .faqItem summary { cursor: pointer; font-weight: 700; padding: 8px 0; font-size: 14.5px; }
@@ -112,7 +113,7 @@
 
       <section aria-label="인기 카드 시세">
         <h2>EB-02 인기 카드 NM 시세 (원화)</h2>
-        <p class="koNote">일본판 NM · 관측일 2026-10-21 · 환율 2026-11-04 기준</p>
+        <p class="koNote">일본판 NM · 관측일 2026-11-06 · 환율 2026-11-04 기준</p>
         
         <div style="overflow-x:auto">
         <table class="koBoard">

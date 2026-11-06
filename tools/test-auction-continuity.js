@@ -43,10 +43,11 @@ try {
   ] });
   write("tcg-snapshot.json", { points: [tcgDay("2026-09-01"), tcgDay("2026-09-02")] });
   write("tcg-series.json", { daily: [tcgSeriesDay("2026-09-01"), tcgSeriesDay("2026-09-02")] });
-  write("palworld-auction-market.json", { points: [{ d: "2026-09-01" }, { d: "2026-09-02" }] });
-  write("palworld-auction-sold.json", { daily: [{ d: "2026-09-01" }, { d: "2026-09-02" }] });
+  // 팰월드 전용 관측·낙찰 파일은 일부러 두지 않는다 — 2026-11-05 수집 중단·동결(가드 PW1) 뒤로는 일일 감사가
+  // 그 파일을 요구하면 안 된다(종전엔 없으면 "팰월드 경매 관측 파일을 못 읽었다"로 FAIL 했다).
 
   let out = runAudit();
+  assert.ok(!out.report.problems.some((p) => /팰월드/.test(p)), `동결된 팰월드 전용 계열을 일일 감사가 요구하면 안 된다: ${out.result.stdout}`);
   assert.equal(out.result.status, 1, "the exact previous-day partial collection must fail the audit");
   assert.ok(out.report.problems.some((p) => /원피스 경매 일별.*2026-09-02.*부분수집.*6시간/.test(p)), out.result.stdout);
 

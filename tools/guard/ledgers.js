@@ -219,7 +219,8 @@ function run() {
   const size = (f) => fs.statSync(path.join(ROOT, f)).size;
   if (size("data/onepiece-packs.json") > 1_200_000) errors.push(`T2: data/onepiece-packs.json 가 ${(size("data/onepiece-packs.json") / 1024).toFixed(0)}KB — 상한 1172KB 초과(compact-series.js 확인, 방문자가 매번 받는 파일)`);
   if (read("data/onepiece-packs.json").slice(0, 4000).includes("\n ")) errors.push("T2: data/onepiece-packs.json 가 들여쓰기된 채로 저장돼 있다 — 전송량 1.5배. 쓴 워크플로 끝에 node tools/compact-series.js");
-  for (const f of ["data/auction-sold.json", "data/palworld-auction-sold.json"].filter(exists)) if (size(f) > 400_000) errors.push(`T3: ${f} 가 ${(size(f) / 1024).toFixed(0)}KB — 상한 390KB 초과(2시간마다 커밋되는 파일: 개별 판매 혼입·안 읽는 축부터 볼 것)`);
+  // 팰월드 전용 낙찰 집계(palworld-auction-sold.json)는 2026-11-05 수집 중단으로 더 안 쓰인다(동결) — 상한 대상이 아니다.
+  for (const f of ["data/auction-sold.json"].filter(exists)) if (size(f) > 400_000) errors.push(`T3: ${f} 가 ${(size(f) / 1024).toFixed(0)}KB — 상한 390KB 초과(2시간마다 커밋되는 파일: 개별 판매 혼입·안 읽는 축부터 볼 것)`);
 
   // R2(원장) · UP1(원장) · CL1(원장)
   const F = setFacts();

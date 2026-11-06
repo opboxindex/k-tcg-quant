@@ -25,6 +25,8 @@ const DEFAULT_PAGES = [
   "/articles/one-piece-set-list-release-dates.html", "/articles/how-many-packs-one-piece-booster-box.html",
   // 2026-11-02 모바일 점검에서 깨짐이 나온 페이지
   "/psa-grading.html", "/compare.html", "/psa10-ranking.html", "/articles/japan-vs-english.html", "/cards/", "/sets/eb-05-english.html", "/sets/op-13-english.html", "/sets/op-13-card-list.html",
+  // 2026-11-05 기준 라벨을 단 두 리포트 — OP-16 리포트 가격 표는 폭 안(354px)인데 흐림이 걸려 있었다(.tblFit 로 정정)
+  "/articles/op-16-box-price-30-days-later.html", "/articles/japanese-vs-english-box-price-data-2026.html",
 ];
 // 인자는 저장소 상대 경로(sets/op-17.html) — 앞의 / 는 붙여 준다(Git Bash 는 /로 시작하는 인자를 윈도우 경로로 바꾼다).
 const pages = process.argv.slice(2).length ? process.argv.slice(2).map((a) => "/" + a.replace(/^\/+/, "")) : DEFAULT_PAGES;

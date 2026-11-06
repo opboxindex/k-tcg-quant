@@ -1,6 +1,6 @@
 {
  "note": "조사가 끝난 영구 공백. 소급 수집이 불가능하다고 확인된 것만 넣는다. audit-series-gaps.js 가 여기 적힌 것은 problems 대신 notes 로 낸다 — 매번 FAIL 이 나면 사람이 감사를 무시하게 되고, 그러면 진짜 새 공백도 같이 묻힌다. 새 공백을 여기 넣어 조용히 덮는 데 쓰지 말 것: 반드시 사유와 확인일을 적는다.",
- "updated": "2026-11-02",
+ "updated": "2026-11-05",
  "gaps": [
   {
    "series": "TCG 시장 스냅샷",
@@ -28,14 +28,6 @@
    "reason": "collect-tcg 워크플로가 8/29~8/30 실패(Settle auctions 가 가드 T3 에서 죽던 것과 같은 기간). 2026-10-14 정정: 실패한 단계는 'Snapshot (once a day)' 다 — 8/29 05:13Z(run 33235648189)·8/30 03:05Z(run 33289464877) — 스냅샷이 실패하면 그 실행은 정산까지 가지 않았다. eBay 는 지나간 날의 진행 중 매물 수를 되돌려주지 않는다. 근본 원인은 2026-08-31 커밋에서 수정(핫 파일에서 개별 판매 제거).",
    "confirmed": "2026-08-31",
    "corrected": "2026-10-14"
-  },
-  {
-   "series": "팰월드 경매 관측",
-   "dates": [
-    "2026-08-27"
-   ],
-   "reason": "같은 기간 워크플로 실패. 진행 중 매물 관측은 그 시점 스냅샷이라 소급 불가.",
-   "confirmed": "2026-08-31"
   },
   {
    "series": "TCG 시장 스냅샷",
@@ -68,15 +60,6 @@
     "2026-09-26"
    ],
    "reason": "2026-09-25 11:43Z ~ 09-27 05:38Z 동안 GitHub Actions 수집 커밋이 하나도 없다. 원인은 가드 P1 이다(2026-10-14 감사로 정정) — update-active-listings 가 9/22 부터 실패해 공급 시계열(supply-series.json) updated 가 2026-09-21 에 멈췄고, 09-25 12:00Z 에 경과가 4.5일(반올림 5일 > 4)을 넘자 P1 이 FAIL 했다. 같은 head 7e39099c3 로 재현하면 11:43Z OK · 12:49Z P1 FAIL 이다. 가드를 도는 수집 워크플로 7개(collect-auction-market·collect-grading·collect-tcg·settle-auctions·update-active-listings·update-fx·update-market-data)가 09-25 12:49Z 부터 Guard 단계에서 실패했고(그 기간 실행 88회 전부 head 7e39099c3), 09-27 05:36Z 로컬 커밋 6fcce2ac(9/26 공급 점)·5d4ba3ed 가 함께 푸시돼 공급 시계열이 갱신되면서 풀렸다. 종전 기록의 'R4·__testFakeCollector' 사유는 틀렸다 — 그 키가 든 6fcce2ac 는 09-27 05:36Z 에 키를 지운 커밋과 함께 처음 푸시됐다. 그래서 09-26(UTC) 스냅샷이 한 번도 커밋되지 않았다. 스냅샷은 그 시점 진행 중 매물 수라 지나간 날은 eBay 에서 되돌려 받을 수 없다.",
-   "confirmed": "2026-09-30",
-   "corrected": "2026-10-14"
-  },
-  {
-   "series": "팰월드 경매 관측",
-   "dates": [
-    "2026-09-26"
-   ],
-   "reason": "2026-09-25 11:43Z ~ 09-27 05:38Z 동안 GitHub Actions 수집 커밋이 하나도 없다. 원인은 가드 P1 이다(2026-10-14 감사로 정정) — update-active-listings 가 9/22 부터 실패해 공급 시계열(supply-series.json) updated 가 2026-09-21 에 멈췄고, 09-25 12:00Z 에 경과가 4.5일(반올림 5일 > 4)을 넘자 P1 이 FAIL 했다. 같은 head 7e39099c3 로 재현하면 11:43Z OK · 12:49Z P1 FAIL 이다. 가드를 도는 수집 워크플로 7개(collect-auction-market·collect-grading·collect-tcg·settle-auctions·update-active-listings·update-fx·update-market-data)가 09-25 12:49Z 부터 Guard 단계에서 실패했고(그 기간 실행 88회 전부 head 7e39099c3), 09-27 05:36Z 로컬 커밋 6fcce2ac(9/26 공급 점)·5d4ba3ed 가 함께 푸시돼 공급 시계열이 갱신되면서 풀렸다. 종전 기록의 'R4·__testFakeCollector' 사유는 틀렸다 — 그 키가 든 6fcce2ac 는 09-27 05:36Z 에 키를 지운 커밋과 함께 처음 푸시됐다. 그래서 09-26(UTC) 팰월드 관측이 없다(09-25 다음 09-27). 진행 중 매물 관측이라 소급 불가.",
    "confirmed": "2026-09-30",
    "corrected": "2026-10-14"
   },

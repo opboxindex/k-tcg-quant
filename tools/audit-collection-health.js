@@ -204,27 +204,9 @@ if (has("data/auction-market.json")) {
   }
 }
 
-// ── 8b. 팰월드 수집 — 2026-08-19 추가. 원피스만 감시하면 팰월드는 조용히 죽어도 모른다.
-//    BP-01 은 2026-07-30 발매라 지금이 발매 직후 궤적을 만드는 유일한 시기다. 소급이 안 된다.
-{
-  const PW_STALE = 2;   // 경매 관측은 2시간마다 돈다. 이틀 넘게 안 늘면 멈춘 것이다.
-  if (has("data/palworld-auction-market.json")) {
-    const m = readJSON("data/palworld-auction-market.json");
-    const last = (m.points || []).map((p) => p.d).sort().pop();
-    if (!last) fail("팰월드 경매 관측이 비어 있다");
-    else if (daysAgo(last) > PW_STALE) fail(`팰월드 경매 관측이 ${daysAgo(last)}일째 안 늘었다 (마지막 ${last})`);
-    else ok(`팰월드 경매 관측 최신 ${last}`);
-  }
-  // 박스 즉시구매 원장은 사람이 브라우저로 긁는다(eBay 가 데이터센터 IP 를 막는다).
-  // 원피스와 같은 주기로 도는 게 맞지만, 걸렀다는 사실이라도 여기서 알려야 한다.
-  if (has("data/palworld-sold-ledger.json")) {
-    const L = readJSON("data/palworld-sold-ledger.json");
-    const n = Object.values(L.sets || {}).reduce((a, s) => a + (s.jp || []).length + (s.en || []).length, 0);
-    if (!L.updated) fail("팰월드 sold 원장에 updated 가 없다");
-    else if (daysAgo(L.updated) > 7) fail(`팰월드 sold 수집이 ${daysAgo(L.updated)}일째 없다 (마지막 ${L.updated})`);
-    else ok(`팰월드 sold 원장 최신 ${L.updated} (${n}건)`);
-  }
-}
+// ── 8b. 팰월드 전용 수집(경매 관측·박스 sold) 신선도 — 2026-08-19 추가, 2026-11-05 삭제.
+//    소유자 결정("팰월드만 수집했던 건 그냥 멈추자")으로 수집을 멈추고 원장을 동결했다. 동결 원장을 여기서 계속 보면
+//    이틀 뒤부터 이 감사가 매일 FAIL 한다. 팰월드는 TCG 13종 묶음(위 TCG 스냅샷·정산)으로만 본다(가드 PW1).
 
 // ── 8c. 그레이딩 시계열(grading-series.json) — 2026-08-19 추가.
 //    세트별 누적 감정을 등급사별·주차별로 담은 파생 파일이다. 원장은 갱신됐는데 이게 안 구워지면

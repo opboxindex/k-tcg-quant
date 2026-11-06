@@ -19,23 +19,38 @@ function stripTags(value) {
     .trim();
 }
 
+// 상품 한 칸 = <div class="card-product …"> 부터 다음 칸 앞까지. 번호·이름·값·재고는 **그 칸 안에서만** 읽는다 — 2026-11-05.
+// 왜: 종전엔 페이지 전체에 정규식 하나를 굴려 "첫 <img alt> → 첫 <span> 번호 → <h4> → 값 → 재고"를 이어 붙였다.
+//     페이지 첫 <img alt> 는 메뉴 아이콘(alt="Icon")이라 첫 결과가 번호 "MENU"·이름 "収録弾"(메뉴 머리)에
+//     **그 쪽 첫 상품의 값·재고**를 붙인 덩어리가 됐고, 첫 상품은 통째로 사라졌다(23쪽 전부, 2026-11-04 감사).
+//     그래서 OP06-118 조로 AA·OP10-118 루피 패러렐·EB01-061 봉쿠레 AA·OP06-119 상디 망가(PRB-02) 4장이
+//     nmUpdated 를 한 번도 못 받아 화면에 NM '—'. seed-set-top-cards.js 도 같은 파서라 새 세트 첫 상품이 후보에서 빠졌다.
+//     칸 경계로 자르면 칸 밖(메뉴·사이드바·추천 캐러셀)의 글자가 상품에 섞일 수 없다.
+const PRODUCT_START = /<div\b[^>]*\bclass="card-product\b/;
+const PRODUCT_FIELDS =
+  /<span[^>]*>\s*([A-Z0-9-]+)\s*<\/span>[\s\S]*?<h4[^>]*>([\s\S]*?)<\/h4>[\s\S]*?<strong[^>]*>\s*([\d,]+)\s*円\s*<\/strong>[\s\S]*?在庫\s*:\s*([\s\S]*?)<\/label>/;
+
 function parseYuyuteiProducts(html) {
   const products = [];
-  const regex =
-    /<img[^>]+alt="([^"]+)"[^>]*>[\s\S]*?<span[^>]*>\s*([A-Z0-9-]+)\s*<\/span>[\s\S]*?<h4[^>]*>([\s\S]*?)<\/h4>[\s\S]*?<strong[^>]*>\s*([\d,]+)\s*円\s*<\/strong>[\s\S]*?在庫\s*:\s*([\s\S]*?)<\/label>/g;
-
-  for (const match of html.matchAll(regex)) {
+  for (const block of String(html).split(PRODUCT_START).slice(1)) {
+    const match = block.match(PRODUCT_FIELDS);
+    if (!match) continue;
+    // 카드 이미지(class="card …")의 alt — "OP10-118 P-SEC モンキー・D・ルフィ(パラレル)". 별(즐겨찾기) 아이콘 alt 가 아니다.
+    const img = (block.slice(0, match.index).match(/<img\b[^>]*\bclass="card\b[^>]*>/) || [""])[0];
     products.push({
-      alt: stripTags(match[1]),
-      number: stripTags(match[2]),
-      name: stripTags(match[3]),
-      priceJpy: Number(match[4].replace(/,/g, "")),
-      stockText: stripTags(match[5]),
+      alt: stripTags((img.match(/\balt="([^"]*)"/) || [])[1] || ""),
+      number: stripTags(match[1]),
+      name: stripTags(match[2]),
+      priceJpy: Number(match[3].replace(/,/g, "")),
+      stockText: stripTags(match[4]),
     });
   }
 
   return products.filter((product) => product.number && Number.isFinite(product.priceJpy));
 }
+
+// 상품 칸 수 — 읽은 상품 수와 다르면 마크업이 바뀐 것이다(칸을 못 읽으면 그 카드 NM 이 조용히 낡는다).
+const countProductBlocks = (html) => String(html).split(PRODUCT_START).length - 1;
 
 // 변형 등급 — 유유테이 일본어 라벨 기준(가장 구체적부터). 실측 라벨(2026-07-23):
 //  (レッドスーパーパラレル)=red · (スーパーパラレル)=super · (金パラレル)=gold · (銀パラレル)=silver · (手配書)=wanted · (パラレル)=parallel · 괄호없음=base
@@ -137,7 +152,11 @@ async function fetchProducts(code) {
     throw new Error(`${code} yuyu-tei HTTP ${response.status}`);
   }
 
-  return { url, products: parseYuyuteiProducts(await response.text()) };
+  const html = await response.text();
+  const products = parseYuyuteiProducts(html);
+  const blocks = countProductBlocks(html);
+  if (products.length !== blocks) console.warn(`  [파서 확인] ${code}: 상품 칸 ${blocks}개 중 ${products.length}개만 읽음 — 유유테이 마크업이 바뀌었는지 볼 것`);
+  return { url, products };
 }
 
 async function main() {
@@ -207,7 +226,8 @@ async function main() {
 }
 
 // seed-set-top-cards.js 가 같은 파서·변형 판별을 쓴다(후보 목록을 따로 해석하면 두 도구의 변형 판단이 갈린다).
-module.exports = { fetchProducts, yuyuTier, cardTier };
+// parseYuyuteiProducts·countProductBlocks 는 test-yuyutei-parser.js(가드 NMP1)가 고정 HTML 로 시험한다.
+module.exports = { fetchProducts, parseYuyuteiProducts, countProductBlocks, yuyuTier, cardTier };
 
 if (require.main === module) {
   main().catch((error) => {

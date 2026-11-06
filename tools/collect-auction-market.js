@@ -44,56 +44,28 @@ const JUNK = /proxy|custom|orica|digital|reprint\s*card|fan\s*made|not\s*officia
 // 그중 낙찰 2건. 같은 기간 박스는 전용 쿼리가 있어 125건이 모였다.
 // 카톤/케이스는 전용 쿼리를 붙여야 그나마 관측된다(원래 드문 물건이라 많이 모이진 않는다).
 //
-// 게임별 설정 — 2026-08-19. 팰월드도 원피스와 같은 깊이로 본다(종류별·세트별·수량별).
-// 다른 TCG 16종은 collect-tcg-snapshot.js 가 게임당 쿼리 하나로 경매수·입찰률·거래액만 훑는다.
-// 그 둘을 한 도구에 섞지 않는 이유: 여기서는 제목에서 세트코드를 뽑아내는데, 그건 게임마다
-// 코드 체계가 달라 게임 하나하나 실측해야 한다. 개괄만 필요한 게임까지 그 비용을 낼 이유가 없다.
-const GAMES = {
-  onepiece: {
-    out: "auction-market.json",
-    label: "One Piece Card Game",
-    // 제목이 이 게임인지 — 이게 없으면 검색어에 걸린 남의 카드가 섞인다.
-    is: /one\s*piece|ワンピース/i,
-    // 이 게임 이름이 붙었지만 카드게임이 아닌 물건(과자 카드·피규어·굿즈).
-    not: /berry\s*match|onepy|one\s*py|wafer|gumi|shokugan|ichiban\s*kuji|figure|keychain|poster|manga\s*volume|dvd|blu-?ray/i,
-    cardId: /(OP|EB|PRB|ST)[-\s]?(\d{2})[-\s]?(\d{3})/i,
-    setOnly: /(OP|EB|PRB|ST)[-\s]?(\d{2})/i,
-    queries: [
-      "One Piece Card Game",
-      "One Piece Card Game Japanese",
-      "One Piece TCG",
-      "ワンピースカードゲーム",
-      "One Piece Card Game booster box",
-      "One Piece Card Game booster pack sealed",
-      "ワンピースカードゲーム BOX 未開封",
-      "One Piece Card Game carton",
-      "One Piece Card Game sealed case",
-      "ワンピースカードゲーム カートン",
-    ],
-  },
-  palworld: {
-    out: "palworld-auction-market.json",
-    label: "Palworld Card Game",
-    is: /palworld|パルワールド/i,
-    // 팰월드는 게임 본편·굿즈가 훨씬 유명하다. 카드가 아닌 것을 세게 걸러야 한다.
-    not: /steam|xbox|playstation|ps[45]|game\s*key|dlc|plush|figure|keychain|poster|amiibo|nintendo/i,
-    // BP01-001 형식(실측 2026-08-18: 매물 제목에 카드번호가 붙는 경우가 아직 드물다).
-    cardId: /(BP)[-\s]?(\d{2})[-\s]?(\d{3})/i,
-    setOnly: /(BP)[-\s]?(\d{2})/i,
-    // 이름으로도 세트를 잡는다. 팰월드 매물은 코드를 거의 안 쓴다(첫 수집 437건 전부 미분류였다).
-    // 이름이 확실히 한 세트를 가리킬 때만 넣는다 — 애매하면 unclassified 로 두는 원칙은 그대로다.
-    setNames: [[/dawn\s+of\s+palpagos|パルパゴスの夜明け/i, "BP-01"]],
-    queries: [
-      "Palworld Card Game",
-      "Palworld TCG",
-      "パルワールドカードゲーム",
-      "Palworld Dawn of Palpagos booster box",
-      "Palworld TCG booster pack sealed",
-      // 카톤 전용 쿼리는 원피스에만 둔다 — 팰월드는 발매 3주차라 카톤 매물 자체가 거의 없고,
-      // 쿼리만 늘리면 호출 비용만 든다. 필요해지면 그때 추가한다.
-    ],
-  },
-};
+// 원피스 한 게임만 이 깊이(종류별·세트별·수량별)로 본다. 다른 TCG 13종은 collect-tcg-snapshot.js 가 게임당
+// 쿼리 하나로 경매수·입찰률·거래액만 훑는다. 그 둘을 한 도구에 섞지 않는 이유: 여기서는 제목에서 세트코드를
+// 뽑아내는데, 그건 게임마다 코드 체계가 달라 게임 하나하나 실측해야 한다.
+// 팰월드도 2026-08-19 부터 --game=palworld 로 같은 깊이로 봤으나 2026-11-05 소유자 결정("팰월드만 수집했던 건
+// 그냥 멈추자")으로 그 경로를 지웠다. 원장 data/palworld-auction-* 은 append-only 라 지우지 않고 동결했다.
+// 팰월드는 TCG 13종 묶음(tcg-config.js)에서 계속 본다. 가드 PW1 이 이 경로가 되살아나는지 본다.
+// 제목이 이 게임인지 — 이게 없으면 검색어에 걸린 남의 카드가 섞인다.
+const IS_GAME = /one\s*piece|ワンピース/i;
+// 이 게임 이름이 붙었지만 카드게임이 아닌 물건(과자 카드·피규어·굿즈).
+const NOT_CARD_GAME = /berry\s*match|onepy|one\s*py|wafer|gumi|shokugan|ichiban\s*kuji|figure|keychain|poster|manga\s*volume|dvd|blu-?ray/i;
+const QUERIES = [
+  "One Piece Card Game",
+  "One Piece Card Game Japanese",
+  "One Piece TCG",
+  "ワンピースカードゲーム",
+  "One Piece Card Game booster box",
+  "One Piece Card Game booster pack sealed",
+  "ワンピースカードゲーム BOX 未開封",
+  "One Piece Card Game carton",
+  "One Piece Card Game sealed case",
+  "ワンピースカードゲーム カートン",
+];
 
 // 실행 모드 — 2026-09-03.
 //   전수(기본): 가격 밴드 × 전 페이지. 시장 관측점(출품량·세트별)을 찍고 24시간 안에 끝날 경매를 감시목록에 넣는다.
@@ -103,11 +75,7 @@ const GAMES = {
 // 싸게 자주 도는 쪽이 맞다.
 const TOPUP = process.argv.includes("--topup");
 const TOPUP_HORIZON_MIN = 540;   // 보충 지평 9시간 — 3시간 간격에서 두 번 빠져도 버틴다
-const GAME_KEY = (process.argv.find((a) => a.startsWith("--game=")) || "--game=onepiece").split("=")[1];
-const GAME = GAMES[GAME_KEY];
-if (!GAME) throw new Error(`알 수 없는 게임: ${GAME_KEY} (가능: ${Object.keys(GAMES).join(", ")})`);
-const QUERIES = GAME.queries;
-const outPath = path.join(ROOT, "data", GAME.out);
+const outPath = path.join(ROOT, "data", "auction-market.json");
 
 function loadEnv(p) {
   if (!fs.existsSync(p)) return {};
@@ -164,7 +132,6 @@ function classify(title) {
   }
   const s = title.match(SET_ONLY);
   if (s) return { set: `${s[1].toUpperCase()}-${s[2]}`, cardId: null };
-  for (const [re, code] of GAME.setNames || []) if (re.test(title)) return { set: code, cardId: null };
   return { set: null, cardId: null };   // 억지로 추측하지 않는다
 }
 
@@ -216,7 +183,7 @@ function summarize(rows) {
     : Math.min(TOPUP ? 150 : Infinity, Math.max(0, quotaLeft - (TOPUP ? 200 : 600)));
   let calls = 0;
   if (quotaLeft != null && scanBudget <= 0) {
-    console.log(JSON.stringify({ game: GAME_KEY, mode: TOPUP ? "topup" : "full", note: "쿼터가 바닥이라 스캔을 건너뛴다", quotaLeft }));
+    console.log(JSON.stringify({ mode: TOPUP ? "topup" : "full", note: "쿼터가 바닥이라 스캔을 건너뛴다", quotaLeft }));
     return;
   }
 
@@ -240,7 +207,7 @@ function summarize(rows) {
         const id = it.itemId;
         const title = it.title || "";
         if (!id || seen.has(id)) continue;
-        if (!GAME.is.test(title) || JUNK.test(title) || GAME.not.test(title)) continue;
+        if (!IS_GAME.test(title) || JUNK.test(title) || NOT_CARD_GAME.test(title)) continue;
         if (isExcludedEbaySellerOrLocation(it)) continue;
         seen.add(id);
         const bid = Number(it.currentBidPrice?.value);
@@ -279,7 +246,7 @@ function summarize(rows) {
   //   전수: 24시간 — 스캔이 하루 통째로 빠져도 그날 종료분은 이미 감시 중이다.
   //   보충: 9시간 — 3시간 간격에서 두 번 빠져도 버틴다(페이지 비용 때문에 짧게).
   const WATCH_HORIZON_MIN = TOPUP ? TOPUP_HORIZON_MIN : 1440;
-  const watchPath = path.join(ROOT, "data", GAME_KEY === "onepiece" ? "auction-watch.json" : `${GAME_KEY}-auction-watch.json`);
+  const watchPath = path.join(ROOT, "data", "auction-watch.json");
   let watch;
   try { watch = JSON.parse(fs.readFileSync(watchPath, "utf8")); } catch { watch = { pending: [] }; }
   const pend = new Map(watch.pending.map((w) => [w.id, w]));
@@ -341,7 +308,7 @@ function summarize(rows) {
       fs.writeFileSync(outPath, JSON.stringify(out) + "\n", "utf8");
     }
     console.log(JSON.stringify({
-      game: GAME_KEY, mode: "topup", calls, scanned: rows.length,
+      mode: "topup", calls, scanned: rows.length,
       watchAdded: added, watchPending: watch.pending.length, priceSamples: prior ? prior.priceObs.length : null,
     }));
     return;
@@ -406,7 +373,7 @@ function summarize(rows) {
     topCards,
     priceObs,                                               // 당일 누적 원표본. 날이 바뀌면 아래에서 제거된다.
   };
-  out.note = `Daily sample of live ${GAME.label} auctions on eBay: how many are running by set and item type, how many have attracted bids, and the median current bid. Bids are live, not final sale prices — eBay does not expose completed-sale data at this access tier. Sellers and locations excluded from our price data are excluded here too. Set and card codes are parsed from listing titles; titles we cannot classify confidently are counted under 'unclassified' rather than guessed. Price figures (medBid) are measured only on auctions ending within 6 hours that already have bids, because a freshly listed auction still shows its opening price, not its value; nPrice reports how many listings each price is based on. This is a sample, not a census: boxes and packs are sampled with dedicated queries, so the box/pack/card split is not a market share figure — compare each category against its own history, not against the others. Price figures are per unit: multi-item lots are divided by the quantity parsed from the title, and listings whose quantity cannot be determined (case/lot/bulk) are excluded from price samples while still counted in listing volume.`;
+  out.note = `Daily sample of live One Piece Card Game auctions on eBay: how many are running by set and item type, how many have attracted bids, and the median current bid. Bids are live, not final sale prices — eBay does not expose completed-sale data at this access tier. Sellers and locations excluded from our price data are excluded here too. Set and card codes are parsed from listing titles; titles we cannot classify confidently are counted under 'unclassified' rather than guessed. Price figures (medBid) are measured only on auctions ending within 6 hours that already have bids, because a freshly listed auction still shows its opening price, not its value; nPrice reports how many listings each price is based on. This is a sample, not a census: boxes and packs are sampled with dedicated queries, so the box/pack/card split is not a market share figure — compare each category against its own history, not against the others. Price figures are per unit: multi-item lots are divided by the quantity parsed from the title, and listings whose quantity cannot be determined (case/lot/bulk) are excluded from price samples while still counted in listing volume.`;
   out.updated = today;
   // 전수가 마지막으로 돈 시각 — 자가치유가 "쿼터 창이 열렸는데 전수가 안 돌았다"를 이걸로 판단한다(2026-09-03:
   // 창 첫 크론 07:20 UTC 를 GitHub 이 통째로 건너뛰었는데 아무도 몰랐다).
@@ -423,7 +390,7 @@ function summarize(rows) {
   fs.writeFileSync(outPath, JSON.stringify(out) + "\n", "utf8");
 
   console.log(JSON.stringify({
-    game: GAME_KEY, run: point.runs, scanned: point.scanned, totalReported, unclassified: point.unclassified,
+    run: point.runs, scanned: point.scanned, totalReported, unclassified: point.unclassified,
     contested: point.contested, sets: Object.keys(setStats).length,
     priceSamples: priceObs.length, watchAdded: added, watchPending: watch.pending.length,
   }));

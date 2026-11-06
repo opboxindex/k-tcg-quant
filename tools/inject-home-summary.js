@@ -303,6 +303,15 @@ console.error("wrote box-prices.html");
   let h = fs.readFileSync(fp, "utf8");
   if (!h.includes(KF_START) || !h.includes(KF_END)) throw new Error("index.html: HOME_KEY_FACTS 마커가 없다");
   h = h.replace(new RegExp(`${KF_START}[\\s\\S]*?${KF_END}`), () => `${KF_START}<style>\n${KF_CSS_ANY}\n        .packHero table.kfTable { margin: 10px 0 2px; }\n        </style>\n        ${kf}\n        ${KF_END}`);
+  // 첫 화면 칩·세트 가이드 제목의 세트 수·글 수 — 2026-11-05. 손으로 쓴 "22 sets"·"14 articles" 가 Key facts 의 23·글 목록 16 과 어긋나 있었다.
+  //   세트 수 = 위 Key facts "Sets tracked"(order.board), 글 수 = 글 목록(articles/index.html)의 글 카드 수 — 가드 TX1.
+  const nSets = rows.length;
+  const nArticles = (fs.readFileSync(path.join(ROOT, "articles", "index.html"), "utf8").match(/<li class="artCard">/g) || []).length;
+  const CHIP = /<span data-ko="\d+세트 · 일본판 \/ 영문판">\d+ sets · JP \/ EN<\/span>/;
+  const GUIDES = /<h2 data-ko="세트 가격 가이드 — \d+개 세트 · 기사 \d+개">Set price guides — all \d+ sets &amp; \d+ articles<\/h2>/;
+  if (!CHIP.test(h) || !GUIDES.test(h)) throw new Error("index.html: 세트 수 칩 또는 세트 가이드 제목을 못 찾음");
+  h = h.replace(CHIP, `<span data-ko="${nSets}세트 · 일본판 / 영문판">${nSets} sets · JP / EN</span>`);
+  h = h.replace(GUIDES, `<h2 data-ko="세트 가격 가이드 — ${nSets}개 세트 · 기사 ${nArticles}개">Set price guides — all ${nSets} sets &amp; ${nArticles} articles</h2>`);
   fs.writeFileSync(fp, h, "utf8");
 }
 

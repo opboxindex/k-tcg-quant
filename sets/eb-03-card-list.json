@@ -54,7 +54,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 10,
+    "sold": 5,
+    "windowDays": 45,
+    "through": "2026-11-07"
+   },
    "psa10": null,
    "cardPage": null
   },

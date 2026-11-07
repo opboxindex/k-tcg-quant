@@ -28,11 +28,11 @@
  },
  "box": {
   "japaneseSoldMedianUsd": 109,
-  "japaneseObservedOn": "2026-11-06",
-  "japaneseN": 39,
-  "englishSoldMedianUsd": 297,
+  "japaneseObservedOn": "2026-11-07",
+  "japaneseN": 43,
+  "englishSoldMedianUsd": 296,
   "englishObservedOn": "2026-11-07",
-  "englishN": 45
+  "englishN": 48
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -566,7 +566,13 @@
    "trigger": true,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 34.88,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-07"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -1319,7 +1325,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 15,
-    "sold": 8,
+    "sold": 9,
     "windowDays": 45,
     "through": "2026-11-07"
    },
@@ -1388,7 +1394,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 8.01,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-07"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -1413,7 +1425,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 33.33,
-    "sold": 3,
+    "sold": 4,
     "windowDays": 45,
     "through": "2026-11-07"
    },
@@ -1877,7 +1889,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 12.5,
-    "sold": 17,
+    "sold": 18,
     "windowDays": 45,
     "through": "2026-11-07"
    },

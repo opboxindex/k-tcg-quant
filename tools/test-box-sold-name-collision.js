@@ -60,4 +60,12 @@ assert.deepEqual(codesFromName("One Piece The World's Strongest Warriors Booster
 const live = new Map(ingestNameMap(packs).map(([n, c]) => [c, n]));
 for (const u of UPCOMING) if (!packs.sets[u.code]) assert.ok(live.has(u.code), `UPCOMING ${u.code} 가 ingest 이름표에 없다`);
 
+// ── 일본판 제목의 영어 번역(JP_TITLE_EN) — 2026-11-08. 앞의 둘은 덤프·원장 실제 제목이다.
+// "Twin Champions" = OP-06 일본판. 이름표에 없어 code-missing 으로 버려졌다(box-2026-09-18~11-08 덤프 49일, Sold Sep 8).
+ok(judge("Bandai One Piece CCG Twin Champions Booster Box  Japanese", 137640, "OP-06", "jp", today), "jp", 1);
+// "Inherited Will" = OP-13 일본판. OP03 코드와 같이 적힌 제목은 어느 세트인지 모른다 — cross-set(07-22 원장 행 #168518173476 의 제목).
+assert.equal(judge("One Piece Card Game Inherited Will OP03 Booster Box Sealed Japan New Bandai", 280054, "OP-03", "jp", today).drop, "cross-set");
+assert.deepEqual(codesFromName("One Piece Inherited Will Booster Box Japanese", today), ["OP-13"]);
+assert.deepEqual(codesFromName("One Piece Wings of the Captain Booster Box English", today), ["OP-06"]);   // 영문판 이름도 그대로
+
 console.log("test-box-sold-name-collision: OK");

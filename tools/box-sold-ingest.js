@@ -59,10 +59,20 @@ const normName = (s) => String(s).toLowerCase().replace(/['’]/g, "").replace(/
 // 2026-09-30: 이름표가 packs.json 만 읽어서, 수집하는 세트(EB-05 "Heroines Edition vol.2")의 이름은 모르고
 // 앞 권(EB-03 "Heroine's Edition")의 이름만 알았다. 그러면 EB-05 제목이 EB-03 이름에도 걸려 cross-set 으로 버려지고,
 // 코드 없는 EB-05 제목은 EB-03 으로 들어간다. 수집하는 세트는 이름표에도 있어야 한다.
+//
+// JP_TITLE_EN — 일본판 제목을 영어로 옮긴 이름. 2026-11-08.
+// 일본판 박스 판매자는 영문판 이름(nameEn) 대신 일본판 제목의 번역을 쓴다:
+//   OP-06 双璧の覇者 "Twin Champions"(영문판 "Wings of the Captain"), OP-13 受け継がれる意志 "Inherited Will"(영문판 "Carrying on His Will").
+// 이름표에 없으니 "Bandai One Piece CCG Twin Champions Booster Box  Japanese"(Sold Sep 8, ₩137,640)는 덤프 49일 내내
+// OP-06 일본판 검색 맨 위(0~2번째)에 있었는데도 code-missing 으로 버려졌고, 그 1건 때문에 OP-06 일본판 09-16 주가 6건에 못 미쳐 빠졌다.
+// 거꾸로 "Inherited Will OP03" 처럼 두 세트를 가리키는 제목은 cross-set 으로 걸러지지 않고 OP-03 일본판에 들어갔다.
+// 원장에서 확인된 이름만 넣는다(추측 금지): 'Twin Champions' 10행 전부 OP-06 일본판, 'Inherited Will' 23행 중 22행 OP-13 일본판(나머지 1행이 위 OP03).
+const JP_TITLE_EN = { "OP-06": "Twin Champions", "OP-13": "Inherited Will" };
 function buildNameMap(packs, extra = []) {
   const byName = new Map();
   const codes = [...(packs.jp?.list || []), ...(packs.extra?.list || [])];
   const entries = codes.map((code) => [code, packs.sets[code]?.nameEn]);
+  for (const code of codes) if (JP_TITLE_EN[code]) entries.push([code, JP_TITLE_EN[code]]);
   for (const u of extra) if (!packs.sets[u.code]) entries.push([u.code, u.nameEn]);   // packs 로 옮겨진 세트는 두 번 넣지 않는다(중복 이름 → 둘 다 지워진다)
   for (const [code, nameEn] of entries) {
     const n = normName(nameEn || "");

@@ -1072,7 +1072,13 @@
     "usd": 80.83,
     "observedOn": "2026-11-06"
    },
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 36.31,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-08"
+   },
    "auctionEnglishPrint": null,
    "psa10": {
     "usd": 257,
@@ -3278,7 +3284,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 9.4,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-08"
+   },
    "psa10": null,
    "cardPage": null
   },

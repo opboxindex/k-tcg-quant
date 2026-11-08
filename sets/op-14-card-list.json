@@ -27,9 +27,9 @@
   "leaders": 7
  },
  "box": {
-  "japaneseSoldMedianUsd": 86,
-  "japaneseObservedOn": "2026-10-27",
-  "japaneseN": 12,
+  "japaneseSoldMedianUsd": 85,
+  "japaneseObservedOn": "2026-11-07",
+  "japaneseN": 13,
   "englishSoldMedianUsd": 254,
   "englishObservedOn": "2026-11-07",
   "englishN": 24
@@ -597,7 +597,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 45,
-    "sold": 8,
+    "sold": 9,
     "windowDays": 45,
     "through": "2026-11-08"
    },
@@ -2925,7 +2925,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 5.5,
-    "sold": 16,
+    "sold": 17,
     "windowDays": 45,
     "through": "2026-11-08"
    },
@@ -3602,7 +3602,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 43.55,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-08"
+   },
    "psa10": null,
    "cardPage": null
   },

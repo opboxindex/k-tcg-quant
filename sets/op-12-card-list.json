@@ -231,8 +231,8 @@
    "nm": null,
    "auction": {
     "print": "Japanese",
-    "medianUsd": 17.5,
-    "sold": 11,
+    "medianUsd": 15.5,
+    "sold": 12,
     "windowDays": 45,
     "through": "2026-11-08"
    },
@@ -1183,7 +1183,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 3,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-08"
+   },
    "psa10": null,
    "cardPage": null
   },

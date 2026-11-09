@@ -6,14 +6,14 @@
  "updated": "2026-11-09",
  "officialList": {
   "url": "https://www.onepiece-cardgame.com/cardlist/?series=550109",
-  "checked": "2026-11-08",
+  "checked": "2026-11-09",
   "changed": "2026-10-14"
  },
  "englishNames": [
   {
    "product": "OP-09",
    "url": "https://en.onepiece-cardgame.com/cardlist/?series=569109",
-   "checked": "2026-11-08"
+   "checked": "2026-11-09"
   }
  ],
  "counts": {
@@ -81,7 +81,13 @@
    "features": "The Four Emperors/Red-Haired Pirates",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 11.5,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-09"
+   },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 16.5,
@@ -1187,8 +1193,8 @@
    "nm": null,
    "auction": {
     "print": "Japanese",
-    "medianUsd": 12.5,
-    "sold": 6,
+    "medianUsd": 15,
+    "sold": 8,
     "windowDays": 45,
     "through": "2026-11-09"
    },
@@ -1398,8 +1404,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 8.79,
-    "sold": 3,
+    "medianUsd": 7.3,
+    "sold": 4,
     "windowDays": 45,
     "through": "2026-11-09"
    },
@@ -1768,13 +1774,7 @@
     "windowDays": 45,
     "through": "2026-11-09"
    },
-   "auctionEnglishPrint": {
-    "print": "English",
-    "medianUsd": 300,
-    "sold": 5,
-    "windowDays": 45,
-    "through": "2026-11-09"
-   },
+   "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null
   },
@@ -2071,7 +2071,13 @@
    "features": "Straw Hat Crew",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 25.06,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-09"
+   },
    "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null

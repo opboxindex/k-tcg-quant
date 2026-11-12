@@ -26,6 +26,27 @@ function latestWednesday(rows) {
   return [...rows].reverse().find((row) => new Date(`${row.date}T00:00:00Z`).getUTCDay() === 3)?.date || null;
 }
 
+// 상류가 그날 갱신하지 않고 전날 누적을 그대로 복사한 행 고르기 — 2026-11-12.
+// 실측: GemRate 추세가 10/27 뒤로 멈춰 10/28 행이 41계열 중 35계열에서 10/27 과 total_grades·total_gems 가 똑같았다
+// (10/02~10/27 은 계열마다 26일 중 0~1일만 전날과 같았다). 그 행을 수요일 누적으로 받아 W44 증가분이 하루치 적게 들어갔다.
+// 작은 세트는 정말로 하루 0건인 날이 드물게 있어 계열 하나로는 못 가른다 → 같은 날 비교할 수 있는 계열의 절반 이상이
+// 전날과 같으면 그날은 상류가 멈춘 날로 보고, 그날 전날과 같은 계열만 돌려준다(그날 실제로 바뀐 계열은 그대로 쓴다).
+function frozenOn(rowsByKey, date) {
+  const prevDate = new Date(dateMs(date) - dayMs).toISOString().slice(0, 10);
+  const same = [];
+  let comparable = 0;
+  for (const [key, rows] of Object.entries(rowsByKey)) {
+    const current = (rows || []).find((row) => row.date === date);
+    const previous = (rows || []).find((row) => row.date === prevDate);
+    if (!current || !previous) continue;
+    comparable += 1;
+    if (current.total_grades === previous.total_grades && current.total_gems === previous.total_gems) same.push(key);
+  }
+  return comparable && same.length * 2 >= comparable ? new Set(same) : new Set();
+}
+
+const FROZEN_REASON = (date) => `GemRate public source repeated the previous day's cumulative row on ${date} (upstream refresh stopped); omitted rather than estimated.`;
+
 function correctionReason(code, date, grades, gems, priorValues) {
   if (!Number.isInteger(grades) || !Number.isInteger(gems) || grades < 0 || gems < 0 || gems > grades) {
     return `${code} ${date}: invalid cumulative delta from the public source`;
@@ -48,13 +69,22 @@ function appendVerifiedWeeks(source, rowsByCode) {
   source.corrections ||= {};
   for (const date of newDates) {
     let covered = 0;
+    const previousDate = new Date(dateMs(date) - 7 * dayMs).toISOString().slice(0, 10);
+    const frozenNow = frozenOn(rowsByCode, date);
+    const frozenBefore = frozenOn(rowsByCode, previousDate);
     for (const [code, set] of Object.entries(source.sets)) {
       const rows = rowsByCode[code] || [];
       const current = rows.find((row) => row.date === date);
-      const previousDate = new Date(dateMs(date) - 7 * dayMs).toISOString().slice(0, 10);
       const previous = rows.find((row) => row.date === previousDate);
       if (!current || !previous) {
         (source.corrections[code] ||= []).push({ date, reason: "GemRate public source did not expose both Wednesday cumulative rows; omitted rather than estimated." });
+        covered += 1;
+        continue;
+      }
+      // 이번 수요일이나 지난 수요일 행이 복사본이면 증가분이 하루 이상 어긋난다 — 추정하지 않고 뺀다.
+      const frozenDate = frozenNow.has(code) ? date : frozenBefore.has(code) ? previousDate : null;
+      if (frozenDate) {
+        (source.corrections[code] ||= []).push({ date, reason: FROZEN_REASON(frozenDate) });
         covered += 1;
         continue;
       }
@@ -174,4 +204,4 @@ async function main() {
 
 if (require.main === module) main().catch((error) => { console.error(error.stack); process.exitCode = 1; });
 
-module.exports = { appendVerifiedWeeks, correctionReason, latestWednesday, collectRows };
+module.exports = { appendVerifiedWeeks, correctionReason, latestWednesday, frozenOn, collectRows };

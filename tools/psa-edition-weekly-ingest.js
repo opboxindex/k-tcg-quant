@@ -4,6 +4,7 @@
 // Run: node tools/psa-edition-weekly-ingest.js <덤프.json>   (psa-trend-ingest.js 다음에)
 const fs = require("node:fs"); const path = require("node:path");
 const ROOT = path.resolve(__dirname, "..");
+const { frozenOn } = require("./collect-gemrate-psa-history.js");
 const LEDGER = path.join(ROOT, "data/psa-edition-weekly.json");
 const dump = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const jpHist = JSON.parse(fs.readFileSync(path.join(ROOT, "data/gemrate-psa-history.json"), "utf8"));
@@ -28,10 +29,14 @@ function appendPoint(store, code, ed, point, problems) {
 const store = JSON.parse(fs.readFileSync(LEDGER, "utf8"));
 const wed = Object.values(rows).map((r) => lastWed(r)).filter(Boolean).sort()[0];
 if (!wed || !isWed(wed)) throw new Error(`기준 수요일을 못 정함(${wed})`);
-const problems = []; const tally = { added: 0, dup: 0, reject: 0, missing: 0 };
+const problems = []; const tally = { added: 0, dup: 0, reject: 0, missing: 0, frozen: 0 };
+// 상류가 그날 갱신하지 않고 전날 누적을 복사한 계열은 그 수요일 점을 넣지 않는다(collect-gemrate-psa-history.js frozenOn, 2026-11-12) —
+// 복사본을 누적으로 받으면 앞 주 증가분은 하루치 적고 다음 주는 그만큼 많아진다.
+const frozen = frozenOn(rows, wed);
 for (const [key, meta] of Object.entries(targets)) {
   const row = rows[key].find((x) => x.date === wed);
   if (!row) { tally.missing += 1; problems.push(`${meta.code}/${meta.ed} ${wed}: 상류에 해당일 행 없음`); continue; }
+  if (frozen.has(key)) { tally.frozen += 1; problems.push(`${meta.code}/${meta.ed} ${wed}: 상류가 전날 누적을 그대로 복사(갱신 멈춤) — 버림`); continue; }
   tally[appendPoint(store, meta.code, meta.ed, { d: wed, g: row.total_grades, m: row.total_gems }, problems)] += 1;
 }
 const conflicts = problems.filter((p) => /보관 .* → 현재/.test(p));

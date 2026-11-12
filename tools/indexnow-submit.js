@@ -82,5 +82,8 @@ if (require.main === module) {
     console.log("IndexNow status:", r.status, r.statusText);
     const t = await r.text();
     if (t) console.log(t.slice(0, 300));
-  }).catch((e) => console.error("failed:", e.message));
+    // 실패를 초록불로 숨기지 않는다(2026-11-12 유입 진단): 워크플로 단계는 continue-on-error 라 갱신은 막지 않지만,
+    // 2xx 가 아니면 종료 코드 1 + 실행 요약 경고로 남는다. 종전엔 어떤 응답이든 exit 0 이라 Bing 통지가 끊겨도 아무도 몰랐다.
+    if (!r.ok) { console.log(`::warning title=IndexNow::IndexNow ${r.status} ${r.statusText} — ${urls.length} URL 통지 실패`); process.exitCode = 1; }
+  }).catch((e) => { console.error("failed:", e.message); console.log(`::warning title=IndexNow::IndexNow 요청 실패 — ${e.message}`); process.exitCode = 1; });
 }

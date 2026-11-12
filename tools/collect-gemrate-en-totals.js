@@ -12,7 +12,7 @@
 // Run: node tools/collect-gemrate-en-totals.js
 const fs = require("node:fs");
 const path = require("node:path");
-const { collectRows } = require("./collect-gemrate-psa-history.js");
+const { collectRows, lastLiveRow } = require("./collect-gemrate-psa-history.js");
 
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "data", "gemrate-psa-en-totals.json");
@@ -30,13 +30,20 @@ const OUT = path.join(ROOT, "data", "gemrate-psa-en-totals.json");
   const dates = [];
   let updated = 0, regressed = [];
   for (const [code, r] of Object.entries(rows)) {
-    const last = Array.isArray(r) ? r.at(-1) : null;
+    // psa-trend-ingest.js 와 같은 규칙(2026-11-12): 끝의 상류 정지일 복사 행은 새 값이 아니고(lastLiveRow), 지금 값(asOf)이 더 새것이면
+    // 덮지 않는다. 지금 값이 팝 리포트 대체값인데 새 추이가 더 작으면 중단하지 않고 그 값을 둔다(두 페이지 집계 차이).
+    const last = Array.isArray(r) ? lastLiveRow(rows, code) : null;
     const cur = store.sets[code];
     if (!last || !Number.isInteger(last.total_grades) || last.total_grades <= 0) continue;
-    if (last.total_grades < cur.totalGrades) { regressed.push(`${code} ${cur.totalGrades} → ${last.total_grades}`); continue; }
+    if (cur.asOf && cur.asOf >= last.date) continue;
+    if (last.total_grades < cur.totalGrades || last.total_gems < cur.totalGems) {
+      if (cur.source === "pop-report") { console.error(`${code}: 추이 ${last.date} ${last.total_grades} < 팝 리포트 ${cur.asOf} ${cur.totalGrades} — 팝 리포트 값 유지`); continue; }
+      regressed.push(`${code} ${cur.totalGrades} → ${last.total_grades}`); continue;
+    }
     cur.totalGrades = last.total_grades;
     cur.totalGems = last.total_gems;
     cur.gemRate = Math.round((last.total_gems / last.total_grades) * 1000) / 10;
+    cur.asOf = last.date; delete cur.source;
     dates.push(last.date);
     updated += 1;
   }

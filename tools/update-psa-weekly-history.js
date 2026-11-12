@@ -44,13 +44,12 @@ function readCumulativeSnapshot(data) {
   }
   if (missing.length) console.error(`[psa-weekly] PSA 누적 없어 제외: ${missing.join(", ")}`);
 
-  if (dates.size !== 1) {
-    throw new Error(`PSA cumulative source dates disagree: ${[...dates].sort().join(", ")}`);
-  }
-
-  const date = [...dates][0];
+  // 세트마다 기준일이 다를 수 있다 — 세트 추이가 멈춰 팝 리포트 카드 합계로 바꾸면 페이지마다 Updated 가 하루씩 다르다
+  // (2026-11-12 실측 11/06·11/07). date 는 가장 이른 기준일(신선도는 가장 낡은 세트로 잰다), 전체 목록은 dates.
+  const sortedDates = [...dates].sort();
   return {
-    date,
+    date: sortedDates[0],
+    dates: sortedDates,
     source: "Verified full-set PSA population cumulative totals",
     total: Object.values(sets).reduce((sum, value) => sum + value, 0),
     sets,
@@ -150,9 +149,11 @@ function main() {
     if (sourceAgeDays > maxIntervalDays) {
       throw new Error(`PSA cumulative source is ${sourceAgeDays} days old (${current.date}); a new verified snapshot is required`);
     }
-    console.log(JSON.stringify({ status: "fresh", date: current.date, sourceAgeDays }, null, 2));
+    console.log(JSON.stringify({ status: "fresh", date: current.date, dates: current.dates, sourceAgeDays }, null, 2));
     return;
   }
+  // 주간 막대는 같은 날짜의 스냅샷끼리만 뺀다 — 기준일이 섞인 누적으로는 만들지 않는다(추정 금지).
+  if (current.dates.length !== 1) throw new Error(`PSA cumulative source dates disagree: ${current.dates.join(", ")}`);
   const result = applySnapshot(data, archive, current);
 
   if (result.changed) {

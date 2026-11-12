@@ -36,7 +36,7 @@ function run() {
   }
   const snap = (json("data/psa-population-snapshots.json", { snapshots: [] }).snapshots || []).at(-1);
   if (!snap) errors.push("D2: PSA cumulative snapshot archive missing or empty");
-  else for (const code of codes) { const s = P.sets?.[code]?.psaFull; if (snap.date === s?.updated && snap.sets?.[code] !== s?.total) errors.push(`D2: ${code} current PSA total differs from stored ${snap.date} snapshot`); }
+  else for (const code of codes) { const s = P.sets?.[code]?.psaFull; const at = snap.dates?.[code] ?? snap.date; if (at === s?.updated && snap.sets?.[code] !== s?.total) errors.push(`D2: ${code} current PSA total differs from stored ${at} snapshot`); }   // 세트별 기준일(dates) — 팝 리포트 대체 때 세트마다 다름(2026-11-12)
   // D3 — psaPending 은 psaFull/psaWeekly 가 아예 없고 발매 90일 이내일 때만(OP-17 표본 1장 사고)
   const V = json("data/gemrate-psa-history.json", null);
   if (!V) errors.push("D3: verified full-set PSA history source missing");

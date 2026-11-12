@@ -124,7 +124,7 @@ for (const row of gradeRows) {
   const tagSplit = latest(tag, row.set_code, edition, (point) => Number.isFinite(point.g10) && Number.isFinite(point.g10p));
   assert.equal(row.psa_total, String(psa?.total ?? ""));
   assert.equal(row.psa_total_as_of, psa?.updated ?? "");
-  assert.equal(row.psa_weekly_add_as_of, psa?.wowAdd == null ? "" : (edition === "jp" ? set.psaWeekly?.points?.at(-1)?.d : psa?.updated) ?? "");
+  assert.equal(row.psa_weekly_add_as_of, psa?.wowAdd == null ? "" : set.psaWow?.to ?? "");
   assert.equal(row.cgc_total, String(cgcTotal?.total ?? ""));
   assert.equal(row.cgc_total_as_of, cgcTotal?.d ?? "");
   assert.equal(row.cgc_pristine10, String(cgcSplit?.grades?.["Pristine 10"] ?? ""));

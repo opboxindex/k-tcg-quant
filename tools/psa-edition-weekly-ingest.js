@@ -44,6 +44,9 @@ if (conflicts.length) { console.error(JSON.stringify({ status: "conflict", wed, 
 if (!tally.added && !tally.dup) { console.error(`${wed}: 적재된 점이 하나도 없음`); process.exit(1); }
 if (!store.weeks.includes(wed)) store.weeks.push(wed);
 store.weeks.sort(); store.updated = wed;
-if (problems.length) store.problems = [...(store.problems || []), ...problems.map((p) => ({ at: wed, note: p }))];
+// 같은 덤프를 다시 적재해도(추이가 멈춰 수요일이 그대로인 주) 같은 사유를 두 번 쌓지 않는다.
+const seenProblems = new Set((store.problems || []).map((p) => `${p.at}|${p.note}`));
+const freshProblems = problems.filter((p) => !seenProblems.has(`${wed}|${p}`));
+if (freshProblems.length) store.problems = [...(store.problems || []), ...freshProblems.map((p) => ({ at: wed, note: p }))];
 fs.writeFileSync(LEDGER, `${JSON.stringify(store, null, 1)}\n`, "utf8");
 console.log(JSON.stringify({ status: "ok", wed, ...tally, weeks: store.weeks.length, problems }));

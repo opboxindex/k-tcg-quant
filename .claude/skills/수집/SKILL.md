@@ -80,12 +80,12 @@ PSA 카드별은 `node tools/collect-psa-card-pop.js --probe` 로 먼저 살핀�
 페이지("잠시만 기다리십시오…")를 주면 실브라우저로 열어야 한다 — plain fetch 는 안 된다(2026-09-02 실증).
 
 세트 추이(PSA 일본판 주간·영문판 총량·판별 주간)도 같은 이유로 실브라우저다(2026-09-07 실증, 워크플로
-`update-market-data` 의 GemRate 스텝이 매주 실패한다). 실브라우저 탭에서 각 세트의 `set-population-trend`
-페이지를 열어 `globalThis.RowData` 를 `{date,total_grades,total_gems}` 로 `sessionStorage` 에 모으고
-`{jp:{code:rows}, en:{code:rows}}` 로 Blob 다운로드 → `node tools/psa-trend-ingest.js <덤프>` →
-`node tools/psa-edition-weekly-ingest.js <덤프>` → `node tools/import-gemrate-psa-history.js` →
-`node tools/import-gemrate-en-totals.js` → `node tools/inject-psa-wow.js`. URL 목록은
-`node tools/collect-psa-card-pop.js --urls` 의 경로를 `set-population-trend` 로 되돌리면 된다.
+`update-market-data` 의 GemRate 스텝이 매주 실패한다). 9346 크롬으로 `box-sold-cdp/psa-nav-run.js`(카드별 팝 리포트 +
+세트별 기준일 `updated`)와 `box-sold-cdp/psa-trend-run.js`(세트 추이)를 받고 →
+`node tools/psa-trend-ingest.js <추이 덤프> <카드별 팝 덤프>` → `node tools/psa-edition-weekly-ingest.js <추이 덤프>` →
+`node tools/import-gemrate-psa-history.js` → `node tools/import-gemrate-en-totals.js` → `node tools/inject-psa-wow.js`.
+명령 순서는 `tools/MONDAY-GRADING.md` 1번. 팝 리포트가 세트 추이보다 새것이면(추세가 멈춘 2026-10-27~ 실제) 세트 누적은 팝 리포트 카드 합계로
+자동 대체된다(누적 감소·최근 속도 초과면 안 씀) — 주간 그래프(수요일 누적의 차)는 대체하지 않는다(팝 리포트는 수요일 값이 아니다).
 import 를 빼먹으면 원장만 새것이고 화면은 옛것이라 가드 D3 가 FAIL 난다(2026-09-07 실제).
 
 ⚠️ **절대 원칙(2026-07-24 소유자 지시)**: 카드번호만 보고 매칭 금지. 번호+변형(tier) 둘 다

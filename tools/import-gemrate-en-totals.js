@@ -29,8 +29,9 @@ for (const code of codes) {
     total: e.totalGrades,
     gems: e.totalGems,
     gemRate: rate,
-    updated: en.collectedAt,
-    source: "GemRate full-set PSA population (English)",
+    // asOf = 그 세트 값의 기준일(psa-trend-ingest.js 가 적음). 팝 리포트 카드 합계로 바꾼 값이면 출처도 그렇게 적는다.
+    updated: e.asOf || en.collectedAt,
+    source: e.source === "pop-report" ? "GemRate PSA population report (English, sum of card rows)" : "GemRate full-set PSA population (English)",
   };
   attached += 1;
 }

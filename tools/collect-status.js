@@ -119,6 +119,18 @@ const pick = {
   //   종전엔 packsField("nm") 의 최댓값이라, 11-02 에 EB-05 11장만 새로 읽자 나머지 183장이 10-21(15일)인데도 "3일 정상"이었고
   //   점수판 C8 도 이 행을 그대로 읽어 OK 였다. 카드는 세트마다 따로 읽히므로 새 세트 하나만 갱신해도 전체가 가려진다.
   //   읽은 날이 없는 카드·숨김 카드는 화면에 안 나가므로 빼고(점수판 D1 이 따로 센다), 가드 NMF1(test-collect-status.js)이 지킨다.
+  // PSA 세트 누적도 같은 원칙 — 일본판·영문판 총량 중 가장 낡은 날(2026-11-12). 팝 리포트 대체가 검사에 걸린 세트는 옛 값에
+  //   머무는데, 최댓값으로 재면 나머지가 가려 "정상"으로 뜬다(재검증 지적).
+  psaFullOldest: () => {
+    let worst = null;
+    for (const set of Object.values(readJSON("data/onepiece-packs.json").sets || {})) {
+      for (const pf of [set.psaFull, set.psaFullEn]) {
+        const d = pf && String(pf.updated || "").slice(0, 10);
+        if (/^\d{4}-\d{2}-\d{2}$/.test(d) && (!worst || d < worst)) worst = d;
+      }
+    }
+    return worst;
+  },
   nmOldest: () => {
     let worst = null;
     for (const set of Object.values(readJSON("data/onepiece-packs.json").sets || {})) {
@@ -211,12 +223,14 @@ const SOURCES = [
   // 커밋한 적이 한 번도 없고 전부 월요일 로컬 수집이었다. auto 로 두면 밀려도 "지금 할 일"에 안 뜬다.
   { key: "psa-weekly", name: "PSA 세트 주간 등급량", mode: "manual", every: "주 1회(월)",
     warn: 8, late: 14,
-    get: pick.earliest(pick.field("data/gemrate-psa-history.json", "collectedAt"), pick.field("data/gemrate-psa-en-totals.json", "collectedAt")),
+    // 주간 그래프가 실제로 어디까지 찼나로 잰다(weeklyThrough·판별 주간 마지막 수요일) — 2026-11-12. 세트 누적(collectedAt)은
+    // 추이가 멈추면 팝 리포트로 최신화돼 "정상"으로 보이는데, 주간 증가분은 그동안 한 점도 안 는다. 누적 신선도는 아래 psa-full 행이 본다.
+    get: pick.earliest(pick.field("data/gemrate-psa-history.json", "weeklyThrough"), pick.field("data/psa-edition-weekly.json", "updated")),
     files: ["gemrate-psa-history.json", "gemrate-psa-en-totals.json", "psa-edition-weekly.json", "psa-population-snapshots.json"],
-    how: "실브라우저 GemRate 탭에서 세트별 set-population-trend 의 RowData 를 {jp,en} 덤프로 받는다(수집 스킬 3절) → node tools/psa-trend-ingest.js <덤프> → node tools/psa-edition-weekly-ingest.js <덤프> → node tools/import-gemrate-psa-history.js → node tools/import-gemrate-en-totals.js → node tools/inject-psa-wow.js",
+    how: "9346 크롬으로 box-sold-cdp/psa-nav-run.js(카드별 팝 리포트)·psa-trend-run.js(세트 추이) 덤프를 받는다(tools/MONDAY-GRADING.md 1번) → node tools/psa-trend-ingest.js <추이 덤프> <카드별 팝 덤프> → node tools/psa-edition-weekly-ingest.js <추이 덤프> → node tools/import-gemrate-psa-history.js → node tools/import-gemrate-en-totals.js → node tools/inject-psa-wow.js",
     note: "psa-edition-weekly-ingest 는 덤프의 마지막 수요일 한 주만 넣는다 — 두 주 밀렸으면 판별 주간이 한 주 빈다(2026-09-28 복구 때 9/16 주가 빠졌다)." },
   { key: "psa-full", name: "PSA 전체 인구(세트별)", mode: "manual", every: "주 1회(월)",
-    warn: 8, late: 14, get: pick.packsField("psafull"), files: [],
+    warn: 8, late: 14, get: pick.psaFullOldest, files: [],
     how: "psa-weekly 와 같은 작업 — import-gemrate-psa-history.js·import-gemrate-en-totals.js 가 packs.json 의 psaFull·psaFullEn 을 갱신한다" },
   { key: "tag-pop", name: "TAG 등급 인구(박스+카드별)", mode: "manual", every: "주 1회(월)",
     warn: 8, late: 14, get: pick.earliest(pick.observed("data/tag-card-pop.json"), pick.observed("data/tag-grading-history.json")),

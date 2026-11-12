@@ -10,12 +10,15 @@
 ## 순서
 
 ```bash
-# 1) PSA — 세트 누적
-node tools/collect-gemrate-psa-history.js
+# 1) PSA — 카드별 + 세트 누적. GemRate 가 헤드리스를 막아 9346 실브라우저 탭으로 받는다(RUN=box-sold-cdp/runs/<폴더>).
+node tools/collect-psa-card-pop.js --browser > $RUN/psa-browser.js                 # 카드별 팝 리포트 URL 목록
+node ../box-sold-cdp/psa-nav-run.js $RUN/psa-browser.js $RUN/psa-card.json <오늘>  # 카드 행 + 세트별 팝 리포트 기준일(updated)
+node tools/psa-card-pop-ingest.js $RUN/psa-card.json
+node ../box-sold-cdp/psa-trend-run.js . $RUN/psa-trend.json                        # 세트 추이(일별 누적)
+node tools/psa-trend-ingest.js $RUN/psa-trend.json $RUN/psa-card.json              # 추이가 멈췄으면 세트 누적은 팝 리포트 합계로(2026-11-12)
+node tools/psa-edition-weekly-ingest.js $RUN/psa-trend.json
 node tools/import-gemrate-psa-history.js      # → packs.json 의 psaFull
-node tools/collect-gemrate-en-totals.js
-node tools/collect-psa-edition-weekly.js
-node tools/import-gemrate-en-totals.js
+node tools/import-gemrate-en-totals.js        # → packs.json 의 psaFullEn
 node tools/inject-psa-wow.js
 
 # 2) CGC — 카드별 + 세트(총량·Pristine 10/Gem Mint 10). 공개 API 라 collect-grading 이 매주 월요일

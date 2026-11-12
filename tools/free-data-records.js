@@ -63,7 +63,9 @@ function buildGradeRecords(data, cgc, tag) {
   for (const code of trackedCodes(data)) for (const edition of ["jp", "en"]) {
     const set = data.sets[code];
     const psa = edition === "jp" ? set.psaFull : set.psaFullEn;
-    const psaWeekly = edition === "jp" ? set.psaWeekly?.points?.at(-1)?.d : psa?.updated;
+    // 주간 증가분(wowAdd)은 두 판 모두 판별 주간 원장의 마지막 두 수요일 차다(inject-psa-wow.js → set.psaWow). 그 끝 수요일이 기준일이다 —
+    // 영문판 총량 날짜(psaFullEn.updated)를 쓰면 총량을 팝 리포트로 최신화한 주에 증가분 날짜가 열흘 넘게 앞서 찍힌다(2026-11-12).
+    const psaWeekly = set.psaWow?.to;
     const cgcTotal = latest(cgc, code, edition);
     const cgcSplit = latest(cgc, code, edition, (point) => point?.grades && Object.keys(point.grades).length);
     const tagTotal = latest(tag, code, edition);

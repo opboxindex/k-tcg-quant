@@ -116,6 +116,8 @@ function applyGemRateHistory(data, source) {
     const imported = source.sets[code];
     const latest = imported.latest;
     const gemRate = round1((latest.totalGems / latest.totalGrades) * 100);
+    // 세트 추이가 멈춰 팝 리포트 카드 합계로 바꾼 값이면 출처도 그렇게 적는다(psa-trend-ingest.js, 2026-11-12).
+    const fromPopReport = latest.source === "pop-report";
 
     set.psaFull = {
       total: latest.totalGrades,
@@ -125,8 +127,8 @@ function applyGemRateHistory(data, source) {
       opAvg: opAverage,
       opDiff: round1(gemRate - opAverage),
       updated: latest.date,
-      source: "GemRate full-set PSA population trend",
-      sourceUrl: imported.url,
+      source: fromPopReport ? "GemRate PSA population report (sum of card rows)" : "GemRate full-set PSA population trend",
+      sourceUrl: fromPopReport ? imported.url.replace("/set-population-trend?", "/item-details?") : imported.url,
     };
     set.psaWeekly = {
       source: "GemRate full-set weekly PSA population deltas",
@@ -138,11 +140,18 @@ function applyGemRateHistory(data, source) {
     };
   }
 
+  // 팝 리포트는 세트마다 기준일이 하루씩 다를 수 있다(2026-11-12 실측 11/06·11/07) → 세트별 기준일을 dates 에 남기고,
+  // 스냅샷 키(date)는 가장 늦은 기준일로 한다. 가장 이른 날로 잡으면 한 세트만 옛 값에 머물러도 지난 스냅샷을
+  // 같은 날짜로 덮어쓰거나 새 값을 옛 날짜에 적게 된다(검증 에이전트 지적).
+  const popCodes = codes.filter((code) => source.sets[code].latest.source === "pop-report");
   return {
-    date: source.collectedAt,
-    source: "GemRate public full-set PSA population trend",
+    date: codes.map((code) => source.sets[code].latest.date).sort().at(-1),
+    source: !popCodes.length ? "GemRate public full-set PSA population trend"
+      : popCodes.length === codes.length ? "GemRate public PSA population report (sum of card rows; set trend stopped)"
+        : `GemRate public full-set PSA population trend; population report card sums for ${popCodes.join(",")}`,
     total: totalGrades,
     sets: Object.fromEntries(codes.map((code) => [code, source.sets[code].latest.totalGrades])),
+    dates: Object.fromEntries(codes.map((code) => [code, source.sets[code].latest.date])),
   };
 }
 

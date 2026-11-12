@@ -151,7 +151,10 @@ if (has("data/auction-market.json")) {
   ];
   for (const [f, label] of GRADING) {
     if (!has(f)) { fail(`${label} 파일이 없다`); continue; }
-    const ds = [...new Set(scanDates(readJSON(f)))].sort();
+    // PSA 주간 이력은 주간 그래프 끝(weeklyThrough)으로 잰다 — 파일 안 아무 날짜나 긁으면 팝 리포트로 최신화한 세트 누적(latest.date)이
+    // 잡혀 주간 증가분이 멈춘 걸 가린다(2026-11-12 검증 지적).
+    const j = readJSON(f);
+    const ds = f === "data/gemrate-psa-history.json" ? [j.weeklyThrough].filter(Boolean) : [...new Set(scanDates(j))].sort();
     if (!ds.length) { fail(`${label}에 날짜가 하나도 없다`); continue; }
     const last = ds[ds.length - 1];
     const age = daysAgo(last);

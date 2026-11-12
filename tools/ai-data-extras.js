@@ -148,7 +148,9 @@ function latestPoint(arr) {
 // PSA 총량은 페이지가 보여주는 것과 **같은 값**(packs 의 psaFull / psaFullEn, GemRate 전체집계)을 쓴다 — 2026-09-10 감사:
 // 종전엔 주간 추이 원장(grading-series)의 마지막 점(9/2)을 실어 페이지(9/5, 58,473)와 AI 파일(58,130)이 서로 달랐다.
 // CGC·TAG 는 추이 원장이 유일한 출처라 그대로 둔다. psaFull 이 없으면 추이 원장으로 떨어진다.
-function psaFromPacks(pf) {
+// addedSinceLastPoint(wowAdd)는 판별 주간 원장의 마지막 두 수요일 차라 총량 날짜(observedOn)와 기간이 다르다 —
+// 그 기간을 addedFrom·addedTo 로 같이 싣는다(총량을 팝 리포트로 최신화한 주엔 열흘 넘게 벌어진다, 2026-11-12).
+function psaFromPacks(pf, wow) {
   if (!pf || !Number.isFinite(pf.total)) return null;
   const gem = Number.isFinite(pf.gems) ? pf.gems : null;
   return {
@@ -157,6 +159,8 @@ function psaFromPacks(pf) {
     gem10: gem,
     gemRatePct: Number.isFinite(pf.gemRate) ? pf.gemRate : (gem != null && pf.total ? Math.round((gem / pf.total) * 1000) / 10 : null),
     addedSinceLastPoint: Number.isFinite(pf.wowAdd) ? pf.wowAdd : null,
+    addedFrom: Number.isFinite(pf.wowAdd) ? (wow?.from || null) : null,
+    addedTo: Number.isFinite(pf.wowAdd) ? (wow?.to || null) : null,
   };
 }
 
@@ -168,7 +172,7 @@ function buildGrading(series, packs) {
     const edition = (ed, pf) => {
       if (!ed && !pf) return null;
       const fromSeries = ed ? (Array.isArray(ed.psa) ? latestPoint(ed.psa) : (ed.psaLatest ? latestPoint([ed.psaLatest]) : null)) : null;
-      const psa = psaFromPacks(pf) || fromSeries;
+      const psa = psaFromPacks(pf, set.psaWow) || fromSeries;
       return { psa, cgc: ed ? latestPoint(ed.cgc) : null, tag: ed ? latestPoint(ed.tag) : null };
     };
     sets.push({ setCode: code, canonicalUrl: `${SITE}/psa-grading.html`, japanese: edition(eds.jp, set.psaFull), english: edition(eds.en, set.psaFullEn) });

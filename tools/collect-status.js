@@ -152,7 +152,7 @@ const SOURCES = [
   // 발매 전 세트(EB-05·OP-18 …) 예약판매 박스 호가 — 2026-10-08 신설(collect-preorder-prices.js, 같은 워크플로).
   { key: "preorder", name: "예약판매 박스 호가(발매 전 세트)", mode: "auto", every: "매일 03:00 KST", wf: "update-active-listings",
     warn: 2, late: 3, get: pick.field("data/preorder-series.json", "updated"), files: ["preorder-series.json"] },
-  { key: "fx", name: "환율", mode: "auto", every: "매일 09:10 KST", wf: "update-fx",
+  { key: "fx", name: "환율", mode: "auto", every: "평일 05:10 KST(화~토)", wf: "update-fx",
     warn: 2, late: 3, businessDays: true, get: pick.field("data/fx.json", "date", "updated"), files: ["fx.json", "fx-history.json"] },
   // collect-grading.yml(월 01:30 UTC)이 만드는 건 CGC 카드별 원장 하나다(공개 API). 2026-09-30 정정: 전엔 이 행이
   // grading-series.json 의 updated — update-market-data 가 수집 성패와 무관하게 매주 찍는 빌드 날짜 — 를 읽어서,

@@ -1,4 +1,4 @@
-# OP Box Index — full facts file (data as of 2026-11-11)
+# OP Box Index — full facts file (data as of 2026-11-12)
 
 Source: https://opboxindex.com/ · Licence CC BY 4.0 · Attribution "OP Box Index (opboxindex.com)" · Machine-readable twin: https://opboxindex.com/opbox-ai-data.json
 All prices USD unless marked. "sold" = median of verified completed eBay sales (n = sample size, date = sample collection). "ask" = median active asking price. Japanese (JP) and English (EN) printings are separate products. null/n/a = not verified, never zero.
@@ -110,9 +110,8 @@ PRB-02 | 27,156 (87.6% gem, 2026-10-29) | 7,106 (2026-11-09) | 38 (55.3% gem, 20
 EB-04 | n/a | 2,528 (2026-11-09) | n/a | n/a | n/a | n/a
 
 ## One Piece eBay auctions (settled after close) — https://opboxindex.com/auction.html
-Last 7 complete days (2026-11-04 to 2026-11-10): 9,423 auctions ended, 2,953 sold, sell-through 31.3%.
+Last 7 complete days (2026-11-05 to 2026-11-11): 9,444 auctions ended, 2,918 sold, sell-through 30.9%.
 Format: date | ended | sold | sell-through | winning-bid total | partial-day flag
-2026-10-29 | 1,108 | 385 | 34.75% | $47,079 | complete
 2026-10-30 | 915 | 290 | 31.69% | $25,617 | complete
 2026-10-31 | 1,097 | 249 | 22.7% | $32,169 | complete
 2026-11-01 | 1,335 | 351 | 26.29% | $35,630 | complete
@@ -125,7 +124,8 @@ Format: date | ended | sold | sell-through | winning-bid total | partial-day fla
 2026-11-08 | 1,731 | 495 | 28.6% | $41,576 | complete
 2026-11-09 | 1,873 | 485 | 25.89% | $59,039 | complete
 2026-11-10 | 1,185 | 471 | 39.75% | $80,358 | complete
-2026-11-11 | 816 | 272 | 33.33% | $33,949 | partial (reading gap)
+2026-11-11 | 1,162 | 330 | 28.4% | $37,022 | complete
+2026-11-12 | 51 | 17 | n/a | $360 | partial (reading gap)
 
 Per set, last 30 days (2026-10-12 to 2026-11-11; sets with 30+ ended auctions, released sets only): SET | ended | sold | sell-through | median winning bid | box sell-through
 OP-17 | 4,566 | 1,685 | 36.9% | $8 | 67.3%
@@ -181,104 +181,104 @@ ST-26 | 46 | 19 | 41.3% | $56 | n/a
 EB-05 | 661 | 427 | 64.6% | $20 | 96%
 
 ## Trading card game auctions (13 games) — https://opboxindex.com/tcg-auction.html
-Last 7 days (2026-11-05 to 2026-11-11), per game: GAME | ended (sample) | sold | sell-through | median winning bid | live auctions on eBay (latest snapshot)
-Pokemon (Japanese) | 875 | 269 | 30.7% | $8 | 42,052
-Pokemon | 875 | 205 | 23.4% | $13 | 332,007
-Magic: The Gathering | 875 | 155 | 17.7% | $6 | 31,469
-Yu-Gi-Oh! | 875 | 270 | 30.9% | $7 | 24,192
-One Piece | 874 | 308 | 35.2% | $17 | 14,482
-Disney Lorcana | 875 | 521 | 59.5% | $52 | 4,673
-Weiss Schwarz | 875 | 293 | 33.5% | $27 | 3,531
-Digimon | 871 | 125 | 14.4% | $10 | 2,222
-Riftbound (LoL) | 856 | 604 | 70.6% | $126 | 1,727
-Union Arena | 794 | 333 | 41.9% | $35 | 915
-Gundam Card Game | 569 | 221 | 38.8% | $13 | 949
-Dragon Ball Fusion World | 800 | 422 | 52.8% | $72 | 1,054
-Palworld TCG | 270 | 136 | 50.4% | $21 | 298
+Last 7 days (2026-11-06 to 2026-11-12), per game: GAME | ended (sample) | sold | sell-through | median winning bid | live auctions on eBay (latest snapshot)
+Pokemon (Japanese) | 752 | 231 | 30.7% | $9 | 42,640
+Pokemon | 754 | 187 | 24.8% | $14 | 333,075
+Magic: The Gathering | 751 | 115 | 15.3% | $6 | 32,018
+Yu-Gi-Oh! | 750 | 230 | 30.7% | $9 | 23,907
+One Piece | 749 | 260 | 34.7% | $17 | 14,475
+Disney Lorcana | 750 | 419 | 55.9% | $68 | 4,473
+Weiss Schwarz | 750 | 249 | 33.2% | $27 | 3,542
+Digimon | 750 | 87 | 11.6% | $10 | 2,213
+Riftbound (LoL) | 751 | 537 | 71.5% | $126 | 1,682
+Union Arena | 709 | 269 | 37.9% | $51 | 957
+Gundam Card Game | 533 | 188 | 35.3% | $13 | 927
+Dragon Ball Fusion World | 700 | 360 | 51.4% | $72 | 1,133
+Palworld TCG | 266 | 137 | 51.5% | $26 | 288
 
 ## Card prices (119 tracked card variants) — https://opboxindex.com/cards/
 Format: CARD# | name | set | raw NM (JPY, USD equiv., date) | PSA 10 sold median (n, date) | PSA population total / PSA 10 (date) | page
-OP05-119 | Monkey D. Luffy 119 SP Gold | OP-11 | ¥1,280,000 ≈ $8,097 (2026-11-06) | n/a | 2,200 / 1,317 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy-119-sp-gold.html
-OP13-118 | Monkey D. Luffy 118 Red Manga Alternate Art | OP-13 | ¥1,280,000 ≈ $8,097 (2026-11-06) | $14,134 (n=3, 2026-07-10) | 798 / 675 (2026-11-09) | https://opboxindex.com/cards/op13-118-monkey-d-luffy-118-red-manga-alternate-art.html
-EB04-061 | Monkey D. Luffy (Super Alternate Art) | OP-17 | ¥998,000 ≈ $6,313 (2026-11-06) | n/a | n/a | https://opboxindex.com/cards/eb04-061-monkey-d-luffy-super-alternate-art.html
-OP05-119 | Monkey D. Luffy | OP-05 | ¥598,000 ≈ $3,783 (2026-11-06) | n/a | 4,132 / 3,769 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy.html
-ST01-012 | Monkey D. Luffy 012 Alternate Art Gold Stamped Signature | OP-05 | ¥598,000 ≈ $3,783 (2026-11-06) | n/a | 4,197 / 3,766 (2026-11-09) | https://opboxindex.com/cards/st01-012-monkey-d-luffy-012-alternate-art-gold-stamped-signature.html
-OP09-118 | Gol D. Roger | OP-09 | ¥498,000 ≈ $3,150 (2026-11-06) | n/a | 955 / 873 (2026-11-09) | https://opboxindex.com/cards/op09-118-gol-d-roger.html
-OP05-119 | Monkey D. Luffy 119 SP Silver | OP-11 | ¥498,000 ≈ $3,150 (2026-11-06) | n/a | 2,118 / 1,201 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy-119-sp-silver.html
-OP13-119 | Portgas D. Ace 119 Red Manga Alternate Art | OP-13 | ¥498,000 ≈ $3,150 (2026-11-06) | n/a | 706 / 621 (2026-11-09) | https://opboxindex.com/cards/op13-119-portgas-d-ace-119-red-manga-alternate-art.html
-EB02-061 | Monkey D. Luffy 061 Manga | EB-02 | ¥398,000 ≈ $2,518 (2026-11-06) | $4,216 (n=5, 2026-10-29) | 2,944 / 2,605 (2026-11-09) | https://opboxindex.com/cards/eb02-061-monkey-d-luffy-061-manga.html
-OP17-118 | Rocks D. Xebec (Super Alternate Art) | OP-17 | ¥398,000 ≈ $2,518 (2026-11-06) | n/a | n/a | https://opboxindex.com/cards/op17-118-rocks-d-xebec-super-alternate-art.html
-OP13-120 | Sabo 120 Red Manga Alternate Art | OP-13 | ¥298,000 ≈ $1,885 (2026-11-06) | n/a | 719 / 632 (2026-11-09) | https://opboxindex.com/cards/op13-120-sabo-120-red-manga-alternate-art.html
-OP09-119 | Monkey D. Luffy 119 Manga | OP-09 | ¥248,000 ≈ $1,569 (2026-11-06) | $2,701 (n=6, 2026-10-29) | 3,072 / 2,606 (2026-11-09) | https://opboxindex.com/cards/op09-119-monkey-d-luffy-119-manga.html
-OP06-118 | Roronoa Zoro Alternate Art Manga | OP-06 | ¥198,000 ≈ $1,252 (2026-11-06) | $2,339 (n=6, 2026-10-29) | 4,850 / 4,501 (2026-11-09) | https://opboxindex.com/cards/op06-118-roronoa-zoro-alternate-art-manga.html
-EB01-006 | Tony TonyChopper Alternate Art Manga | EB-01 | ¥198,000 ≈ $1,252 (2026-11-06) | $2,401 (n=4, 2026-10-29) | 2,924 / 2,581 (2026-11-09) | https://opboxindex.com/cards/eb01-006-tony-tonychopper-alternate-art-manga.html
-OP01-120 | Shanks Manga | PRB-01 | ¥198,000 ≈ $1,252 (2026-11-06) | n/a | 85 / 72 (2026-11-09) | https://opboxindex.com/cards/op01-120-shanks-manga.html
-OP02-013 | Portgas D. Ace Manga | PRB-01 | ¥198,000 ≈ $1,252 (2026-11-06) | n/a | 86 / 72 (2026-11-09) | https://opboxindex.com/cards/op02-013-portgas-d-ace-manga.html
-OP05-060 | Monkey D. Luffy OP05-060 SP | EB-02 | ¥198,000 ≈ $1,252 (2026-11-06) | n/a | 694 / 590 (2026-11-09) | https://opboxindex.com/cards/op05-060-monkey-d-luffy-op05-060-sp.html
-OP13-118 | Monkey D. Luffy 118 Super Alternate Art | OP-13 | ¥198,000 ≈ $1,252 (2026-11-06) | n/a | 2,842 / 2,310 (2026-11-09) | https://opboxindex.com/cards/op13-118-monkey-d-luffy-118-super-alternate-art.html
-OP09-051 | Buggy OP09 051 SP Gold | OP-14 | ¥198,000 ≈ $1,252 (2026-11-06) | n/a | 871 / 427 (2026-11-09) | https://opboxindex.com/cards/op09-051-buggy-op09-051-sp-gold.html
-OP02-013 | Portgas D. Ace Parallel Manga Alternate Art | OP-02 | ¥148,000 ≈ $936 (2026-11-06) | n/a | 4,588 / 3,918 (2026-11-09) | https://opboxindex.com/cards/op02-013-portgas-d-ace-parallel-manga-alternate-art.html
-OP07-051 | Boa Hancock 051 Parallel Manga | OP-07 | ¥148,000 ≈ $936 (2026-11-06) | $1,675 (n=8, 2026-10-29) | 5,619 / 4,852 (2026-11-09) | https://opboxindex.com/cards/op07-051-boa-hancock-051-parallel-manga.html
-OP09-004 | Shanks 004 Manga | OP-09 | ¥148,000 ≈ $936 (2026-11-06) | $1,926 (n=5, 2026-10-29) | 2,773 / 2,120 (2026-11-09) | https://opboxindex.com/cards/op09-004-shanks-004-manga.html
-OP11-118 | Monkey D. Luffy 118 Manga | OP-11 | ¥148,000 ≈ $936 (2026-11-06) | $1,624 (n=24, 2026-10-29) | 4,671 / 4,050 (2026-11-09) | https://opboxindex.com/cards/op11-118-monkey-d-luffy-118-manga.html
-OP09-093 | Marshall D. Teach SP Gold | OP-12 | ¥148,000 ≈ $936 (2026-11-06) | n/a | 1,218 / 1,078 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-sp-gold.html
-OP06-119 | Sanji OP06 119 Manga | PRB-02 | ¥148,000 ≈ $936 (2026-11-06) | $1,682 (n=7, 2026-10-29) | 3,329 / 2,706 (2026-11-09) | https://opboxindex.com/cards/op06-119-sanji-op06-119-manga.html
-OP16-063 | Kuzan (Manga) | OP-16 | ¥148,000 ≈ $936 (2026-11-06) | n/a | 876 / 781 (2026-11-09) | https://opboxindex.com/cards/op16-063-kuzan-manga.html
-OP16-065 | Sakazuki (Manga) | OP-16 | ¥148,000 ≈ $936 (2026-11-06) | n/a | 968 / 881 (2026-11-09) | https://opboxindex.com/cards/op16-065-sakazuki-manga.html
-OP16-073 | Borsalino (Manga) | OP-16 | ¥148,000 ≈ $936 (2026-11-06) | n/a | 881 / 749 (2026-11-09) | https://opboxindex.com/cards/op16-073-borsalino-manga.html
-OP05-069 | Trafalgar Law 069 Alternate Art Manga | OP-05 | ¥128,000 ≈ $810 (2026-11-06) | $1,770 (n=10, 2026-10-29) | 3,079 / 2,170 (2026-11-09) | https://opboxindex.com/cards/op05-069-trafalgar-law-069-alternate-art-manga.html
-EB03-026 | Boa Hancock SP | EB-03 | ¥128,000 ≈ $810 (2026-11-06) | $1,485 (n=9, 2026-10-29) | 2,747 / 2,361 (2026-11-09) | https://opboxindex.com/cards/eb03-026-boa-hancock-sp.html
-OP01-120 | Shanks Parallel Manga Alternate Art | OP-01 | ¥128,000 ≈ $810 (2026-11-06) | n/a | 5,118 / 4,421 (2026-11-09) | https://opboxindex.com/cards/op01-120-shanks-parallel-manga-alternate-art.html
-OP09-093 | Marshall D. Teach 093 Manga | OP-09 | ¥128,000 ≈ $810 (2026-11-06) | n/a | 2,624 / 2,226 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-093-manga.html
-OP01-078 | Boa Hancock SP | OP-04 | ¥99,800 ≈ $631 (2026-11-06) | $965 (n=6, 2026-10-29) | 5,832 / 5,234 (2026-11-09) | https://opboxindex.com/cards/op01-078-boa-hancock-sp.html
-OP04-083 | Sabo Alternate Art Manga | OP-04 | ¥99,800 ≈ $631 (2026-11-06) | $1,015 (n=8, 2026-10-29) | 4,031 / 3,410 (2026-11-09) | https://opboxindex.com/cards/op04-083-sabo-alternate-art-manga.html
-OP09-051 | Buggy 051 Manga | OP-09 | ¥99,800 ≈ $631 (2026-11-06) | $988 (n=7, 2026-10-29) | 2,524 / 2,160 (2026-11-09) | https://opboxindex.com/cards/op09-051-buggy-051-manga.html
-OP09-093 | Marshall D. Teach SP Silver | OP-12 | ¥99,800 ≈ $631 (2026-11-06) | n/a | 1,044 / 942 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-sp-silver.html
-OP03-122 | Sogeking Alternate Art Manga | OP-03 | ¥79,800 ≈ $505 (2026-11-06) | $744 (n=10, 2026-06-29) | 3,534 / 3,047 (2026-11-09) | https://opboxindex.com/cards/op03-122-sogeking-alternate-art-manga.html
-OP10-119 | Trafalgar Law 119 Manga | OP-10 | ¥79,800 ≈ $505 (2026-11-06) | $818 (n=12, 2026-10-29) | 3,994 / 3,357 (2026-11-09) | https://opboxindex.com/cards/op10-119-trafalgar-law-119-manga.html
-OP12-118 | Jewelry Bonney 118 Manga | OP-12 | ¥79,800 ≈ $505 (2026-11-06) | $866 (n=19, 2026-10-29) | 2,949 / 2,177 (2026-11-09) | https://opboxindex.com/cards/op12-118-jewelry-bonney-118-manga.html
-OP13-120 | Sabo 120 Super Alternate Art | OP-13 | ¥79,800 ≈ $505 (2026-11-06) | $965 (n=13, 2026-10-29) | 2,141 / 1,756 (2026-11-09) | https://opboxindex.com/cards/op13-120-sabo-120-super-alternate-art.html
-OP14-119 | Dracule Mihawk Manga | OP-14 | ¥79,800 ≈ $505 (2026-11-06) | $978 (n=8, 2026-10-29) | 2,306 / 1,884 (2026-11-09) | https://opboxindex.com/cards/op14-119-dracule-mihawk-manga.html
-EB03-055 | Nico Robin 055 SP | EB-03 | ¥79,800 ≈ $505 (2026-11-06) | $887 (n=11, 2026-10-29) | 1,978 / 1,774 (2026-11-09) | https://opboxindex.com/cards/eb03-055-nico-robin-055-sp.html
-EB03-053 | Nami 053 SP | EB-03 | ¥79,800 ≈ $505 (2026-11-06) | $885 (n=10, 2026-10-29) | 2,088 / 1,806 (2026-11-09) | https://opboxindex.com/cards/eb03-053-nami-053-sp.html
-OP08-118 | Silvers Rayleigh Parallel Manga | OP-08 | ¥69,800 ≈ $442 (2026-11-06) | $884 (n=16, 2026-10-29) | 3,871 / 3,458 (2026-11-09) | https://opboxindex.com/cards/op08-118-silvers-rayleigh-parallel-manga.html
-OP01-003 | Monkey D. Luffy 003 Parallel | OP-01 | ¥39,800 ≈ $252 (2026-11-06) | $1,238 (n=15, 2026-10-29) | 4,307 / 3,682 (2026-11-09) | https://opboxindex.com/cards/op01-003-monkey-d-luffy-003-parallel.html
-OP06-001 | Uta SP | EB-02 | ¥39,800 ≈ $252 (2026-11-06) | $582 (n=3, 2026-10-29) | 367 / 351 (2026-11-09) | https://opboxindex.com/cards/op06-001-uta-sp.html
-OP11-080 | Gear Two Alternate Art | OP-11 | ¥39,800 ≈ $252 (2026-11-06) | $501 (n=26, 2026-10-29) | 3,725 / 3,451 (2026-11-09) | https://opboxindex.com/cards/op11-080-gear-two-alternate-art.html
-OP09-078 | Gum Gum Giant Alternate Art | PRB-02 | ¥39,800 ≈ $252 (2026-11-06) | $1,133 (n=6, 2026-10-29) | 2,958 / 2,643 (2026-11-09) | https://opboxindex.com/cards/op09-078-gum-gum-giant-alternate-art.html
-OP14-112 | Boa Hancock OP14 112 SP | OP-14 | ¥39,800 ≈ $252 (2026-11-06) | $631 (n=20, 2026-10-29) | 2,644 / 2,514 (2026-11-09) | https://opboxindex.com/cards/op14-112-boa-hancock-op14-112-sp.html
-EB03-003 | Uta 003 SP | EB-03 | ¥39,800 ≈ $252 (2026-11-06) | $580 (n=3, 2026-10-29) | 1,700 / 1,297 (2026-11-09) | https://opboxindex.com/cards/eb03-003-uta-003-sp.html
-OP01-016 | Nami SP | OP-05 | ¥34,800 ≈ $220 (2026-11-06) | $335 (n=17, 2026-10-29) | 5,884 / 5,386 (2026-11-09) | https://opboxindex.com/cards/op01-016-nami-sp.html
-OP06-101 | O Nami SP | OP-07 | ¥34,800 ≈ $220 (2026-11-06) | $511 (n=4, 2026-10-29) | 5,177 / 4,887 (2026-11-09) | https://opboxindex.com/cards/op06-101-o-nami-sp.html
-OP08-106 | Nami SP | OP-09 | ¥34,800 ≈ $220 (2026-11-06) | $401 (n=16, 2026-10-29) | 5,742 / 5,356 (2026-11-09) | https://opboxindex.com/cards/op08-106-nami-sp.html
-EB02-061 | Monkey D. Luffy EB02 061 SP | PRB-02 | ¥29,800 ≈ $189 (2026-11-06) | $619 (n=13, 2026-10-29) | 2,267 / 2,069 (2026-11-09) | https://opboxindex.com/cards/eb02-061-monkey-d-luffy-eb02-061-sp.html
-OP14-118 | Youll Frighten Me Alternate Art | OP-14 | ¥29,800 ≈ $189 (2026-11-06) | $282 (n=25, 2026-10-29) | 2,656 / 2,395 (2026-11-09) | https://opboxindex.com/cards/op14-118-youll-frighten-me-alternate-art.html
-ST26-005 | Monkey D. Luffy SP | OP-15 | ¥29,800 ≈ $189 (2026-11-06) | $891 (n=9, 2026-10-29) | 2,548 / 2,388 (2026-11-09) | https://opboxindex.com/cards/st26-005-monkey-d-luffy-sp.html
-OP01-001 | Roronoa Zoro 001 Parallel | OP-01 | ¥24,800 ≈ $157 (2026-11-06) | $399 (n=27, 2026-10-29) | 3,745 / 3,360 (2026-11-09) | https://opboxindex.com/cards/op01-001-roronoa-zoro-001-parallel.html
-OP05-067 | Zoro Juurou SP | OP-09 | ¥24,800 ≈ $157 (2026-11-06) | $646 (n=12, 2026-10-29) | 3,674 / 3,265 (2026-11-09) | https://opboxindex.com/cards/op05-067-zoro-juurou-sp.html
-ST18-005 | Luffy Tarou SP | OP-11 | ¥24,800 ≈ $157 (2026-11-06) | $520 (n=33, 2026-10-29) | 3,042 / 2,239 (2026-11-09) | https://opboxindex.com/cards/st18-005-luffy-tarou-sp.html
-OP09-020 | Come On Well Fight You Alternate Art | PRB-02 | ¥24,800 ≈ $157 (2026-11-06) | $396 (n=13, 2026-10-29) | 1,917 / 1,763 (2026-11-09) | https://opboxindex.com/cards/op09-020-come-on-well-fight-you-alternate-art.html
-OP14-096 | Ground Death Alternate Art | OP-14 | ¥24,800 ≈ $157 (2026-11-06) | $136 (n=16, 2026-10-29) | 608 / 573 (2026-11-09) | https://opboxindex.com/cards/op14-096-ground-death-alternate-art.html
-OP13-031 | Trafalgar Law SP | OP-15 | ¥24,800 ≈ $157 (2026-11-06) | $296 (n=3, 2026-10-29) | 893 / 852 (2026-11-09) | https://opboxindex.com/cards/op13-031-trafalgar-law-sp.html
-ST18-004 | Zoro Juurou SP | OP-12 | ¥17,800 ≈ $113 (2026-11-06) | $327 (n=23, 2026-10-29) | 1,289 / 1,150 (2026-11-09) | https://opboxindex.com/cards/st18-004-zoro-juurou-sp.html
-EB03-031 | Vinsmoke Reiju SP | EB-03 | ¥17,800 ≈ $113 (2026-11-06) | $315 (n=8, 2026-10-29) | 1,222 / 1,100 (2026-11-09) | https://opboxindex.com/cards/eb03-031-vinsmoke-reiju-sp.html
-OP01-016 | Nami Parallel | OP-01 | ¥14,800 ≈ $94 (2026-11-06) | $211 (n=23, 2026-10-29) | 9,671 / 8,915 (2026-11-09) | https://opboxindex.com/cards/op01-016-nami-parallel.html
-ST15-002 | EdwardNewgate SP | OP-10 | ¥14,800 ≈ $94 (2026-11-06) | $338 (n=16, 2026-10-29) | 1,532 / 1,359 (2026-11-09) | https://opboxindex.com/cards/st15-002-edwardnewgate-sp.html
-OP01-002 | Trafalgar Law 002 Parallel | OP-01 | ¥12,800 ≈ $81 (2026-11-06) | $448 (n=18, 2026-10-29) | 2,825 / 2,551 (2026-11-09) | https://opboxindex.com/cards/op01-002-trafalgar-law-002-parallel.html
-OP03-040 | Nami 040 Alternate Art | OP-03 | ¥12,800 ≈ $81 (2026-11-06) | $238 (n=4, 2026-09-14) | 2,808 / 2,427 (2026-11-09) | https://opboxindex.com/cards/op03-040-nami-040-alternate-art.html
-OP01-047 | Trafalgar Law SP | OP-04 | ¥12,800 ≈ $81 (2026-11-06) | $290 (n=6, 2026-10-29) | 1,730 / 1,572 (2026-11-09) | https://opboxindex.com/cards/op01-047-trafalgar-law-sp.html
-OP02-120 | Uta SP | OP-05 | ¥12,800 ≈ $81 (2026-11-06) | $253 (n=20, 2026-10-29) | 4,422 / 4,145 (2026-11-09) | https://opboxindex.com/cards/op02-120-uta-sp.html
-OP01-121 | Yamato SP | OP-05 | ¥12,800 ≈ $81 (2026-11-06) | $243 (n=10, 2026-10-29) | 3,781 / 3,516 (2026-11-09) | https://opboxindex.com/cards/op01-121-yamato-sp.html
-OP04-064 | Ms All Sunday SP | OP-06 | ¥12,800 ≈ $81 (2026-11-06) | $366 (n=7, 2026-10-29) | 1,184 / 1,129 (2026-11-09) | https://opboxindex.com/cards/op04-064-ms-all-sunday-sp.html
-OP07-038 | Boa Hancock 038 Parallel | OP-07 | ¥12,800 ≈ $81 (2026-11-06) | $257 (n=7, 2026-10-29) | 5,533 / 5,225 (2026-11-09) | https://opboxindex.com/cards/op07-038-boa-hancock-038-parallel.html
-ST02-007 | Jewelry Bonney SP | OP-08 | ¥12,800 ≈ $81 (2026-11-06) | $245 (n=12, 2026-10-29) | 2,163 / 2,030 (2026-11-09) | https://opboxindex.com/cards/st02-007-jewelry-bonney-sp.html
-ST16-004 | Shanks SP | OP-11 | ¥12,800 ≈ $81 (2026-11-06) | $300 (n=14, 2026-10-29) | 1,789 / 1,516 (2026-11-09) | https://opboxindex.com/cards/st16-004-shanks-sp.html
-OP06-119 | Sanji SP | OP-11 | ¥12,800 ≈ $81 (2026-11-06) | $272 (n=17, 2026-10-29) | 1,590 / 1,367 (2026-11-09) | https://opboxindex.com/cards/op06-119-sanji-sp.html
-OP07-085 | Stussy SP | OP-11 | ¥12,800 ≈ $81 (2026-11-06) | $237 (n=14, 2026-10-29) | 1,769 / 1,383 (2026-11-09) | https://opboxindex.com/cards/op07-085-stussy-sp.html
-EB01-057 | Shirahoshi SP | OP-11 | ¥12,800 ≈ $81 (2026-11-06) | $209 (n=14, 2026-10-29) | 2,048 / 1,835 (2026-11-09) | https://opboxindex.com/cards/eb01-057-shirahoshi-sp.html
-OP12-030 | Dracule Mihawk OP12 030 SP | OP-14 | ¥12,800 ≈ $81 (2026-11-06) | $221 (n=16, 2026-10-29) | 1,278 / 1,199 (2026-11-09) | https://opboxindex.com/cards/op12-030-dracule-mihawk-op12-030-sp.html
-EB03-042 | Koala SP | EB-03 | ¥12,800 ≈ $81 (2026-11-06) | $252 (n=9, 2026-10-29) | 975 / 875 (2026-11-09) | https://opboxindex.com/cards/eb03-042-koala-sp.html
-ST15-005 | Portgas D. Ace SP | OP-16 | ¥12,800 ≈ $81 (2026-11-06) | $271 (n=11, 2026-10-29) | 1,686 / 1,591 (2026-11-09) | https://opboxindex.com/cards/st15-005-portgas-d-ace-sp.html
+OP05-119 | Monkey D. Luffy 119 SP Gold | OP-11 | ¥1,280,000 ≈ $8,042 (2026-11-06) | n/a | 2,200 / 1,317 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy-119-sp-gold.html
+OP13-118 | Monkey D. Luffy 118 Red Manga Alternate Art | OP-13 | ¥1,280,000 ≈ $8,042 (2026-11-06) | $14,134 (n=3, 2026-07-10) | 798 / 675 (2026-11-09) | https://opboxindex.com/cards/op13-118-monkey-d-luffy-118-red-manga-alternate-art.html
+EB04-061 | Monkey D. Luffy (Super Alternate Art) | OP-17 | ¥998,000 ≈ $6,271 (2026-11-06) | n/a | n/a | https://opboxindex.com/cards/eb04-061-monkey-d-luffy-super-alternate-art.html
+OP05-119 | Monkey D. Luffy | OP-05 | ¥598,000 ≈ $3,757 (2026-11-06) | n/a | 4,132 / 3,769 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy.html
+ST01-012 | Monkey D. Luffy 012 Alternate Art Gold Stamped Signature | OP-05 | ¥598,000 ≈ $3,757 (2026-11-06) | n/a | 4,197 / 3,766 (2026-11-09) | https://opboxindex.com/cards/st01-012-monkey-d-luffy-012-alternate-art-gold-stamped-signature.html
+OP09-118 | Gol D. Roger | OP-09 | ¥498,000 ≈ $3,129 (2026-11-06) | n/a | 955 / 873 (2026-11-09) | https://opboxindex.com/cards/op09-118-gol-d-roger.html
+OP05-119 | Monkey D. Luffy 119 SP Silver | OP-11 | ¥498,000 ≈ $3,129 (2026-11-06) | n/a | 2,118 / 1,201 (2026-11-09) | https://opboxindex.com/cards/op05-119-monkey-d-luffy-119-sp-silver.html
+OP13-119 | Portgas D. Ace 119 Red Manga Alternate Art | OP-13 | ¥498,000 ≈ $3,129 (2026-11-06) | n/a | 706 / 621 (2026-11-09) | https://opboxindex.com/cards/op13-119-portgas-d-ace-119-red-manga-alternate-art.html
+EB02-061 | Monkey D. Luffy 061 Manga | EB-02 | ¥398,000 ≈ $2,501 (2026-11-06) | $4,216 (n=5, 2026-10-29) | 2,944 / 2,605 (2026-11-09) | https://opboxindex.com/cards/eb02-061-monkey-d-luffy-061-manga.html
+OP17-118 | Rocks D. Xebec (Super Alternate Art) | OP-17 | ¥398,000 ≈ $2,501 (2026-11-06) | n/a | n/a | https://opboxindex.com/cards/op17-118-rocks-d-xebec-super-alternate-art.html
+OP13-120 | Sabo 120 Red Manga Alternate Art | OP-13 | ¥298,000 ≈ $1,872 (2026-11-06) | n/a | 719 / 632 (2026-11-09) | https://opboxindex.com/cards/op13-120-sabo-120-red-manga-alternate-art.html
+OP09-119 | Monkey D. Luffy 119 Manga | OP-09 | ¥248,000 ≈ $1,558 (2026-11-06) | $2,701 (n=6, 2026-10-29) | 3,072 / 2,606 (2026-11-09) | https://opboxindex.com/cards/op09-119-monkey-d-luffy-119-manga.html
+OP06-118 | Roronoa Zoro Alternate Art Manga | OP-06 | ¥198,000 ≈ $1,244 (2026-11-06) | $2,339 (n=6, 2026-10-29) | 4,850 / 4,501 (2026-11-09) | https://opboxindex.com/cards/op06-118-roronoa-zoro-alternate-art-manga.html
+EB01-006 | Tony TonyChopper Alternate Art Manga | EB-01 | ¥198,000 ≈ $1,244 (2026-11-06) | $2,401 (n=4, 2026-10-29) | 2,924 / 2,581 (2026-11-09) | https://opboxindex.com/cards/eb01-006-tony-tonychopper-alternate-art-manga.html
+OP01-120 | Shanks Manga | PRB-01 | ¥198,000 ≈ $1,244 (2026-11-06) | n/a | 85 / 72 (2026-11-09) | https://opboxindex.com/cards/op01-120-shanks-manga.html
+OP02-013 | Portgas D. Ace Manga | PRB-01 | ¥198,000 ≈ $1,244 (2026-11-06) | n/a | 86 / 72 (2026-11-09) | https://opboxindex.com/cards/op02-013-portgas-d-ace-manga.html
+OP05-060 | Monkey D. Luffy OP05-060 SP | EB-02 | ¥198,000 ≈ $1,244 (2026-11-06) | n/a | 694 / 590 (2026-11-09) | https://opboxindex.com/cards/op05-060-monkey-d-luffy-op05-060-sp.html
+OP13-118 | Monkey D. Luffy 118 Super Alternate Art | OP-13 | ¥198,000 ≈ $1,244 (2026-11-06) | n/a | 2,842 / 2,310 (2026-11-09) | https://opboxindex.com/cards/op13-118-monkey-d-luffy-118-super-alternate-art.html
+OP09-051 | Buggy OP09 051 SP Gold | OP-14 | ¥198,000 ≈ $1,244 (2026-11-06) | n/a | 871 / 427 (2026-11-09) | https://opboxindex.com/cards/op09-051-buggy-op09-051-sp-gold.html
+OP02-013 | Portgas D. Ace Parallel Manga Alternate Art | OP-02 | ¥148,000 ≈ $930 (2026-11-06) | n/a | 4,588 / 3,918 (2026-11-09) | https://opboxindex.com/cards/op02-013-portgas-d-ace-parallel-manga-alternate-art.html
+OP07-051 | Boa Hancock 051 Parallel Manga | OP-07 | ¥148,000 ≈ $930 (2026-11-06) | $1,675 (n=8, 2026-10-29) | 5,619 / 4,852 (2026-11-09) | https://opboxindex.com/cards/op07-051-boa-hancock-051-parallel-manga.html
+OP09-004 | Shanks 004 Manga | OP-09 | ¥148,000 ≈ $930 (2026-11-06) | $1,926 (n=5, 2026-10-29) | 2,773 / 2,120 (2026-11-09) | https://opboxindex.com/cards/op09-004-shanks-004-manga.html
+OP11-118 | Monkey D. Luffy 118 Manga | OP-11 | ¥148,000 ≈ $930 (2026-11-06) | $1,624 (n=24, 2026-10-29) | 4,671 / 4,050 (2026-11-09) | https://opboxindex.com/cards/op11-118-monkey-d-luffy-118-manga.html
+OP09-093 | Marshall D. Teach SP Gold | OP-12 | ¥148,000 ≈ $930 (2026-11-06) | n/a | 1,218 / 1,078 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-sp-gold.html
+OP06-119 | Sanji OP06 119 Manga | PRB-02 | ¥148,000 ≈ $930 (2026-11-06) | $1,682 (n=7, 2026-10-29) | 3,329 / 2,706 (2026-11-09) | https://opboxindex.com/cards/op06-119-sanji-op06-119-manga.html
+OP16-063 | Kuzan (Manga) | OP-16 | ¥148,000 ≈ $930 (2026-11-06) | n/a | 876 / 781 (2026-11-09) | https://opboxindex.com/cards/op16-063-kuzan-manga.html
+OP16-065 | Sakazuki (Manga) | OP-16 | ¥148,000 ≈ $930 (2026-11-06) | n/a | 968 / 881 (2026-11-09) | https://opboxindex.com/cards/op16-065-sakazuki-manga.html
+OP16-073 | Borsalino (Manga) | OP-16 | ¥148,000 ≈ $930 (2026-11-06) | n/a | 881 / 749 (2026-11-09) | https://opboxindex.com/cards/op16-073-borsalino-manga.html
+OP05-069 | Trafalgar Law 069 Alternate Art Manga | OP-05 | ¥128,000 ≈ $804 (2026-11-06) | $1,770 (n=10, 2026-10-29) | 3,079 / 2,170 (2026-11-09) | https://opboxindex.com/cards/op05-069-trafalgar-law-069-alternate-art-manga.html
+EB03-026 | Boa Hancock SP | EB-03 | ¥128,000 ≈ $804 (2026-11-06) | $1,485 (n=9, 2026-10-29) | 2,747 / 2,361 (2026-11-09) | https://opboxindex.com/cards/eb03-026-boa-hancock-sp.html
+OP01-120 | Shanks Parallel Manga Alternate Art | OP-01 | ¥128,000 ≈ $804 (2026-11-06) | n/a | 5,118 / 4,421 (2026-11-09) | https://opboxindex.com/cards/op01-120-shanks-parallel-manga-alternate-art.html
+OP09-093 | Marshall D. Teach 093 Manga | OP-09 | ¥128,000 ≈ $804 (2026-11-06) | n/a | 2,624 / 2,226 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-093-manga.html
+OP01-078 | Boa Hancock SP | OP-04 | ¥99,800 ≈ $627 (2026-11-06) | $965 (n=6, 2026-10-29) | 5,832 / 5,234 (2026-11-09) | https://opboxindex.com/cards/op01-078-boa-hancock-sp.html
+OP04-083 | Sabo Alternate Art Manga | OP-04 | ¥99,800 ≈ $627 (2026-11-06) | $1,015 (n=8, 2026-10-29) | 4,031 / 3,410 (2026-11-09) | https://opboxindex.com/cards/op04-083-sabo-alternate-art-manga.html
+OP09-051 | Buggy 051 Manga | OP-09 | ¥99,800 ≈ $627 (2026-11-06) | $988 (n=7, 2026-10-29) | 2,524 / 2,160 (2026-11-09) | https://opboxindex.com/cards/op09-051-buggy-051-manga.html
+OP09-093 | Marshall D. Teach SP Silver | OP-12 | ¥99,800 ≈ $627 (2026-11-06) | n/a | 1,044 / 942 (2026-11-09) | https://opboxindex.com/cards/op09-093-marshall-d-teach-sp-silver.html
+OP03-122 | Sogeking Alternate Art Manga | OP-03 | ¥79,800 ≈ $501 (2026-11-06) | $744 (n=10, 2026-06-29) | 3,534 / 3,047 (2026-11-09) | https://opboxindex.com/cards/op03-122-sogeking-alternate-art-manga.html
+OP10-119 | Trafalgar Law 119 Manga | OP-10 | ¥79,800 ≈ $501 (2026-11-06) | $818 (n=12, 2026-10-29) | 3,994 / 3,357 (2026-11-09) | https://opboxindex.com/cards/op10-119-trafalgar-law-119-manga.html
+OP12-118 | Jewelry Bonney 118 Manga | OP-12 | ¥79,800 ≈ $501 (2026-11-06) | $866 (n=19, 2026-10-29) | 2,949 / 2,177 (2026-11-09) | https://opboxindex.com/cards/op12-118-jewelry-bonney-118-manga.html
+OP13-120 | Sabo 120 Super Alternate Art | OP-13 | ¥79,800 ≈ $501 (2026-11-06) | $965 (n=13, 2026-10-29) | 2,141 / 1,756 (2026-11-09) | https://opboxindex.com/cards/op13-120-sabo-120-super-alternate-art.html
+OP14-119 | Dracule Mihawk Manga | OP-14 | ¥79,800 ≈ $501 (2026-11-06) | $978 (n=8, 2026-10-29) | 2,306 / 1,884 (2026-11-09) | https://opboxindex.com/cards/op14-119-dracule-mihawk-manga.html
+EB03-055 | Nico Robin 055 SP | EB-03 | ¥79,800 ≈ $501 (2026-11-06) | $887 (n=11, 2026-10-29) | 1,978 / 1,774 (2026-11-09) | https://opboxindex.com/cards/eb03-055-nico-robin-055-sp.html
+EB03-053 | Nami 053 SP | EB-03 | ¥79,800 ≈ $501 (2026-11-06) | $885 (n=10, 2026-10-29) | 2,088 / 1,806 (2026-11-09) | https://opboxindex.com/cards/eb03-053-nami-053-sp.html
+OP08-118 | Silvers Rayleigh Parallel Manga | OP-08 | ¥69,800 ≈ $439 (2026-11-06) | $884 (n=16, 2026-10-29) | 3,871 / 3,458 (2026-11-09) | https://opboxindex.com/cards/op08-118-silvers-rayleigh-parallel-manga.html
+OP01-003 | Monkey D. Luffy 003 Parallel | OP-01 | ¥39,800 ≈ $250 (2026-11-06) | $1,238 (n=15, 2026-10-29) | 4,307 / 3,682 (2026-11-09) | https://opboxindex.com/cards/op01-003-monkey-d-luffy-003-parallel.html
+OP06-001 | Uta SP | EB-02 | ¥39,800 ≈ $250 (2026-11-06) | $582 (n=3, 2026-10-29) | 367 / 351 (2026-11-09) | https://opboxindex.com/cards/op06-001-uta-sp.html
+OP11-080 | Gear Two Alternate Art | OP-11 | ¥39,800 ≈ $250 (2026-11-06) | $501 (n=26, 2026-10-29) | 3,725 / 3,451 (2026-11-09) | https://opboxindex.com/cards/op11-080-gear-two-alternate-art.html
+OP09-078 | Gum Gum Giant Alternate Art | PRB-02 | ¥39,800 ≈ $250 (2026-11-06) | $1,133 (n=6, 2026-10-29) | 2,958 / 2,643 (2026-11-09) | https://opboxindex.com/cards/op09-078-gum-gum-giant-alternate-art.html
+OP14-112 | Boa Hancock OP14 112 SP | OP-14 | ¥39,800 ≈ $250 (2026-11-06) | $631 (n=20, 2026-10-29) | 2,644 / 2,514 (2026-11-09) | https://opboxindex.com/cards/op14-112-boa-hancock-op14-112-sp.html
+EB03-003 | Uta 003 SP | EB-03 | ¥39,800 ≈ $250 (2026-11-06) | $580 (n=3, 2026-10-29) | 1,700 / 1,297 (2026-11-09) | https://opboxindex.com/cards/eb03-003-uta-003-sp.html
+OP01-016 | Nami SP | OP-05 | ¥34,800 ≈ $219 (2026-11-06) | $335 (n=17, 2026-10-29) | 5,884 / 5,386 (2026-11-09) | https://opboxindex.com/cards/op01-016-nami-sp.html
+OP06-101 | O Nami SP | OP-07 | ¥34,800 ≈ $219 (2026-11-06) | $511 (n=4, 2026-10-29) | 5,177 / 4,887 (2026-11-09) | https://opboxindex.com/cards/op06-101-o-nami-sp.html
+OP08-106 | Nami SP | OP-09 | ¥34,800 ≈ $219 (2026-11-06) | $401 (n=16, 2026-10-29) | 5,742 / 5,356 (2026-11-09) | https://opboxindex.com/cards/op08-106-nami-sp.html
+EB02-061 | Monkey D. Luffy EB02 061 SP | PRB-02 | ¥29,800 ≈ $187 (2026-11-06) | $619 (n=13, 2026-10-29) | 2,267 / 2,069 (2026-11-09) | https://opboxindex.com/cards/eb02-061-monkey-d-luffy-eb02-061-sp.html
+OP14-118 | Youll Frighten Me Alternate Art | OP-14 | ¥29,800 ≈ $187 (2026-11-06) | $282 (n=25, 2026-10-29) | 2,656 / 2,395 (2026-11-09) | https://opboxindex.com/cards/op14-118-youll-frighten-me-alternate-art.html
+ST26-005 | Monkey D. Luffy SP | OP-15 | ¥29,800 ≈ $187 (2026-11-06) | $891 (n=9, 2026-10-29) | 2,548 / 2,388 (2026-11-09) | https://opboxindex.com/cards/st26-005-monkey-d-luffy-sp.html
+OP01-001 | Roronoa Zoro 001 Parallel | OP-01 | ¥24,800 ≈ $156 (2026-11-06) | $399 (n=27, 2026-10-29) | 3,745 / 3,360 (2026-11-09) | https://opboxindex.com/cards/op01-001-roronoa-zoro-001-parallel.html
+OP05-067 | Zoro Juurou SP | OP-09 | ¥24,800 ≈ $156 (2026-11-06) | $646 (n=12, 2026-10-29) | 3,674 / 3,265 (2026-11-09) | https://opboxindex.com/cards/op05-067-zoro-juurou-sp.html
+ST18-005 | Luffy Tarou SP | OP-11 | ¥24,800 ≈ $156 (2026-11-06) | $520 (n=33, 2026-10-29) | 3,042 / 2,239 (2026-11-09) | https://opboxindex.com/cards/st18-005-luffy-tarou-sp.html
+OP09-020 | Come On Well Fight You Alternate Art | PRB-02 | ¥24,800 ≈ $156 (2026-11-06) | $396 (n=13, 2026-10-29) | 1,917 / 1,763 (2026-11-09) | https://opboxindex.com/cards/op09-020-come-on-well-fight-you-alternate-art.html
+OP14-096 | Ground Death Alternate Art | OP-14 | ¥24,800 ≈ $156 (2026-11-06) | $136 (n=16, 2026-10-29) | 608 / 573 (2026-11-09) | https://opboxindex.com/cards/op14-096-ground-death-alternate-art.html
+OP13-031 | Trafalgar Law SP | OP-15 | ¥24,800 ≈ $156 (2026-11-06) | $296 (n=3, 2026-10-29) | 893 / 852 (2026-11-09) | https://opboxindex.com/cards/op13-031-trafalgar-law-sp.html
+ST18-004 | Zoro Juurou SP | OP-12 | ¥17,800 ≈ $112 (2026-11-06) | $327 (n=23, 2026-10-29) | 1,289 / 1,150 (2026-11-09) | https://opboxindex.com/cards/st18-004-zoro-juurou-sp.html
+EB03-031 | Vinsmoke Reiju SP | EB-03 | ¥17,800 ≈ $112 (2026-11-06) | $315 (n=8, 2026-10-29) | 1,222 / 1,100 (2026-11-09) | https://opboxindex.com/cards/eb03-031-vinsmoke-reiju-sp.html
+OP01-016 | Nami Parallel | OP-01 | ¥14,800 ≈ $93 (2026-11-06) | $211 (n=23, 2026-10-29) | 9,671 / 8,915 (2026-11-09) | https://opboxindex.com/cards/op01-016-nami-parallel.html
+ST15-002 | EdwardNewgate SP | OP-10 | ¥14,800 ≈ $93 (2026-11-06) | $338 (n=16, 2026-10-29) | 1,532 / 1,359 (2026-11-09) | https://opboxindex.com/cards/st15-002-edwardnewgate-sp.html
+OP01-002 | Trafalgar Law 002 Parallel | OP-01 | ¥12,800 ≈ $80 (2026-11-06) | $448 (n=18, 2026-10-29) | 2,825 / 2,551 (2026-11-09) | https://opboxindex.com/cards/op01-002-trafalgar-law-002-parallel.html
+OP03-040 | Nami 040 Alternate Art | OP-03 | ¥12,800 ≈ $80 (2026-11-06) | $238 (n=4, 2026-09-14) | 2,808 / 2,427 (2026-11-09) | https://opboxindex.com/cards/op03-040-nami-040-alternate-art.html
+OP01-047 | Trafalgar Law SP | OP-04 | ¥12,800 ≈ $80 (2026-11-06) | $290 (n=6, 2026-10-29) | 1,730 / 1,572 (2026-11-09) | https://opboxindex.com/cards/op01-047-trafalgar-law-sp.html
+OP02-120 | Uta SP | OP-05 | ¥12,800 ≈ $80 (2026-11-06) | $253 (n=20, 2026-10-29) | 4,422 / 4,145 (2026-11-09) | https://opboxindex.com/cards/op02-120-uta-sp.html
+OP01-121 | Yamato SP | OP-05 | ¥12,800 ≈ $80 (2026-11-06) | $243 (n=10, 2026-10-29) | 3,781 / 3,516 (2026-11-09) | https://opboxindex.com/cards/op01-121-yamato-sp.html
+OP04-064 | Ms All Sunday SP | OP-06 | ¥12,800 ≈ $80 (2026-11-06) | $366 (n=7, 2026-10-29) | 1,184 / 1,129 (2026-11-09) | https://opboxindex.com/cards/op04-064-ms-all-sunday-sp.html
+OP07-038 | Boa Hancock 038 Parallel | OP-07 | ¥12,800 ≈ $80 (2026-11-06) | $257 (n=7, 2026-10-29) | 5,533 / 5,225 (2026-11-09) | https://opboxindex.com/cards/op07-038-boa-hancock-038-parallel.html
+ST02-007 | Jewelry Bonney SP | OP-08 | ¥12,800 ≈ $80 (2026-11-06) | $245 (n=12, 2026-10-29) | 2,163 / 2,030 (2026-11-09) | https://opboxindex.com/cards/st02-007-jewelry-bonney-sp.html
+ST16-004 | Shanks SP | OP-11 | ¥12,800 ≈ $80 (2026-11-06) | $300 (n=14, 2026-10-29) | 1,789 / 1,516 (2026-11-09) | https://opboxindex.com/cards/st16-004-shanks-sp.html
+OP06-119 | Sanji SP | OP-11 | ¥12,800 ≈ $80 (2026-11-06) | $272 (n=17, 2026-10-29) | 1,590 / 1,367 (2026-11-09) | https://opboxindex.com/cards/op06-119-sanji-sp.html
+OP07-085 | Stussy SP | OP-11 | ¥12,800 ≈ $80 (2026-11-06) | $237 (n=14, 2026-10-29) | 1,769 / 1,383 (2026-11-09) | https://opboxindex.com/cards/op07-085-stussy-sp.html
+EB01-057 | Shirahoshi SP | OP-11 | ¥12,800 ≈ $80 (2026-11-06) | $209 (n=14, 2026-10-29) | 2,048 / 1,835 (2026-11-09) | https://opboxindex.com/cards/eb01-057-shirahoshi-sp.html
+OP12-030 | Dracule Mihawk OP12 030 SP | OP-14 | ¥12,800 ≈ $80 (2026-11-06) | $221 (n=16, 2026-10-29) | 1,278 / 1,199 (2026-11-09) | https://opboxindex.com/cards/op12-030-dracule-mihawk-op12-030-sp.html
+EB03-042 | Koala SP | EB-03 | ¥12,800 ≈ $80 (2026-11-06) | $252 (n=9, 2026-10-29) | 975 / 875 (2026-11-09) | https://opboxindex.com/cards/eb03-042-koala-sp.html
+ST15-005 | Portgas D. Ace SP | OP-16 | ¥12,800 ≈ $80 (2026-11-06) | $271 (n=11, 2026-10-29) | 1,686 / 1,591 (2026-11-09) | https://opboxindex.com/cards/st15-005-portgas-d-ace-sp.html
 OP01-024 | Monkey D. Luffy 024 Parallel | OP-01 | ¥9,980 ≈ $63 (2026-11-06) | $248 (n=31, 2026-10-29) | 2,602 / 2,341 (2026-11-09) | https://opboxindex.com/cards/op01-024-monkey-d-luffy-024-parallel.html
 OP05-100 | Enel 100 SP | OP-05 | ¥9,980 ≈ $63 (2026-11-06) | $211 (n=12, 2026-10-29) | 2,311 / 2,139 (2026-11-09) | https://opboxindex.com/cards/op05-100-enel-100-sp.html
 OP05-091 | Rebecca SP | OP-06 | ¥9,980 ≈ $63 (2026-11-06) | $178 (n=21, 2026-10-29) | 2,777 / 2,662 (2026-11-09) | https://opboxindex.com/cards/op05-091-rebecca-sp.html
@@ -292,11 +292,11 @@ OP06-022 | Yamato Alternate Art | OP-06 | ¥5,980 ≈ $38 (2026-11-06) | $99 (n=
 ST06-006 | Tashigi SP | OP-08 | ¥5,980 ≈ $38 (2026-11-06) | $139 (n=12, 2026-10-29) | 1,320 / 1,225 (2026-11-09) | https://opboxindex.com/cards/st06-006-tashigi-sp.html
 OP10-019 | Divine Departure Parallel | OP-10 | ¥5,980 ≈ $38 (2026-11-06) | $120 (n=20, 2026-10-29) | 2,834 / 2,617 (2026-11-09) | https://opboxindex.com/cards/op10-019-divine-departure-parallel.html
 OP11-041 | Nami 041 Alternate Art | OP-11 | ¥5,980 ≈ $38 (2026-11-06) | $129 (n=9, 2026-10-29) | 1,609 / 1,487 (2026-11-09) | https://opboxindex.com/cards/op11-041-nami-041-alternate-art.html
-OP01-078 | Boa Hancock Parallel | OP-01 | ¥4,980 ≈ $32 (2026-11-06) | $248 (n=21, 2026-10-29) | 4,822 / 4,421 (2026-11-09) | https://opboxindex.com/cards/op01-078-boa-hancock-parallel.html
-OP01-062 | Crocodile 062 Parallel | OP-01 | ¥4,980 ≈ $32 (2026-11-06) | $227 (n=5, 2026-10-29) | 791 / 685 (2026-11-09) | https://opboxindex.com/cards/op01-062-crocodile-062-parallel.html
-OP02-026 | Sanji Alternate Art | OP-02 | ¥4,980 ≈ $32 (2026-11-06) | $194 (n=3, 2026-10-29) | 1,141 / 1,002 (2026-11-09) | https://opboxindex.com/cards/op02-026-sanji-alternate-art.html
-OP05-074 | EustassCaptainKid SP | OP-07 | ¥4,980 ≈ $32 (2026-11-06) | $119 (n=3, 2026-10-29) | 534 / 496 (2026-11-09) | https://opboxindex.com/cards/op05-074-eustasscaptainkid-sp.html
-ST12-012 | Charlotte Pudding SP | OP-10 | ¥4,980 ≈ $32 (2026-11-06) | $82 (n=6, 2026-10-29) | 657 / 610 (2026-11-09) | https://opboxindex.com/cards/st12-012-charlotte-pudding-sp.html
+OP01-078 | Boa Hancock Parallel | OP-01 | ¥4,980 ≈ $31 (2026-11-06) | $248 (n=21, 2026-10-29) | 4,822 / 4,421 (2026-11-09) | https://opboxindex.com/cards/op01-078-boa-hancock-parallel.html
+OP01-062 | Crocodile 062 Parallel | OP-01 | ¥4,980 ≈ $31 (2026-11-06) | $227 (n=5, 2026-10-29) | 791 / 685 (2026-11-09) | https://opboxindex.com/cards/op01-062-crocodile-062-parallel.html
+OP02-026 | Sanji Alternate Art | OP-02 | ¥4,980 ≈ $31 (2026-11-06) | $194 (n=3, 2026-10-29) | 1,141 / 1,002 (2026-11-09) | https://opboxindex.com/cards/op02-026-sanji-alternate-art.html
+OP05-074 | EustassCaptainKid SP | OP-07 | ¥4,980 ≈ $31 (2026-11-06) | $119 (n=3, 2026-10-29) | 534 / 496 (2026-11-09) | https://opboxindex.com/cards/op05-074-eustasscaptainkid-sp.html
+ST12-012 | Charlotte Pudding SP | OP-10 | ¥4,980 ≈ $31 (2026-11-06) | $82 (n=6, 2026-10-29) | 657 / 610 (2026-11-09) | https://opboxindex.com/cards/st12-012-charlotte-pudding-sp.html
 OP02-001 | EdwardNewgate 001 Alternate Art | OP-02 | ¥3,980 ≈ $25 (2026-11-06) | $96 (n=4, 2026-06-29) | 755 / 610 (2026-11-09) | https://opboxindex.com/cards/op02-001-edwardnewgate-001-alternate-art.html
 OP03-099 | Charlotte Katakuri 099 Alternate Art | OP-03 | ¥3,980 ≈ $25 (2026-11-06) | $119 (n=3, 2026-10-29) | 986 / 828 (2026-11-09) | https://opboxindex.com/cards/op03-099-charlotte-katakuri-099-alternate-art.html
 OP08-001 | Tony TonyChopper 001 Parallel | OP-08 | ¥3,980 ≈ $25 (2026-11-06) | $144 (n=8, 2026-10-29) | 916 / 856 (2026-11-09) | https://opboxindex.com/cards/op08-001-tony-tonychopper-001-parallel.html
@@ -310,7 +310,7 @@ OP02-036 | Nami Alternate Art | OP-02 | ¥2,980 ≈ $19 (2026-11-06) | $141 (n=1
 EB01-061 | Mr2BonKurei Bentham Alternate Art | EB-01 | ¥2,980 ≈ $19 (2026-11-06) | $171 (n=3, 2026-10-29) | 927 / 871 (2026-11-09) | https://opboxindex.com/cards/eb01-061-mr2bonkurei-bentham-alternate-art.html
 OP07-019 | Jewelry Bonney 019 Parallel | OP-07 | ¥2,980 ≈ $19 (2026-11-06) | $102 (n=4, 2026-10-29) | 1,520 / 1,427 (2026-11-09) | https://opboxindex.com/cards/op07-019-jewelry-bonney-019-parallel.html
 OP02-041 | Monkey D. Luffy 041 Alternate Art | OP-02 | ¥2,480 ≈ $16 (2026-11-06) | $89 (n=6, 2026-10-29) | 700 / 639 (2026-11-09) | https://opboxindex.com/cards/op02-041-monkey-d-luffy-041-alternate-art.html
-EB01-046 | Brook 046 Alternate Art | EB-01 | ¥1,980 ≈ $13 (2026-11-06) | $220 (n=5, 2026-09-14) | 249 / 233 (2026-11-09) | https://opboxindex.com/cards/eb01-046-brook-046-alternate-art.html
+EB01-046 | Brook 046 Alternate Art | EB-01 | ¥1,980 ≈ $12 (2026-11-06) | $220 (n=5, 2026-09-14) | 249 / 233 (2026-11-09) | https://opboxindex.com/cards/eb01-046-brook-046-alternate-art.html
 EB01-048 | Laboon 048 Alternate Art | EB-01 | ¥1,480 ≈ $9 (2026-11-06) | $320 (n=3, 2026-08-31) | 426 / 399 (2026-11-09) | https://opboxindex.com/cards/eb01-048-laboon-048-alternate-art.html
 EB01-021 | Hannyabal Alternate Art | EB-01 | ¥980 ≈ $6 (2026-11-06) | $49 (n=3, 2026-10-29) | 399 / 381 (2026-11-09) | https://opboxindex.com/cards/eb01-021-hannyabal-alternate-art.html
 OP02-059 | Boa Hancock Box Topper | OP-02 | ¥80 ≈ $1 (2026-11-06) | $249 (n=3, 2026-06-29) | 2,571 / 2,259 (2026-11-09) | https://opboxindex.com/cards/op02-059-boa-hancock-box-topper.html

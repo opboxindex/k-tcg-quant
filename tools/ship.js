@@ -6,17 +6,16 @@
 //   파이프의 종료코드는 마지막 명령(tail)의 것이다. FAIL 원인은 클라우드 커밋을 pull 한 뒤 build 를 안 돌린 낡은 생성물이었다.
 //   그래서 순서는 언제나 pull → build → 관문이고, 종료코드는 spawnSync 의 status 로 직접 본다. 셸 파이프는 어디에도 없다.
 // 멈춤(종료코드) — 멈추면 이번 실행의 커밋은 남기지 않고, build 가 바꾼 파일(내 파일 안의 날짜 갱신 포함)은 되돌린다 — 시작할 때의 내 변경만 남는다
-//   1 예외(git 명령 실패 등)   3 무인 수집과 겹침: 08:30~09:30 KST(--force-window 로 건너뜀) 이거나 작업 스케줄러 opbox-box-sold 실행 중(건너뛸 수 없음)
+//   1 예외(git 명령 실패 등)   3 무인 수집 daily.ps1 이 저장소를 쓰는 중(box-sold-cdp/repo-busy.json, 건너뛸 수 없음)
 //   4 --paths 밖의 미커밋 변경(남의 작업·잡파일을 같이 올리지 않는다)   5 pull 실패·충돌(리베이스는 abort 해 시작 상태로)   6 build 실패
 //   7 관문(check.js --gate --fast) FAIL — 푸시 금지(소유자 절대 지시)
 //   8 비밀·문서 파일(.env·키·엑셀·PDF·한글 문서 등) 또는 토큰 모양 문자열 — 공개 저장소다
 //   9 검색 노출 변경(noindex 추가·canonical/hreflang 변경·사이트맵 URL 제거·페이지 삭제·내 페이지 title/h1 변경) — CLAUDE.md 절대 규칙 1, 소유자 확인 뒤 --seo-ok
 //   10 push 실패(이번 커밋은 풀어 둔다)   11 원격 주소(토큰 URL·opboxindex@ 없음 — 2026-09-16 GCM 계정 선택 창 사고)   12 push 는 됐는데 미커밋 변경이 남음
-// Run: node tools/ship.js -m "<커밋 메시지>" [--paths a b ...] [--dry-run] [--seo-ok] [--force-window]
+// Run: node tools/ship.js -m "<커밋 메시지>" [--paths a b ...] [--dry-run] [--seo-ok]
 //      node tools/ship.js --verify <sha>   push 뒤 Pages 배포·라이브 반영 확인(읽기 전용: 공개 API·라이브 GET, 30초 간격 최대 8분 — Bash 포그라운드 한 번(timeout 600000)에 끝난다)
 //   --paths   내가 고친 파일·폴더. 이 밖에 미커밋 변경이 있으면 멈춘다. 커밋에는 이 경로 + pull 뒤 build 가 바꾼 생성물이 들어간다.
 //   --dry-run 커밋 직전까지(pull·build·검사·관문) 돌고 올라갈 목록만 보여준다. build 가 바꾼 파일은 되돌린다.
-//   --force-window 08:30~09:30 시계 검사만 건너뛴다(opbox-box-sold 실행 중 검사는 그대로).
 const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
@@ -25,7 +24,7 @@ const ROOT = path.join(__dirname, "..");
 const PAGES_RUNS = "https://api.github.com/repos/opboxindex/k-tcg-quant/actions/workflows/299896261/runs?per_page=10"; // pages-build-deployment
 const SITE = "https://opboxindex.com";
 const TRAILER = "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>";
-const USAGE = 'node tools/ship.js -m "<메시지>" [--paths a b ...] [--dry-run] [--seo-ok] [--force-window] | --verify <sha>';
+const USAGE = 'node tools/ship.js -m "<메시지>" [--paths a b ...] [--dry-run] [--seo-ok] | --verify <sha>';
 const TIDY = "고쳐서 같은 명령을 다시 실행하거나, 이번 변경을 버린다면 되돌린다 — 미커밋 변경을 남긴 채 끝내지 않는다(08:30 daily.ps1 이 git add -A 로 검토 없이 올린다).";
 
 // 공개 저장소에 올라가면 안 되는 파일. 회사·개인 자료는 거의 문서 파일이라 확장자로 막는다 — 이 저장소는 문서 파일을 하나도 추적하지 않는다(2026-10-28 git ls-files).
@@ -39,14 +38,13 @@ const PROTECTED = /^(robots\.txt|ads\.txt|CNAME|[0-9a-f]{32}\.txt|google[0-9a-f]
 const SEO_LINE = /<title|<h1|canonical|hreflang|robots|noindex/i;
 
 function parseArgs(argv) {
-  const o = { message: null, paths: null, dryRun: false, seoOk: false, forceWindow: false, verify: null };
+  const o = { message: null, paths: null, dryRun: false, seoOk: false, verify: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "-m" || a === "--message") o.message = argv[++i];
     else if (a === "--paths") { o.paths = []; while (i + 1 < argv.length && !argv[i + 1].startsWith("-")) o.paths.push(argv[++i]); }
     else if (a === "--dry-run") o.dryRun = true;
     else if (a === "--seo-ok") o.seoOk = true;
-    else if (a === "--force-window") o.forceWindow = true;
     else if (a === "--verify") o.verify = argv[++i];
     else throw new Error(`모르는 인자 ${a} — ${USAGE}`);
   }
@@ -57,18 +55,24 @@ function parseArgs(argv) {
   return o;
 }
 
-// 08:30~09:30 KST — 무인 수집(작업 스케줄러 opbox-box-sold → daily.ps1)이 같은 checkout 에서 pull·build·commit·push 하는 시간.
-//   겹치면 리베이스가 꼬여 무인 푸시가 멈춘다. 이 PC 시간대와 무관하게 UTC+9 로 센다(한국은 서머타임이 없다).
-function inCollectionWindow(d = new Date()) {
-  const m = ((d.getUTCHours() + 9) % 24) * 60 + d.getUTCMinutes();
-  return m >= 8 * 60 + 30 && m < 9 * 60 + 30;
+// 무인 수집(작업 스케줄러 opbox-box-sold → box-sold-cdp/daily.ps1)이 같은 checkout 에서 pull·build·commit·push 하는 동안 겹치면 리베이스가 꼬여 무인 푸시가 멈춘다.
+// 2026-11-13: eBay 차단 때문에 daily.ps1 이 70분씩 쉬며 저녁까지 돌 수 있게 됐다(작업 실행 제한 15시간). 종전 검사(08:30~09:30 시계 + '작업 실행 중')는
+//   그런 날 배포를 종일 막는다. 그래서 daily.ps1 이 저장소를 실제로 쓰는 동안(시작 동기화, 적재~푸시)만 남기는 표시 box-sold-cdp/repo-busy.json
+//   ({pid, phase, since})을 본다. daily.ps1 은 들어가기 전에 ship.js 실행·미커밋 변경을 보고 비켜 간다(기다리거나 건너뜀).
+//   표시가 남았어도 그 pid 가 죽었거나 6시간이 지났으면 낡은 표시다(작업이 실행 제한으로 끊긴 경우). 읽다 깨진 표시는 막는 쪽으로 본다.
+const BUSY_FILE = path.join(ROOT, "..", "box-sold-cdp", "repo-busy.json");
+function boxSoldBusy(raw, alive, now = Date.now()) {
+  if (raw == null) return null;
+  let b;
+  try { b = JSON.parse(String(raw).replace(/^﻿/, "")); } catch { return { phase: "?", since: "?", pid: "?" }; }
+  if (!b || !Number.isInteger(b.pid)) return { phase: "?", since: "?", pid: "?" };
+  if (!alive(b.pid)) return null;
+  const since = Date.parse(b.since);
+  if (Number.isFinite(since) && now - since > 6 * 3600e3) return null;
+  return b;
 }
-// 09:30 을 넘겨도 무인 작업이 아직 돌 수 있다(10/27 처럼 늦게 끝나는 날) — 작업 스케줄러 상태를 직접 본다. 영어 열거값이라 로캘 무관.
-function boxSoldRunning() {
-  if (process.platform !== "win32") return false;
-  const r = spawnSync("powershell", ["-NoProfile", "-Command", "(Get-ScheduledTask -TaskName opbox-box-sold -ErrorAction SilentlyContinue).State"], { encoding: "utf8" });
-  return String(r.stdout || "").trim() === "Running";
-}
+function pidAlive(pid) { try { process.kill(pid, 0); return true; } catch (e) { return e.code === "EPERM"; } }
+function readBusy() { try { return fs.readFileSync(BUSY_FILE, "utf8"); } catch { return null; } }
 
 function git(args, opt = {}) {
   const r = spawnSync("git", ["-c", "core.quotepath=false", "-c", "core.safecrlf=false", ...args], {
@@ -208,9 +212,9 @@ function restoreBuild(snap) {
 }
 
 function ship(o) {
-  // 0. 무인 수집과 겹치지 않게. 실행 중 검사는 --force-window 로도 건너뛰지 않는다 — 같은 폴더에서 동시에 pull·push 하는 것이 막으려는 사고 그 자체다.
-  if (!o.forceWindow && inCollectionWindow()) stop(3, "지금은 무인 수집 시간(08:30~09:30 KST)이다. 09:30 뒤에 다시 — box-sold.log 로 오늘 무인 작업이 끝났다고 확인했으면 --force-window(시계 검사만 건너뛴다)");
-  if (boxSoldRunning()) stop(3, "작업 스케줄러 opbox-box-sold(daily.ps1)가 실행 중이다. box-sold.log 가 done/stop 을 찍은 뒤 다시(--force-window 로도 건너뛰지 않는다)");
+  // 0. 무인 수집과 겹치지 않게 — 같은 폴더에서 동시에 pull·push 하는 것이 막으려는 사고 그 자체다. 건너뛰는 옵션은 없다.
+  const busy = boxSoldBusy(readBusy(), pidAlive);
+  if (busy) stop(3, `무인 수집 daily.ps1 이 저장소를 쓰는 중이다(${busy.phase}, ${busy.since}부터, pid ${busy.pid}). 보통 몇 분 — box-sold.log 가 done/stop 을 찍은 뒤 다시. 표시 파일 ${BUSY_FILE}`);
   // 1. 원격 — 토큰 박힌 주소 금지, username opboxindex 고정(GCM 에 github 계정이 둘이라 username 이 없으면 선택 창 → 무인 작업 정지)
   //   set-url 만으로는 따로 잡힌 remote.origin.pushurl 이 그대로라 --push 도 같이 바꾼다.
   const fix = "git remote set-url origin https://opboxindex@github.com/opboxindex/k-tcg-quant.git && git remote set-url --push origin https://opboxindex@github.com/opboxindex/k-tcg-quant.git";
@@ -385,7 +389,7 @@ async function verify(rev) {
   process.exit(bad.length ? 1 : 0);
 }
 
-module.exports = { parseArgs, inCollectionWindow, outside, forbidden, diffLines, secretHits, pageFacts, titleScope, seoHits };
+module.exports = { parseArgs, boxSoldBusy, outside, forbidden, diffLines, secretHits, pageFacts, titleScope, seoHits };
 if (require.main === module) {
   let o;
   try { o = parseArgs(process.argv.slice(2)); } catch (e) { console.error(e.message); process.exit(2); }

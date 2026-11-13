@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 // tools/ship.js 순수 함수 검사 — 2026-10-28. git·네트워크 없음(check.js 가 모든 관문에서 돌린다 — 빠르고 저장소를 건드리지 않게).
-//  · 08:30~09:30 KST 는 막는다(경계: 08:30 막음, 09:30 통과) — 이 PC 시간대와 무관하게 UTC 로 센다
+//  · 무인 수집 daily.ps1 이 저장소를 쓰는 중이라는 표시(repo-busy.json)는 살아 있는 pid·6시간 안일 때만 막는다 — 죽은 pid·낡은 표시는 통과, 깨진 표시는 막음
 //  · --paths 밖 변경, 비밀·문서 파일, 토큰 모양 문자열을 잡는다(가짜 토큰은 이 파일이 스스로 걸리지 않게 실행 중에 조립한다)
 //  · 노출 변경(noindex 추가·canonical/hreflang 변경·사이트맵 URL 제거·페이지 삭제·title/h1 변경)만 잡고,
 //    노출을 늘리는 쪽(새 페이지·noindex 해제·사이트맵 추가)과 줄바꿈만 바뀐 페이지는 통과
@@ -9,28 +9,37 @@
 // Run: node tools/test-ship.js
 const assert = require("node:assert/strict");
 const path = require("node:path");
-const { parseArgs, inCollectionWindow, outside, forbidden, diffLines, secretHits, titleScope, seoHits } = require("./ship");
+const { parseArgs, boxSoldBusy, outside, forbidden, diffLines, secretHits, titleScope, seoHits } = require("./ship");
 
 // 인자
 {
   const ROOT = path.join(__dirname, "..");
-  const o = parseArgs(["-m", "fix: x", "--paths", path.join(ROOT, "tools", "a.js"), `${path.join(ROOT, "sets")}${path.sep}`, "--dry-run", "--seo-ok", "--force-window"]);
+  const o = parseArgs(["-m", "fix: x", "--paths", path.join(ROOT, "tools", "a.js"), `${path.join(ROOT, "sets")}${path.sep}`, "--dry-run", "--seo-ok"]);
   assert.equal(o.message, "fix: x");
   assert.deepEqual(o.paths, ["tools/a.js", "sets"], "경로는 저장소 기준 상대·슬래시로");
-  assert.ok(o.dryRun && o.seoOk && o.forceWindow);
+  assert.ok(o.dryRun && o.seoOk);
   assert.throws(() => parseArgs([]), /-m/, "메시지 없이는 못 올린다");
   assert.throws(() => parseArgs(["-m", "x", "--paths"]), /--paths/);
   assert.throws(() => parseArgs(["-m", "x", "--push-anyway"]), /모르는 인자/);
+  assert.throws(() => parseArgs(["-m", "x", "--force-window"]), /모르는 인자/, "시계 검사 건너뛰기는 없앴다(2026-11-13)");
   assert.equal(parseArgs(["--verify", "abc123"]).verify, "abc123");
   assert.throws(() => parseArgs(["--verify"]), /sha/);
 }
 
-// 무인 수집 시간 — KST = UTC+9
-assert.equal(inCollectionWindow(new Date("2026-10-27T23:29:00Z")), false, "08:29 KST 는 통과");
-assert.equal(inCollectionWindow(new Date("2026-10-27T23:30:00Z")), true, "08:30 KST 는 막음");
-assert.equal(inCollectionWindow(new Date("2026-10-28T00:29:00Z")), true, "09:29 KST 는 막음");
-assert.equal(inCollectionWindow(new Date("2026-10-28T00:30:00Z")), false, "09:30 KST 는 통과");
-assert.equal(inCollectionWindow(new Date("2026-10-28T03:00:00Z")), false, "12:00 KST 는 통과");
+// 무인 수집이 저장소를 쓰는 중인가 — box-sold-cdp/repo-busy.json (daily.ps1 이 PowerShell 로 쓴다: 시간대 없는 지역 시각)
+{
+  const now = Date.parse("2026-11-14T15:00:00");
+  const live = () => true, dead = () => false;
+  const mk = (o) => JSON.stringify({ pid: 4321, phase: "ingest", since: "2026-11-14T14:58:00", ...o });
+  assert.equal(boxSoldBusy(null, live, now), null, "표시 없음 → 통과");
+  assert.equal(boxSoldBusy(mk(), live, now).phase, "ingest", "살아 있는 pid → 막음");
+  assert.equal(boxSoldBusy("﻿" + mk(), live, now).pid, 4321, "BOM 이 붙어도 읽는다");
+  assert.equal(boxSoldBusy(mk(), dead, now), null, "죽은 pid(작업이 끊겨 남은 표시) → 통과");
+  assert.equal(boxSoldBusy(mk({ since: "2026-11-14T08:31:00" }), live, now), null, "6시간 넘은 표시(pid 재사용 대비) → 통과");
+  assert.ok(boxSoldBusy(mk({ since: "2026-11-14T09:01:00" }), live, now), "6시간 안 → 막음");
+  assert.ok(boxSoldBusy("{\"pid\":43", live, now), "깨진 표시 → 막음(읽는 순간 쓰는 중일 수 있다)");
+  assert.ok(boxSoldBusy(JSON.stringify({ phase: "sync" }), live, now), "pid 없는 표시 → 막음");
+}
 
 // --paths 범위 · 금지 파일
 assert.deepEqual(outside(["tools/a.js", "sets/op-01.html", "notes.txt", "setsX/y.html"], ["tools/a.js", "sets"]), ["notes.txt", "setsX/y.html"]);

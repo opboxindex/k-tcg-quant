@@ -6,14 +6,14 @@
  "updated": "2026-11-15",
  "officialList": {
   "url": "https://www.onepiece-cardgame.com/cardlist/?series=550110",
-  "checked": "2026-11-14",
+  "checked": "2026-11-15",
   "changed": "2026-10-14"
  },
  "englishNames": [
   {
    "product": "OP-10",
    "url": "https://en.onepiece-cardgame.com/cardlist/?series=569110",
-   "checked": "2026-11-14"
+   "checked": "2026-11-15"
   }
  ],
  "counts": {
@@ -2294,7 +2294,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 9.5,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-15"
+   },
    "psa10": null,
    "cardPage": null
   },

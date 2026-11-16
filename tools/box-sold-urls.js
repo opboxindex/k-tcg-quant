@@ -52,6 +52,8 @@ const UPCOMING = [
   // 이름 충돌(EB-03 Heroine's Edition ⊂ EB-05 Heroines Edition vol.2)은 ingestNameMap·가드 Q5 가 막는다.
   { code: "EB-05", nameEn: "Heroines Edition vol.2", release: "2026-10-31" },
   { code: "OP-18", nameEn: "The Dominance of God", release: "2026-11-21" },
+  // 2026-11-16 추가: EB-06(JP 2027-01-30) — 아마존 재팬 초대판매가 열렸다(ASIN B0HMZ9WLVZ). OP-18 처럼 예약 판매부터 쌓는다(+10장).
+  { code: "EB-06", nameEn: "East Blue", release: "2027-01-30" },
 ];
 const ORDER = [...data.jp.list, ...data.extra.list].filter((c) => data.sets[c]);
 for (const u of UPCOMING) {

@@ -30,9 +30,9 @@
   "japaneseSoldMedianUsd": 109,
   "japaneseObservedOn": "2026-11-14",
   "japaneseN": 62,
-  "englishSoldMedianUsd": 294,
-  "englishObservedOn": "2026-11-14",
-  "englishN": 65
+  "englishSoldMedianUsd": 291,
+  "englishObservedOn": "2026-11-16",
+  "englishN": 67
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -156,8 +156,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 0.11,
-    "sold": 4,
+    "medianUsd": 0.12,
+    "sold": 5,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -356,8 +356,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 38,
-    "sold": 9,
+    "medianUsd": 36,
+    "sold": 10,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -448,7 +448,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 0.12,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-16"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -494,8 +500,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 1.32,
-    "sold": 5,
+    "medianUsd": 0.99,
+    "sold": 6,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -683,7 +689,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 10.17,
-    "sold": 14,
+    "sold": 15,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1018,7 +1024,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 0.06,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-16"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -1040,7 +1052,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 0.12,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-16"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -1108,8 +1126,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 1.25,
-    "sold": 5,
+    "medianUsd": 1,
+    "sold": 6,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1206,13 +1224,7 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": {
-    "print": "English",
-    "medianUsd": 14.5,
-    "sold": 3,
-    "windowDays": 45,
-    "through": "2026-11-16"
-   },
+   "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null
   },
@@ -1309,7 +1321,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 0.16,
-    "sold": 3,
+    "sold": 4,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1380,8 +1392,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 0.22,
-    "sold": 4,
+    "medianUsd": 0.5,
+    "sold": 5,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1480,8 +1492,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 8.01,
-    "sold": 13,
+    "medianUsd": 7.5,
+    "sold": 14,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1647,7 +1659,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 3.25,
-    "sold": 4,
+    "sold": 5,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1675,7 +1687,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 26,
-    "sold": 12,
+    "sold": 13,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1747,7 +1759,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 5.5,
-    "sold": 15,
+    "sold": 16,
     "windowDays": 45,
     "through": "2026-11-16"
    },
@@ -1860,13 +1872,7 @@
    "trigger": true,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": {
-    "print": "English",
-    "medianUsd": 17.5,
-    "sold": 5,
-    "windowDays": 45,
-    "through": "2026-11-16"
-   },
+   "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null
   },

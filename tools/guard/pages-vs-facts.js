@@ -459,6 +459,10 @@ function upcoming() {
     const h = read(f), s = S[code], lds = ldOf(h);
     for (const [lbl, ed] of [["Japanese", "jp"], ["English", "en"]]) {
       const p = lds.find((j) => j["@type"] === "Product" && new RegExp(`\\(${lbl}\\)$`).test(j.name || "")), a = u.ask[ed];
+      // 예약판매 호가가 없는 판은 생성기가 Product 를 내지 않는다(offers 없는 Product = audit-seo FAIL) — 2026-11-16 EB-06.
+      //   그때는 Product 가 '없어야' 맞다. 호가가 있으면 종전대로 발매일·가격을 대조한다.
+      const hasAsk = !!(a && a.n && a.best && a.best.total != null);
+      if (!hasAsk) { cmp("UP1", f, `Product(${lbl}) — 호가 없으면 없음`, p ? "있음" : "없음", "없음"); continue; }
       cmp("UP1", f, `Product(${lbl}) releaseDate`, p && p.releaseDate, u.release[ed]);
       if (p && p.offers) { cmp("UP1", f, `Product(${lbl}) lowPrice`, p.offers.lowPrice, a && a.best ? a.best.total : null); cmp("UP1", f, `Product(${lbl}) offerCount`, p.offers.offerCount, a ? a.n : null); }
     }

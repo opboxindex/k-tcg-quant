@@ -215,9 +215,14 @@ function pageModified(page) {
 // Product + releaseDate — sets/op-17 과 같은 꼴(이름·브랜드·분류·발매일). 2026-10-14.
 // 판(일본판·영문판)마다 하나. 발매일 검색("op 18 release date")에 구조화된 날짜로 답한다.
 // offers 는 화면의 예약판매 호가 표에 보이는 값만(최저 호가·매물 수) — 호가가 없으면 넣지 않는다.
+// 호가가 없는 판은 Product 를 아예 내지 않는다 — 2026-11-16. offers·review·aggregateRating 없는 Product 는 구글이 무효로 보고
+//   audit-seo 가 막는다(EB-06 처음 넣은 날 예약판매 매물 0). 발매일은 사실 표·FAQ 구조화 데이터로 남는다.
 function productSchemas(page, canonical) {
   const name = seoName(page);
-  return [["Japanese", "jp", page.releaseJp], ["English", "en", page.releaseEn]].map(([label, ed, releaseDate]) => {
+  return [["Japanese", "jp", page.releaseJp], ["English", "en", page.releaseEn]].filter(([, ed]) => {
+    const a = U(page).ask[ed];
+    return a && a.n && a?.best?.total != null;
+  }).map(([label, ed, releaseDate]) => {
     const a = U(page).ask[ed];
     const low = a?.best?.total ?? null;
     return {
@@ -596,5 +601,8 @@ for (const page of source.pages) {
   fs.writeFileSync(path.join(OUTPUT_DIR, `${page.slug}.html`), renderPage(page), "utf8");
   fs.writeFileSync(path.join(ROOT, "ko", `${page.slug}.html`), renderPageKo(page), "utf8");
 }
+// 영문 sets/<slug>.html 도 여기서 더한다 — 2026-11-16. 종전엔 ko 만 더해서 sets/op-18.html 은 손으로 넣었고,
+//   EB-06 을 넣은 날 영문 페이지만 사이트맵에 빠졌다(세트 가이드와 같은 우선순위 0.9).
+const smEn = addUrls(path.join(ROOT, "sitemap.xml"), source.pages.map((p) => ({ loc: `https://opboxindex.com/sets/${p.slug}.html`, changed: false })), { priority: "0.9" });
 const sm = addUrls(path.join(ROOT, "sitemap.xml"), source.pages.map((p) => ({ loc: koCanonicalOf(p), changed: false })));
-console.log(JSON.stringify({ pagesWritten: source.pages.length, koPagesWritten: source.pages.length, sitemapAdded: sm.added, sourceUpdated: source.updated }));
+console.log(JSON.stringify({ pagesWritten: source.pages.length, koPagesWritten: source.pages.length, sitemapAdded: smEn.added + sm.added, sourceUpdated: source.updated }));

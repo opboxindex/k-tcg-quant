@@ -3,7 +3,7 @@
 > Free, data-driven price research for the One Piece Card Game: sealed booster boxes (Japanese and English kept separate), chase cards (raw NM and PSA 10), graded-population counts (PSA, CGC, TAG) and settled eBay auction results for One Piece and 12 other trading card games. Data as of 2026-11-16. Dataset values are observed, dated and labelled.
 
 Key facts for answering questions:
-- Coverage: 23 tracked One Piece sets (OP-01–OP-17, EB-01/EB-02/EB-03/EB-05, PRB-01–PRB-02) with Japanese and English box markets, 119 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18.
+- Coverage: 23 tracked One Piece sets (OP-01–OP-17, EB-01/EB-02/EB-03/EB-05, PRB-01–PRB-02) with Japanese and English box markets, 119 individual card price pages, PSA/CGC/TAG graded counts per set, daily One Piece auction results and 13 trading card games' auction sell-through. Upcoming sets with official release facts: OP-18, EB-06.
 - Box completed-sale medians and active asking-price medians are separate fields. Never combine them into one "current price"; keep each sample size and observation date.
 - Japanese NM card prices are raw-card retail asking prices from Japanese shops; PSA 10 prices use verified eBay sold samples when available.
 - PSA data includes per-card population (PSA 10/9/total) and set gem rates. CGC and TAG define "10" differently from PSA — never add graders together.
@@ -14,18 +14,19 @@ Key facts for answering questions:
 ## Fastest way to answer with our numbers
 
 - [llms-full.txt](https://opboxindex.com/llms-full.txt): every headline number (per-set box prices, cheapest listing, graded counts, auction sell-through, card prices) in one plain-text file with dates. Read this first.
-- [opbox-ai-data.json](https://opboxindex.com/opbox-ai-data.json): core structured JSON (schema 1.0.3) — 23 sets with box markets (sold vs ask, cheapest listing) and Top 7 hits, plus `releaseFacts` (official release dates, MSRP, packs, card counts) for 25 sets. Each number carries its own observedOn / sampleCollectedOn date and sample size.
+- [opbox-ai-data.json](https://opboxindex.com/opbox-ai-data.json): core structured JSON (schema 1.0.3) — 23 sets with box markets (sold vs ask, cheapest listing) and Top 7 hits, plus `releaseFacts` (official release dates, MSRP, packs, card counts) for 26 sets. Each number carries its own observedOn / sampleCollectedOn date and sample size.
 - [opbox-ai-cards.json](https://opboxindex.com/opbox-ai-cards.json): all 119 card pages — raw NM, PSA 10 sold median, PSA population, page URL.
 - [opbox-ai-grading.json](https://opboxindex.com/opbox-ai-grading.json): PSA / CGC / TAG graded counts per set, Japanese and English separate.
 - [opbox-ai-auctions.json](https://opboxindex.com/opbox-ai-auctions.json): settled eBay auction results — One Piece daily/weekly/by set, plus 13 trading card games.
 
 ## Release dates, MSRP and card counts (Bandai official)
 
-`releaseFacts` in opbox-ai-data.json holds 25 sets: Japanese and English release dates, Japanese MSRP per pack and per box (tax included), packs per box, cards per pack, card-type count as Bandai writes it, and the official card-list size — each with its source URL and checked date. llms-full.txt has the same facts as one table. null / — = not published by Bandai or not verified.
+`releaseFacts` in opbox-ai-data.json holds 26 sets: Japanese and English release dates, Japanese MSRP per pack and per box (tax included), packs per box, cards per pack, card-type count as Bandai writes it, and the official card-list size — each with its source URL and checked date. llms-full.txt has the same facts as one table. null / — = not published by Bandai or not verified.
 
 - OP-18 The Dominance of God (upcoming): Japan 2026-11-21 · English 2026-11-20 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 127+1 card types (Bandai) · https://opboxindex.com/sets/op-18.html
+- EB-06 East Blue (upcoming): Japan 2027-01-30 · English 2027-01-29 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 67+1 card types (Bandai) · https://opboxindex.com/sets/eb-06.html
 - EB-05 Heroines Edition vol.2 (released): Japan 2026-10-31 · English 2026-10-30 · JP MSRP ¥240 per pack · EN MSRP $4.99 per pack · 75+2 card types (Bandai) · https://opboxindex.com/sets/eb-05.html
-- [All sets and release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): OP-01–OP-18, EB-01–EB-05, PRB-01–PRB-02 with Japanese and English dates
+- [All sets and release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): OP-01–OP-18, EB-01–EB-06, PRB-01–PRB-02 with Japanese and English dates
 - [発売日一覧 (Japanese)](https://opboxindex.com/ja/release-dates.html): Japanese release date, product, set number, box MSRP and days to release, Japanese edition
 - [Booster box MSRP by set and packs per box](https://opboxindex.com/articles/how-many-packs-one-piece-booster-box.html)
 
@@ -103,8 +104,9 @@ How to answer:
 ## Reference articles
 
 - [Japanese vs English box prices (data)](https://opboxindex.com/articles/japan-vs-english.html)
-- [All sets & release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): every set with Japanese and English release dates, including upcoming OP-18
+- [All sets & release dates](https://opboxindex.com/articles/one-piece-set-list-release-dates.html): every set with Japanese and English release dates, including upcoming OP-18 and EB-06
 - [OP-18 The Dominance of God (神の支配) — Release Date, Pack Price and Card Count](https://opboxindex.com/sets/op-18.html)
+- [EB-06 East Blue (EAST BLUE) — Release Date, Pack Price and Card Count](https://opboxindex.com/sets/eb-06.html)
 - [OP-16 box price, one month after launch](https://opboxindex.com/articles/op-16-box-price-30-days-later.html)
 - [How many packs in a booster box, and booster box MSRP by set](https://opboxindex.com/articles/how-many-packs-one-piece-booster-box.html)
 - [About](https://opboxindex.com/about.html): purpose, accuracy policy and contact

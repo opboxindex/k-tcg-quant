@@ -494,7 +494,8 @@ function upcoming() {
     for (const tr of rows(tbl || "")) {
       const cs = cells(tr), ed = /Japanese/.test(cs[0] || "") ? "jp" : /English/.test(cs[0] || "") ? "en" : null; if (!ed || cs.length < 3) continue;
       const a = u.ask[ed], pr = s && s.preRelease[ed], w = `${f} ${ed}`;
-      cmp("UP1", w, "최저 호가", dollars(cs[1]), a && a.best ? a.best.total : null); if (a) { cmp("UP1", w, "호가 중앙값", first(cs[1], /median (\$[\d,]+)/), a.median); cmp("UP1", w, "호가 매물 수", first(cs[1], /(\d+) listings/), a.n); }
+      // 매물 0개(a.n 0)인 날은 생성기가 호가 칸을 "—"로 낸다(askHtml: a && a.n) — 중앙값·매물 수도 n 이 있을 때만 대조한다. 2026-11-18 EB-06(11/16·11/17 update-active-listings 가드 FAIL).
+      cmp("UP1", w, "최저 호가", dollars(cs[1]), a && a.best ? a.best.total : null); if (a && a.n) { cmp("UP1", w, "호가 중앙값", first(cs[1], /median (\$[\d,]+)/), a.median); cmp("UP1", w, "호가 매물 수", first(cs[1], /(\d+) listings?/), a.n); }
       if (!u.released[ed]) { cmp("D16", w, "예약판매 중앙값", dollars(cs[2]), pr && pr.median != null ? pr.median : null); if (pr) { cmp("D16", w, "예약판매 건수", first(cs[2], /(\d+) sales/), pr.sales); cmp("D16", w, "예약판매 매물", first(cs[2], /(\d+) listings/), pr.listings); } }
     }
   }

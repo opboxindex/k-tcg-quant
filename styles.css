@@ -3,6 +3,9 @@
   --paper: #11141c;
   --ink: #eef2ff;
   --muted: #8d95a7;
+  /* 낡은 값 글자색 — 2026-11-18. 투명도(.6)로 흐리면 칸 안 날짜 꼬리표·eBay 구매 링크까지 흐려져 대비 미달(약 3.1:1)이었다.
+     색으로 흐린다: 바탕 대비 약 7.7:1, 본문(--ink)보다 확실히 어둡다. 칸 안 small·a.rowBuy 는 자기 색을 그대로 가진다. */
+  --stale-ink: #9aa2b1;
   --line: #242936;
   /* 신호색 — 2026-08-20. 종전 값은 밝은 배경 기준이라 다크 화면에서 죽었다(#b98523 이 회색으로 보였다).
      다크 대시보드는 어두운 바탕에서 튀는 채도가 필요하다. 각 색마다 8% 배경 변형을 같이 둬서
@@ -69,6 +72,12 @@ button.hitThumb:focus-visible { outline: 3px solid var(--accent); outline-offset
 .comparisonHelp summary { min-height: 44px; padding: 10px 0; cursor: pointer; color: var(--accent); font-weight: 700; }
 .setComparisonScroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .setComparisonScroll .ctTable tbody th { font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0; text-align: left; }
+/* 비교표 6열(가장 비싼 카드) — 이름이 'Tony Ton'처럼 잘리지 않게 줄바꿈 허용·왼쪽 정렬(2026-11-18) */
+.setComparisonScroll .ctTable :is(th, td):nth-child(6) { text-align: left; }
+.setComparisonScroll .ctTable td:nth-child(6) { white-space: normal; min-width: 220px; }
+.setComparisonScroll .ctTable td:nth-child(6) small { display: block; margin-top: 2px; line-height: 1.4; }
+/* compare 섹션 폭 제한을 표 때문에 풀었으니 설명 문단만 읽기 폭으로 다시 묶는다(2026-11-18) */
+.compareStatic > p { max-width: 760px; }
 .setComparisonScroll .ctSet > a { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-height: 44px; }
 @media (max-width: 640px) {
   .setComparisonScroll .ctSet { position: sticky; left: 0; z-index: 1; background: var(--paper); min-width: 124px; max-width: 152px; white-space: normal; }
@@ -131,14 +140,18 @@ a {
   transform: translateY(0);
 }
 
+/* 줄글로 둔다 — flex 면 'Updated'와 날짜가 다른 줄로 갈리고 간격이 두 배였다(2026-11-18). 마크업의 ' · ' 가 구분자다. */
 .articleMeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 8px;
+  display: block;
   margin: 8px 0 18px;
   color: var(--muted);
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.7;
+}
+
+.articleMeta time,
+.bodyPage .factTable time {
+  white-space: nowrap;
 }
 
 .articleMeta a {
@@ -1092,6 +1105,10 @@ h2 {
   margin-top: 38px;
   font-size: 28px;
 }
+/* 폰: h1 은 25.7px 로 줄어드는데 h2 는 28px 그대로라 소제목이 제목보다 컸다(2026-11-18). 위 h2 규칙 뒤에 둬야 이긴다. */
+@media (max-width: 640px) {
+  .bodyPage h2 { font-size: 22px; line-height: 1.25; margin-top: 30px; }
+}
 
 .bodyPage p,
 .bodyPage li {
@@ -1365,13 +1382,20 @@ h2 {
 .tickerBoard .tbChip { flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: 6px; border: 1px solid rgba(255,255,255,.1); background: rgba(12,14,18,.6); border-radius: 8px; padding: 4px 9px; font-size: 12px; cursor: pointer; color: #cfd6e4; }
 .tickerBoard .tbChip:hover { border-color: var(--accent); }
 .tickerBoard .tbChip.stale { opacity: .55; }
-.tickerBoard .tbWeekly { margin-left: 8px; color: var(--accent); font-size: 12.5px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.tickerBoard .tbWeekly { display: inline-flex; align-items: center; min-height: 32px; padding: 0 4px; margin-left: 8px; color: var(--accent); font-size: 12.5px; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .tickerBoard .tbChip .tbDate { color: var(--muted); font-size: 11.5px; }
 .tickerBoard .tbChip.stale .tbDate { color: #f5c842; opacity: 1; }
 .tickerBoard .tbCode { font-weight: 800; color: #eef2ff; }
 .tickerBoard .tbPrice { color: var(--muted); font-size: 12px; }
 .tickerBoard b.up { color: #00e5a0; } .tickerBoard b.down { color: #ff5f6e; } .tickerBoard b.flat { color: #9aa4b6; }
-@media (max-width: 640px) { .tickerBoard { margin: 10px 12px 0; } }
+@media (max-width: 640px) {
+  .tickerBoard { margin: 10px 12px 0; }
+  /* 폰: 라벨이 366px 중 181px 를 먹어 칩이 1개만 잘려 보였다 — 라벨 줄과 칩 줄을 나눈다(2026-11-18) */
+  .tickerBoard { flex-wrap: wrap; row-gap: 6px; padding: 8px 10px; }
+  .tickerBoard .tbHead { flex: 1 1 100%; justify-content: space-between; }
+  .tickerBoard .tbScroll { flex: 1 1 0; min-width: 0; }
+  .tickerBoard .tbChip { gap: 5px; padding: 4px 7px; }
+}
 #sinceLast b.up { color: var(--green); }
 #sinceLast b.down { color: var(--red); }
 .watchBtn { display: inline-flex; align-items: center; min-height: 34px; margin: 2px 0 8px; padding: 0 12px; border-radius: 9px; border: 1px dashed rgba(255,255,255,.25); background: transparent; color: #9aa4b6; font-size: 12px; font-weight: 700; cursor: pointer; }
@@ -1421,8 +1445,8 @@ h2 {
 .homeSummaryTable td.flat { color: #9aa4b6; }
 .homeSummaryTable td.when { color: #9aa4b6; font-size: 12.5px; }
 .homeSummaryTable td.when small { font-size: 11.5px; color: var(--muted); }
-.homeSummaryTable tr.stale td { opacity: .62; }
-.homeSummaryTable tr.stale td.when { opacity: 1; color: #f5c842; }
+.homeSummaryTable tr.stale td { color: var(--stale-ink, #9aa2b1); }   /* 투명도 대신 색 — 칸 안 eBay 구매 링크까지 흐려 대비 미달이던 것(2026-11-18) */
+.homeSummaryTable tr.stale td.when { color: #f5c842; }
 .homeSummary h2 small { display: block; font-size: 12px; font-weight: 600; color: #9aa4b6; margin-top: 4px; }
 .homeSummaryTable td a { color: var(--accent); text-decoration: none; font-weight: 700; }
 .homeSummaryTable .up { color: var(--green); }
@@ -1464,6 +1488,13 @@ small { font-size: 12px; }
 @media (min-width: 881px) {
   .topbar .nav { gap: 4px; font-size: 14px; }
   .topbar .nav a { padding: 0 8px; min-height: 44px; }
+}
+/* 브랜드 부제('Booster box research')가 활성 메뉴 알약에 0px 로 붙었다 — .nav 가 flex:1 이라 margin-left:auto 가 일하지 않는다(2026-11-18).
+   간격은 브랜드와 메뉴 사이에만, 메뉴가 한 줄에 다 들어가는 폭에서만 준다. 881~1239px 에 주면 브랜드 부제가 두 줄로 접혀
+   sticky 상단바가 77→94/119px 로 커지고 마지막 메뉴('Amazon Japan Raffle')가 잘렸다(1180·1194 iPad 가로, 실측 2026-11-18).
+   영문 메뉴는 이 간격을 둔 채 1188px 부터 한 줄에 든다 — 1240 은 NEW 배지 한 개(~45px) 여유를 둔 값. 검사: 881~1440 폭별 높이·온전한 메뉴 수. */
+@media (min-width: 1240px) {
+  .topbar .brand { margin-right: 20px; }
 }
 @media (max-width: 880px) {
   .topbar { flex-direction: row; flex-wrap: wrap; align-items: center; }
@@ -1557,6 +1588,15 @@ small { font-size: 12px; }
     -webkit-mask-image: none;
     mask-image: none;
   }
+}
+
+/* 키보드로 밀 수 있게 tabindex 를 준 스크롤 표·상자 — 오른쪽 흐림(mask)이 바깥 포커스 테두리까지 지워, 스크롤이 필요한 폰 폭에서만
+   포커스가 안 보였다(WCAG 2.4.7, 2026-11-18 실측 market·free-data·ko/grading). 포커스 동안은 흐림을 걷고 테두리를 안쪽에 그린다. */
+.mkWrap:focus-visible,
+.bodyPage table[tabindex]:focus-visible {
+  -webkit-mask-image: none;
+  mask-image: none;
+  outline-offset: -3px;
 }
 
 /* 요약 시세표(홈·box-prices·세트 허브) — 2026-10-14 QA: 390px 에서 'OP-'/'01' 로 코드가 갈리고, 이름 칸이 오른쪽 정렬에

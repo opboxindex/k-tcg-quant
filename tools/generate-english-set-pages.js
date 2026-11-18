@@ -150,7 +150,7 @@ function cheapestBox(code, m) {
       <div class="liveBox">
         <span>Lowest total-cost English ${code} box listed now</span><br />
         <b>${usd(bl.total)}</b>
-        <small>${esc(ship.trim())} · ${esc(bl.condition)} · ships from ${esc(bl.country || "—")} · as of ${esc(m.ask.updated || DATA_DATE)} · <a href="${link}" target="_blank" rel="noopener noreferrer sponsored">View listing</a></small>
+        <small>${esc(ship.trim())} · ${esc(bl.condition)} · ships from ${esc(bl.country || "—")} · as of ${esc(m.ask.updated || DATA_DATE)} · <a class="rowBuy" href="${link}" target="_blank" rel="noopener noreferrer sponsored">View listing</a></small>
       </div>`;
 }
 
@@ -312,6 +312,7 @@ const PAGE_CSS = `      .setHero { display: flex; gap: 18px; align-items: flex-s
       .liveBox { margin: 18px 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: rgba(var(--accent-rgb), .05); }
       .liveBox b { font-size: 20px; color: var(--accent); }
       .liveBox small { color: var(--muted); display: block; margin-top: 4px; }
+      .liveBox small a.rowBuy { margin: -7px 0; }   /* 누르는 높이(33px)는 두고 줄 간격만 원래대로(2026-11-18) */
       .ctaRow { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
       .ctaRow a { display: inline-flex; align-items: center; min-height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--line); font-weight: 800; }
       .ctaRow a.primary { background: rgba(var(--accent-rgb), .14); border-color: rgba(var(--accent-rgb), .5); color: var(--accent); }

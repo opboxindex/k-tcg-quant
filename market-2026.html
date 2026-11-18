@@ -21,8 +21,8 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"One Piece TCG market 2026 — monthly booster box prices, PSA grading and eBay auctions","description":"Monthly 2026 One Piece Card Game market table: cross-set median of Japanese and English sealed booster box completed-sale medians, count of sets up and down over 4 weeks, PSA grades added, and completed eBay auctions sold.","url":"https://opboxindex.com/market-2026.html","dateModified":"2026-11-18","temporalCoverage":"2026-01/2026-11","creator":{"@type":"Organization","name":"OP Box Index","url":"https://opboxindex.com/"},"license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"variableMeasured":["Japanese booster box median (USD)","English booster box median (USD)","Sets up / down over 4 weeks","PSA grades added","eBay auctions sold"]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"OP Box Index","item":"https://opboxindex.com/"},{"@type":"ListItem","position":2,"name":"Market 2026","item":"https://opboxindex.com/market-2026.html"}]}</script>
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261102epn" />
-    <script defer src="lang-toggle.js?v=20261102epn"></script>
+    <link rel="stylesheet" href="styles.css?v=20261118design2" />
+    <script defer src="lang-toggle.js?v=20261118design2"></script>
     <meta name="theme-color" content="#0a0c10" />
     <style>
       table.kfTable { width: 100%; max-width: 640px; min-width: 0; margin: 12px 0 4px; font-size: 14px; }
@@ -49,6 +49,14 @@
       .mkTable td small { display: block; color: var(--muted); font-size: 11.5px; }
       .mkTable .up { color: var(--accent); } .mkTable .down { color: var(--red); }
       .mkNote { color: var(--muted); font-size: 12.5px; line-height: 1.6; margin: 6px 0 0; }
+      .mkTable tbody th small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 500; }
+      /* 폰: Month 열이 화면의 60%를 먹어 7열 중 2열만 보였다(2026-11-18) — 머리글 두 줄, 첫 열 고정, 넘치는 쪽 흐림 */
+      @media (max-width: 640px) {
+        .mkWrap { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); }
+        .mkTable th, .mkTable td { padding: 7px 6px; }
+        .mkTable thead th { white-space: normal; vertical-align: bottom; min-width: 64px; line-height: 1.3; }
+        .mkTable thead th:first-child, .mkTable tbody th { position: sticky; left: 0; z-index: 1; background: var(--bg); }
+      }
     </style>
   </head>
   <body>
@@ -68,7 +76,7 @@
           </tbody></table>
       <nav class="nextLinks" aria-label="Next"><a href="/" data-ko="실시간 박스 시세 →">Live box prices →</a><a href="/amazon-lottery.html" data-ko="OP-18 아마존 응모 →">OP-18 Amazon invite →</a><a href="/sets/op-18.html" data-ko="OP-18 발매일 →">OP-18 release date →</a><a href="/sets/index.html" data-ko="전체 세트 가이드 →">All set guides →</a></nav>
       <h2 id="by-month" data-ko="2026 월별">2026 by month</h2>
-      <div class="mkWrap"><table class="mkTable">
+      <div class="mkWrap" role="region" tabindex="0" aria-labelledby="by-month"><table class="mkTable">
         <thead><tr><th data-ko="월">Month</th><th data-ko="일본판 박스 중앙값">JP box median</th><th data-ko="영문판 박스 중앙값">EN box median</th><th data-ko="4주 등락 (일본판)">4-wk ▲ / ▼ (JP)</th><th data-ko="PSA 등급 증가">PSA grades added</th><th data-ko="이베이 경매 낙찰">eBay auctions sold</th><th data-ko="기준일">As of</th></tr></thead>
         <tbody>
           <tr><th scope="row">Jan 2026</th><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">13,023<small>4 wk</small></td><td class="num">—</td><td class="num"><time datetime="2026-01-28">2026-01-28</time></td></tr>
@@ -81,7 +89,7 @@
           <tr><th scope="row">Aug 2026</th><td class="num">$125<small>n=20</small></td><td class="num">$481<small>n=21</small></td><td class="num"><span class="up">▲ 5</span> · <span class="down">▼ 9</span><small>n=19</small></td><td class="num">42,514<small>4 wk</small></td><td class="num">10,263<small>31 d</small></td><td class="num"><time datetime="2026-08-31">2026-08-31</time></td></tr>
           <tr><th scope="row">Sep 2026</th><td class="num">$123<small>n=18</small></td><td class="num">$428<small>n=22</small></td><td class="num"><span class="up">▲ 6</span> · <span class="down">▼ 9</span><small>n=18</small></td><td class="num">71,895<small>5 wk</small></td><td class="num">13,440<small>30 d</small></td><td class="num"><time datetime="2026-09-30">2026-09-30</time></td></tr>
           <tr><th scope="row">Oct 2026</th><td class="num">$110<small>n=17</small></td><td class="num">$414<small>n=22</small></td><td class="num"><span class="up">▲ 4</span> · <span class="down">▼ 8</span><small>n=17</small></td><td class="num">54,009<small>4 wk</small></td><td class="num">11,799<small>31 d</small></td><td class="num"><time datetime="2026-10-31">2026-10-31</time></td></tr>
-          <tr><th scope="row">Nov 2026 <small data-ko="진행 중 · 현재가">in progress · current prices</small></th><td class="num">$112<small>n=18</small></td><td class="num">$373<small>n=23</small></td><td class="num"><span class="up">▲ 4</span> · <span class="down">▼ 8</span><small>n=17</small></td><td class="num">—</td><td class="num">7,219<small>18 d</small></td><td class="num"><time datetime="2026-11-18">2026-11-18</time></td></tr>
+          <tr><th scope="row">Nov 2026 <small data-ko="진행 중 · 현재가">in progress · current prices</small></th><td class="num">$112<small>n=18</small></td><td class="num">$373<small>n=23</small></td><td class="num"><span class="up">▲ 4</span> · <span class="down">▼ 8</span><small>n=17</small></td><td class="num">—</td><td class="num">7,486<small>18 d</small></td><td class="num"><time datetime="2026-11-18">2026-11-18</time></td></tr>
         </tbody>
       </table></div>
       <p class="mkNote" data-ko-html="박스 중앙값 = 세트마다 그 달 말일 기준 주간 판매 중앙값의 세트 간 중앙값(진행 중인 달은 세트별 현재가)(n = 세트 수, 5세트 미만 — ) · 4주 등락 = 그 말일 점 대비 전달 말일 점(진행 중인 달은 세트 페이지·홈과 같은 현재가 기준) · PSA = 주간 등급 증가의 합(wk = 주 수) · 경매 = 이베이 완료 경매 낙찰 수(d = 관측일 수) · <a href=&quot;methodology.html#box-median&quot;>규칙</a>">Box median = median across sets of each set's weekly completed-sale median as of the month's last day; the month in progress uses each set's current price (n = sets; under 5 sets —) · 4-wk = month-end point vs the previous month-end point; the month in progress uses current prices, as on each set page · PSA = sum of weekly grades added (wk = weeks) · auctions = completed eBay auctions sold (d = days observed) · <a href="methodology.html#box-median">Rules</a></p>

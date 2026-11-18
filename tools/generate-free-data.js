@@ -165,6 +165,8 @@ const html = `<!doctype html>
       .dTable th:nth-child(1), .dTable th:nth-child(2) { text-align: left; }
       .dTable td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.05); font-variant-numeric: tabular-nums; }
       .dTable td.num { text-align: right; }
+      .dTable td:first-child { white-space: nowrap; }
+      .bodyPage table.dTable :is(th, td):nth-child(2) { text-align: left; }
       .fields { font-size: 13.5px; color: #9aa4b6; line-height: 1.9; max-width: 760px; }
       .fields code { color: var(--accent); background: rgba(var(--accent-rgb), .08); padding: 1px 6px; border-radius: 5px; }
       .attrBox { margin: 16px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 13.5px; line-height: 1.7; }
@@ -210,9 +212,9 @@ const html = `<!doctype html>
         <code>*_as_of</code> — source date per value · blank = unverified (not 0)
       </div>
 
-      <h2 data-ko="미리보기 — 그레이딩 인구">Preview — grading population</h2>
+      <h2 id="grading-preview" data-ko="미리보기 — 그레이딩 인구">Preview — grading population</h2>
       <div style="overflow-x:auto">
-      <table class="dTable">
+      <table class="dTable" tabindex="0" aria-labelledby="grading-preview">
         <thead><tr><th>Set</th><th>Printing</th><th>PSA</th><th>PSA 10 rate</th><th>CGC</th><th>Pristine 10</th><th>TAG</th></tr></thead>
         <tbody>
 ${gradePreview}

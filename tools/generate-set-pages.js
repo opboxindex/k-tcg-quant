@@ -137,7 +137,7 @@ const SET_PAGE_CSS = `      /* 제목 블록이 폭을 100% 잡고 있어 박스
       .hubTable td.num { text-align: right; white-space: nowrap; }
       .hubTable td.up { color: var(--green); } .hubTable td.down { color: var(--red); } .hubTable td.flat, .hubTable td.when { color: #9aa4b6; }
       .hubTable td.when small { font-size: 11.5px; color: var(--muted); }
-      .hubTable tr.stale td { opacity: .62; } .hubTable tr.stale td.when { opacity: 1; color: #f5c842; }
+      .hubTable tr.stale td { color: var(--stale-ink, #9aa2b1); } .hubTable tr.stale td.when { color: #f5c842; }
       .hubTable td.links { font-size: 12.5px; white-space: nowrap; }
       /* 2026-11-02: 폰에서 표가 465px(보이는 폭 354px)로 넘쳐 '4-wk change' 가 흐림 밑에 잘렸다 — box-prices 와 같은 모바일 꼴(코드 한 줄·이름 왼쪽·머리글 두 줄)에 '더 보기' 열을 뺀다 */
       @media (max-width: 720px) { .hubTable th.links, .hubTable td.links { display: none; } }
@@ -185,7 +185,7 @@ ${KF_CSS}
       .chaseTable td:first-child { color: var(--muted); font-variant-numeric: tabular-nums; }
       .chaseTable .cNum { display: block; color: var(--muted); font-size: 11.5px; margin-top: 1px; }
       .chaseTable .psaKind { color: var(--muted); font-size: 11.5px; }
-      .chaseTable td.psaStale, .chaseTable td.nmStale { opacity: .62; }   /* 35일 넘은 PSA10 sold(2026-09-24)·28일 넘은 NM(2026-11-05) — 값은 두되 흐리게 */
+      .chaseTable td.psaStale, .chaseTable td.nmStale { color: var(--stale-ink, #9aa2b1); }   /* 35일 넘은 PSA10 sold(2026-09-24)·28일 넘은 NM(2026-11-05) — 값은 두되 흐리게 */
       .chaseTable td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
       /* 카드명은 왼쪽 — styles.css 기사 표 기본(.bodyPage table 2열부터 오른쪽)보다 구체적으로 이긴다 */
       .bodyPage table.chaseTable :is(th, td).cn:not(:first-child) { text-align: left; }
@@ -1027,8 +1027,8 @@ ${list.map((r, i) => rowHtml(r, i + offset)).join("\n")}
       .aTable td.psa { color: var(--accent); font-weight: 800; font-size: 14.5px; }
       .aTable td.rng { color: var(--muted); }
       .aTable td.obs { color: var(--muted); }
-      .aTable tr.stale td { opacity: .62; } .aTable tr.stale td.obs { opacity: 1; color: #f5c842; }
-      .kfTable b.stale, .stat.stale b { opacity: .62; }   /* 대표 칸도 표 행과 같은 35일 흐림(2026-11-05) */
+      .aTable tr.stale td { color: var(--stale-ink, #9aa2b1); } .aTable tr.stale td.obs { color: #f5c842; }
+      .kfTable b.stale, .stat.stale b { color: var(--stale-ink, #9aa2b1); }   /* 대표 칸도 표 행과 같은 35일 흐림(2026-11-05) */
       .aTable td.mul { font-weight: 700; }
       .aTable td.pop small, .aTable td.l small { color: var(--muted); margin-left: 4px; }
       .aTable td.l a { color: inherit; text-decoration: none; }

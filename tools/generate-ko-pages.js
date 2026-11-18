@@ -146,10 +146,13 @@ const tableRows = rows.map((b) => {
   const rpCell = (rs.restock.length
     ? `<span class="rpDot" title="${esc(rs.restock.map(restockLabel).join(" / "))}">재판 ${rs.restock.length}회</span>`
     : `<span class="rpNone">재판 기록 없음</span>`) + (drawShort ? `<small class="fromDate" title="${esc(drawText(rs))}">${esc(drawShort)}</small>` : "");
-  const chgCls = b.changePct >= 0 ? "up" : "down";
+  // 폰(≤560px)에서는 재판 열을 숨기고 같은 배지를 이름 아래에 다시 보인다 — 기록이 있는 세트만('재판 기록 없음'은 폰에서 빠짐, 범례는 그대로).
+  const rpMobile = (rs.restock.length ? `<span class="rpDot" title="${esc(rs.restock.map(restockLabel).join(" / "))}">재판 ${rs.restock.length}회</span>` : "")
+    + (drawShort ? `<small class="fromDate" title="${esc(drawText(rs))}">${esc(drawShort)}</small>` : "");
+  const chgCls = b.changePct == null ? "" : (b.changePct >= 0 ? "up" : "down");
   return `<tr>
     <td class="code"><a href="${koSlug(b.code)}.html">${esc(b.code)}</a></td>
-    <td class="nm">${esc(nameKo(b.code))}</td>
+    <td class="nm">${esc(nameKo(b.code))}${rpMobile ? `<span class="rpM">${rpMobile}</span>` : ""}</td>
     <td class="num">${won(krw)}${b.nowDate ? `<small class="fromDate">${esc(b.nowDate)}</small>` : ""}</td>
     <td class="num ${chgCls}">${pct(b.changePct)}${b.changeBasis ? `<small class="fromDate">${esc(b.changeBasis)} 대비</small>` : ""}</td>
     <td class="rp">${rpCell}</td>
@@ -237,16 +240,31 @@ const html = `<!doctype html>
       .koBoard td.code { font-weight: 700; color: #cfd6e4; }
       .koBoard td.nm { color: #9aa4b6; }
       .rpDot { display: inline-block; background: rgba(255,125,60,.15); color: #ff9d6c; border-radius: 6px; padding: 1px 7px; font-weight: 700; font-size: 12px; }
-      .rpNone { color: #6a7182; font-size: 12px; }
+      .rpNone { color: var(--muted); font-size: 12px; }
       .koLinks { list-style: none; padding: 0; margin: 8px 0; max-width: 760px; color: #9aa4b6; font-size: 14px; line-height: 1.9; }
       .fromDate { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
       .koBoard td.code a { color: var(--accent); text-decoration: none; font-weight: 700; }
+      /* 2026-11-18 휴대폰 시세표 — 세트 코드 한 줄, 이름은 낱말 단위로 줄바꿈. 공용 규칙(styles.css .bodyPage table:not(.text) …, 0,3,2)이
+         이름·재판 칸을 오른쪽 정렬로 덮던 것을 같은 특이성의 뒤 규칙으로 되돌린다. 폰에서는 재판 열 대신 이름 아래 배지(.rpM). */
+      .koBoard :is(td.code, td.l:first-child), .koBoard time { white-space: nowrap; }
+      .bodyPage table.koBoard :is(td.nm, td.rp, th.l) { text-align: left; }
+      .koBoard td.nm { word-break: keep-all; }
+      .koPrice .rpM { display: none; }
+      .koUpcoming td { word-break: keep-all; }
+      .koUpcoming td small { white-space: nowrap; }
+      @media (max-width: 560px) {
+        .bodyPage table.koPrice { font-size: 13.5px; }
+        .bodyPage table.koPrice :is(th, td) { padding: 7px 4px; }
+        .bodyPage table.koBoard thead th { white-space: normal; word-break: keep-all; }
+        .koPrice :is(th:nth-child(5), td.rp) { display: none; }
+        .koPrice .rpM { display: block; margin-top: 3px; }
+      }
       .owMeter { display: flex; gap: 8px; align-items: flex-end; height: 120px; max-width: 520px; margin: 12px 0; }
       .owBar { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 4px; }
       .owBar span { width: 100%; background: #ff7d3c; opacity: .6; border-radius: 4px 4px 0 0; min-height: 6px; }
       .owBar:last-child span { opacity: 1; }
       .owBar small { font-size: 11.5px; color: var(--muted); }
-      .koFacts { margin: 14px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.7; }
+      .koFacts { margin: 14px 0; padding: 12px 16px 12px 34px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.7; }
       .koFacts strong { color: var(--accent); }
       .koNote { color: var(--muted); font-size: 12.5px; max-width: 760px; margin: 8px 0 14px; line-height: 1.6; }
       main h2 { font-size: 18px; margin: 24px 0 6px; }
@@ -281,7 +299,7 @@ const html = `<!doctype html>
         ${/* 범례 = 라벨·한 조각 정의만. "세트 코드를 누르면 …갑니다" 안내 문장은 지웠고, 허브 FAQ "재판 정보는 공식인가요?"의 뜻은 "재판 =" 라벨로 옮겼다(2026-10-15) */ ""}
         <p class="koNote">시세 = 이베이 실거래 중앙값(원화 환산) · 아래 날짜 = 그 중앙값의 날짜 · 변동률 = <strong>28일 전 중앙값 대비</strong>(기준일 행마다, 발매일 대비 아님) · — = 28일 안에 날짜가 찍힌 중앙값 없음(중앙값 = 판매 6건 이상) · 재판 = 유통사·리테일러 재입고 + 반다이남코샵 재판(再販) 추첨판매</p>
         <div style="overflow-x:auto">
-        <table class="koBoard">
+        <table class="koBoard koPrice tblFit">
           <thead><tr><th class="l">세트</th><th class="l">이름</th><th>일판 박스 시세 (기준일)</th><th>4주 등락</th><th class="l">재판</th></tr></thead>
           <tbody>
 ${tableRows}
@@ -301,7 +319,7 @@ ${tableRows}
 ${UPCOMING_ROWS ? `      <section aria-label="발매 예정 세트">
         <h2>발매 예정 세트 · 발매일</h2>
         <div style="overflow-x:auto">
-        <table class="koBoard">
+        <table class="koBoard koUpcoming tblFit">
           <thead><tr><th class="l">세트</th><th>영문판 발매일</th><th>일본판 발매일</th><th>최저 호가 (이베이 · 배송비 포함)</th></tr></thead>
           <tbody>
 ${UPCOMING_ROWS}
@@ -642,9 +660,9 @@ ${cardRows}
       .koBoard td small { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
       .koBoard td.thumb { width: 52px; padding: 6px 8px; }
       .koBoard td.thumb img { width: 40px; height: 56px; object-fit: cover; border-radius: 4px; display: block; background: #12161d; }
-      .koFacts { margin: 14px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.8; }
+      .koFacts { margin: 14px 0; padding: 12px 16px 12px 34px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.8; }
       .koFacts strong { color: var(--accent); }
-      .koFacts li.stale strong, .koBoard td.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
+      .koFacts li.stale strong, .koBoard td.stale { color: var(--stale-ink, #9aa2b1); }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koNote { color: var(--muted); font-size: 12.5px; max-width: 760px; margin: 8px 0 14px; line-height: 1.6; }
       .faqItem { max-width: 760px; border-bottom: 1px solid rgba(255,255,255,.08); padding: 4px 0; }
       .faqItem summary { cursor: pointer; font-weight: 700; padding: 8px 0; font-size: 14.5px; }

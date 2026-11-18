@@ -10,14 +10,14 @@
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261102epn" />
-    <script defer src="lang-toggle.js?v=20261102epn"></script>
+    <link rel="stylesheet" href="styles.css?v=20261118design2" />
+    <script defer src="lang-toggle.js?v=20261118design2"></script>
     <script>
       // 2026-10-08: 첫 화면은 정적 선렌더(prerender-home.js)라 JSON 이 첫 그리기에 필요 없다. 1MB 를 첫 그리기 전에 받아 파싱하면
       // 느린 폰에서 그만큼 그리기가 늦어진다(라이트하우스 실측). load 뒤에 받고, 받으면 packs.js 가 같은 화면을 다시 그린다.
       window.__opPackData = new Promise(function (resolve) {
         var go = function () {
-          resolve(fetch("data/onepiece-packs.json?v=20261102epn", { cache: "default", priority: "low" })
+          resolve(fetch("data/onepiece-packs.json?v=20261118design2", { cache: "default", priority: "low" })
             .then(function (r) { return r.ok ? r.json() : null; })
             .catch(function () { return null; }));
         };
@@ -164,11 +164,11 @@
       .homeCollapse[open] > summary::before { transform: rotate(90deg); }
       .homeCollapse > summary h2, .homeCollapse > summary h3 { margin: 0; display: inline; }
 
+      /* 세트 탭 띠는 붙어 다니지 않는다(2026-11-18) — 부모가 main 이라 1280에서 페이지 끝까지 따라와 상세 차트 머리·Top 10 구매 버튼·
+         제휴 고지 줄을 가렸다. 폰은 main{overflow-x:hidden} 탓에 이미 붙지 않았다 — 데스크톱도 같은 동작. */
       .langTabs {
         display: flex; flex-wrap: wrap; gap: 8px; margin: 16px clamp(16px,4vw,52px) 0;
-        position: sticky; top: 64px; z-index: 12; padding: 8px 0;
-        background: color-mix(in srgb, var(--bg) 88%, transparent);
-        backdrop-filter: blur(10px);
+        padding: 8px 0;
       }
       .langTab {
         display: inline-flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 16px;
@@ -413,7 +413,6 @@
          이 구간은 topbar 를 흘려보내고 탭바를 맨 위에 붙인다 — 560px 이하와 같은 동작. */
       @media (max-width: 880px) {
         .topbar { position: static; }
-        .langTabs { top: 0; }
       }
       @media (max-width: 560px) {
         .topbar { position: static; align-items: flex-start; }
@@ -437,7 +436,7 @@
         /* 모바일에선 topbar 가 static 이라 스크롤과 함께 사라진다(바로 위 규칙). 그런데 탭바만
            top:104px 로 붙어 있으면 화면 위에서 104px 내려온 허공에 떠서 콘텐츠를 가린다 — 2026-08-26.
            topbar 가 없으니 탭바는 맨 위(0)에 붙는 게 맞다. */
-        .langTabs { margin: 12px 12px 0; top: 0; gap: 6px; flex-wrap: nowrap; }
+        .langTabs { margin: 12px 12px 0; gap: 6px; flex-wrap: nowrap; }
         .langTab { flex: 1 1 0; min-width: 0; min-height: 38px; padding: 0 8px; justify-content: center; font-size: 12px; }
         .packSection { padding: 14px 12px 0; }
         .packGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -615,9 +614,9 @@
       }
       @media (max-width: 720px) {
         .todayDeals { margin: 12px 12px 0; min-height: 320px; }
-        .todayDeals .dealCard { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 14px; }
-        .todayDeals .dealPhoto { width: 112px; height: 78px; }
-        .todayDeals .dealBox3d { transform: scale(.72); transform-origin: left center; width: 112px; }
+        .todayDeals .dealCard { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; padding: 14px; align-items: start; }
+        .todayDeals .dealPhoto { width: 88px; height: 62px; }
+        .todayDeals .dealBox3d { width: 88px; transform: scale(.58); transform-origin: left top; margin-bottom: -44px; }
         .todayDeals .dealCta { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
         .todayDeals .dealPrice { font-size: 24px; }
       }
@@ -1389,6 +1388,6 @@
       </nav>
     </footer>
 
-    <script data-home-js>(function(){function go(){["box-chart.js?v=20261102epn","packs.js?v=20261102epn"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
+    <script data-home-js>(function(){function go(){["box-chart.js?v=20261118design2","packs.js?v=20261118design2"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
   </body>
 </html>

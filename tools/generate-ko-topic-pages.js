@@ -149,9 +149,11 @@ ${koHeadTags({ file, title, desc, breadcrumbName, enHref })}
         .koBoard td.l small { font-size: 11.5px; }
         .koBoard img.cardThumb { width: 30px; height: 42px; }
         .koBoard td.l .cardCell { gap: 7px; min-width: 0; }
+        /* 그레이딩 표: 옆으로 밀어도 세트 칸이 남게(2026-11-18) — 행 첫 칸이 td.l 인 표만(.koGrad) */
+        .koGrad :is(td.l, th.l) { position: sticky; left: 0; z-index: 1; background: var(--bg); min-width: 92px; }
       }
       .koBoard th.w, .koBoard td.w { white-space: normal; }
-      .koBoard td.stale, .koBoard span.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
+      .koBoard td.stale, .koBoard span.stale { color: var(--stale-ink, #9aa2b1); }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koBoard td.l a { color: var(--accent); }
       .koSteps { color: #cfd6e4; font-size: 13.5px; line-height: 1.8; max-width: 760px; padding-left: 20px; margin: 8px 0 14px; }
     </style>
@@ -204,7 +206,7 @@ function cardsPage() {
   // 카드 셀 — 한글 캐릭터명이 잡히면 [한글 / 영문 원본] 두 줄, 안 잡히면 영문만.
   const cell = (r) => `<td class="l"><span class="cardCell">${r.thumb}<span>${r.ko ? `${esc(r.ko)}<small>${esc(r.name)}</small>` : esc(r.name)}<small>${esc(r.number)} · ${esc(r.code)} ${esc(nameKo(r.code))}</small></span></span></td>`;
 
-  const tr = top.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}${nmTd(r, "hideM")}<td>${r.p10Krw != null ? p10Cell(r) : '<span style="color:#6a7182;font-size:12px">집계중</span>'}</td><td>${multCell(r)}</td></tr>`).join("\n");
+  const tr = top.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}${nmTd(r, "hideM")}<td>${r.p10Krw != null ? p10Cell(r) : '<span style="color:var(--muted);font-size:12px">집계중</span>'}</td><td>${multCell(r)}</td></tr>`).join("\n");
   const sTr = sold.map((r, i) => `<tr><td>${i + 1}</td>${cell(r)}<td>${p10Cell(r)}</td><td class="hideM">${num(r.n)}</td>${nmTd(r, "hideM")}<td>${multCell(r)}</td></tr>`).join("\n");
 
   const soldBlock = sold.length ? `
@@ -309,7 +311,7 @@ function gradingPage() {
   // 버튼 위 "그레이딩 데이터 읽는 법" 제목은 지웠다 — 그 아래 설명이 이미 없고 링크 버튼만 남아 있던 빈 제목(2026-10-15 소유자 결정).
   const body = `
       <div style="overflow-x:auto">
-      <table class="koBoard">
+      <table class="koBoard koGrad" tabindex="0" aria-label="세트별 PSA·CGC·TAG 그레이딩 인구">
         <thead><tr><th class="l">세트</th><th>PSA 일본판</th><th>젬률</th><th>PSA 영문판</th><th>젬률</th><th>CGC</th><th>TAG</th></tr></thead>
         <tbody>
 ${tr}
@@ -571,6 +573,8 @@ ${koHeadTags({ file: "auction.html", title, desc, breadcrumbName: "원피스 이
         .col:not(.key) .v { display: none; }
         .strip { gap: 6px; }
         .kpi { padding: 10px 8px; }
+        .col:not(.short) .dn { visibility: hidden; }
+        .col .dn { left: -3px; right: -3px; font-size: 10px; letter-spacing: -.02em; }
       }
 
       /* ⑤ 종류별 · ⑥ 세트별 */
@@ -583,6 +587,8 @@ ${koHeadTags({ file: "auction.html", title, desc, breadcrumbName: "원피스 이
       .setName { display: block; margin-top: 0; color: var(--muted); font-size: 12.5px; white-space: normal; }
       .foot { margin-top: 16px; font-size: 12.5px; color: var(--muted); }
       .foot a { display: inline-block; padding: 7px 0; color: var(--accent); }
+      /* 세트 칸 링크(a.setCode, 위아래 5px)만큼 숫자가 위로 떠 있었다 — 영문 auction 과 같게 숫자 칸을 세트 코드 줄에 맞춘다(2026-11-18) */
+      #sets .t tbody td:not(.l) { padding-top: 22px; }
       @media (max-width: 480px) { .t td, .t th { padding-left: 8px; padding-right: 8px; } }
     </style>
   </head>

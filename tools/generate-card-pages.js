@@ -238,7 +238,7 @@ for (const { code, set: s, card: c } of cands) {
 
   // 그레이딩 경제성(전부 실데이터 파생 — 추정치 없음)
   // PSA 등급 분포 표(10 / 9 / 8 이하) — 아래 세 갈래가 같은 표를 쓴다(2026-10-15, NM 없는 갈래를 더하며 하나로 묶음).
-  const gradeTable = pop ? `<table class="dataTable"><thead><tr><th>Grade</th><th>Population</th><th>Share</th></tr></thead><tbody>
+  const gradeTable = pop ? `<table class="dataTable tblFit"><thead><tr><th>Grade</th><th>Population</th><th>Share</th></tr></thead><tbody>
         <tr><td>PSA 10</td><td class="num">${intl(pop.psa10)}</td><td class="num">${pop.total ? Math.round((pop.psa10 / pop.total) * 100) : 0}%</td></tr>
         <tr><td>PSA 9</td><td class="num">${intl(pop.psa9)}</td><td class="num">${pop.total ? Math.round((pop.psa9 / pop.total) * 100) : 0}%</td></tr>
         <tr><td>PSA 8 or lower</td><td class="num">${intl(Math.max(0, (pop.total || 0) - (pop.psa10 || 0) - (pop.psa9 || 0)))}</td><td class="num">${pop.total ? Math.max(0, 100 - Math.round((pop.psa10 / pop.total) * 100) - Math.round((pop.psa9 / pop.total) * 100)) : 0}%</td></tr>
@@ -422,7 +422,7 @@ for (const { code, set: s, card: c } of cands) {
       .pc b { font-size: 21px; color: #eef2ff; font-variant-numeric: tabular-nums; }
       .pc small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 3px; }
       .pc.hl b { color: var(--accent); }
-      .pc.stale b, .dataTable td.carried, .dataTable td.stale { opacity: .62; }   /* 낡은 값·이월 칸 — 세트 표 psaStale 과 같은 흐림(2026-11-05) */
+      .pc.stale b, .dataTable td.carried, .dataTable td.stale { color: var(--stale-ink, #9aa2b1); }   /* 낡은 값·이월 칸 — 세트 표 psaStale 과 같은 흐림(2026-11-05) */
       .dataTable td.carried small { display: block; color: var(--muted); font-size: 11.5px; }
       .dataTable { width: 100%; max-width: 560px; border-collapse: collapse; margin: 10px 0 6px; font-size: 14px; }
       .dataTable th { text-align: right; padding: 6px 8px; border-bottom: 1px solid #2a3140; color: #9aa4b6; font-weight: 600; }
@@ -470,7 +470,7 @@ ${BUY_CTA_CSS}
       </div>
 
       ${serRows ? `<h2>Recent price checkpoints</h2>
-      <table class="dataTable"><thead><tr><th>Date</th><th>NM (raw)</th><th>PSA 10</th></tr></thead><tbody>${serRows}</tbody></table>
+      <table class="dataTable tblFit"><thead><tr><th>Date</th><th>NM (raw)</th><th>PSA 10</th></tr></thead><tbody>${serRows}</tbody></table>
       <p class="srcNoteA">NM = Japanese retail, raw · PSA 10 = exact-variant eBay sold median${serCarried ? " · dimmed = earlier observation carried forward (as of = observed)" : ""}</p>` : ""}
 
       ${gradeSection}
@@ -509,7 +509,7 @@ ${BUY_CTA_CSS}
         const rows = sib.map((x) => `<tr><td><a href="${slugify(x.card.number + "-" + x.card.name)}.html">${esc(seoName(x.card).short)}</a></td>${numTd(x.nm != null && x.card.nm.stale, `NM observed ${x.card.nm.date} — older than ${F.staleDays.nm} days`)}${x.nm != null ? usd(x.nm) : "—"}</td>${numTd(x.p10 && x.p10.kind === "sold" && x.card.psa10.stale, `PSA 10 sales observed ${x.p10 && x.p10.date} — older than ${PSA10_STALE_DAYS} days`)}${x.p10 ? `${usd(x.p10.v)}${x.p10.kind === "ask" ? " ask" : ""}` : "—"}</td></tr>`).join("");
         // 캡션 = 열 정의만 — 2026-10-15 소유자 결정. "Same figures as the … set guide" 문장은 지웠다(세트 링크는 머리 줄·푸터에 있다).
         return `<h2>More ${esc(code)} cards tracked here</h2>
-      <div class="tableWrap" style="overflow-x:auto"><table class="dataTable"><thead><tr><th>Card</th><th class="num">Japanese NM</th><th class="num">PSA 10</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="tableWrap" style="overflow-x:auto"><table class="dataTable tblFit"><thead><tr><th>Card</th><th class="num">Japanese NM</th><th class="num">PSA 10</th></tr></thead><tbody>${rows}</tbody></table></div>
       <p class="srcNoteA">NM = Japanese retail, raw · PSA 10 = eBay sold median; "ask" = cheapest listing</p>`;
       })()}
 
@@ -664,7 +664,7 @@ const hub = `<!doctype html>
       .clList li { break-inside: avoid; }
       @media (max-width: 560px) { .clList { columns: 1; } }
 ${KF_CSS}
-      .kfTable b.stale, .dataTable tr.stale td { opacity: .62; } .dataTable tr.stale td:last-child { opacity: 1; color: #f5c842; }   /* 35일 넘은 PSA 10 표본 — 랭킹 표와 같은 흐림·노란 날짜(2026-11-05) */
+      .kfTable b.stale, .dataTable tr.stale td { color: var(--stale-ink, #9aa2b1); } .dataTable tr.stale td:last-child { color: #f5c842; }   /* 35일 넘은 PSA 10 표본 — 랭킹 표와 같은 흐림·노란 날짜(2026-11-05) */
     </style>
   </head>
   <body>

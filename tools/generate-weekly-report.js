@@ -99,8 +99,8 @@ const html = `<!doctype html>
       <p>The numbers below are generated directly from our weekly tracking series — Japanese sealed box market values and PSA population deltas — for the week ending ${asOf}. Every figure links to the live set page where you can inspect the full chart.</p>
 
       <h2>Japanese boxes: week-over-week movers</h2>
-      ${gainers.length ? `<p><strong>Up:</strong></p><div class="tblWrap"><table class="dataTable"><thead><tr><th>Set</th><th>Last wk</th><th>This wk</th><th>WoW</th></tr></thead><tbody>${gainers.map(tr).join("")}</tbody></table></div>` : "<p>No Japanese box moved up more than 1% this week.</p>"}
-      ${losers.length ? `<p><strong>Down:</strong></p><div class="tblWrap"><table class="dataTable"><thead><tr><th>Set</th><th>Last wk</th><th>This wk</th><th>WoW</th></tr></thead><tbody>${losers.map(tr).join("")}</tbody></table></div>` : "<p>No Japanese box fell more than 1% this week.</p>"}
+      ${gainers.length ? `<p><strong>Up:</strong></p><div class="tblWrap"><table class="dataTable tblFit"><thead><tr><th>Set</th><th>Last wk</th><th>This wk</th><th>WoW</th></tr></thead><tbody>${gainers.map(tr).join("")}</tbody></table></div>` : "<p>No Japanese box moved up more than 1% this week.</p>"}
+      ${losers.length ? `<p><strong>Down:</strong></p><div class="tblWrap"><table class="dataTable tblFit"><thead><tr><th>Set</th><th>Last wk</th><th>This wk</th><th>WoW</th></tr></thead><tbody>${losers.map(tr).join("")}</tbody></table></div>` : "<p>No Japanese box fell more than 1% this week.</p>"}
       <p class="srcNoteA">Weekly ungraded market values, USD-converted. Boxes within ±1% are treated as flat and omitted.</p>
 
       <h2>Grading activity${gradesWeek ? ` (week of ${gradesWeek})` : ""}</h2>

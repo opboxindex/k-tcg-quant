@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"OP Box Index","item":"https://opboxindex.com/"},{"@type":"ListItem","position":2,"name":"한국어 시세","item":"https://opboxindex.com/ko/"},{"@type":"ListItem","position":3,"name":"아마존 응모 (초대판매)","item":"https://opboxindex.com/ko/amazon-lottery.html"}]}</script>
     <link rel="preload" href="../fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="../styles.css?v=20261102epn" />
+    <link rel="stylesheet" href="../styles.css?v=20261118design2" />
     <meta name="theme-color" content="#0a0c10" />
     <style>
       .koBoard { width: 100%; max-width: 860px; border-collapse: collapse; font-size: 13.5px; margin: 10px 0; }
@@ -61,9 +61,11 @@
         .koBoard td.l small { font-size: 11.5px; }
         .koBoard img.cardThumb { width: 30px; height: 42px; }
         .koBoard td.l .cardCell { gap: 7px; min-width: 0; }
+        /* 그레이딩 표: 옆으로 밀어도 세트 칸이 남게(2026-11-18) — 행 첫 칸이 td.l 인 표만(.koGrad) */
+        .koGrad :is(td.l, th.l) { position: sticky; left: 0; z-index: 1; background: var(--bg); min-width: 92px; }
       }
       .koBoard th.w, .koBoard td.w { white-space: normal; }
-      .koBoard td.stale, .koBoard span.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
+      .koBoard td.stale, .koBoard span.stale { color: var(--stale-ink, #9aa2b1); }   /* 낡은 값(NM 28일·PSA 10 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .koBoard td.l a { color: var(--accent); }
       .koSteps { color: #cfd6e4; font-size: 13.5px; line-height: 1.8; max-width: 760px; padding-left: 20px; margin: 8px 0 14px; }
     </style>

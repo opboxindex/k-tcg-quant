@@ -104,6 +104,14 @@ ${KF_CSS_ANY}
       .mkTable td small { display: block; color: var(--muted); font-size: 11.5px; }
       .mkTable .up { color: var(--accent); } .mkTable .down { color: var(--red); }
       .mkNote { color: var(--muted); font-size: 12.5px; line-height: 1.6; margin: 6px 0 0; }
+      .mkTable tbody th small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 500; }
+      /* 폰: Month 열이 화면의 60%를 먹어 7열 중 2열만 보였다(2026-11-18) — 머리글 두 줄, 첫 열 고정, 넘치는 쪽 흐림 */
+      @media (max-width: 640px) {
+        .mkWrap { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 24px), transparent); }
+        .mkTable th, .mkTable td { padding: 7px 6px; }
+        .mkTable thead th { white-space: normal; vertical-align: bottom; min-width: 64px; line-height: 1.3; }
+        .mkTable thead th:first-child, .mkTable tbody th { position: sticky; left: 0; z-index: 1; background: var(--bg); }
+      }
     </style>
   </head>
   <body>
@@ -117,7 +125,7 @@ ${KF_CSS_ANY}
       <h1 data-ko="원피스 카드 시장 ${esc(year)} — 월별">One Piece card market ${esc(year)} — by month</h1>
       ${kf}
       <h2 id="by-month" data-ko="${esc(year)} 월별">${esc(year)} by month</h2>
-      <div class="mkWrap"><table class="mkTable">
+      <div class="mkWrap" role="region" tabindex="0" aria-labelledby="by-month"><table class="mkTable">
         <thead><tr><th data-ko="월">Month</th><th data-ko="일본판 박스 중앙값">JP box median</th><th data-ko="영문판 박스 중앙값">EN box median</th><th data-ko="4주 등락 (일본판)">4-wk ▲ / ▼ (JP)</th><th data-ko="PSA 등급 증가">PSA grades added</th><th data-ko="이베이 경매 낙찰">eBay auctions sold</th><th data-ko="기준일">As of</th></tr></thead>
         <tbody>
 ${trs}

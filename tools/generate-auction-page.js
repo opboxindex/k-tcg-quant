@@ -290,6 +290,9 @@ function main() {
         .kpi { padding: 10px 8px; }
         /* 390px 에서 "Median sold price" 만 두 줄이 돼 숫자 줄이 어긋났다 — 라벨 높이를 두 줄로 맞춘다. */
         .kpi .lbl { min-height: 2.5em; line-height: 1.25; }
+        /* 390px 에서 막대(약 14px)보다 n/7 라벨(26px)이 넓어 '4/75/75/7…'로 겹쳤다 — 점선 주(7일 미만)만 라벨을 남긴다(값은 아래 표에 그대로). */
+        .col:not(.short) .dn { visibility: hidden; }
+        .col .dn { left: -3px; right: -3px; font-size: 10px; letter-spacing: -.02em; }
       }
 
       /* ⑤ 종류별 · ⑥ 세트별 */
@@ -302,6 +305,8 @@ function main() {
       .setName { display: block; margin-top: 0; color: var(--muted); font-size: 12.5px; white-space: normal; }
       .foot { margin-top: 16px; font-size: 12.5px; color: var(--muted); }
       .foot a { display: inline-block; padding: 7px 0; color: var(--accent); }
+      /* 세트 칸 링크(a.setCode, 위아래 5px)만큼 숫자가 위로 떠 있었다 — 숫자 칸을 세트 코드 줄에 맞춘다(2026-11-18) */
+      #sets .t tbody td:not(.l) { padding-top: 22px; }
       @media (max-width: 480px) { .t td, .t th { padding-left: 8px; padding-right: 8px; } }
     </style>
     <link rel="stylesheet" href="auction-dashboard.css?v=${CACHE}" />

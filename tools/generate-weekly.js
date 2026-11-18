@@ -133,13 +133,21 @@ const html = `<!doctype html>
       .wkTable td.num { text-align: right; white-space: nowrap; }
       .wkTable td.up, .wkTable small.up { color: var(--accent); } .wkTable td.down, .wkTable small.down { color: var(--red); } .wkTable td.flat { color: #9aa4b6; }
       .wkTable small { font-size: 11.5px; color: var(--muted); }
-      .wkTable tr.stale td { opacity: .6; } .wkTable tr.stale td .when { opacity: 1; color: #f5c842; }
+      /* 낡은 행 — 투명도 대신 색으로 흐린다(2026-11-18, 대비 미달 27건). 등락 색은 한 단계 어둡게, 날짜 꼬리표(.when)는 노랑 그대로. */
+      .wkTable tr.stale td { color: var(--muted); } .wkTable tr.stale td b { color: #c3cad8; }
+      .wkTable tr.stale :is(td.up, small.up) { color: #2fa3b6; } .wkTable tr.stale :is(td.down, small.down) { color: #e0596a; }
+      .wkTable tr.stale td .when { color: #f5c842; }
       .wkSummary { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 6px; }
       .wkSummary span { padding: 5px 11px; border: 1px solid #2a3140; border-radius: 999px; font-size: 12.5px; color: #cfd6e4; font-variant-numeric: tabular-nums; }
       .wkSummary b { color: #eef2ff; }
       h2 { margin-top: 30px; }
       .note { color: #9aa4b6; font-size: 12.5px; line-height: 1.6; }
-      @media (max-width: 640px) { .wkTable td:nth-child(2) { display: none; } .wkTable th:nth-child(2) { display: none; } }
+      /* 세트 코드 한 줄('OP-'/'10' 두 줄로 행이 두 배였다), 이름 열은 왼쪽(공용 규칙이 오른쪽으로 덮었다) — 2026-11-18 */
+      .wkTable td:first-child { white-space: nowrap; }
+      .bodyPage table.wkTable :is(th, td):nth-child(2) { text-align: left; }
+      @media (max-width: 640px) { .wkTable td:nth-child(2) { display: none; } .wkTable th:nth-child(2) { display: none; }
+        .wkTable th, .wkTable td { padding: 7px 6px; }
+        .wkTable :is(th, td):first-child { position: sticky; left: 0; z-index: 1; background: var(--bg); } }
     </style>
   </head>
   <body>

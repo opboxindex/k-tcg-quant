@@ -10,14 +10,14 @@
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261102epn" />
-    <script defer src="lang-toggle.js?v=20261102epn"></script>
+    <link rel="stylesheet" href="styles.css?v=20261118design2" />
+    <script defer src="lang-toggle.js?v=20261118design2"></script>
     <script>
       // 2026-10-08: 첫 화면은 정적 선렌더(prerender-home.js)라 JSON 이 첫 그리기에 필요 없다. 1MB 를 첫 그리기 전에 받아 파싱하면
       // 느린 폰에서 그만큼 그리기가 늦어진다(라이트하우스 실측). load 뒤에 받고, 받으면 packs.js 가 같은 화면을 다시 그린다.
       window.__opPackData = new Promise(function (resolve) {
         var go = function () {
-          resolve(fetch("data/onepiece-packs.json?v=20261102epn", { cache: "default", priority: "low" })
+          resolve(fetch("data/onepiece-packs.json?v=20261118design2", { cache: "default", priority: "low" })
             .then(function (r) { return r.ok ? r.json() : null; })
             .catch(function () { return null; }));
         };
@@ -1256,6 +1256,6 @@
       </nav>
     </footer>
 
-    <script data-home-js>(function(){function go(){["packs.js?v=20261102epn"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
+    <script data-home-js>(function(){function go(){["packs.js?v=20261118design2"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
   </body>
 </html>

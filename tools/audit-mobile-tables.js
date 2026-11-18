@@ -27,6 +27,10 @@ const DEFAULT_PAGES = [
   "/psa-grading.html", "/compare.html", "/psa10-ranking.html", "/articles/japan-vs-english.html", "/cards/", "/sets/eb-05-english.html", "/sets/op-13-english.html", "/sets/op-13-card-list.html",
   // 2026-11-05 기준 라벨을 단 두 리포트 — OP-16 리포트 가격 표는 폭 안(354px)인데 흐림이 걸려 있었다(.tblFit 로 정정)
   "/articles/op-16-box-price-30-days-later.html", "/articles/japanese-vs-english-box-price-data-2026.html",
+  // 2026-11-18 디자인 점검 — 폭 안(354px) 표에 흐림이 걸려 있던 글 3개와 카드 페이지 표본(.tblFit 로 정정)
+  "/articles/one-piece-booster-box-price-guide.html", "/articles/psa-population-and-prices.html", "/articles/weekly-market-report-2026-07-16.html",
+  "/cards/op13-118-monkey-d-luffy-118-super-alternate-art.html", "/cards/op01-003-monkey-d-luffy-003-parallel.html",
+  "/weekly.html", "/market-2026.html", "/free-data.html", "/ko/grading.html",
 ];
 // 인자는 저장소 상대 경로(sets/op-17.html) — 앞의 / 는 붙여 준다(Git Bash 는 /로 시작하는 인자를 윈도우 경로로 바꾼다).
 const pages = process.argv.slice(2).length ? process.argv.slice(2).map((a) => "/" + a.replace(/^\/+/, "")) : DEFAULT_PAGES;

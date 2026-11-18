@@ -26,7 +26,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"원피스 부스터박스 시세는 어디 기준인가요?","acceptedAnswer":{"@type":"Answer","text":"이베이 실거래 중앙값의 원화 환산값입니다(환율 ₩1336.21/$, 2026-11-17)."}},{"@type":"Question","name":"변동률은 발매일 대비인가요?","acceptedAnswer":{"@type":"Answer","text":"아니요. 각 세트 판매 중앙값을 그 28일 전 중앙값과 비교한 값입니다."}}]}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"원피스 부스터박스 시세 (일본판)","description":"일본판 원피스 카드게임 부스터박스 전 세트의 원화 시세, 4주 변동률(28일 전 중앙값 대비), 재판 기록. 매일 갱신.","inLanguage":"ko","isAccessibleForFree":true,"temporalCoverage":"2026-08-19/2026-11-18","dateModified":"2026-11-18","url":"https://opboxindex.com/ko/","license":"https://creativecommons.org/licenses/by/4.0/","distribution":[{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl":"https://opboxindex.com/opbox-set-prices.csv"}],"creator":{"@type":"Organization","name":"OP Box Index","url":"https://opboxindex.com/"}}</script>
     <link rel="preload" href="../fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="../styles.css?v=20261102epn" />
+    <link rel="stylesheet" href="../styles.css?v=20261118design2" />
     <meta name="theme-color" content="#0a0c10" />
     <style>
       .ixHero { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin: 6px 0 2px; }
@@ -43,16 +43,31 @@
       .koBoard td.code { font-weight: 700; color: #cfd6e4; }
       .koBoard td.nm { color: #9aa4b6; }
       .rpDot { display: inline-block; background: rgba(255,125,60,.15); color: #ff9d6c; border-radius: 6px; padding: 1px 7px; font-weight: 700; font-size: 12px; }
-      .rpNone { color: #6a7182; font-size: 12px; }
+      .rpNone { color: var(--muted); font-size: 12px; }
       .koLinks { list-style: none; padding: 0; margin: 8px 0; max-width: 760px; color: #9aa4b6; font-size: 14px; line-height: 1.9; }
       .fromDate { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; }
       .koBoard td.code a { color: var(--accent); text-decoration: none; font-weight: 700; }
+      /* 2026-11-18 휴대폰 시세표 — 세트 코드 한 줄, 이름은 낱말 단위로 줄바꿈. 공용 규칙(styles.css .bodyPage table:not(.text) …, 0,3,2)이
+         이름·재판 칸을 오른쪽 정렬로 덮던 것을 같은 특이성의 뒤 규칙으로 되돌린다. 폰에서는 재판 열 대신 이름 아래 배지(.rpM). */
+      .koBoard :is(td.code, td.l:first-child), .koBoard time { white-space: nowrap; }
+      .bodyPage table.koBoard :is(td.nm, td.rp, th.l) { text-align: left; }
+      .koBoard td.nm { word-break: keep-all; }
+      .koPrice .rpM { display: none; }
+      .koUpcoming td { word-break: keep-all; }
+      .koUpcoming td small { white-space: nowrap; }
+      @media (max-width: 560px) {
+        .bodyPage table.koPrice { font-size: 13.5px; }
+        .bodyPage table.koPrice :is(th, td) { padding: 7px 4px; }
+        .bodyPage table.koBoard thead th { white-space: normal; word-break: keep-all; }
+        .koPrice :is(th:nth-child(5), td.rp) { display: none; }
+        .koPrice .rpM { display: block; margin-top: 3px; }
+      }
       .owMeter { display: flex; gap: 8px; align-items: flex-end; height: 120px; max-width: 520px; margin: 12px 0; }
       .owBar { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 4px; }
       .owBar span { width: 100%; background: #ff7d3c; opacity: .6; border-radius: 4px 4px 0 0; min-height: 6px; }
       .owBar:last-child span { opacity: 1; }
       .owBar small { font-size: 11.5px; color: var(--muted); }
-      .koFacts { margin: 14px 0; padding: 12px 16px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.7; }
+      .koFacts { margin: 14px 0; padding: 12px 16px 12px 34px; border: 1px solid rgba(var(--accent-rgb), .28); background: rgba(var(--accent-rgb), .05); border-radius: 12px; max-width: 760px; font-size: 14px; line-height: 1.7; }
       .koFacts strong { color: var(--accent); }
       .koNote { color: var(--muted); font-size: 12.5px; max-width: 760px; margin: 8px 0 14px; line-height: 1.6; }
       main h2 { font-size: 18px; margin: 24px 0 6px; }
@@ -87,7 +102,7 @@
         
         <p class="koNote">시세 = 이베이 실거래 중앙값(원화 환산) · 아래 날짜 = 그 중앙값의 날짜 · 변동률 = <strong>28일 전 중앙값 대비</strong>(기준일 행마다, 발매일 대비 아님) · — = 28일 안에 날짜가 찍힌 중앙값 없음(중앙값 = 판매 6건 이상) · 재판 = 유통사·리테일러 재입고 + 반다이남코샵 재판(再販) 추첨판매</p>
         <div style="overflow-x:auto">
-        <table class="koBoard">
+        <table class="koBoard koPrice tblFit">
           <thead><tr><th class="l">세트</th><th class="l">이름</th><th>일판 박스 시세 (기준일)</th><th>4주 등락</th><th class="l">재판</th></tr></thead>
           <tbody>
 <tr>
@@ -108,14 +123,14 @@
     <td class="code"><a href="op-03.html">OP-03</a></td>
     <td class="nm">강대한 적</td>
     <td class="num">—</td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpNone">재판 기록 없음</span></td>
   </tr>
 <tr>
     <td class="code"><a href="op-04.html">OP-04</a></td>
     <td class="nm">모략의 왕국</td>
     <td class="num">—</td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpNone">재판 기록 없음</span></td>
   </tr>
 <tr>
@@ -127,9 +142,9 @@
   </tr>
 <tr>
     <td class="code"><a href="op-06.html">OP-06</a></td>
-    <td class="nm">쌍벽의 패자</td>
+    <td class="nm">쌍벽의 패자<span class="rpM"><span class="rpDot" title="2024-04-12 · 리테일러 재입고">재판 1회</span></span></td>
     <td class="num">—</td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpDot" title="2024-04-12 · 리테일러 재입고">재판 1회</span></td>
   </tr>
 <tr>
@@ -143,12 +158,12 @@
     <td class="code"><a href="op-08.html">OP-08</a></td>
     <td class="nm">두 개의 전설</td>
     <td class="num">—</td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpNone">재판 기록 없음</span></td>
   </tr>
 <tr>
     <td class="code"><a href="op-09.html">OP-09</a></td>
-    <td class="nm">새로운 황제</td>
+    <td class="nm">새로운 황제<span class="rpM"><span class="rpDot" title="2024-10 · 반다이남코샵 재판(再販) 추첨판매">재판 1회</span></span></td>
     <td class="num">145,647원<small class="fromDate">2026-11-08</small></td>
     <td class="num down">-22.7%<small class="fromDate">2026-10-11 대비</small></td>
     <td class="rp"><span class="rpDot" title="2024-10 · 반다이남코샵 재판(再販) 추첨판매">재판 1회</span></td>
@@ -162,7 +177,7 @@
   </tr>
 <tr>
     <td class="code"><a href="op-11.html">OP-11</a></td>
-    <td class="nm">신속의 권</td>
+    <td class="nm">신속의 권<span class="rpM"><span class="rpDot" title="2025-06-28 · 리테일러 재입고">재판 1회</span></span></td>
     <td class="num">160,345원<small class="fromDate">2026-10-31</small></td>
     <td class="num up">+0.0%<small class="fromDate">2026-10-03 대비</small></td>
     <td class="rp"><span class="rpDot" title="2025-06-28 · 리테일러 재입고">재판 1회</span></td>
@@ -176,7 +191,7 @@
   </tr>
 <tr>
     <td class="code"><a href="op-13.html">OP-13</a></td>
-    <td class="nm">계승되는 의지</td>
+    <td class="nm">계승되는 의지<span class="rpM"><span class="rpDot" title="2025-09 · 리테일러 재입고 / 2025-11 · 리테일러 재입고">재판 2회</span><small class="fromDate" title="발매 후 반다이 공식 추첨판매 1회(2025-12)">발매 후 추첨 1회</small></span></td>
     <td class="num">168,362원<small class="fromDate">2026-11-12</small></td>
     <td class="num down">-2.3%<small class="fromDate">2026-10-15 대비</small></td>
     <td class="rp"><span class="rpDot" title="2025-09 · 리테일러 재입고 / 2025-11 · 리테일러 재입고">재판 2회</span><small class="fromDate" title="발매 후 반다이 공식 추첨판매 1회(2025-12)">발매 후 추첨 1회</small></td>
@@ -197,7 +212,7 @@
   </tr>
 <tr>
     <td class="code"><a href="op-16.html">OP-16</a></td>
-    <td class="nm">결전의 시간</td>
+    <td class="nm">결전의 시간<span class="rpM"><small class="fromDate" title="발매 후 반다이 공식 추첨판매 1회(2026-06)">발매 후 추첨 1회</small></span></td>
     <td class="num">128,276원<small class="fromDate">2026-11-15</small></td>
     <td class="num up">+0.0%<small class="fromDate">2026-10-18 대비</small></td>
     <td class="rp"><span class="rpNone">재판 기록 없음</span><small class="fromDate" title="발매 후 반다이 공식 추첨판매 1회(2026-06)">발매 후 추첨 1회</small></td>
@@ -211,9 +226,9 @@
   </tr>
 <tr>
     <td class="code"><a href="eb-01.html">EB-01</a></td>
-    <td class="nm">메모리얼 컬렉션</td>
+    <td class="nm">메모리얼 컬렉션<span class="rpM"><span class="rpDot" title="2024-08-28 · 유통사 재입고">재판 1회</span></span></td>
     <td class="num">—</td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpDot" title="2024-08-28 · 유통사 재입고">재판 1회</span></td>
   </tr>
 <tr>
@@ -234,12 +249,12 @@
     <td class="code"><a href="eb-05.html">EB-05</a></td>
     <td class="nm">Heroines Edition vol.2</td>
     <td class="num">145,647원<small class="fromDate">2026-11-16</small></td>
-    <td class="num up">—</td>
+    <td class="num ">—</td>
     <td class="rp"><span class="rpNone">재판 기록 없음</span></td>
   </tr>
 <tr>
     <td class="code"><a href="prb-01.html">PRB-01</a></td>
-    <td class="nm">프리미엄 부스터 vol.1</td>
+    <td class="nm">프리미엄 부스터 vol.1<span class="rpM"><span class="rpDot" title="유통사 재입고">재판 1회</span></span></td>
     <td class="num">153,664원<small class="fromDate">2026-11-13</small></td>
     <td class="num down">-23.3%<small class="fromDate">2026-10-16 대비</small></td>
     <td class="rp"><span class="rpDot" title="유통사 재입고">재판 1회</span></td>
@@ -267,7 +282,7 @@
       <section aria-label="발매 예정 세트">
         <h2>발매 예정 세트 · 발매일</h2>
         <div style="overflow-x:auto">
-        <table class="koBoard">
+        <table class="koBoard koUpcoming tblFit">
           <thead><tr><th class="l">세트</th><th>영문판 발매일</th><th>일본판 발매일</th><th>최저 호가 (이베이 · 배송비 포함)</th></tr></thead>
           <tbody>
             <tr><td class="l"><a href="op-18.html"><strong>OP-18</strong></a></td><td><time datetime="2026-11-20">2026-11-20</time></td><td><time datetime="2026-11-21">2026-11-21</time></td><td>일본판 $105 · 영문판 $210 <small>(2026-11-18)</small></td></tr>

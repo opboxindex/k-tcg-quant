@@ -113,9 +113,7 @@ const fit = (cands, max, what) => {
 const seen = new Set();
 const unique = (t) => { if (seen.has(t)) throw new Error(`타이틀 중복: ${t}`); seen.add(t); return t; };
 
-const CSS = `      .clSummary { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 12px 0 2px; color: var(--muted); font-size: 14px; }
-      .clSummary b { color: var(--ink); font-family: var(--font-display); font-size: 17px; font-variant-numeric: tabular-nums; }
-      .clMeta { margin: 6px 0 0; max-width: 900px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+const CSS = `      .clMeta { margin: 6px 0 0; max-width: 900px; color: var(--muted); font-size: 13px; line-height: 1.65; }
       .clMeta b { color: var(--ink); font-variant-numeric: tabular-nums; }
       .clLinks { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; font-size: 14px; }
       .bodyPage table.clTable { width: 100%; min-width: 0; margin: 16px 0 8px; font-size: 13.5px; }
@@ -139,7 +137,7 @@ const CSS = `      .clSummary { display: flex; flex-wrap: wrap; gap: 4px 14px; m
       .bodyPage table.clMini :is(th, td):not(.num) { text-align: left; }
       .clMini td.num, .clMini th.num { text-align: right; white-space: nowrap; }
       .clMini td small { display: block; color: var(--muted); font-size: 11.5px; }
-      .clMini td.stale { opacity: .62; }   /* 낡은 값(NM 28일·PSA 10 sold 35일) — 날짜는 두고 흐리게(2026-11-05) */
+      .clMini td.stale { color: var(--stale-ink, #9aa2b1); }   /* 낡은 값(NM 28일·PSA 10 sold 35일) — 날짜는 두고 흐리게(2026-11-05) */
       .bodyPage h2.clH2 { margin: 22px 0 2px; font-size: 18px; }
       @media (max-width: 900px) { .bodyPage table.clMini { display: table; overflow: visible; -webkit-mask-image: none; mask-image: none; } }
 ${KF_CSS}`;

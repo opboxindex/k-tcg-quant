@@ -90,7 +90,7 @@ const byAdd = [...rows].filter((r) => r.jp.psa && r.jp.psa.add != null).sort((a,
 const addTr = (r) => `<tr>${setCell(r, 36)}${GR.map((k) => `<td class="num ${k}">${r.jp[k] && r.jp[k].add != null ? sn(r.jp[k].add) : "—"}</td>`).join("")}</tr>`;
 
 const TITLE = "One Piece PSA Population Report by Set (PSA, CGC, TAG)"; // 60자 이내. 실제 유입 검색어 "psa population" 에 맞춤(2026-09-22, GSC 노출 1위)
-const DESC = `One Piece PSA population report by set — PSA, CGC and TAG counts, Japanese and English separate, weekly change. ${rows.length} sets, updated ${updated}.`; // 155자 이내(2026-09-22)
+const DESC = `One Piece PSA population report by set — PSA, CGC and TAG counts, Japanese and English separate, change since last report. ${rows.length} sets, updated ${updated}.`; // 155자 이내(2026-09-22)
 if (DESC.length > 155) throw new Error(`psa-grading description ${DESC.length} > 155`);
 const html = `<!doctype html>
 <html lang="en">

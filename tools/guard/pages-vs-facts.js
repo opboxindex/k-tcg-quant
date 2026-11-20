@@ -202,14 +202,19 @@ function koCards(f, h, s) {
   const days = seen.map((c) => c.nm.date).filter((x) => ISO.test(x || "")).sort();
   if (seen.length) cmp("NM1", f, "인기 카드 관측일", first(sec, /관측일 ([\d~-]+)/), days.length ? (days[0] === days.at(-1) ? days[0] : `${days[0]}~${days.at(-1)}`) : null);
 }
+// 2026-11-20: PSA 일본판 누적 칸에 <small> 증가 꼬리표(원장 두 점 "MM-DD~MM-DD N일 +X장")가 붙는다 — 종전 정규식은 <small> 이 있는 칸을
+//   통째로 건너뛰어(칸이 [^<]* 로 끝나야 했다) PSA 일본판 행을 한 번도 대조하지 않았다. 꼬리표는 사실 grading.psa.jp.change 와 글자 그대로 맞춘다
+//   (영문판은 꼬리표를 쓰지 않는다 — 있으면 FAIL).
 function koGrading(f, h, s) {
-  for (const m of h.matchAll(/<td class="l"[^>]*>(PSA|CGC|TAG) (일본판|영문판)<\/td><td class="num">([^<]*)<\/td><td class="l">([^<]*)<\/td>/g)) {
+  for (const m of h.matchAll(/<td class="l"[^>]*>(PSA|CGC|TAG) (일본판|영문판)<\/td><td class="num">([^<]*)(?:<small>([^<]*)<\/small>)?<\/td><td class="l">([^<]*)<\/td>/g)) {
     const g = s.grading[m[1].toLowerCase()][m[2] === "일본판" ? "jp" : "en"], what = `${m[1]} ${m[2]}`;
     cmp("G9", f, `${what} 누적`, m[3], g ? g.total : null);
     if (!g) continue;
-    if (m[1] === "PSA") cmp("G9", f, `${what} 젬률`, first(m[4], /PSA 10 ([\d.]+)%/), g.gemRate);
-    if (m[1] === "CGC") { cmp("G9", f, `${what} 프리스틴 10`, first(m[4], /프리스틴 10 ([\d,]+)장/), g.pristine10 ?? null); cmp("G9", f, `${what} 젬 민트 10`, first(m[4], /젬 민트 10 ([\d,]+)장/), g.gemMint10 ?? null); }
-    if (m[1] === "TAG") { cmp("G9", f, `${what} 10`, first(m[4], /\b10 ([\d,]+)장/), g.g10 ?? null); cmp("G9", f, `${what} 10P`, first(m[4], /10P ([\d,]+)장/), g.g10p ?? null); }
+    const ch = m[1] === "PSA" && m[2] === "일본판" ? g.change : null;
+    cmp("G9", f, `${what} 증가`, m[4] ?? null, ch ? `${ch.from.slice(5)}~${ch.to.slice(5)} ${ch.days}일 +${Number(ch.add).toLocaleString("ko-KR")}장` : null);
+    if (m[1] === "PSA") cmp("G9", f, `${what} 젬률`, first(m[5], /PSA 10 ([\d.]+)%/), g.gemRate);
+    if (m[1] === "CGC") { cmp("G9", f, `${what} 프리스틴 10`, first(m[5], /프리스틴 10 ([\d,]+)장/), g.pristine10 ?? null); cmp("G9", f, `${what} 젬 민트 10`, first(m[5], /젬 민트 10 ([\d,]+)장/), g.gemMint10 ?? null); }
+    if (m[1] === "TAG") { cmp("G9", f, `${what} 10`, first(m[5], /\b10 ([\d,]+)장/), g.g10 ?? null); cmp("G9", f, `${what} 10P`, first(m[5], /10P ([\d,]+)장/), g.g10p ?? null); }
   }
 }
 
@@ -382,10 +387,16 @@ function weekly() {
       cmp("WK1", w, "Last week", cs[2], x.prev ? x.prev.median : null); cmp("WK1", w, "This week", cs[3], x.last.median); cmp("WK1", w, "WoW", cs[4], x.wow); cmp("WK1", w, "4-wk", cs[5], x.c4);
       cmp("WK1", w, "Sales", first(cs[6], /^(\S+)/), x.last.vol); cmp("WK1", w, "n", first(cs[6], /n=(\d+)/), x.last.n); cmp("WK1", w, "Listed", first(cs[7], /^(\S+)/), x.listed);
     } else if (cs.length === 5) {
-      const p = S[code].psaWeekly; cmp("WK1", w, "New PSA grades", cs[2], p ? p.last.v : null); if (p) { cmp("WK1", w, "Prev week", cs[3], p.prev ? p.prev.v : null); if (p.prev) cmp("WK1", w, "WoW", cs[4], (p.last.v / p.prev.v - 1) * 100); }
+      // 등급 표(2026-11-20): 직전 값은 바로 앞 구간(prev.d = 이번 구간 시작 f)일 때만, % 는 두 구간 날짜 수가 같을 때만 — generate-weekly 와 같은 규칙.
+      const p = S[code].psaWeekly, prev = p && p.prev && p.prev.d === p.last.f ? p.prev : null;
+      cmp("WK1", w, "New grades", cs[2], p ? p.last.v : null);
+      if (p) { cmp("WK1", w, "Previous interval", cs[3], prev ? prev.v : null); cmp("WK1", w, "Change %", cs[4], prev && prev.v > 0 && prev.days === p.last.days ? (p.last.v / prev.v - 1) * 100 : null); }
     }
   }
   if (!n) cmp("WK1", "weekly.html", "표 행", null, "행을 읽어야 한다");
+  // 등급 표 제목의 구간 = 사실 psaWeekly.gradeTo 로 끝나는 구간(시작 → 끝, 날짜 수). 10일 넘게 낡았으면(gradeTo null) 표가 없어야 한다.
+  const iv = F.psaWeekly.gradeTo ? F.psaWeekly.intervals.find((x) => x.d === F.psaWeekly.gradeTo) : null;
+  cmp("WK1", "weekly.html", "PSA 구간", first(h, /population snapshots (\d{4}-\d{2}-\d{2} → \d{4}-\d{2}-\d{2} \(\d+ days?\))<\/h2>/), iv ? `${iv.f} → ${iv.d} (${iv.days} day${iv.days === 1 ? "" : "s"})` : null);
   const ds = ldFlat(h).find((j) => j["@type"] === "Dataset"); if (ds) cmp("DS1", "weekly.html", "Dataset 기간", ds.temporalCoverage, `${W.weekStart}/${W.weekEnd}`);
 }
 function articles() {

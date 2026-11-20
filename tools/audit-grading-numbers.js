@@ -5,7 +5,11 @@
 //
 // 검사 항목
 //   G1 젬률 = PSA10 ÷ 총량 (반올림 오차 0.1%p 이내)
-//   G2 주간 증감(wowAdd/wowPct)이 판별 원장의 마지막 두 점과 일치
+//   G2 판별 원장(psa-edition-weekly)과 화면 증감 — 2026-11-20 개편(wowAdd·wowPct·wowSpark·psaWow → change)
+//      G2a 원장 모양: weeks 오름차순·ISO 주마다 한 날 / 계열마다 점 날짜 = 첫 점 이후의 weeks / 누적 g 감소 없음 / m ≤ g
+//      G2b psaFull(En).change {from,to,days,add,pct,spark} 가 원장 마지막 두 점에서 다시 계산한 값과 정확히 같다(pct 만 ±0.15).
+//          두 점이 있는데 change 가 없거나, 두 점이 없는데 change 가 있거나, 옛 wowAdd·wowPct·wowSpark·psaWow 가 남으면 실패
+//      G2c 일본판 세트 증가 이력(packs psaWeekly.points {d, v, f})의 구간 f→d 가 gemrate-psa-history.retainedWeeklyDates 와 맞다
 //   G3 CGC 최상위 등급 합(Pristine 10 + Gem Mint 10 + Perfect 10)이 총량을 넘지 않음
 //   G4 TAG 10 + 10P 가 총량을 넘지 않음
 //   G5 등급 수가 총량보다 큰 항목이 없음
@@ -21,6 +25,7 @@ const ROOT = path.resolve(__dirname, "..");
 const rd = (p) => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, "data", p), "utf8")); } catch { return null; } };
 const pk = rd("onepiece-packs.json");
 const led = rd("psa-edition-weekly.json");
+const hist = rd("gemrate-psa-history.json");
 const cgc = rd("cgc-grading-history.json");
 const tag = rd("tag-grading-history.json");
 
@@ -29,6 +34,40 @@ const warn = [];
 // 누적 감소 후보. 루프가 끝난 뒤 같은 등급사·판·날짜에 몇 세트가 함께 줄었는지로 판정한다(아래 참조).
 const drops = [];
 const codes = [...(pk.jp?.list || []), ...(pk.extra?.list || [])];
+
+// 날짜 계산은 UTC 일 번호로 한다 — 원장 날짜가 전부 UTC 날짜라 시간대에 따라 하루가 밀리면 days 가 틀린다.
+const DAY = 86400000;
+const dayNum = (d) => Date.parse(`${d}T00:00:00Z`) / DAY;
+const isoOf = (n) => new Date(n * DAY).toISOString().slice(0, 10);
+// 같은 ISO 주 = 같은 월요일. 주 번호(연도 경계 계산)를 만들 필요 없이 월요일만 비교하면 된다.
+const mondayOf = (d) => { const n = dayNum(d); return n - ((new Date(n * DAY).getUTCDay() + 6) % 7); };
+
+// ── G2a. 판별 원장 모양 — 2026-11-20.
+//    공유 점 = ISO 주마다 수요일, 없으면 주가 끝난 뒤 수요일에 가장 가까운 41계열 완전·비복사 날(tools/psa-snapshot-select.js).
+//    그래서 간격이 7일이 아닐 수 있다. 대신 "모든 계열이 같은 날짜를 공유한다"를 여기서 지킨다 — 그래야 change 의 from/to 가
+//    일본판·영문판 어느 계열에서나 같은 창이고, audit-series-gaps 의 합집합 주 판정이 곧 원장 주 판정이 된다.
+//    누적 감소 검사도 여기로 옮겼다(마지막 두 점만이 아니라 전 구간) — 누적이 줄면 수집이 다른 세트를 읽은 것이다(과거 실사고).
+const weeks = (led && led.weeks) || [];
+if (!led) errors.push("G2a data/psa-edition-weekly.json 을 못 읽었다");
+for (let i = 1; i < weeks.length; i++) {
+  if (!(weeks[i] > weeks[i - 1])) errors.push(`G2a weeks: ${weeks[i - 1]} → ${weeks[i]} 오름차순이 아니다`);
+  else if (mondayOf(weeks[i]) === mondayOf(weeks[i - 1])) errors.push(`G2a weeks: ${weeks[i - 1]}·${weeks[i]} 가 같은 ISO 주 — 주마다 한 점이어야 한다`);
+}
+for (const [code, eds] of Object.entries((led && led.sets) || {})) {
+  for (const [ed, arr] of Object.entries(eds || {})) {
+    if (!Array.isArray(arr) || !arr.length) continue;
+    const got = arr.map((p) => p.d), want = weeks.filter((w) => w >= got[0]);
+    if (got.join() !== want.join()) {
+      const miss = want.filter((d) => !got.includes(d)), extra = got.filter((d) => !want.includes(d));
+      errors.push(`G2a ${code}.${ed}: 점 날짜가 원장 weeks 와 다르다 — 빠진 날 [${miss.join(" ")}] · weeks 에 없는 날 [${extra.join(" ")}]${miss.length || extra.length ? "" : " · 순서·중복"}`);
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const p = arr[i];
+      if (!Number.isInteger(p.g) || !Number.isInteger(p.m) || p.m > p.g) errors.push(`G2a ${code}.${ed} ${p.d}: g(${p.g})·m(${p.m}) 가 정수가 아니거나 m > g`);
+      else if (i && p.g < arr[i - 1].g) errors.push(`G2a ${code}.${ed}: 누적 등급 수가 감소(${arr[i - 1].d} ${arr[i - 1].g} → ${p.d} ${p.g}) — 수집 오염 의심`);
+    }
+  }
+}
 
 for (const code of codes) {
   const s = pk.sets[code] || {};
@@ -50,25 +89,44 @@ for (const code of codes) {
     errors.push(`G6 ${code}: 일판·영판 PSA 총량이 동일(${s.psaFull.total}) — 복사 의심`);
   }
 
-  // ── G2. 주간 증감이 원장과 일치하는가
-  const wk = (led.weeks || []).slice(-2);
-  const rec = (led.sets || {})[code] || {};
+  // ── G2b. 화면 증감(change)이 원장 마지막 두 점과 정확히 같은가 — 2026-11-20(wowAdd·wowPct·wowSpark·psaWow 대체).
+  //    change = { from, to, days, add, pct, spark? } — [from, to] = weeks.slice(-2), days = UTC 일수 차, add = b.g − a.g,
+  //    pct = 반올림 1자리 %, spark = 그 계열 마지막 ≤12 구간의 [일수, Δg] 쌍(구간 4개 이상일 때만). 간격이 7일이 아닐 수 있어
+  //    화면은 반드시 from·to·일수를 같이 쓴다 — 그 숫자들이 원장과 하나라도 다르면 "며칠 사이 몇 장"이 거짓이 된다.
+  //    옛 필드가 남아 있으면 그걸 읽는 화면이 7일이 아닌 창을 "주간"으로 낼 수 있어 실패로 본다.
+  if (s.psaWow) errors.push(`G2b ${code}: 옛 psaWow 가 남아 있다 — inject-psa-wow 를 다시 돌려야 한다`);
+  const [wa, wb] = weeks.length >= 2 ? weeks.slice(-2) : [null, null];
+  const rec = ((led && led.sets) || {})[code] || {};
   for (const [ed, f] of [["jp", s.psaFull], ["en", s.psaFullEn]]) {
-    if (!f || f.wowAdd == null) continue;
+    if (!f) continue;
+    const left = ["wowAdd", "wowPct", "wowSpark"].filter((k) => k in f);
+    if (left.length) errors.push(`G2b ${code}.${ed}: 옛 필드 ${left.join("·")} 가 남아 있다 — inject-psa-wow 를 다시 돌려야 한다`);
     const arr = rec[ed] || [];
-    const a = arr.find((p) => p.d === wk[0]), b = arr.find((p) => p.d === wk[1]);
-    if (!a || !b) { errors.push(`G2 ${code}.${ed}: wowAdd(${f.wowAdd}) 가 있는데 원장에 두 점이 없다`); continue; }
-    const add = b.g - a.g;
-    if (add !== f.wowAdd) errors.push(`G2 ${code}.${ed}: 주간 증감 표시 ${f.wowAdd} ≠ 원장 ${add} (${wk[0]}→${wk[1]})`);
-    const pct = Math.round((add / a.g) * 1000) / 10;
-    if (f.wowPct != null && Math.abs(pct - f.wowPct) > 0.15) {
-      errors.push(`G2 ${code}.${ed}: 주간 증감률 표시 ${f.wowPct}% ≠ 계산 ${pct}%`);
+    const ia = wa ? arr.findIndex((p) => p.d === wa) : -1, ib = wb ? arr.findIndex((p) => p.d === wb) : -1;
+    const c = f.change;
+    if (ia < 0 || ib < 0) {
+      if (c) errors.push(`G2b ${code}.${ed}: change(${c.from}→${c.to}) 가 있는데 원장에 마지막 두 점(${wa}·${wb})이 다 있지 않다`);
+      continue;
     }
-    // 누적은 줄어들 수 없다 — 줄면 수집이 다른 세트를 읽은 것이다(과거 실사고).
-    if (add < 0) errors.push(`G2 ${code}.${ed}: 누적 등급 수가 감소(${a.g}→${b.g}) — 수집 오염 의심`);
+    if (!c) { errors.push(`G2b ${code}.${ed}: 원장에 ${wa}·${wb} 두 점이 있는데 change 가 없다 — inject-psa-wow 를 다시 돌려야 한다`); continue; }
+    const a = arr[ia], b = arr[ib];
+    const add = b.g - a.g, days = dayNum(wb) - dayNum(wa);
+    const pct = Math.round((add / a.g) * 1000) / 10;
+    const odd = Object.keys(c).filter((k) => !["from", "to", "days", "add", "pct", "spark"].includes(k));
+    if (odd.length) errors.push(`G2b ${code}.${ed}: change 에 정의 밖 필드 ${odd.join("·")}`);
+    if (c.from !== wa || c.to !== wb) errors.push(`G2b ${code}.${ed}: 증감 구간 표시 ${c.from}→${c.to} ≠ 원장 ${wa}→${wb}`);
+    if (c.days !== days) errors.push(`G2b ${code}.${ed}: 증감 일수 표시 ${c.days} ≠ 원장 ${days}일 (${wa}→${wb})`);
+    if (c.add !== add) errors.push(`G2b ${code}.${ed}: 증감 표시 ${c.add} ≠ 원장 ${add} (${wa}→${wb})`);
+    if (typeof c.pct !== "number" || Math.abs(c.pct - pct) > 0.15) errors.push(`G2b ${code}.${ed}: 증감률 표시 ${c.pct}% ≠ 계산 ${pct}%`);
+    const iv = [];
+    for (let i = 1; i <= ib; i++) iv.push([dayNum(arr[i].d) - dayNum(arr[i - 1].d), arr[i].g - arr[i - 1].g]);
+    const spark = iv.length >= 4 ? iv.slice(-12) : undefined;
+    if (JSON.stringify(c.spark) !== JSON.stringify(spark)) {
+      errors.push(`G2b ${code}.${ed}: spark ${JSON.stringify(c.spark ?? null)} ≠ 원장 재계산 ${JSON.stringify(spark ?? null)}`);
+    }
     // 원장 최신값과 화면 총량이 크게 다르면 둘 중 하나가 낡았다.
     if (Math.abs(b.g - f.total) > Math.max(50, f.total * 0.02)) {
-      warn.push(`${code}.${ed}: 화면 총량 ${f.total} vs 원장 최신 ${b.g} (${wk[1]}) 차이 큼`);
+      warn.push(`${code}.${ed}: 화면 총량 ${f.total} vs 원장 최신 ${b.g} (${wb}) 차이 큼`);
     }
   }
 
@@ -104,6 +162,31 @@ for (const code of codes) {
         break;
       }
     }
+  }
+}
+
+// ── G2c. 일본판 세트 증가 이력(packs psaWeekly.points {d, v, f})의 구간이 원장 보존일과 맞는가 — 2026-11-20.
+//    점 하나 = 직전 보존일(f) → d 사이에 새로 등급 받은 수다. 판별 원장과 같은 선택기로 날짜를 고르게 되면서 간격이 7일이 아닐 수
+//    있으므로, 화면이 "f → d (며칠)" 을 쓰려면 f 가 정확해야 한다. f = d 바로 앞 보존일, 첫 보존일이면 d − 7일(옛 점은 수요일 쌍이었다).
+//    v 값 자체는 가드 D3(tools/guard/ledgers.js)가 원장과 대조한다 — 여기서는 구간만 본다.
+{
+  const ret = (hist && hist.retainedWeeklyDates) || [];
+  const at = new Map(ret.map((d, i) => [d, i]));
+  for (const code of codes) {
+    const w = (pk.sets[code] || {}).psaWeekly;
+    if (!w) continue;
+    if (!hist) { errors.push(`G2c ${code}: psaWeekly 가 있는데 data/gemrate-psa-history.json 을 못 읽었다`); continue; }
+    const pts = w.points || [];
+    const bad = [];
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      if (i && !(p.d > pts[i - 1].d)) { bad.push(`${pts[i - 1].d}→${p.d} 오름차순 아님`); continue; }
+      const k = at.get(p.d);
+      if (k == null) { bad.push(`${p.d} 가 retainedWeeklyDates 에 없다`); continue; }
+      const f = k > 0 ? ret[k - 1] : isoOf(dayNum(p.d) - 7);
+      if (p.f !== f) bad.push(`${p.d} 의 f=${p.f ?? "없음"} ≠ 직전 보존일 ${f}`);
+    }
+    if (bad.length) errors.push(`G2c ${code}: psaWeekly 점 ${bad.length}/${pts.length}개 구간이 보존일과 다르다 — ${bad.slice(0, 3).join(" · ")}${bad.length > 3 ? " …" : ""}`);
   }
 }
 

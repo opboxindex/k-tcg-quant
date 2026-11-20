@@ -15,8 +15,8 @@ node tools/collect-psa-card-pop.js --browser > $RUN/psa-browser.js              
 node ../box-sold-cdp/psa-nav-run.js $RUN/psa-browser.js $RUN/psa-card.json <오늘>  # 카드 행 + 세트별 팝 리포트 기준일(updated)
 node tools/psa-card-pop-ingest.js $RUN/psa-card.json
 node ../box-sold-cdp/psa-trend-run.js . $RUN/psa-trend.json                        # 세트 추이(일별 누적)
-node tools/psa-trend-ingest.js $RUN/psa-trend.json $RUN/psa-card.json              # 추이가 멈췄으면 세트 누적은 팝 리포트 합계로(2026-11-12)
-node tools/psa-edition-weekly-ingest.js $RUN/psa-trend.json
+node tools/psa-trend-ingest.js $RUN/psa-trend.json $RUN/psa-card.json              # 일본판 주간 이력(날짜는 아래 'PSA 스냅샷 날짜'). 추이가 멈췄으면 세트 누적은 팝 리포트 합계로(2026-11-12)
+node tools/psa-edition-weekly-ingest.js $RUN/psa-trend.json                        # 판별 누적 — 출력 gaps 의 주는 known-gaps.json 에 등록
 node tools/import-gemrate-psa-history.js      # → packs.json 의 psaFull
 node tools/import-gemrate-en-totals.js        # → packs.json 의 psaFullEn
 node tools/inject-psa-wow.js
@@ -47,6 +47,25 @@ node tools/audit-workflows.js                 # 워크플로 YAML 이 GitHub 에
 node tools/audit-series-gaps.js               # 시계열에 빠진 날·주가 있는지(경매·TCG·진행매물 + 등급 카드별·세트 누적·판별 주간)
 node tools/guard-invariants.js
 ```
+
+## PSA 스냅샷 날짜 (2026-11-20)
+
+일본판 주간 이력(`gemrate-psa-history.json` weekly)과 판별 누적(`psa-edition-weekly.json`)은 같은 선택기
+`tools/psa-snapshot-select.js` 로 **ISO 주(월~일)마다 한 날**을 고른다. 두 원장 날짜는 늘 같다.
+- 그 주 수요일에 41계열이 모두 실제 값(행 있음 · 상류 복사일 아님)이면 수요일.
+- 아니면 주가 끝난 뒤 수요일에 가장 가까운 그런 날(수·목·화·금·월·토·일 순). 덤프 하나로 밀린 주를 모두 채운다.
+- GemRate 가 10/27 뒤로 매일 갱신을 멈춰(10/28·10/29 복사, 그 뒤 11/06·11/13·11/14·11/16 만) 간격이 7일이 아닐 수 있다.
+  증가분은 "직전 원장 날짜 → 이번 날짜" 사이 값이고 화면은 언제나 시작일 → 끝일(일수)로 적는다.
+
+두 적재기 출력에서 볼 것:
+- `gaps` — 끝난 주에 그런 날이 없다. 원장에는 아무것도 안 쓴다(보간 없음). 그 주를 같은 커밋에서
+  `data/known-gaps.json` 'PSA 판별 주간' weeks 에 등록한다(사유: 출력 `days` 의 날짜별 have/of — 그날 몇 계열뿐이었나).
+- `pending` — 아직 안 끝난 주의 수요일이 안 된다. 등록하지 않는다 — 다음 월요일 덤프가 다시 본다.
+- `psa-edition-weekly-ingest` 가 exit 1(abort)이면 아무것도 안 썼다: (a) 원장 점이 덤프와 다름 (b) 원장 날짜가 덤프에서 복사일
+  (c) 대상 계열이 덤프에 없음. `offenders` 를 보고 원인을 고친다 — 값을 손으로 맞추지 않는다.
+  `psa-trend-ingest` 도 일본판 이력의 보관 날짜가 덤프에서 복사일이면 아무것도 안 쓰고 멈춘다((b)와 같은 검사).
+- 팝 리포트 카드 합계는 세트 누적(일본판 latest · 영문판 총량) 대체에만 쓰고 원장 점으로는 안 쓴다 — 같은 집계지만 계열마다
+  갱신일이 달라 41계열 공유 날짜 점을 못 만들고, 같은 날 추이 행 없이는 카드 누락을 확인할 수 없다.
 
 ## 브라우저 수집 (실브라우저 필수)
 

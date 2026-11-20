@@ -68,7 +68,7 @@ macOS 는 옆자리 타인 기기다 — 절대 선택 금지, 되묻지도 않�
    삼켜 OP-13 일본판 주력 가격대가 통째로 비었다. 소유자가 지적해서 발각됐다.)
 7. `node tools/build-box-sold-series.js`
 
-## 3. 등급 인구 (PSA / TAG) — `todo` 에 `psa-pop`·`psa-weekly`·`psa-full`·`tag-pop`·`graderpop-card` 가 있을 때
+## 3. 등급 인구 (PSA / TAG) — `todo` 에 `psa-pop`·`psa-weekly`·`psa-edition`·`psa-full`·`tag-pop`·`graderpop-card` 가 있을 때
 
 주 1회(보통 월요일). 순서와 명령은 `tools/MONDAY-GRADING.md` 가 기준이다.
 CGC 는 세트(총량·Pristine/Gem Mint)·카드별 모두 워크플로 `collect-grading` 이 공개 API 로 자동 수집한다 —
@@ -79,13 +79,17 @@ TAG 세트는 `__tagAgg` → `tag-pop-ingest.js` 한 번에 10·10P 분리값까
 PSA 카드별은 `node tools/collect-psa-card-pop.js --probe` 로 먼저 살핀다. GemRate 가 봇 차단
 페이지("잠시만 기다리십시오…")를 주면 실브라우저로 열어야 한다 — plain fetch 는 안 된다(2026-09-02 실증).
 
-세트 추이(PSA 일본판 주간·영문판 총량·판별 주간)도 같은 이유로 실브라우저다(2026-09-07 실증, 워크플로
-`update-market-data` 의 GemRate 스텝이 매주 실패한다). 9346 크롬으로 `box-sold-cdp/psa-nav-run.js`(카드별 팝 리포트 +
+세트 추이(PSA 일본판 주간·영문판 총량·판별 주간)도 같은 이유로 실브라우저다(2026-09-07 실증 — 워크플로
+`update-market-data` 의 헤드리스 GemRate 단계가 매주 실패해 2026-11-20 지웠다. 영문판 총량 재시도만 남았다). 9346 크롬으로 `box-sold-cdp/psa-nav-run.js`(카드별 팝 리포트 +
 세트별 기준일 `updated`)와 `box-sold-cdp/psa-trend-run.js`(세트 추이)를 받고 →
 `node tools/psa-trend-ingest.js <추이 덤프> <카드별 팝 덤프>` → `node tools/psa-edition-weekly-ingest.js <추이 덤프>` →
 `node tools/import-gemrate-psa-history.js` → `node tools/import-gemrate-en-totals.js` → `node tools/inject-psa-wow.js`.
-명령 순서는 `tools/MONDAY-GRADING.md` 1번. 팝 리포트가 세트 추이보다 새것이면(추세가 멈춘 2026-10-27~ 실제) 세트 누적은 팝 리포트 카드 합계로
-자동 대체된다(누적 감소·최근 속도 초과면 안 씀) — 주간 그래프(수요일 누적의 차)는 대체하지 않는다(팝 리포트는 수요일 값이 아니다).
+명령 순서는 `tools/MONDAY-GRADING.md` 1번. 두 원장(일본판 주간 이력·판별 누적)의 날짜는 같은 선택기(`tools/psa-snapshot-select.js`)가
+ISO 주마다 하나 고른다 — 수요일에 41계열이 모두 실제 값이면 수요일, 아니면 주가 끝난 뒤 수요일에 가장 가까운 그런 날(2026-11-20).
+적재기 출력의 `gaps`(그런 날이 없는 끝난 주)는 같은 커밋에서 `data/known-gaps.json` 'PSA 판별 주간' 에 등록하고, `pending`(아직 안 끝난 주)은 다음 주에 다시 본다.
+팝 리포트가 세트 추이보다 새것이면(추세가 멈춘 2026-10-27~ 실제) 세트 누적은 팝 리포트 카드 합계로
+자동 대체된다(누적 감소·최근 속도 초과면 안 씀) — 원장 점으로는 안 쓴다(같은 집계지만 계열마다 갱신일이 달라 41계열 공유 날짜 점을 못 만들고,
+같은 날 추이 행 없이는 카드 누락을 확인할 수 없다).
 import 를 빼먹으면 원장만 새것이고 화면은 옛것이라 가드 D3 가 FAIL 난다(2026-09-07 실제).
 
 ⚠️ **절대 원칙(2026-07-24 소유자 지시)**: 카드번호만 보고 매칭 금지. 번호+변형(tier) 둘 다

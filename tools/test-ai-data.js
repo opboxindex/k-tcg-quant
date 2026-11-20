@@ -124,7 +124,12 @@ for (const row of gradeRows) {
   const tagSplit = latest(tag, row.set_code, edition, (point) => Number.isFinite(point.g10) && Number.isFinite(point.g10p));
   assert.equal(row.psa_total, String(psa?.total ?? ""));
   assert.equal(row.psa_total_as_of, psa?.updated ?? "");
-  assert.equal(row.psa_weekly_add_as_of, psa?.wowAdd == null ? "" : set.psaWow?.to ?? "");
+  // 증가 = 판별 원장 마지막 두 점(psaFull(En).change) — 값·시작·끝이 같이 있거나 같이 빈칸(2026-11-20, 옛 psa_weekly_add 열은 없다).
+  const change = psa?.change || null;
+  assert.equal(row.psa_added, change ? String(change.add) : "");
+  assert.equal(row.psa_added_from, change ? change.from : "");
+  assert.equal(row.psa_added_to, change ? change.to : "");
+  assert.ok(!("psa_weekly_add" in row) && !("psa_weekly_add_as_of" in row), "old weekly-add columns must be gone");
   assert.equal(row.cgc_total, String(cgcTotal?.total ?? ""));
   assert.equal(row.cgc_total_as_of, cgcTotal?.d ?? "");
   assert.equal(row.cgc_pristine10, String(cgcSplit?.grades?.["Pristine 10"] ?? ""));

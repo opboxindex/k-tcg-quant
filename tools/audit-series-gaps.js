@@ -299,7 +299,10 @@ for (const [label, file, opts] of [
   // (CGC 세트 9/11 → 9/29 로 W38·W39, PSA 판별 9/09 → 9/23 으로 W38). 최신성만 보는 감사는 따라잡은 뒤 통과한다.
   ["CGC 세트 누적", "data/cgc-grading-history.json"],
   ["TAG 세트 누적", "data/tag-grading-history.json"],
-  // 판별 주간은 GemRate 의 수요일 행을 다음 월요일에 받는다(9/23 점 → 9/28 수집). 월요일이 지나야 그 주를 본다.
+  // 판별 원장의 공유 점 = ISO 주마다 수요일, 없으면 주가 끝난 뒤 수요일에 가장 가까운 41계열 완전·비복사 날
+  // (tools/psa-snapshot-select.js, 2026-11-20). 끝난 주는 다음 월요일 수집이 채우므로 월요일이 지나야 그 주를 본다(due 1).
+  // 모든 계열이 같은 날짜를 공유하므로(audit-grading-numbers G2a) 아래 합집합 주 판정이 곧 원장의 주 판정이다.
+  // 그런 날이 없는 주는 ingest 가 gaps 로 출력한다 — 보간하지 않고 known-gaps.json 'PSA 판별 주간' 에 사유와 함께 등록한다.
   ["PSA 판별 주간", "data/psa-edition-weekly.json", { due: 1 }],
 ]) {
   const j = read(file);

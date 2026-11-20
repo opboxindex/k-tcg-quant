@@ -41,8 +41,11 @@ assert.equal(data.sets["OP-01"].psaFull.total, 100);
 assert.equal(data.sets["OP-01"].psaFull.gems, 90);
 assert.equal(data.sets["OP-01"].psaFull.gemRate, 90);
 assert.equal(data.sets["OP-01"].psaFull.opAvg, 86.7);
-assert.deepEqual(data.sets["OP-01"].psaWeekly.points.at(-1), { d: "2026-07-15", v: 16 });
+// 점마다 증가분이 시작한 날 f(직전 보관 날짜, 첫 보관 날짜는 d − 7일)를 같이 싣는다 — 2026-11-20.
+assert.deepEqual(data.sets["OP-01"].psaWeekly.points.at(-1), { d: "2026-07-15", v: 16, f: "2026-07-08" });
+assert.deepEqual(data.sets["OP-01"].psaWeekly.points[0], { d: "2026-06-03", v: 4, f: "2026-05-27" });
 assert.equal(data.sets["OP-01"].psaWeekly.points.length, 7);
+assert.equal(data.sets["OP-01"].psaWeekly.source, "GemRate full-set PSA population change between ledger snapshots");
 assert.throws(
   () => applyGemRateHistory({ ...data, jp: { list: ["OP-01", "OP-02"] } }, source),
   /coverage mismatch/,

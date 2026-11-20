@@ -206,7 +206,7 @@ const html = `<!doctype html>
       <div class="fields">
         <span data-ko="행 = 세트 × 판(일본판·영문판) · 감정사별 열">Row = set × printing (Japanese / English) · one column group per grader</span><br />
         <code>set_code</code> · <code>edition</code> — <code>japanese</code> or <code>english</code><br />
-        <code>psa_total</code> · <code>psa10_rate_pct</code> · <code>psa_weekly_add</code> — cumulative PSA count · PSA 10 share · added in the latest recorded week<br />
+        <code>psa_total</code> · <code>psa10_rate_pct</code> · <code>psa_added</code> — cumulative PSA count · PSA 10 share · new PSA grades between the two latest population snapshots (<code>psa_added_from</code> → <code>psa_added_to</code>; the gap follows the source's update schedule, not always 7 days)<br />
         <code>cgc_total</code> · <code>cgc_pristine10</code> · <code>cgc_gem_mint10</code> — CGC total · Pristine 10 (above Gem Mint 10) · Gem Mint 10<br />
         <code>tag_total</code> · <code>tag_10</code> · <code>tag_10p</code> — TAG total · 10 · 10P (above 10)<br />
         <code>*_as_of</code> — source date per value · blank = unverified (not 0)

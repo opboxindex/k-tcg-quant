@@ -321,7 +321,7 @@ ${tr}
       <p class="koNote">CGC·TAG = 누적 장수(대표 판) · — = 미집계(0 아님)</p>
       <div class="koCta">
         <a class="primary" href="cards.html">카드 시세 →</a>
-        <a class="ghost" href="../psa-grading.html">영문 상세(주간 증감) →</a>
+        <a class="ghost" href="../psa-grading.html">영문 상세(직전 대비 증감) →</a>
         <a class="ghost" href="auction.html">이베이 경매 데이터 →</a>
       </div>`;
 

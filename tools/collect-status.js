@@ -218,17 +218,24 @@ const SOURCES = [
   { key: "psa-pop", name: "PSA 카드별 등급 인구", mode: "manual", every: "주 1회(월)",
     warn: 8, late: 14, get: pick.field("data/psa-card-pop.json", "updated"), files: ["psa-card-pop.json"],
     how: "브라우저로 GemRate 카드별 수집 → node tools/collect-psa-card-pop.js" },
-  // PSA 세트 주간 — 2026-09-30 수동으로 정정(전엔 auto·update-market-data). 그 워크플로의 GemRate 단계는 러너 IP 가
+  // PSA 세트 원장 둘 — 2026-09-30 수동으로 정정(전엔 auto·update-market-data). 그 워크플로의 GemRate 단계는 러너 IP 가
   // 막혀 매주 실패한다(continue-on-error — 워크플로 주석: "PSA 는 어차피 매주 월요일에 사람이 로컬에서"). 아래 원장들을 Actions 가
   // 커밋한 적이 한 번도 없고 전부 월요일 로컬 수집이었다. auto 로 두면 밀려도 "지금 할 일"에 안 뜬다.
-  { key: "psa-weekly", name: "PSA 세트 주간 등급량", mode: "manual", every: "주 1회(월)",
-    warn: 8, late: 14,
-    // 주간 그래프가 실제로 어디까지 찼나로 잰다(weeklyThrough·판별 주간 마지막 수요일) — 2026-11-12. 세트 누적(collectedAt)은
-    // 추이가 멈추면 팝 리포트로 최신화돼 "정상"으로 보이는데, 주간 증가분은 그동안 한 점도 안 는다. 누적 신선도는 아래 psa-full 행이 본다.
-    get: pick.earliest(pick.field("data/gemrate-psa-history.json", "weeklyThrough"), pick.field("data/psa-edition-weekly.json", "updated")),
-    files: ["gemrate-psa-history.json", "gemrate-psa-en-totals.json", "psa-edition-weekly.json", "psa-population-snapshots.json"],
+  // 2026-11-20: 한 행(두 원장의 earliest)을 원장마다 나눴다. 묶어 두면 어느 원장이 멈췄는지 행만 봐선 모른다.
+  //   두 원장은 같은 선택기(tools/psa-snapshot-select.js)로 같은 날짜를 고른다 — ISO 주마다 수요일, 없으면 주가 끝난 뒤
+  //   수요일에 가장 가까운, 41계열이 모두 있고 복사가 아닌 날. 그래서 간격이 7일이 아닐 수 있다.
+  //   둘 다 점이 끝난 곳으로 잰다 — 세트 누적(collectedAt)은 추이가 멈추면 팝 리포트로 최신화돼 "정상"으로 보이는데,
+  //   원장에는 그동안 한 점도 안 는다(2026-11-12). 누적 신선도는 아래 psa-full 행이 본다.
+  // gemrate-psa-en-totals.json 은 영문판 세트 총량이지만 같은 psa-trend-ingest 한 단계가 쓴다 — 그래서 이 행에 둔다.
+  { key: "psa-weekly", name: "PSA 세트 증가 이력(일본판)", mode: "manual", every: "주 1회(월)",
+    warn: 8, late: 14, get: pick.field("data/gemrate-psa-history.json", "weeklyThrough"),
+    files: ["gemrate-psa-history.json", "gemrate-psa-en-totals.json", "psa-population-snapshots.json"],
     how: "9346 크롬으로 box-sold-cdp/psa-nav-run.js(카드별 팝 리포트)·psa-trend-run.js(세트 추이) 덤프를 받는다(tools/MONDAY-GRADING.md 1번) → node tools/psa-trend-ingest.js <추이 덤프> <카드별 팝 덤프> → node tools/psa-edition-weekly-ingest.js <추이 덤프> → node tools/import-gemrate-psa-history.js → node tools/import-gemrate-en-totals.js → node tools/inject-psa-wow.js",
-    note: "psa-edition-weekly-ingest 는 덤프의 마지막 수요일 한 주만 넣는다 — 두 주 밀렸으면 판별 주간이 한 주 빈다(2026-09-28 복구 때 9/16 주가 빠졌다)." },
+    note: "psa-trend-ingest(appendVerifiedWeeks)는 판별 원장과 같은 선택기·같은 날짜로 일본판 세트 증가분을 넣는다 — 값은 직전 보존일 대비라 간격이 7일이 아닐 수 있다. 그런 날이 없는 주(판별 원장의 gaps 와 같은 주)는 아무것도 안 쓴다" },
+  { key: "psa-edition", name: "PSA 판별 누적(일본판·영문판)", mode: "manual", every: "주 1회(월)",
+    warn: 8, late: 14, get: pick.field("data/psa-edition-weekly.json", "updated"), files: ["psa-edition-weekly.json"],
+    how: "psa-weekly 와 같은 월요일 사슬(tools/MONDAY-GRADING.md) — node tools/psa-edition-weekly-ingest.js <추이 덤프> 가 이 원장을 채우고, 끝에 node tools/inject-psa-wow.js 가 화면 증감(change)을 다시 얹는다",
+    note: "psa-edition-weekly-ingest 는 마지막 점 다음 ISO 주부터 덤프가 덮는 주를 모두 채운다 — 수요일, 없으면 주가 끝난 뒤 수요일에 가장 가까운, 41계열이 모두 있고 복사가 아닌 날. 그런 날이 없는 주는 gaps 로 출력 → known-gaps.json 에 등록" },
   { key: "psa-full", name: "PSA 전체 인구(세트별)", mode: "manual", every: "주 1회(월)",
     warn: 8, late: 14, get: pick.psaFullOldest, files: [],
     how: "psa-weekly 와 같은 작업 — import-gemrate-psa-history.js·import-gemrate-en-totals.js 가 packs.json 의 psaFull·psaFullEn 을 갱신한다" },
@@ -301,12 +308,11 @@ const PACKS_TRACKED = [
   /\.boxMarket\.(jp|en)\.ebay(Active|Sold)\.updated$/,     // 박스 시세 (자동/수동)
   /\.boxSeries(En|Ebay|EnEbay)?\.updated$/,                // 박스 시세 시계열 (자동)
   /\.boxSeries(En|Ebay|EnEbay)?\.points\.\d+\.d$/,
-  /\.psaWeekly\.(updated|points\.\d+\.d|corrections\.\d+\.date)$/, // PSA 주간 (자동)
+  /\.psaWeekly\.(updated|points\.\d+\.(d|f)|corrections\.\d+\.date)$/, // PSA 일본판 증가 이력 — 점마다 구간 f→d (수동)
   /\.psaFull(En)?\.updated$/,                              // PSA 전체 인구 (자동)
-  /\.psaWow\.(from|to)$/,                                  // 주간 증감 표시용(파생)
+  /\.psaFull(En)?\.change\.(from|to)$/,                    // 판별 원장 마지막 두 점 증감 창(파생, inject-psa-wow)
   /\.graders\.(cgc|tag)\.(jp|en)\.(from|to)$/,             // 등급사 관측창(파생)
   /\.englishNmEbay\.updated$/,                             // 영문판 NM 시세 (자동)
-  /^\.marketIndex\.meter\./,                               // 개봉 미터 주간 (자동)
   /^\.marketIndex\.board\.\d+\.(nowDate|changeBasis)$/,    // 지수 보드 기준일(파생)
   /^\.marketIndex\.updated$/,
   /\.release(Ja)?$/,                                       // 세트 발매일(고정 사실)
@@ -457,7 +463,7 @@ if (todo.length) {
     if (r.note) out.push(`    주의: ${r.note}`);
   }
 } else if (!gaps.length && !autoBroken.length && !staleParts.length) {
-  out.push("== 지금 할 일 없음 — 수집 22종 최신 · 날짜 빈칸 없음 ==");
+  out.push(`== 지금 할 일 없음 — 수집 ${rows.length}종 최신 · 날짜 빈칸 없음 ==`);   // 개수는 목록에서 센다 — 손으로 적은 22 가 낡아 있었다(2026-11-20)
 } else {
   out.push("== 수동 수집은 전부 최신이다(위의 경고는 사람이 브라우저로 고칠 수 있는 게 아니다) ==");
 }

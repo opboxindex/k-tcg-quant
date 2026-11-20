@@ -2,6 +2,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const { isoWeek } = require("./psa-snapshot-select.js");
 
 const projectRoot = path.resolve(__dirname, "..");
 const dataPath = path.join(projectRoot, "data", "onepiece-packs.json");
@@ -19,6 +20,13 @@ function round1(value) {
   return Math.round(value * 10) / 10;
 }
 
+// 점 d 의 증가분이 시작한 날 f = 보관 날짜 목록에서 d 바로 앞 날짜. 첫 보관 날짜는 d − 7일
+// (옛 점은 전부 7일 전 수요일과의 차였다). 화면은 d − f 로 간격 일수를 적는다 — 2026-11-20.
+function intervalStart(retained, date) {
+  const index = retained.indexOf(date);
+  return index > 0 ? retained[index - 1] : new Date(parseDate(date) - 7 * 864e5).toISOString().slice(0, 10);
+}
+
 function validateSet(code, source, history) {
   if (!source || !/^https:\/\/www\.gemrate\.com\/set-population-trend\?/.test(source.url || "")) {
     throw new Error(`${code}: GemRate source URL is missing`);
@@ -31,27 +39,34 @@ function validateSet(code, source, history) {
     throw new Error(`${code}: totalGems is invalid`);
   }
 
+  // 2026-11-20: 보관 날짜는 더 이상 7일 간격 수요일만이 아니다(psa-snapshot-select.js — GemRate 갱신일을 따라 ISO 주마다 한 점).
+  // 그래서 "정수 주 간격" 검사를 버리고, 점 날짜가 보관 날짜 목록에 있고 오름차순인지·보관 날짜가 ISO 주마다 하나뿐인지를 본다.
   const weekly = Array.isArray(source.weekly) ? source.weekly : [];
   const dates = weekly.map((point) => point.d);
+  const retained = history.retainedWeeklyDates || [];
+  const retainedSet = new Set(retained);
   const correctionDates = new Set((history.corrections?.[code] || []).map((entry) => entry.date));
   if (weekly.length < minimumWeeklyPoints) throw new Error(`${code}: fewer than ${minimumWeeklyPoints} verified weekly points`);
-  if (new Set(dates).size !== dates.length) throw new Error(`${code}: duplicate weekly dates`);
-  for (let index = 1; index < dates.length; index += 1) {
-    const intervalWeeks = (parseDate(dates[index]) - parseDate(dates[index - 1])) / (7 * 864e5);
-    const skippedDates = (history.retainedWeeklyDates || []).filter((date) => date > dates[index - 1] && date < dates[index]);
-    if (!Number.isInteger(intervalWeeks) || intervalWeeks < 1 || skippedDates.some((date) => !correctionDates.has(date))) {
-      throw new Error(`${code}: weekly dates are not consecutive at ${dates[index]}`);
-    }
+  for (let index = 1; index < retained.length; index += 1) {
+    if (retained[index] <= retained[index - 1]) throw new Error(`retainedWeeklyDates are not strictly ascending at ${retained[index]}`);
+    if (isoWeek(retained[index]) === isoWeek(retained[index - 1])) throw new Error(`retainedWeeklyDates has two dates in ${isoWeek(retained[index])}`);
+  }
+  for (const [index, date] of dates.entries()) {
+    if (!retainedSet.has(date)) throw new Error(`${code}: weekly date ${date} is not a retained snapshot date`);
+    if (index > 0 && date <= dates[index - 1]) throw new Error(`${code}: weekly dates are not strictly ascending at ${date}`);
+    if (index === 0) continue;
+    const skippedDates = retained.filter((retainedDate) => retainedDate > dates[index - 1] && retainedDate < date);
+    if (skippedDates.some((skipped) => !correctionDates.has(skipped))) throw new Error(`${code}: weekly dates are not consecutive at ${date}`);
   }
   const lastDate = dates.at(-1);
-  const trailingDates = (history.retainedWeeklyDates || []).filter((date) => date > lastDate && date <= history.weeklyThrough);
+  const trailingDates = retained.filter((date) => date > lastDate && date <= history.weeklyThrough);
   if (lastDate !== history.weeklyThrough && trailingDates.some((date) => !correctionDates.has(date))) {
     throw new Error(`${code}: weekly graph does not reach ${history.weeklyThrough} and missing dates are not declared corrections`);
   }
   if (history.historyStart && dates[0] < history.historyStart) throw new Error(`${code}: weekly history predates verified start`);
 
   const firstDate = dates[0];
-  for (const retainedDate of history.retainedWeeklyDates || []) {
+  for (const retainedDate of retained) {
     if (retainedDate >= firstDate && !dates.includes(retainedDate) && !correctionDates.has(retainedDate)) {
       throw new Error(`${code}: retained weekly date ${retainedDate} was deleted without a correction`);
     }
@@ -131,12 +146,12 @@ function applyGemRateHistory(data, source) {
       sourceUrl: fromPopReport ? imported.url.replace("/set-population-trend?", "/item-details?") : imported.url,
     };
     set.psaWeekly = {
-      source: "GemRate full-set weekly PSA population deltas",
+      source: "GemRate full-set PSA population change between ledger snapshots",
       sourceUrl: imported.url,
       updated: source.weeklyThrough,
       allTimeTotal: latest.totalGrades,
       corrections: source.corrections?.[code] || [],
-      points: imported.weekly.map((point) => ({ d: point.d, v: point.grades })),
+      points: imported.weekly.map((point) => ({ d: point.d, v: point.grades, f: intervalStart(source.retainedWeeklyDates, point.d) })),
     };
   }
 

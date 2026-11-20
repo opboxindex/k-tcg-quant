@@ -142,6 +142,9 @@ const STATUS = runJSON("collect-status.js", ["--json"]);
     ["box", "박스 실거래(eBay sold)"], ["op-auction", "원피스 경매 정산"], ["tcg", "TCG 스냅샷"], ["psa-pop", "PSA 카드별 인구"],
     ["psa-weekly", "PSA 세트 주간"], ["grading", "CGC 카드별 인구"], ["tag-pop", "TAG 인구"], ["nm", "유유테이 NM"],
     ["psa10-sold", "PSA10 실거래"], ["fx", "환율"], ["official-cardlist", "공식 카드리스트"],
+    // 2026-11-20 collect-status 가 PSA 세트 행을 원장마다 나눴다(psa-weekly = 일본판 증가 이력만). 판별 누적 원장은 새 행이라
+    // 끝에 붙인다 — 가운데 끼우면 C6~C11 번호가 밀려 문서·기록의 ID 가 어긋난다.
+    ["psa-edition", "PSA 판별 누적"],
   ];
   const byKey = Object.fromEntries(((STATUS && STATUS.rows) || []).map((r) => [r.key, r]));
   FRESH.forEach(([key, name], i) => {

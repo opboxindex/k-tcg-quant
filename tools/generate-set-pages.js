@@ -486,17 +486,21 @@ function setPage(code, prev, next) {
 
   // 주간 PSA 등급 증가 — psaWeekly. 문장("How fast is … growing?" · "(still running near its peak)" · "Grades are not a box-opening count")을
   // 라벨 줄로 바꿨다(2026-10-15). 세트 누적(psaFull.total)은 지표 칸 "PSA graded" 에 있어 되풀이하지 않는다(한 사실 한 값).
+  // 2026-11-20: 점 = 원장 스냅샷 f → d 사이 증가(GemRate 갱신일을 따라 늘 7일이 아니다 — 10-27 → 11-13 = 17일). "per week·Peak week·Latest week" 를
+  //   구간 라벨(시작 → 끝, 날짜 수)로 바꿨다. 가장 바쁜 구간 = 하루 평균이 가장 큰 구간(빌더 peak). 범위는 첫 구간 시작 → 마지막 구간 끝.
+  //   제목(h2)에 출처 이름을 쓰지 않는다 — sets/ 는 외부 업체명 금지(가드 S4).
   let momentum = "";
-  const wk = s.psaWeekly;   // 사실 파일: n·sum·first·last·prev·peak
+  const wk = s.psaWeekly;   // 사실 파일: n·sum·first·last·prev·peak — 점마다 {d, v, f, days}
   if (wk && wk.n >= 3) {
     const pk = wk.peak, lastW = wk.last;
+    const span = (p) => `${esc(p.f)} → ${esc(p.d)}, ${p.days} day${p.days === 1 ? "" : "s"}`;
     momentum = `
-      <h2>${code} PSA grades added per week</h2>
+      <h2>${code} PSA grades added between population snapshots</h2>
       <ul class="keyFacts">
-        <li>${esc(wk.first.d)} – ${esc(lastW.d)}: <strong>${intl(wk.sum)}</strong> grades added</li>
-        <li>Peak week (${esc(pk.d)}): <strong>${intl(pk.v)}</strong></li>${pk.d === lastW.d && pk.v === lastW.v ? "" : `
-        <li>Latest week (${esc(lastW.d)}): <strong>${intl(lastW.v)}</strong></li>`}
-      </ul>`;   // 고점 주가 마지막 주면 같은 값을 두 줄로 쓰지 않는다(한 사실 한 값)
+        <li>${esc(wk.first.f)} → ${esc(lastW.d)}: <strong>${intl(wk.sum)}</strong> grades added</li>
+        <li>Busiest interval (${span(pk)}): <strong>${intl(pk.v)}</strong></li>${pk.d === lastW.d ? "" : `
+        <li>Latest interval (${span(lastW)}): <strong>${intl(lastW.v)}</strong></li>`}
+      </ul>`;   // 가장 바쁜 구간이 마지막 구간이면 같은 값을 두 줄로 쓰지 않는다(한 사실 한 값)
   }
 
   // ── 경매 실적 — 우리가 직접 종료 후 재조회해 쌓은 원장에서만 나오는 축이다.

@@ -1,4 +1,4 @@
-// OPBOX 성적표(board) + 개봉 미터 → onepiece-packs.json 의 marketIndex
+// OPBOX 성적표(board) → onepiece-packs.json 의 marketIndex
 //  - board 가격: 우리 eBay 실판매 원장(box-sold-series.json, jp 주간 중앙값 USD).
 //    2026-08-21 전환 — 종전 외부 boxSeries 는 20/21 세트가 07-11~13 에 멈춘 것을
 //    아무도 몰랐다. 우리 원장은 멈추면 수집 감사가 바로 잡는다. 차트와 같은 소스라
@@ -6,9 +6,10 @@
 //  - Change = 각 세트 추적 시작일 대비(발매 대비 아님 — 발매추적은 launchTracked 만).
 //  - 지수(2026-01-07=100)는 소비처가 없어서 전환 때 삭제했다. 화면 표시는 2026-07-29 에
 //    이미 빠졌고 남은 건 방문자 페이로드 속 죽은 시계열뿐이었다.
-//  - 개봉 미터: 전세트 psaWeekly 합산(최근 주) + 전주대비. 누적은 psaFull.total 합.
-// 2026-10-15: 성적표(board)·개봉 미터 합산은 사실 빌더(tools/build-site-facts.js — data/derived/site-facts.json board · psaWeekly)에서 온다.
-//   여기는 그 값을 packs.marketIndex 에 옮겨 쓰고, 오늘 기준 경과일(ageDays·isStale)만 더한다(오늘 날짜는 사실 파일에 넣지 않는다).
+//  - 개봉 미터(meter: 전세트 psaWeekly 최근 주 합 + 전주대비)는 2026-11-20 에 지웠다 — 화면 표시는 2026-07-29 에 이미 빠졌고
+//    읽는 곳이 없었다. 남겨 두면 17일 구간을 "주(wk)"로 부르는 죽은 페이로드가 방문자에게 계속 내려간다.
+// 2026-10-15: 성적표(board)는 사실 빌더(tools/build-site-facts.js — data/derived/site-facts.json board)에서 온다.
+//   여기는 그 값을 packs.marketIndex 에 옮겨 쓴다.
 //   재판 횟수(board.reprints)·4주 변동률·current 규칙은 빌더가 market-data-normalizers(splitReprints·boxChange28)로 한 번 센다.
 // Run: node tools/build-market-index.js
 const fs = require("fs");
@@ -20,19 +21,7 @@ const d = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "onepiece-packs.jso
 let FACTS = { sets: {}, bandaiAnnouncesReprints: false };
 try { FACTS = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "set-facts.json"), "utf8")); } catch (e) {}
 
-// ── 개봉 미터(psaWeekly 전세트 합산) — 합산은 사실 파일, 경과일만 오늘 기준.
-const meterWeeks = F.psaWeekly.weeks;
-const meterLatest = F.psaWeekly.latestWeek;
-const meterWoW = F.psaWeekly.wowPct;
-const meterUpdated = F.psaWeekly.updated;
 const todayIso = new Date().toISOString().slice(0, 10);
-const meterAgeDays = meterLatest
-  ? Math.max(0, Math.floor((Date.parse(`${todayIso}T00:00:00Z`) - Date.parse(`${meterLatest.d}T00:00:00Z`)) / 864e5))
-  : null;
-// PSA weekly figures are manually verified snapshots. Once they trail the live
-// market index by more than ten days, the UI must present them as historical.
-const meterIsStale = meterAgeDays == null || meterAgeDays > 10;
-const allTimeGraded = F.psaWeekly.allTimeGraded;
 
 // ── 성적표(전세트) = 사실 파일 board. 변화율은 **최근 4주** — "추적 시작 대비"를 버렸다(2026-08-24).
 // 시리즈는 원장에서 매번 다시 만드는데, 새 수집이 과거 판매를 되메우면 초기 희소 구간의
@@ -45,16 +34,6 @@ const board = F.board;
 const out = {
   updated: d.updated || F.series.updated || todayIso,
   method: "Per-set current price: the latest rolling median of completed eBay sales of sealed Japanese booster boxes (our own ledger) when that median point is dated within 28 days of the series asOf, otherwise null. n = sales inside that point's rolling window (windowDays, 28-56 days). 4-week change: that median vs the median point 28 days earlier.",
-  meter: {
-    latestWeek: meterLatest,
-    weeks: meterWeeks,
-    wowPct: meterWoW,
-    allTimeGraded,
-    updated: meterUpdated,
-    ageDays: meterAgeDays,
-    isStale: meterIsStale,
-    basis: "verified PSA population weekly deltas",
-  },
   board,
   reprints: { bandaiAnnounces: FACTS.bandaiAnnouncesReprints === true, bySet: FACTS.sets || {} },
 };
@@ -65,7 +44,6 @@ main.marketIndex = out;
 fs.writeFileSync(mainPath, JSON.stringify(main));
 console.log(JSON.stringify({
   boardSets: board.length,
-  meter: meterLatest ? `${meterLatest.v.toLocaleString()} graded wk of ${meterLatest.d} (WoW ${meterWoW >= 0 ? "+" : ""}${meterWoW}%), all-time ${allTimeGraded.toLocaleString()}` : "none",
   boardTop: board[0].code + " " + board[0].changePct + "% ... " + board[board.length - 1].code + " " + board[board.length - 1].changePct + "%",   // null 이면 4주 기준점 없는 신생 세트
   launchTracked: board.filter((b) => b.launchTracked).map((b) => b.code),
 }, null, 1));

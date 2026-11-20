@@ -10,7 +10,8 @@ name: Collect grading
 # ⚠️ 여기서 안 하는 것:
 #   · eBay sold — eBay 가 데이터센터 IP 를 막아 **실브라우저(사용자 IP)로만** 가능하다. 자동화 불가.
 #   · TAG — 포털이 SPA 렌더 DOM 이라 아직 브라우저가 필요하다.
-#   · PSA — update-market-data.yml(일요일)이 이미 맡고 있다. 여기서 또 돌리면 이중 적재가 된다.
+#   · PSA — GemRate 가 헤드리스를 막아(2026-09-02) 월요일 9346 실브라우저 수동 체인(tools/MONDAY-GRADING.md 1번)만 적재한다.
+#     update-market-data.yml 도 PSA 원장을 쌓지 않는다(2026-11-20 헤드리스 단계 삭제).
 #
 # CGC 원장 둘을 쓴다: data/cgc-card-pop.json(카드별) · data/cgc-grading-history.json(세트 총량 + Pristine/Gem 분리).
 # 2026-09-30 전까지는 카드별만 담고 같은 덤프의 세트 합을 버렸다 — 세트 분리값이 8/3 에 멈춰 화면 열이 전부 '—' 였다.

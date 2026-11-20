@@ -60,27 +60,34 @@ const up = jpThis.filter((r) => r.wow > 0.5).length, down = jpThis.filter((r) =>
 const volJp = jpRows.filter((r) => r.isThisWeek).reduce((a, r) => a + (r.last.vol || 0), 0);
 const volEn = enRows.filter((r) => r.isThisWeek).reduce((a, r) => a + (r.last.vol || 0), 0);
 
-// 등급 인구 주간 증가 — GemRate 주간 델타(psaWeekly). 10일 넘게 낡았으면 표를 내지 않는다(옛 값을 이번 주로 읽히지 않게).
-let gradeTable = "", gradeWeek = null;
+// 일본판 PSA 등급 증가 — 세트별 마지막 구간(psaWeekly.last = 원장 스냅샷 f → d). 10일 넘게 낡았으면 표를 내지 않는다(옛 값을 최신으로 읽히지 않게).
+// 2026-11-20: 구간이 GemRate 갱신일을 따라 늘 7일이 아니다(10-27 → 11-13 = 17일) — "this week · Prev week · WoW" 대신 제목에 시작 → 끝(날짜 수),
+//   직전 열 제목 밑에 직전 구간의 시작 → 끝(MM-DD — 390px 한 화면 표 .tblFit 에 들어가게)을 쓴다.
+//   직전 값은 바로 앞 구간(prev.d = 이번 구간 시작)일 때만, % 는 두 구간 날짜 수가 같을 때만 — 아니면 "—".
+//   출처 이름은 쓰지 않는다(weekly.html 은 외부 업체명 금지 — 가드 VN1).
+let gradeTable = "", gradeTo = null;
 {
   const rows = [];
   for (const code of ORDER) {
-    const w = F.sets[code].psaWeekly;   // 사실 파일: last·prev
+    const w = F.sets[code].psaWeekly;   // 사실 파일: last·prev — 점마다 {d, v, f, days}
     if (!w) continue;
-    rows.push({ code, name: F.sets[code].nameEn || code, d: w.last.d, v: w.last.v, prev: w.prev ? w.prev.v : null });
+    rows.push({ code, name: F.sets[code].nameEn || code, last: w.last, prev: w.prev && w.prev.d === w.last.f ? w.prev : null });
   }
-  const latest = F.psaWeekly.gradeWeek;   // 가장 늦은 주 — 시리즈 갱신일 기준 10일 넘게 낡았으면 null(빌더)
-  if (rows.length && latest) {
-    gradeWeek = latest;
-    const cur = rows.filter((r) => r.d === latest).sort((a, b) => b.v - a.v);
-    const total = cur.reduce((a, r) => a + r.v, 0);
+  const latest = F.psaWeekly.gradeTo;   // 가장 늦은 구간 끝 — 시리즈 갱신일 기준 10일 넘게 낡았으면 null(빌더)
+  const cur = rows.filter((r) => r.last.d === latest).sort((a, b) => b.last.v - a.last.v);
+  if (cur.length) {
+    gradeTo = latest;
+    const win = cur[0].last;   // 같은 끝 날짜 = 같은 구간(빌더가 확인)
+    const pw = (cur.find((r) => r.prev) || {}).prev || null;
+    const total = cur.reduce((a, r) => a + r.last.v, 0);
+    const pctOf = (r) => (r.prev && r.prev.v > 0 && r.prev.days === r.last.days ? (r.last.v / r.prev.v - 1) * 100 : null);
     // 2026-10-15: 외부 업체명(가드 S4 원칙)과 해석 문장("Grades measure submission activity, not boxes opened.")을 뺐다 — 라벨만.
-    gradeTable = `<h2 id="grading" data-ko="이번 주 PSA 등급 증가 — 세트별">PSA grades added this week — by set</h2>
-      <p class="note" data-ko="PSA 세트 집계 주간 델타 · 주 ${esc(latest)} · 합계 ${total.toLocaleString("en-US")}장 · 일본판">PSA set-level weekly delta · week of ${esc(latest)} · total ${total.toLocaleString("en-US")} · Japanese</p>
+    gradeTable = `<h2 id="grading" data-ko="세트별 PSA 등급 증가 — 집계 스냅샷 ${esc(win.f)} → ${esc(win.d)} (${win.days}일)">PSA grades added by set — population snapshots ${esc(win.f)} → ${esc(win.d)} (${win.days} day${win.days === 1 ? "" : "s"})</h2>
+      <p class="note" data-ko="일본판 · 합계 ${total.toLocaleString("en-US")}장 · % = 두 구간 날짜 수가 같을 때만">Japanese · total ${total.toLocaleString("en-US")} · % only when both intervals have the same number of days</p>
       <div style="overflow-x:auto"><table class="wkTable tblFit">
-        <thead><tr><th>Set</th><th>Name</th><th>New PSA grades</th><th>Prev week</th><th>WoW</th></tr></thead>
+        <thead><tr><th>Set</th><th>Name</th><th>New grades</th><th>Previous interval${pw ? `<br /><small>${esc(pw.f.slice(5))} → ${esc(pw.d.slice(5))}</small>` : ""}</th><th>Change %</th></tr></thead>
         <tbody>
-${cur.map((r) => `<tr><td><a href="sets/${r.code.toLowerCase()}.html">${esc(r.code)}</a></td><td>${esc(r.name)}</td><td class="num"><b>${r.v.toLocaleString("en-US")}</b></td><td class="num">${r.prev != null ? r.prev.toLocaleString("en-US") : "—"}</td>${pctCell(r.prev ? (r.v / r.prev - 1) * 100 : null)}</tr>`).join("\n")}
+${cur.map((r) => `<tr><td><a href="sets/${r.code.toLowerCase()}.html">${esc(r.code)}</a></td><td>${esc(r.name)}</td><td class="num"><b>${r.last.v.toLocaleString("en-US")}</b></td><td class="num">${r.prev ? r.prev.v.toLocaleString("en-US") : "—"}</td>${pctCell(pctOf(r))}</tr>`).join("\n")}
         </tbody></table></div>`;
   }
 }
@@ -198,5 +205,5 @@ fs.writeFileSync(path.join(ROOT, "weekly.html"), html, "utf8");
     sm = sm.replace(new RegExp(`(<loc>${loc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc>\\s*<lastmod>)[^<]*`), `$1${DATA_DATE}`);
   }
   fs.writeFileSync(smPath, sm, "utf8");
-  console.log(JSON.stringify({ wrote: "weekly.html", weekEnd, jpRows: jpRows.length, enRows: enRows.length, up, down, volJp, volEn, gradeWeek, sitemapAdded: added }));
+  console.log(JSON.stringify({ wrote: "weekly.html", weekEnd, jpRows: jpRows.length, enRows: enRows.length, up, down, volJp, volEn, gradeTo, sitemapAdded: added }));
 }

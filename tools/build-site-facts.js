@@ -41,6 +41,13 @@ const readJson = (rel, fallback) => { try { return JSON.parse(fs.readFileSync(pa
 const median = (arr) => { const a = arr.filter((x) => x != null).sort((x, y) => x - y); return { v: a.length ? a[Math.floor(a.length / 2)] : null, n: a.length }; };
 const lastWith = (arr, key) => { const f = (arr || []).filter((p) => p && p[key] != null); return f.length ? f[f.length - 1] : null; };
 const round1 = (v) => Math.round(v * 10) / 10;
+const daysBetween = (a, b) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 864e5);
+// 일본판 PSA 증가 이력의 점 하나 = 원장 보존일 f → d 구간(import-gemrate-psa-history 가 f 를 싣는다, 2026-11-20). f 없이는 구간 길이를 모른다 —
+//   날짜 수를 지어내지 않고 멈춘다(import 를 다시 돌리면 생긴다).
+const psaInterval = (p) => {
+  if (!p.f || !(p.f < p.d)) throw new Error(`psaWeekly 점 ${p.d} 에 구간 시작 f 가 없거나 d 보다 늦다 — node tools/import-gemrate-psa-history.js 를 다시 돌려야 한다`);
+  return { d: p.d, v: p.v, f: p.f, days: daysBetween(p.f, p.d) };
+};
 
 // ── 입력 파일 — load() 의 신선도 검사(sha1). onepiece-packs 는 marketIndex(build-market-index 가 이 사실로 다시 쓰는 사본)를 뺀 내용으로 잰다.
 const INPUTS = [
@@ -48,8 +55,8 @@ const INPUTS = [
   "data/set-auction-stats.json", "data/fx-history.json", "data/upcoming-set-pages.json",
   "data/psa-card-pop.json", "data/cgc-card-pop.json", "data/tag-card-pop.json",
   "data/grading-series.json", "data/auction-series.json", "data/tcg-series.json", "cards/card-map.json",
-  // 카드 쪽(2026-10-15): 카드별 경매 실적(45일 롤링)·카드 시세 이력·예약판매 호가·PSA 판별 주간 증감
-  "data/auction-card-stats.json", "data/card-series.json", "data/preorder-series.json", "data/psa-edition-weekly.json",
+  // 카드 쪽(2026-10-15): 카드별 경매 실적(45일 롤링)·카드 시세 이력·예약판매 호가. PSA 판별 원장은 2026-11-20 부터 읽지 않는다(packs 의 change 만)
+  "data/auction-card-stats.json", "data/card-series.json", "data/preorder-series.json",
   // 반다이 상품 페이지 확인(2026-10-19, tools/check-bandai-product-pages.js) — 발매 전 페이지의 "Bandai product page checked" 날짜
   "data/bandai-product-check.json",
   // PSA 10 매물 자체 감사(2026-11-05, tools/audit-psa10-mismatches.js) — SET 불일치 표시가 psa10Ask 숨김 규칙의 입력. 감사 파일만 바뀐 날에도 다시 굽는다.
@@ -430,13 +437,12 @@ function buildCard(src, code, c, i, spikes, datasetUpdatedOn, ctx = {}) {
 }
 
 // 등급 인구 페이지(psa-grading.html)의 세트 행 — 판(jp/en) × 등급사(psa/cgc/tag): {total, gem, add, from, to}(2026-10-15, F4 — generate-psa-grading-page.js 에서 옮김).
-//   시계열 = data/grading-series.json 의 마지막 두 점. PSA 는 최신 전체 스냅샷(psaFull·psaFullEn)이 시계열보다 새롭고, 주간 증감은
-//   판별 원장(data/psa-edition-weekly.json)의 마지막 두 주(src.psaWeeks)에서 온다. 영문판 PSA 에 두 주가 없으면 증감은 null.
+//   시계열 = data/grading-series.json 의 마지막 두 점. PSA 는 최신 전체 스냅샷(psaFull·psaFullEn)이 시계열보다 새롭고, 증감·구간은
+//   두 판 모두 psaFull(En).change(inject-psa-wow — 판별 원장 마지막 두 점)에서만 온다. change 가 없으면 증감·구간은 null.
+//   2026-11-20: 일본판만 grading-series 창으로 떨어지던 길과 원장 직접 읽기를 지웠다 — 원장 읽는 곳은 inject 하나다.
 const GRADERS = ["psa", "cgc", "tag"];
 function gradingPageRows(src, code, s) {
   const gs = src.gradingSeries || { sets: {} };
-  const led = src.psaEdWeekly || { sets: {} };
-  const [wPrev, wNow] = src.psaWeeks || [null, null];
   const last = (arr) => (Array.isArray(arr) && arr.length ? arr[arr.length - 1] : null);
   const prev = (arr) => (Array.isArray(arr) && arr.length > 1 ? arr[arr.length - 2] : null);
   const ed = (e) => {
@@ -450,9 +456,8 @@ function gradingPageRows(src, code, s) {
       if (k === "psa") {
         const ps = e === "jp" ? s.psaFull : s.psaFullEn;
         if (ps) { total = ps.total; gem = ps.gems; }
-        const arr = ((led.sets || {})[code] || {})[e] || [];
-        const a = wPrev && arr.find((x) => x.d === wPrev), b = wNow && arr.find((x) => x.d === wNow);
-        if (a && b) { add = b.g - a.g; from = wPrev; to = wNow; } else if (e === "en") { add = null; }
+        const ch = ps && ps.change;
+        add = ch ? ch.add : null; from = ch ? ch.from : null; to = ch ? ch.to : null;
       }
       out[k] = total == null ? null : { total, gem: gem ?? null, add: add ?? null, from: from || null, to: to || null };
     }
@@ -531,12 +536,14 @@ function buildSet(src, code, datasetUpdatedOn) {
     return { last: point(last), prev: point(prev), wow: prev ? (last.median / prev.median - 1) * 100 : null, c4: ch ? ch.pct : null, isThisWeek, listed: supNow ? supNow[ed] : null, listedPrev: supPrev ? supPrev[ed] : null };
   };
 
-  // ── 주간 PSA 등급 증가(psaWeekly) 요약 — 합계·고점 주·마지막 주·직전 주.
-  const wk = s.psaWeekly && Array.isArray(s.psaWeekly.points) ? s.psaWeekly.points : [];
+  // ── 일본판 PSA 등급 증가 이력(packs psaWeekly.points {d, v, f}) 요약 — 합계·가장 바쁜 구간·마지막 구간·직전 구간.
+  //    2026-11-20: 점 = 원장 보존일 f → d 사이 증가(GemRate 갱신일을 따라 늘 7일이 아니다). 점마다 {d, v, f, days} 를 싣고,
+  //    고점은 v 가 아니라 하루 평균(v/days)으로 고른다 — 17일치 증가가 7일치보다 크다고 "가장 바쁜 주"가 되면 안 된다(동률은 늦은 쪽).
+  const wk = (s.psaWeekly && Array.isArray(s.psaWeekly.points) ? s.psaWeekly.points : []).map(psaInterval);
   const psaWeekly = wk.length ? {
-    n: wk.length, sum: wk.reduce((a, b) => a + b.v, 0), first: { d: wk[0].d, v: wk[0].v }, last: { d: wk[wk.length - 1].d, v: wk[wk.length - 1].v },
-    prev: wk.length > 1 ? { d: wk[wk.length - 2].d, v: wk[wk.length - 2].v } : null,
-    peak: (() => { const pk = wk.reduce((a, b) => (b.v > a.v ? b : a), wk[0]); return { d: pk.d, v: pk.v }; })(),
+    n: wk.length, sum: wk.reduce((a, b) => a + b.v, 0), first: wk[0], last: wk[wk.length - 1],
+    prev: wk.length > 1 ? wk[wk.length - 2] : null,
+    peak: wk.reduce((a, b) => (b.v / b.days >= a.v / a.days ? b : a), wk[0]),
     updated: s.psaWeekly.updated || null,
   } : null;
 
@@ -561,7 +568,9 @@ function buildSet(src, code, datasetUpdatedOn) {
   const counted = N.countedValues(top10, fx);
   const rv = N.rawValues(top10, fx);
   // PSA 세트 전체 집계(psaFull / psaFullEn 이 있을 때만 — 종전 psaGem/psaTotal 폴백은 2026-08-19 에 없앴다) · CGC·TAG 는 원장 값 그대로.
-  const psaBlock = (pf) => (pf ? { total: pf.total ?? null, gems: pf.gems ?? null, gemRate: pf.gemRate ?? null, updated: pf.updated || null, wowAdd: pf.wowAdd ?? null } : null);
+  //   change = 판별 원장 마지막 두 점 사이 증가 {from, to, days, add}(inject-psa-wow) — 없으면 null. 화면은 늘 시작·끝·날짜 수를 같이 쓴다(2026-11-20).
+  const psaBlock = (pf) => (pf ? { total: pf.total ?? null, gems: pf.gems ?? null, gemRate: pf.gemRate ?? null, updated: pf.updated || null,
+    change: pf.change ? { from: pf.change.from, to: pf.change.to, days: pf.change.days, add: pf.change.add } : null } : null);
   const grading = {
     psa: { jp: psaBlock(s.psaFull), en: psaBlock(s.psaFullEn) },
     cgc: { jp: s.graders?.cgc?.jp || null, en: s.graders?.cgc?.en || null },
@@ -739,7 +748,8 @@ function build(inputs) {
   const fx = packs.fx || {};
   const dataDate = packs.updated || new Date().toISOString().slice(0, 10);
   const codes = [...(packs.jp?.list || []), ...(packs.extra?.list || [])].filter((c) => packs.sets?.[c]);
-  // ── 카드 쪽 입력(2026-10-15, F4): 카드별 경매 실적(변형 키 → 낙찰 요약, 집계 기준일 day)·카드 시세 이력·예약판매 호가·PSA 판별 주간 원장(마지막 두 주).
+  // ── 카드 쪽 입력(2026-10-15, F4): 카드별 경매 실적(변형 키 → 낙찰 요약, 집계 기준일 day)·카드 시세 이력·예약판매 호가.
+  //    PSA 판별 원장은 여기서 읽지 않는다(2026-11-20) — 증감은 inject-psa-wow 가 psaFull(En).change 로 얹은 값만 쓴다.
   //    variants.usable = 카드리스트가 쓰는 "낙찰 중앙값으로 써도 되는 행"(의심 표식 없음·낙찰 3건 이상·중앙값 있음). 카드 상세 행(cards[i].auctionRows)은 낙찰 3건 이상만 본다.
   const aucRaw = readJson("data/auction-card-stats.json", { variants: {}, updated: "" });
   const cardAuction = {
@@ -751,9 +761,7 @@ function build(inputs) {
   };
   const cardSeries = readJson("data/card-series.json", { sets: {} });
   const preorder = readJson("data/preorder-series.json", { sets: {}, updated: null });
-  const psaEdWeekly = readJson("data/psa-edition-weekly.json", { sets: {}, weeks: [] });
-  const edWeeks = (psaEdWeekly.weeks || []).slice(-2);
-  const src = { packs, sold, facts, auction, pop, fx, dataDate, cardAuction, cardSeries, preorder, psaEdWeekly, psaWeeks: edWeeks.length === 2 ? edWeeks : null };
+  const src = { packs, sold, facts, auction, pop, fx, dataDate, cardAuction, cardSeries, preorder };
   // PSA 10 최저 매물 판본 규칙(2026-11-05) — 다른 판·공유 매물로 판정된 카드("세트|카드순번")는 buildCard 가 psa10Ask 를 내지 않는다.
   src.psa10Rejected = N.psa10AskRejections({ packs, setFacts: facts, officialCardlist: readJson("data/official-cardlist.json", null), audit: readJson("data/psa10-mismatch-audit.json", null) });
   const yenUsd = (yen) => (fx.jpyKrw && fx.usdKrw ? (yen * fx.jpyKrw) / fx.usdKrw : null);
@@ -909,19 +917,22 @@ function build(inputs) {
     en: Object.fromEntries(["price", "chg", "days", "psa", "gem", "multiple"].map((k) => [k, medOf(englishPages.map((c) => sets[c].metrics.en), k)])),
   };
 
-  // ── 주간 PSA 등급 증가(전 세트 합산) — 개봉 미터(build-market-index)·weekly.html 등급 표.
-  const weekTotals = {}, weekCoverage = {};
-  for (const c of codes) for (const p of (packs.sets[c]?.psaWeekly?.points || [])) { weekTotals[p.d] = (weekTotals[p.d] || 0) + p.v; weekCoverage[p.d] = (weekCoverage[p.d] || 0) + 1; }
-  const weeks = Object.keys(weekTotals).sort().map((t) => ({ d: t, v: weekTotals[t], n: weekCoverage[t] }));
-  const latestWeek = weeks[weeks.length - 1] || null, prevWeek = weeks[weeks.length - 2] || null;
+  // ── 일본판 PSA 등급 증가 합계(전 세트) — 구간 끝 날짜(d)별 {d, f, days, v, n}. weekly.html 등급 표·market-2026 월별 칸이 읽는다.
+  //    2026-11-20: 구간이 GemRate 갱신일을 따라 늘 7일이 아니다 — 끝 날짜만이 아니라 시작(f)·날짜 수(days)를 같이 싣는다.
+  //    같은 끝 날짜는 같은 구간이어야 더할 수 있다(보존일 공유 규칙 — audit-grading-numbers G2c). 다르면 서로 다른 구간을 섞은 합이라 멈춘다.
+  //    개봉 미터(전 구간 대비 %·누적 합·updated)는 읽는 곳이 없어 build-market-index 의 meter 와 함께 지웠다.
+  const byEnd = {};
+  for (const c of codes) for (const p of (packs.sets[c]?.psaWeekly?.points || []).map(psaInterval)) {
+    const t = byEnd[p.d] || (byEnd[p.d] = { d: p.d, f: p.f, days: p.days, v: 0, n: 0 });
+    if (t.f !== p.f) throw new Error(`psaWeekly ${c} 점 ${p.d} 의 구간 시작 ${p.f} 가 다른 세트(${t.f})와 다르다 — 보존일 공유 규칙 위반`);
+    t.v += p.v; t.n += 1;
+  }
   const seriesDate = sold.updated || dataDate;
   const gradeLatest = codes.map((c) => sets[c].psaWeekly && sets[c].psaWeekly.last.d).filter(Boolean).sort().pop() || null;
   const gradeAge = gradeLatest ? Math.round((Date.parse(seriesDate) - Date.parse(gradeLatest)) / DAY) : null;
   const psaWeekly = {
-    weeks, latestWeek, wowPct: latestWeek && prevWeek ? Math.round((latestWeek.v / prevWeek.v - 1) * 1000) / 10 : null,
-    allTimeGraded: codes.reduce((t, c) => t + ((packs.sets[c]?.psaFull?.total) || 0), 0),
-    updated: codes.map((c) => packs.sets[c]?.psaWeekly?.updated).filter(Boolean).sort().at(-1) || (latestWeek && latestWeek.d) || null,
-    gradeWeek: gradeAge != null && gradeAge <= 10 ? gradeLatest : null,   // 10일 넘게 낡은 주간 델타는 "이번 주"가 아니다(weekly.html)
+    intervals: Object.keys(byEnd).sort().map((d) => byEnd[d]),
+    gradeTo: gradeAge != null && gradeAge <= 10 ? gradeLatest : null,   // 마지막 구간 끝 — 10일 넘게 낡았으면 null(weekly.html 은 표를 내지 않는다)
   };
 
   // ── 발매 — 가장 최근 발매된 OP 세트와 다음 발매(어느 계열이든), 기준일은 판매 원장 asOf(발매일 글과 같은 기준).
@@ -996,7 +1007,7 @@ function build(inputs) {
   // ── 2026 시장 추이(market-2026.html) — 2026-10-19. 'one piece card market trend 2026' 질문은 4엔진 모두 우리 인용 0(10/19 실측), 받을 페이지가 없었다.
   //   달마다: 일본판·영문판 박스 = 세트마다 그 달 말일 점(box-sold-series monthEnd — 말일을 끝으로 하는 주간과 같은 창) → 세트 사이 중앙값(n = 세트 수) ·
   //   4주 등락 = 그 말일 점 대 28일 넘게 앞선 말일 점(전달 말일) ↑/↓ 세트 수 · 이번 달(판매 기준일 sold.asOf 의 달, partial)은 세트마다 현재가·홈과 같은 등락 ·
-  //   PSA 등급 증가 = 주간 증가(psaWeekly.weeks, 전 세트 합)의 그 달 합(n = 주 수) · 경매 = auction-series 월간 낙찰 수(n = 관측일 수). asOf = 그 칸 값의 마지막 관측일.
+  //   PSA 등급 증가 = 일본판 증가 구간(psaWeekly.intervals, 전 세트 합) 중 그 달에 끝나는 구간의 합(days = 날짜 수 합, from → to) · 경매 = auction-series 월간 낙찰 수(n = 관측일 수). asOf = 그 칸 값의 마지막 관측일.
   const MARKET_MIN_SETS = 5;
   const market = (() => {
     const year = String(sold.asOf || dataDate || "").slice(0, 4);
@@ -1035,7 +1046,11 @@ function build(inputs) {
       }
       return up + dn + flat ? { up, down: dn, flat, n: up + dn + flat, asOf: dates.sort().pop() } : null;
     };
-    const psaOf = (ym) => { const ws = (psaWeekly.weeks || []).filter((w) => w.d.slice(0, 7) === ym); return ws.length ? { added: ws.reduce((t, w) => t + w.v, 0), n: ws.length, asOf: ws[ws.length - 1].d } : null; };
+    // PSA = 그 달에 끝나는 구간들의 합 — days = 그 구간 날짜 수의 합, 창 = 첫 구간 시작(f) → 마지막 구간 끝(d)(2026-11-20, 종전 n = 주 수).
+    const psaOf = (ym) => {
+      const ws = psaWeekly.intervals.filter((w) => w.d.slice(0, 7) === ym);
+      return ws.length ? { added: ws.reduce((t, w) => t + w.v, 0), days: ws.reduce((t, w) => t + w.days, 0), from: ws[0].f, to: ws[ws.length - 1].d, asOf: ws[ws.length - 1].d } : null;
+    };
     const aucOf = (ym) => {
       const mo = ((auctionSeries && auctionSeries.monthly) || []).find((r) => String(r.d).slice(0, 7) === ym);
       if (!mo) return null;
@@ -1081,7 +1096,6 @@ function build(inputs) {
     cardLists,
     cardPages,
     cardAuction,                                                                   // 카드별 경매 실적(45일 롤링) — day 는 집계 기준일
-    psaEditionWeeks: src.psaWeeks ? { prev: src.psaWeeks[0], now: src.psaWeeks[1] } : null,   // PSA 판별 주간 원장의 마지막 두 주(등급 인구 페이지 비교 창)
     preorder: { updated: preorder.updated || null },
     upcoming,
     // 영문판 팩 구성(반다이 영문 상품 페이지의 팩당 카드 수, 확인일) — set-facts 에 있는 세트만, 자연 정렬.

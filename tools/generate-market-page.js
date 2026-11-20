@@ -30,7 +30,7 @@ const time = (iso) => (iso ? `<time datetime="${esc(iso)}">${esc(iso)}</time>` :
 const year = M.year;
 // 머리 사실·설명문은 다 끝난 달 기준 — 2026-11-02. 진행 중인 달(partial: 판매 기준일의 달)을 쓰면 11/02 에 '11월' 박스 중앙값·
 // 경매 '602 · 2 days' 가 10월 $417·11,799 옆에서 급락처럼 읽혔다. 진행 중인 달은 표의 마지막 줄에만, '진행 중' 꼬리표로.
-// 칸마다 그 값이 있는 마지막 완료 달을 따로 찾는다(PSA 주간 증가는 월초엔 아직 없다 — 종전엔 last.psa 만 봐서 월초마다 줄이 사라졌다).
+// 칸마다 그 값이 있는 마지막 완료 달을 따로 찾는다(PSA 증가 구간은 월초엔 아직 없다 — 종전엔 last.psa 만 봐서 월초마다 줄이 사라졌다).
 const done = M.rows.filter((r) => !r.partial);
 const lastWith = (pick) => [...done].reverse().find((r) => pick(r)) || null;
 const lastBox = lastWith((r) => r.jp && r.jp.usd != null);
@@ -40,7 +40,8 @@ const lastAuc = lastWith((r) => r.auction);
 
 const boxCell = (b) => (b ? `${usd(b.usd)}<small>n=${b.n}</small>` : "—");
 const chgCell = (c) => (c ? `<span class="up">▲ ${c.up}</span> · <span class="down">▼ ${c.down}</span><small>n=${c.n}</small>` : "—");
-const psaCell = (p) => (p ? `${intl(p.added)}<small>${p.n} wk</small>` : "—");
+// PSA 칸 꼬리표 = 그 달에 끝나는 일본판 증가 구간의 날짜 수 합(2026-11-20, 종전 "N wk") — 구간이 GemRate 갱신일을 따라 늘 7일이 아니다.
+const psaCell = (p) => (p ? `${intl(p.added)}<small>${p.days} d</small>` : "—");
 const aucCell = (a) => (a ? `${intl(a.sold)}<small>${a.n} d</small>` : "—");
 const rowAsOf = (r) => [r.jp && r.jp.asOf, r.en && r.en.asOf, r.chg && r.chg.asOf, r.psa && r.psa.asOf, r.auction && r.auction.asOf].filter(Boolean).sort().pop() || null;
 const partWord = (r) => (r.partial ? ` <small data-ko="진행 중 · 현재가">in progress · current prices</small>` : "");
@@ -49,7 +50,7 @@ const trs = M.rows.map((r) => `          <tr><th scope="row">${esc(monthLabel(r.
 const kf = kfTableAny([
   lastBox ? ["jp", `JP box median (${monthLabel(lastBox.month)})`, `일본판 박스 중앙값 (${lastBox.month})`, `<b>${usd(lastBox.jp.usd)}</b> <small>${lastBox.jp.n} <span data-ko="세트">sets</span> · ${time(lastBox.jp.asOf)}</small>`] : null,
   lastEn ? ["en", `EN box median (${monthLabel(lastEn.month)})`, `영문판 박스 중앙값 (${lastEn.month})`, `<b>${usd(lastEn.en.usd)}</b> <small>${lastEn.en.n} <span data-ko="세트">sets</span> · ${time(lastEn.en.asOf)}</small>`] : null,
-  lastPsa ? ["psa", `PSA grades added (${monthLabel(lastPsa.month)})`, `PSA 등급 증가 (${lastPsa.month})`, `<b>${intl(lastPsa.psa.added)}</b> <small>${lastPsa.psa.n} <span data-ko="주">weeks</span> · ${time(lastPsa.psa.asOf)}</small>`] : null,
+  lastPsa ? ["psa", `PSA grades added (${monthLabel(lastPsa.month)})`, `PSA 등급 증가 (${lastPsa.month})`, `<b>${intl(lastPsa.psa.added)}</b> <small>${time(lastPsa.psa.from)} → ${time(lastPsa.psa.to)} · ${lastPsa.psa.days} <span data-ko="일">days</span></small>`] : null,
   lastAuc ? ["auction", `eBay auctions sold (${monthLabel(lastAuc.month)})`, `이베이 경매 낙찰 (${lastAuc.month})`, `<b>${intl(lastAuc.auction.sold)}</b> <small>${lastAuc.auction.n} <span data-ko="일">days</span> · ${time(lastAuc.auction.asOf)}</small>`] : null,
 ], { id: "key-facts-table", label: "Market 2026 key facts", caption: `<span data-ko="원피스 카드 시장 ${year} · 기준일">One Piece TCG market ${year} · as of</span> ${time(M.asOf)}` });
 
@@ -131,7 +132,7 @@ ${KF_CSS_ANY}
 ${trs}
         </tbody>
       </table></div>
-      <p class="mkNote" data-ko-html="박스 중앙값 = 세트마다 그 달 말일 기준 주간 판매 중앙값의 세트 간 중앙값(진행 중인 달은 세트별 현재가)(n = 세트 수, ${M.minSets}세트 미만 — ) · 4주 등락 = 그 말일 점 대비 전달 말일 점(진행 중인 달은 세트 페이지·홈과 같은 현재가 기준) · PSA = 주간 등급 증가의 합(wk = 주 수) · 경매 = 이베이 완료 경매 낙찰 수(d = 관측일 수) · <a href=&quot;methodology.html#box-median&quot;>규칙</a>">Box median = median across sets of each set's weekly completed-sale median as of the month's last day; the month in progress uses each set's current price (n = sets; under ${M.minSets} sets —) · 4-wk = month-end point vs the previous month-end point; the month in progress uses current prices, as on each set page · PSA = sum of weekly grades added (wk = weeks) · auctions = completed eBay auctions sold (d = days observed) · <a href="methodology.html#box-median">Rules</a></p>
+      <p class="mkNote" data-ko-html="박스 중앙값 = 세트마다 그 달 말일 기준 주간 판매 중앙값의 세트 간 중앙값(진행 중인 달은 세트별 현재가)(n = 세트 수, ${M.minSets}세트 미만 — ) · 4주 등락 = 그 말일 점 대비 전달 말일 점(진행 중인 달은 세트 페이지·홈과 같은 현재가 기준) · PSA = 그 달에 끝나는 일본판 등급 증가 구간의 합(d = 그 구간 날짜 수 합) · 경매 = 이베이 완료 경매 낙찰 수(d = 관측일 수) · <a href=&quot;methodology.html#box-median&quot;>규칙</a>">Box median = median across sets of each set's weekly completed-sale median as of the month's last day; the month in progress uses each set's current price (n = sets; under ${M.minSets} sets —) · 4-wk = month-end point vs the previous month-end point; the month in progress uses current prices, as on each set page · PSA = sum of Japanese grades added in snapshot intervals ending that month (d = days those intervals cover) · auctions = completed eBay auctions sold (d = days observed) · <a href="methodology.html#box-median">Rules</a></p>
       <p class="mkNote"><a href="weekly.html" data-ko="이번 주">This week</a> · <a href="box-prices.html" data-ko="전체 박스 시세">All box prices</a> · <a href="compare.html" data-ko="세트 비교">Compare sets</a> · <a href="psa-grading.html" data-ko="그레이딩 통계">Grading population</a> · <a href="auction.html" data-ko="경매">Auctions</a> · <a href="free-data.html" data-ko="무료 데이터">Free data (CSV / JSON)</a></p>
     </main>
     <footer class="footer">

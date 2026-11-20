@@ -1,4 +1,4 @@
-// 주간 마켓 리포트 자동생성 — boxSeries(주간 시세)와 psaWeekly(주간 등급)에서
+// 주간 마켓 리포트 자동생성 — boxSeries(주간 시세)와 psaWeekly(일본판 등급 증가 구간)에서
 // WoW 상승/하락·등급량을 계산해 articles/weekly-market-report-YYYY-MM-DD.html 생성.
 // 사이트맵에 idempotent 추가. RSS는 tools/generate-feed.js 재실행으로 반영.
 // Run: node tools/generate-weekly-report.js
@@ -23,7 +23,8 @@ for (const [code, s] of Object.entries(d.sets || {})) {
     now: USD(last.p), prevUsd: USD(prev.p), chg: Math.round(chg * 10) / 10,
     asOf: last.d,
     grades: wk.length ? wk[wk.length - 1].v : null,
-    gradesDate: wk.length ? wk[wk.length - 1].d : null,
+    gradesFrom: wk.length ? wk[wk.length - 1].f : null,
+    gradesTo: wk.length ? wk[wk.length - 1].d : null,
   });
 }
 if (!rows.length) { console.error("시리즈 데이터 없음"); process.exit(1); }
@@ -31,15 +32,19 @@ rows.sort((a, b) => b.chg - a.chg);
 const asOf = rows.map((r) => r.asOf).sort().pop();
 const gainers = rows.filter((r) => r.chg >= 1).slice(0, 5);
 const losers = rows.filter((r) => r.chg <= -1).sort((a, b) => a.chg - b.chg).slice(0, 5);
-const gradeRows = rows.filter((r) => r.grades != null).sort((a, b) => b.grades - a.grades);
+// 등급 증가 = 원장 스냅샷 f → d 구간(2026-11-20 — GemRate 갱신일을 따라 늘 7일이 아니다). 가장 늦은 구간이 끝나는 세트만 더한다 —
+// 세트마다 마지막 점을 그냥 더하면 서로 다른 구간이 한 합에 섞인다. 문장은 "latest recorded week" 대신 시작 → 끝(날짜 수).
+const gradesTo = rows.map((r) => r.gradesTo).filter(Boolean).sort().pop() || "";
+const gradeRows = rows.filter((r) => r.grades != null && r.gradesTo === gradesTo).sort((a, b) => b.grades - a.grades);
 const totalGrades = gradeRows.reduce((a, b) => a + b.grades, 0);
-const gradesWeek = gradeRows[0]?.gradesDate || "";
+const gradesFrom = gradeRows[0]?.gradesFrom || "";
+const gradesDays = gradesFrom && gradesTo ? Math.round((Date.parse(`${gradesTo}T00:00:00Z`) - Date.parse(`${gradesFrom}T00:00:00Z`)) / 864e5) : null;
 
 const slugDate = asOf;
 const fname = `weekly-market-report-${slugDate}.html`;
 const canonical = `${SITE}/articles/${fname}`;
 const title = `One Piece Box Market Weekly: ${asOf} | OP Box Index`;
-const desc = `Week of ${asOf}: ${gainers[0] ? `${gainers[0].code} led Japanese boxes at +${gainers[0].chg}%` : "quiet week for Japanese boxes"}; ${totalGrades.toLocaleString("en-US")} new PSA grades. Auto-generated from our weekly tracking data.`;
+const desc = `Week of ${asOf}: ${gainers[0] ? `${gainers[0].code} led Japanese boxes at +${gainers[0].chg}%` : "quiet week for Japanese boxes"}; ${totalGrades.toLocaleString("en-US")} new PSA grades (${gradesFrom} → ${gradesTo}). Auto-generated from our weekly tracking data.`;
 const publishedDate = new Date().toISOString().slice(0, 10);
 const esc = (x) => String(x).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const pct = (v) => `<span style="color:${v >= 0 ? "#26d07c" : "#ff7a7a"}">${v >= 0 ? "+" : ""}${v}%</span>`;
@@ -103,8 +108,8 @@ const html = `<!doctype html>
       ${losers.length ? `<p><strong>Down:</strong></p><div class="tblWrap"><table class="dataTable tblFit"><thead><tr><th>Set</th><th>Last wk</th><th>This wk</th><th>WoW</th></tr></thead><tbody>${losers.map(tr).join("")}</tbody></table></div>` : "<p>No Japanese box fell more than 1% this week.</p>"}
       <p class="srcNoteA">Weekly ungraded market values, USD-converted. Boxes within ±1% are treated as flat and omitted.</p>
 
-      <h2>Grading activity${gradesWeek ? ` (week of ${gradesWeek})` : ""}</h2>
-      <p>Collectors added <strong>${totalGrades.toLocaleString("en-US")}</strong> new PSA grades across tracked sets in the latest recorded week. Leaders: ${gradeRows.slice(0, 3).map((r) => `<a href="../sets/${r.code.toLowerCase()}.html">${r.code}</a> (${r.grades.toLocaleString("en-US")})`).join(", ")}. Weekly bar charts on each set page show the full trend, and the background is covered in <a href="psa-grading-vs-sealed-supply-2026.html">our grading-vs-supply report</a>.</p>
+      <h2>Grading activity${gradesTo ? ` (${gradesFrom} → ${gradesTo})` : ""}</h2>
+      <p>Collectors added <strong>${totalGrades.toLocaleString("en-US")}</strong> new PSA grades between GemRate snapshots ${gradesFrom} → ${gradesTo} (${gradesDays} day${gradesDays === 1 ? "" : "s"}) across tracked sets. Leaders: ${gradeRows.slice(0, 3).map((r) => `<a href="../sets/${r.code.toLowerCase()}.html">${r.code}</a> (${r.grades.toLocaleString("en-US")})`).join(", ")}. Each set page shows its total since the first snapshot, the busiest interval and the latest interval, and the background is covered in <a href="psa-grading-vs-sealed-supply-2026.html">our grading-vs-supply report</a>.</p>
 
       <h2>How to use this</h2>
       <p>One week is noise; direction over months is signal. Use the movers table to spot boxes worth a closer look, then open the set page and check the six-month trajectory, the top-10 chase cards and the grading momentum before drawing conclusions. The <a href="../compare.html">comparison table</a> ranks all boxes side by side.</p>

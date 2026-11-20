@@ -7,7 +7,8 @@
 //
 // 데이터(2026-10-15, F4): 세트 행은 사실 파일 data/derived/site-facts.json(tools/build-site-facts.js gradingPageRows) 에서 읽는다 —
 //        sets[code].gradingPage = 판(jp/en) × 등급사(psa/cgc/tag) {total, gem, add, from, to}. 원천은 data/grading-series.json(세트×판×회사 누적 시계열),
-//        packs 의 psaFull / psaFullEn(최신 PSA 총량·젬 수 — 시계열보다 새롭다), data/psa-edition-weekly.json(PSA 주간 증감, 비교 창 = F.psaEditionWeeks).
+//        packs 의 psaFull / psaFullEn(최신 PSA 총량·젬 수 — 시계열보다 새롭다), PSA 증감·구간 = psaFull(En).change(inject-psa-wow — 판별 원장 마지막 두 점).
+//        2026-11-20: 비교 창 관문(F.psaEditionWeeks)을 지웠다 — 구간은 행마다 change 에 실려 오고, 원장 점 사이가 늘 7일이 아니다.
 //        여기서는 페이지 합계(K)·정렬·그리기만 한다. 원장 직접 읽기 없음(박스 이미지 파일 존재 확인만).
 // 합산 금지: 일본판+영문판을 더하면 어느 쪽도 설명하지 못하는 값이 된다. 같은 판 안에서 회사별 합계는 낸다(누적 막대).
 // 이미지: 세트 박스(/card-img/box/*.webp) 자체 호스팅만.
@@ -22,8 +23,6 @@ const OUT = path.join(ROOT, "psa-grading.html");
 const F = require("./build-site-facts").load();
 const ver = (fs.readFileSync(path.join(ROOT, "packs.js"), "utf8").match(/DATA_VERSION = "([^"]+)"/) || [])[1];
 
-if (!F.psaEditionWeeks) { console.error("주간 비교에 두 점이 필요 — 페이지 미생성"); process.exit(1); }
-const { prev: wPrev, now: wNow } = F.psaEditionWeeks;
 const n = (v) => (v == null ? "—" : Math.round(v).toLocaleString("en-US"));
 const sn = (v) => (v == null ? "—" : (v >= 0 ? "+" : "−") + Math.abs(Math.round(v)).toLocaleString("en-US"));
 const pct = (a, b) => (a != null && b ? (a / b * 100).toFixed(1) + "%" : "—");
@@ -33,7 +32,7 @@ const GRN = { psa: "PSA", cgc: "CGC", tag: "TAG" };
 // 최상위 등급의 정의가 회사마다 다르다 — 하나로 뭉뚱그리지 않는다. CGC 는 세트 단위 등급 분포를 수집하지 않아 비율이 없다.
 const TOP = { psa: "PSA 10", cgc: "Pristine 10 + Gem Mint 10", tag: "10 + 10P" };
 
-// 세트 행 — 사실 파일 sets[code].gradingPage(PSA 는 최신 전체 스냅샷, 주간 증감은 판별 원장의 마지막 두 주). 박스 이미지는 파일이 있을 때만.
+// 세트 행 — 사실 파일 sets[code].gradingPage(PSA 는 최신 전체 스냅샷, 증감은 판별 원장 마지막 두 점 사이). 박스 이미지는 파일이 있을 때만.
 const rows = F.order.all.map((code) => {
   const set = F.sets[code];
   const box = set.box && fs.existsSync(path.join(ROOT, set.box.replace(/^\//, ""))) ? set.box.replace(/^\//, "") : null;
@@ -44,6 +43,8 @@ rows.sort((a, b) => (tot(b, "jp") + tot(b, "en")) - (tot(a, "jp") + tot(a, "en")
 const sumBy = (e, k, f) => rows.reduce((t, r) => t + ((r[e][k] && r[e][k][f]) || 0), 0);
 const K = {};
 for (const e of ["jp", "en"]) for (const k of GR) K[e + k] = { total: sumBy(e, k, "total"), add: sumBy(e, k, "add"), gem: sumBy(e, k, "gem") };
+// PSA 판 합계 증가는 그 판에서 PSA 총량이 있는 행이 모두 증가를 가질 때만(2026-11-20) — 몇 세트가 빠진 합을 그 판 전체의 증가처럼 쓰지 않는다("—").
+for (const e of ["jp", "en"]) if (rows.some((r) => r[e].psa && r[e].psa.total != null && r[e].psa.add == null)) K[e + "psa"].add = null;
 const win = (k, e) => { const r = rows.find((x) => x[e][k] && x[e][k].from); return r ? `${r[e][k].from.slice(5)} → ${r[e][k].to.slice(5)}` : ""; };
 // Dataset 기간·수정일 = 배포 파일(등급 CSV·JSON)의 관측일 범위 — free-data 의 같은 Dataset 과 한 함수(tools/dataset-coverage.js, 2026-10-14 QA).
 // 이 Dataset 은 CSV·JSON 두 파일을 내려주므로 기간 = 두 파일 기간의 합(첫날~마지막 날), 수정일 = 둘 중 늦은 날 — 2026-10-15(3차).
@@ -55,7 +56,10 @@ const GRADE_SPAN = (() => {
   const sp = DC.span([csv && csv.from, csv && csv.to, json && json.from, json && json.to]);
   return sp && { ...sp, to: DC.latestDate(sp.to, json && json.modified) };
 })();
-const updated = rows.flatMap((r) => ["jp", "en"].flatMap((e) => GR.map((k) => (r[e][k] && r[e][k].to) || ""))).sort().pop() || wNow;
+const updated = rows.flatMap((r) => ["jp", "en"].flatMap((e) => GR.map((k) => (r[e][k] && r[e][k].to) || ""))).sort().pop();
+if (!updated) { console.error("등급 표에 관측일이 하나도 없다 — 페이지 미생성"); process.exit(1); }
+// Dataset 기간 대체값(배포 파일 기간이 없을 때) — 첫 행의 PSA 증감 시작일부터(2026-11-20, 종전 원장 비교 창 시작).
+const psaFrom = (rows.map((r) => (r.jp.psa && r.jp.psa.from) || (r.en.psa && r.en.psa.from)).find(Boolean)) || updated;
 
 // ── 세트별 누적 막대(회사별 색), 일본판·영문판 두 줄, 같은 눈금
 const maxTot = Math.max(...rows.flatMap((r) => [tot(r, "jp"), tot(r, "en")]), 1);
@@ -81,7 +85,7 @@ const setCell = (r, size) => `<td class="l setCell"><a href="sets/${r.code.toLow
 const tr = (r) => `<tr>${setCell(r, 44)}${GR.map((k) => cellG(r, k)).join("")}</tr>`;
 const foot = `<tr><td class="l"><b>All ${rows.length} sets</b></td>${GR.map((k) => `<td class="num ${k}">${n(K["jp" + k].total)}<small>${sn(K["jp" + k].add)}</small>${K["jp" + k].gem ? `<small class="gem">${pct(K["jp" + k].gem, K["jp" + k].total)} top</small>` : ""}<small class="mOnly">EN ${n(K["en" + k].total)}</small></td><td class="num ${k} hideM en">${n(K["en" + k].total)}<small>${sn(K["en" + k].add)}</small>${K["en" + k].gem ? `<small class="gem">${pct(K["en" + k].gem, K["en" + k].total)} top</small>` : ""}</td>`).join("")}</tr>`;
 
-// ── 최근 증가 상위 10(일본판, PSA 주간 증가 기준 정렬)
+// ── 최근 증가 상위 10(일본판, PSA 증가 기준 정렬 — 원장 마지막 두 점 사이, 화면 라벨은 MM-DD → MM-DD)
 const byAdd = [...rows].filter((r) => r.jp.psa && r.jp.psa.add != null).sort((a, b) => b.jp.psa.add - a.jp.psa.add).slice(0, 10);
 const addTr = (r) => `<tr>${setCell(r, 36)}${GR.map((k) => `<td class="num ${k}">${r.jp[k] && r.jp[k].add != null ? sn(r.jp[k].add) : "—"}</td>`).join("")}</tr>`;
 
@@ -115,7 +119,7 @@ const html = `<!doctype html>
     <meta property="og:image" content="https://opboxindex.com/og-image.png" />
     <meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "Dataset", name: "One Piece grading population by set (PSA, CGC, TAG; Japanese and English)", description: DESC, isAccessibleForFree: true, url: "https://opboxindex.com/psa-grading.html", license: "https://creativecommons.org/licenses/by/4.0/", distribution: [{ "@type": "DataDownload", encodingFormat: "text/csv", contentUrl: "https://opboxindex.com/opbox-grading-population.csv" }, { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://opboxindex.com/opbox-ai-grading.json" }], creator: { "@type": "Organization", name: "OP Box Index", url: "https://opboxindex.com/" }, temporalCoverage: GRADE_SPAN ? GRADE_SPAN.coverage : `${wPrev}/${updated}`, dateModified: GRADE_SPAN ? GRADE_SPAN.to : updated, variableMeasured: ["Cards graded by PSA", "Cards graded by CGC", "Cards graded by TAG", "PSA 10 share", "TAG 10 and 10P share", "Change since previous report"] })}</script>
+    <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "Dataset", name: "One Piece grading population by set (PSA, CGC, TAG; Japanese and English)", description: DESC, isAccessibleForFree: true, url: "https://opboxindex.com/psa-grading.html", license: "https://creativecommons.org/licenses/by/4.0/", distribution: [{ "@type": "DataDownload", encodingFormat: "text/csv", contentUrl: "https://opboxindex.com/opbox-grading-population.csv" }, { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://opboxindex.com/opbox-ai-grading.json" }], creator: { "@type": "Organization", name: "OP Box Index", url: "https://opboxindex.com/" }, temporalCoverage: GRADE_SPAN ? GRADE_SPAN.coverage : `${psaFrom}/${updated}`, dateModified: GRADE_SPAN ? GRADE_SPAN.to : updated, variableMeasured: ["Cards graded by PSA", "Cards graded by CGC", "Cards graded by TAG", "PSA 10 share", "TAG 10 and 10P share", "Change since previous report"] })}</script>
     <script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "OP Box Index", item: "https://opboxindex.com/" }, { "@type": "ListItem", position: 2, name: "Grading population", item: "https://opboxindex.com/psa-grading.html" }] })}</script>
     <link rel="stylesheet" href="styles.css?v=${ver}" />
     <script defer src="lang-toggle.js?v=${ver}"></script>

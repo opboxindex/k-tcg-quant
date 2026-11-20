@@ -203,7 +203,7 @@ const DATA_URLS = [
   "https://opboxindex.com/data/onepiece-packs.json",
 ];
 const SITE_BASE = "https://opboxindex.com";
-const DATA_VERSION = "20261118design2";
+const DATA_VERSION = "20261120psa";
 
 // 경매 중계기(Cloudflare Worker) 주소. 정적 호스팅이라 실시간 경매는 이 중계기를 통해서만 온다.
 // 비어 있으면 경매 섹션은 통째로 숨는다 — 빈 상자를 띄워 레이아웃만 밀어내지 않기 위함.
@@ -713,30 +713,50 @@ function psaRarShort(r) { return PSA_RAR_SHORT[r] || String(r || "").split(/\s+/
 
 // PSA 등급·개봉 패널 — 우리가 수집한 PSA 인구조사(psa/psaGem/psaTotal) 기반. 캡처(TCG Quant)와 유사 레이아웃이지만 숫자는 우리 데이터.
 // 주간 PSA 등급 증가 막대차트 (TCG Quant 스타일: y축 눈금선 + hover 툴팁, 청록 그라데이션)
-// 판(일본판/영문판)별 누적 등급 + 최근 주간 증감. 세트에 따라 영문판이 일본판의 2배인
+// 판(일본판/영문판)별 누적 등급 + 원장 마지막 두 점 사이 증가. 세트에 따라 영문판이 일본판의 2배인
 // 경우도 있어 한쪽만 보면 시장의 절반을 못 본다. 합산은 하지 않는다 — 젬률이 뜻을 잃는다.
 // 영문판 PSA 수치를 못 구한 세트는 행을 만들되 비운다. "미발매"라고 쓰지 말 것 —
 // 2026-07-27 실사고: OP-14·OP-15 를 미발매로 표기했으나 CGC·TAG 에는 영문판 기록이 있었다.
+// 2026-11-20: 증가 칸은 psaFull(En).change(inject-psa-wow) = {from, to, days, add, pct, spark}. 원장 점 사이가 늘 7일이 아니라
+//   (10-27 → 11-13 = 17일) "This week/주간" 대신 열 제목에 날짜 수, 각주에 시작 → 끝을 그대로 쓴다 — 7일 구간도 같은 꼴.
+//   두 판 구간은 같은 원장 날짜라 같다(공유 날짜 규칙) — 일본판 change, 없으면 영문판 change 의 구간을 쓴다.
 function renderEditionTable(set) {
   const jp = set.psaFull, en = set.psaFullEn;
   if (!jp) return "";
-  const w = set.psaWow;
-  // 12주 궤적(inject-psa-wow.js 의 wowSpark). 세트마다 절대량이 수십~수천으로 갈리므로
-  // 각자의 최대값에 맞춰 그린다 — 선은 방향만 말하고, 크기 비교는 옆의 숫자로 한다.
-  const spark = (v, cls) => {
-    if (!Array.isArray(v) || v.length < 4) return "";
-    const W = 58, H = 15, max = Math.max(...v, 1), step = W / (v.length - 1);
-    const d = v.map((x, i) => `${i ? "L" : "M"}${(i * step).toFixed(1)} ${(H - 1 - (x / max) * (H - 2)).toFixed(1)}`).join(" ");
+  const w = (jp.change || (en && en.change)) || null;
+  // 궤적 = 구간마다 하루 평균(add ÷ days)을 계단으로. x 는 구간 날짜 수에 비례 — 17일 구간은 7일 구간보다 넓고,
+  // 17일치 증가가 급증처럼 솟지 않는다. 세트마다 절대량이 수십~수천으로 갈리므로 각자의 최대값에 맞춰 그린다 —
+  // 선은 방향만 말하고, 크기 비교는 옆의 숫자로 한다. 4구간 미만이면 inject 가 spark 를 만들지 않는다.
+  const sparkStart = (sp) => {
+    const total = sp.reduce((a, x) => a + x[0], 0);
+    return new Date(Date.parse(`${w.to}T00:00:00Z`) - total * 864e5).toISOString().slice(0, 10);
+  };
+  const spark = (sp, cls) => {
+    if (!Array.isArray(sp) || sp.length < 4) return "";
+    const W = 58, H = 15, total = sp.reduce((a, x) => a + x[0], 0);
+    const rate = sp.map((x) => x[1] / x[0]), max = Math.max(...rate, 1e-9);
+    const y = (r) => (H - 1 - (r / max) * (H - 2)).toFixed(1);
+    let x = 0, d = `M0 ${y(rate[0])}`;
+    sp.forEach((iv, i) => { x += (iv[0] / total) * W; d += ` H${x.toFixed(1)}`; if (i + 1 < sp.length) d += ` V${y(rate[i + 1])}`; });
     return `<svg class="edSpark ${cls}" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><path d="${d}"/></svg>`;
   };
-  const wk = (d, cls) => (d && d.wowAdd != null
-    ? `<td class="edNum edAdd">+${num(d.wowAdd)}${spark(d.wowSpark, cls)}</td><td class="edGem">${d.wowPct >= 0 ? "+" : ""}${d.wowPct}%</td>`
+  const drawn = [jp.change, en && en.change].filter((c) => c && Array.isArray(c.spark) && c.spark.length >= 4);
+  const wk = (d, cls) => (d && d.change
+    ? `<td class="edNum edAdd">+${num(d.change.add)}${spark(d.change.spark, cls)}</td><td class="edGem">${d.change.pct >= 0 ? "+" : ""}${d.change.pct}%</td>`
     : `<td class="edNum">&mdash;</td><td class="edGem">&mdash;</td>`);
   const row = (label, d, note, cls) => `<tr><td class="edName">${label}</td><td class="edNum">${d ? num(d.total) : "&mdash;"}</td><td class="edNum">${d ? num(d.gems != null ? d.gems : d.gem10) : "&mdash;"}</td><td class="edGem">${d ? d.gemRate + "%" : `<span class="edNone">${note}</span>`}</td>${wk(d, cls)}</tr>`;
-  return `<div class="edWrap" role="region" tabindex="0" aria-label="${t("판본별 그레이딩 비교", "Grading by edition")}"><table class="edTable"><thead><tr><th class="gHead gPsa">${t("PSA 그레이딩", "PSA grading")}</th><th>${t("누적 등급", "Total graded")}</th><th>PSA 10</th><th>${t("젬률", "Gem rate")}</th><th>${t("주간", "This week")}</th><th>%</th></tr></thead><tbody>
+  // 각주 — 시작 → 끝(날짜 수). 궤적을 그렸으면 그 시작일까지. 두 판 궤적 길이가 다르면(영문판 계열이 짧은 세트) 판마다 적는다.
+  const starts = [...new Set(drawn.map((c) => sparkStart(c.spark)))];
+  const sinceEn = starts.length === 1 ? starts[0] : drawn.map((c) => `${sparkStart(c.spark)} (${c === jp.change ? "JP" : "EN"})`).join(" · ");
+  const sinceKo = starts.length === 1 ? starts[0] : drawn.map((c) => `${c === jp.change ? "일본판" : "영문판"} ${sparkStart(c.spark)}`).join(" · ");
+  const foot = w
+    ? t(`증가 = 집계 스냅샷 ${w.from} → ${w.to} 사이 새로 등급 받은 수(${w.days}일)${drawn.length ? ` · 선 = 구간별 하루 평균(${sinceKo}부터)` : ""}`,
+      `Change = new PSA grades between population snapshots ${w.from} → ${w.to} (${w.days} day${w.days === 1 ? "" : "s"})${drawn.length ? ` · line = average per day in each interval since ${sinceEn}` : ""}`)
+    : "";
+  return `<div class="edWrap" role="region" tabindex="0" aria-label="${t("판본별 그레이딩 비교", "Grading by edition")}"><table class="edTable"><thead><tr><th class="gHead gPsa">${t("PSA 그레이딩", "PSA grading")}</th><th>${t("누적 등급", "Total graded")}</th><th>PSA 10</th><th>${t("젬률", "Gem rate")}</th><th>${w ? t(`${w.days}일 증가`, `${w.days}-day change`) : t("증가", "Change")}</th><th>%</th></tr></thead><tbody>
     ${row(t("일본판", "Japanese"), jp, "", "edJp")}
     ${row(t("영문판", "English"), en, t("집계중", "collecting"), "edEn")}
-  </tbody></table>${w ? `<p class="edFoot">${t(`주간 = ${w.from} 대비 ${w.to} 증가분`, `This week = change from ${w.from} to ${w.to}`)}</p>` : ""}${renderGraderTable(set)}</div>`;
+  </tbody></table>${foot ? `<p class="edFoot">${foot}</p>` : ""}${renderGraderTable(set)}</div>`;
 }
 
 // 등급사별로 따로 소개한다 — CGC 와 TAG 를 "타 등급사"로 묶으면 각 등급사의 등급 체계가

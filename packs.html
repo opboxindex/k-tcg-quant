@@ -10,14 +10,14 @@
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="preload" href="fonts/bricolage-grotesque-latin-750.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css?v=20261118design2" />
-    <script defer src="lang-toggle.js?v=20261118design2"></script>
+    <link rel="stylesheet" href="styles.css?v=20261120psa" />
+    <script defer src="lang-toggle.js?v=20261120psa"></script>
     <script>
       // 2026-10-08: 첫 화면은 정적 선렌더(prerender-home.js)라 JSON 이 첫 그리기에 필요 없다. 1MB 를 첫 그리기 전에 받아 파싱하면
       // 느린 폰에서 그만큼 그리기가 늦어진다(라이트하우스 실측). load 뒤에 받고, 받으면 packs.js 가 같은 화면을 다시 그린다.
       window.__opPackData = new Promise(function (resolve) {
         var go = function () {
-          resolve(fetch("data/onepiece-packs.json?v=20261118design2", { cache: "default", priority: "low" })
+          resolve(fetch("data/onepiece-packs.json?v=20261120psa", { cache: "default", priority: "low" })
             .then(function (r) { return r.ok ? r.json() : null; })
             .catch(function () { return null; }));
         };
@@ -1103,37 +1103,27 @@
         <h1>One Piece Booster Box Prices <span>&amp; TCG eBay Auction Data</span></h1>
         <p class="affTop"><b>Paid Link:</b> As an eBay Partner Network affiliate, we earn from qualifying purchases.</p>
       </section>
-      <div class="marketStatus" id="marketStatus" aria-label="Market status"><!--PRERENDER:marketStatus--><span><i></i>eBay completed sales</span><span>updated daily</span><span>data 2026-11-18</span><span>23 sets · USD</span><!--/PRERENDER:marketStatus--></div>
+      <div class="marketStatus" id="marketStatus" aria-label="Market status"><!--PRERENDER:marketStatus--><span><i></i>eBay completed sales</span><span>updated daily</span><span>data 2026-11-20</span><span>23 sets · USD</span><!--/PRERENDER:marketStatus--></div>
       <section class="todayDeals" id="todayDeals" aria-label="Today's box deals" aria-live="polite"><!--PRERENDER:todayDeals-->
     <div class="dealsHead"><span>Today's box deals</span><small>Verified listings under recent sold · incl. shipping · Japanese &amp; English</small></div>
     <div class="dealsRow">
+      <a class="dealCard" href="https://www.ebay.com/itm/128184402395?_skw=One+Piece+Card+Game+PRB-01+Premium+Booster+Premium+Booster+Box+English+sealed&amp;hash=item1dd862c1db%3Ag%3AaKEAAeSwRHlq8Xjx&amp;customid=home-deal-prb-01-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+        <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/PRB-01.webp" loading="eager" fetchpriority="high"><span class="dealLbl">PRB-01 EN</span></span>
+        <span class="dealBody">
+          <span class="dealSet"><b>PRB-01</b> Premium Booster<span class="dealEd">English</span></span>
+          <span class="dealPriceRow"><span class="dealPrice">$800</span><span class="dealWas">recent sold $939</span></span>
+          <span class="dealSave">−$139 · 15% under recent sold <small>(13 sales to 11-17)</small></span>
+          <span class="dealMeta">Ships from US · free shipping · asks mid $900, 19 listings (−11%)</span>
+        </span>
+        <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
+      </a>
       <a class="dealCard" href="https://www.ebay.com/itm/227597478430?_skw=One+Piece+Card+Game+EB-05+Heroines+Edition+vol.2+Extra+Booster+Box+English+sealed&amp;hash=item34fdddea1e%3Ag%3A8yEAAeSw8Rpq6xcT&amp;customid=home-deal-eb-05-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/EB-05.webp" loading="eager" fetchpriority="high"><span class="dealLbl">EB-05 EN</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>EB-05</b> Heroines Edition vol.2<span class="dealEd">English</span></span>
           <span class="dealPriceRow"><span class="dealPrice">$150</span><span class="dealWas">recent sold $289</span></span>
           <span class="dealSave">−$139 · 48% under recent sold <small>(72 sales to 11-19)</small></span>
-          <span class="dealMeta">Ships from IL · free shipping · asks mid $259, 24 listings (−42%)</span>
-        </span>
-        <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
-      </a>
-      <a class="dealCard" href="https://www.ebay.com/itm/860150827579?_skw=One+Piece+Card+Game+PRB-01+Premium+Booster+Premium+Booster+Box+English+sealed&amp;hash=itemc844fc0a3b%3Ag%3AXW0AAeSwiTdq-8tf&amp;customid=home-deal-prb-01-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
-        <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/PRB-01.webp" loading="eager" fetchpriority="high"><span class="dealLbl">PRB-01 EN</span></span>
-        <span class="dealBody">
-          <span class="dealSet"><b>PRB-01</b> Premium Booster<span class="dealEd">English</span></span>
-          <span class="dealPriceRow"><span class="dealPrice">$825</span><span class="dealWas">recent sold $939</span></span>
-          <span class="dealSave">−$114 · 12% under recent sold <small>(13 sales to 11-17)</small></span>
-          <span class="dealMeta">Ships from US · free shipping · asks mid $900, 16 listings (−8%)</span>
-        </span>
-        <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
-      </a>
-      <a class="dealCard" href="https://www.ebay.com/itm/336896380650?_skw=One+Piece+Card+Game+OP-16+The+Time+of+Battle+Booster+Box+English+sealed&amp;hash=item4e7096ceea%3Ag%3AU3IAAeSwa%7E5q943V&amp;amdata=enc%3AAQALAAABMOf5zIIojhOf%2BkQK%2Bxzjn7lhsndm2u4%2FAf6yZrniln3qmfmsMLSz6Tc45W%2BjjMyCv5lr6IFJohLmN%2Fy6R6HZ8tqQmDSRXJi%2FgcWy7KO1%2BKBlWW7Kw0k2LztXOTMZ%2FCbRU%2Fmm0bl7mgTyF2V%2FGlT2464KtHqbPKaUMpepBe%2FWCuzBel75PQIgCejYPxvc2SaTmxlmBANkF9d7oteVnhNWlyuUX5mYVVX7vN7hJRa%2FNMvyFSB95Evfo%2F31RMU9xDhpzoN8x4DgesS8frF1GrnKZ5xoJLQWG0Mu%2B8oXxZRv731uaV3GthNC6SBuiReLhO17xHvhd1L2RjGkEk4JocQD7p6m1DElBlAsTnw2sKWMC9X7FRaffrLZ8pRwsJsVT9AgvGSF5LeGzvIDSUFDGBg15Wg%3D&amp;customid=home-deal-op-16-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
-        <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/OP-16.webp" loading="lazy"><span class="dealLbl">OP-16 EN</span></span>
-        <span class="dealBody">
-          <span class="dealSet"><b>OP-16</b> The Time of Battle<span class="dealEd">English</span></span>
-          <span class="dealPriceRow"><span class="dealPrice">$145</span><span class="dealWas">recent sold $235</span></span>
-          <span class="dealSave">−$90 · 38% under recent sold <small>(52 sales to 11-19)</small></span>
-          <span class="dealMeta">Ships from US · free shipping · asks mid $264, 6 listings (−45%)</span>
+          <span class="dealMeta">Ships from IL · free shipping · asks mid $250, 26 listings (−40%)</span>
         </span>
         <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
       </a>
@@ -1141,9 +1131,19 @@
         <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/EB-03.webp" loading="lazy"><span class="dealLbl">EB-03 EN</span></span>
         <span class="dealBody">
           <span class="dealSet"><b>EB-03</b> Heroine's Edition<span class="dealEd">English</span></span>
-          <span class="dealPriceRow"><span class="dealPrice">$250</span><span class="dealWas">recent sold $325</span></span>
-          <span class="dealSave">−$75 · 23% under recent sold <small>(9 sales to 11-02)</small></span>
-          <span class="dealMeta">Ships from US · free shipping · asks mid $315, 10 listings (−21%)</span>
+          <span class="dealPriceRow"><span class="dealPrice">$252</span><span class="dealWas">recent sold $325</span></span>
+          <span class="dealSave">−$73 · 22% under recent sold <small>(9 sales to 11-02)</small></span>
+          <span class="dealMeta">Ships from US · free shipping · asks mid $280, 21 listings (−10%)</span>
+        </span>
+        <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
+      </a>
+      <a class="dealCard" href="https://www.ebay.com/itm/860070788371?_skw=One+Piece+Card+Game+EB-02+Anime+25th+Collection+Extra+Booster+Box+English+sealed&amp;hash=itemc84036bd13%3Ag%3ADdoAAeSwfrlq2W2n&amp;customid=home-deal-eb-02-en&amp;mkcid=1&amp;mkrid=711-53200-19255-0&amp;siteid=0&amp;campid=5339163744&amp;toolid=10001&amp;mkevt=1" target="_blank" rel="noopener noreferrer sponsored">
+        <span class="dealPhoto"><img width="150" height="104" alt="" decoding="async" src="card-img/box/hero/EB-02.webp" loading="lazy"><span class="dealLbl">EB-02 EN</span></span>
+        <span class="dealBody">
+          <span class="dealSet"><b>EB-02</b> Anime 25th Collection<span class="dealEd">English</span></span>
+          <span class="dealPriceRow"><span class="dealPrice">$657</span><span class="dealWas">recent sold $729</span></span>
+          <span class="dealSave">−$72 · 10% under recent sold <small>(14 sales to 11-15)</small></span>
+          <span class="dealMeta">Ships from US · incl. $8 shipping · asks mid $770, 11 listings (−15%)</span>
         </span>
         <span class="dealCta"><span class="dealBtn">Buy on eBay <i>↗</i></span><span class="dealPaid">Paid Link</span></span>
       </a>
@@ -1256,6 +1256,6 @@
       </nav>
     </footer>
 
-    <script data-home-js>(function(){function go(){["packs.js?v=20261118design2"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
+    <script data-home-js>(function(){function go(){["packs.js?v=20261120psa"].forEach(function(src){var e=document.createElement("script");e.src=src;e.async=false;document.body.appendChild(e);});}if(document.readyState==="complete")setTimeout(go,0);else window.addEventListener("load",function(){setTimeout(go,0);});})();</script>
   </body>
 </html>

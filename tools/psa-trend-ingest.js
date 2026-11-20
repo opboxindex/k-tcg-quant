@@ -6,24 +6,38 @@
 // 둘째 인자는 같은 주 카드별 팝 리포트 덤프(box-sold-cdp/psa-nav-run.js 출력 — sets·updated). 추이가 멈췄으면
 // 세트 누적(일본판 latest·영문판 총량)을 그 카드 합계로 대신한다(규칙: collect-gemrate-psa-history.js popReportLatest, 2026-11-12).
 // 두 원장은 모든 검사가 끝난 뒤에만 쓴다 — 영문판에서 멈추면 일본판도 안 바뀐다.
+// 일본판 주간 이력 날짜는 판별 누적 원장과 같은 선택기(psa-snapshot-select.js)·같은 필수 계열(판별 원장에 점이 있는 대상)로 고른다
+// (2026-11-20). 그래서 영문판 덤프 세트 = 영문판 총량 원장의 url 세트인지를 일본판 적재 전에 확인한다(41계열 목록이 같아야 한다).
+// 빈 주(gaps)·끝나지 않은 주(pending)는 출력에 남긴다 — 빈 주는 known-gaps.json 에 등록할 몫(psa-edition-weekly-ingest 도 같은 주를 낸다).
 // Run: node tools/psa-trend-ingest.js <추이 덤프.json> <카드별 팝 덤프.json>   → 이어서 node tools/psa-edition-weekly-ingest.js <추이 덤프>
 const fs = require("node:fs");
 const path = require("node:path");
 const ROOT = path.resolve(__dirname, "..");
 const { appendVerifiedWeeks, lastLiveRow, popReportTotals, popReportLatest } = require("./collect-gemrate-psa-history.js");
+const { snapshotTargets, selectionBasis } = require("./psa-snapshot-select.js");
 if (process.argv.length < 4) throw new Error("사용법: node tools/psa-trend-ingest.js <추이 덤프.json> <카드별 팝 덤프.json>");
 const dump = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
 const pop = popReportTotals(JSON.parse(fs.readFileSync(process.argv[3], "utf8")));
 const popProblems = [];
 const popMissing = [];
 
-// JP — 주간 원장
 const jpPath = path.join(ROOT, "data/gemrate-psa-history.json");
 const jp = JSON.parse(fs.readFileSync(jpPath, "utf8"));
+const enPath = path.join(ROOT, "data/gemrate-psa-en-totals.json");
+const en = JSON.parse(fs.readFileSync(enPath, "utf8"));
 const jpMissing = Object.keys(jp.sets).filter((c) => !dump.jp[c]);
 if (jpMissing.length) throw new Error("JP 덤프에 없는 세트: " + jpMissing.join(","));
+const enUnknown = Object.keys(dump.en).filter((c) => !en.sets[c]?.url);
+if (enUnknown.length) throw new Error("EN 원장에 없는 세트: " + enUnknown.join(","));
+const enExpected = Object.entries(en.sets).filter(([, s]) => s?.url).map(([c]) => c).filter((c) => !dump.en[c]);
+if (enExpected.length) throw new Error("EN 덤프에 없는 세트: " + enExpected.join(","));
+
+// JP — 주간 원장. 필수 계열 = 판별 누적 원장에 점이 하나라도 있는 대상(새 대상은 날짜 선택을 막지 않는다).
+const edition = JSON.parse(fs.readFileSync(path.join(ROOT, "data/psa-edition-weekly.json"), "utf8"));
+// 바닥값(판별 원장 마지막 누적)도 같이 넘긴다 — 판별 적재기와 같은 입력이어야 값 이상·리셋 날을 두 원장이 똑같이 건너뛴다.
+const { required, floors } = selectionBasis(edition, snapshotTargets(jp, en));
 const before = jp.weeklyThrough;
-const r = appendVerifiedWeeks(jp, dump.jp);
+const r = appendVerifiedWeeks(jp, dump, required, floors);
 const jpPop = [];
 for (const [code, set] of Object.entries(jp.sets)) {
   if (!pop[`${code}|jp`]) { popMissing.push(`${code}/jp`); continue; }
@@ -37,12 +51,9 @@ if (jpPop.length) jp.collectedAt = Object.values(jp.sets).map((set) => set.lates
 // asOf = 그 값의 기준일. 추이는 끝에 붙은 상류 정지일 복사본을 걷어낸 마지막 행만 본다(lastLiveRow).
 // 지금 값(asOf)이 추이보다 새것이면 추이로 덮지 않는다. 지금 값이 팝 리포트 대체값인데 그보다 새 추이가 더 작으면
 // 중단하지 않고 팝 리포트 값을 둔 채 사유를 남긴다 — 두 페이지 집계가 어긋난 것이지 누적이 준 게 아니다.
-const enPath = path.join(ROOT, "data/gemrate-psa-en-totals.json");
-const en = JSON.parse(fs.readFileSync(enPath, "utf8"));
 const dates = []; let updated = 0; const regressed = []; const enPop = [];
 for (const [code, rows] of Object.entries(dump.en)) {
   const cur = en.sets[code];
-  if (!cur || !cur.url) throw new Error("EN 원장에 없는 세트: " + code);
   const last = lastLiveRow(dump.en, code);
   if (!last || !Number.isInteger(last.total_grades) || last.total_grades <= 0) continue;
   if (!(cur.asOf && cur.asOf >= last.date)) {
@@ -64,9 +75,7 @@ for (const [code, rows] of Object.entries(dump.en)) {
   }
   dates.push(cur.asOf); updated += 1;
 }
-const enExpected = Object.entries(en.sets).filter(([, s]) => s?.url).map(([c]) => c).filter((c) => !dump.en[c]);
 if (regressed.length) { console.error(JSON.stringify({ status: "regression", regressed })); process.exit(1); }
-if (enExpected.length) throw new Error("EN 덤프에 없는 세트: " + enExpected.join(","));
 en.collectedAt = dates.sort().at(-1);
 
 if (r.changed || jpPop.length) fs.writeFileSync(jpPath, `${JSON.stringify(jp, null, 2)}\n`, "utf8");

@@ -2,8 +2,8 @@
   "version": 1,
   "basis": "GemRate public full-set PSA population trend",
   "collectedAt": "2026-11-14",
-  "weeklyThrough": "2026-10-28",
-  "note": "Append-only verified Wednesday-to-Wednesday GemRate full-set PSA deltas. Retained dates must never be deleted. Declared upstream corrections remain visible as gaps instead of estimated values. Weekly history is published from 2025-12-03 only; earlier weeks are intentionally not republished.",
+  "weeklyThrough": "2026-11-13",
+  "note": "Append-only verified Wednesday-to-Wednesday GemRate full-set PSA deltas. Retained dates must never be deleted. Declared upstream corrections remain visible as gaps instead of estimated values. Weekly history is published from 2025-12-03 only; earlier weeks are intentionally not republished. From 2026-11-20 each point is the change since the previous retained date, on one shared snapshot day per ISO week chosen by tools/psa-snapshot-select.js (not always 7 days). One logged correction: the 2026-10-28 points (GemRate repeated 2026-10-27 for 18 of 22 sets) were replaced by 2026-10-27.",
   "sets": {
     "OP-01": {
       "year": 2022,
@@ -347,11 +347,18 @@
           "totalGems": 55068
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 333,
           "gems": 283,
           "totalGrades": 61639,
           "totalGems": 55351
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 961,
+          "gems": 807,
+          "totalGrades": 62600,
+          "totalGems": 56158
         }
       ]
     },
@@ -697,11 +704,18 @@
           "totalGems": 27330
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 145,
           "gems": 122,
           "totalGrades": 30681,
           "totalGems": 27452
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 611,
+          "gems": 530,
+          "totalGrades": 31292,
+          "totalGems": 27982
         }
       ]
     },
@@ -1047,11 +1061,18 @@
           "totalGems": 23229
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 94,
           "gems": 83,
           "totalGrades": 26532,
           "totalGems": 23312
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 414,
+          "gems": 345,
+          "totalGrades": 26946,
+          "totalGems": 23657
         }
       ]
     },
@@ -1397,11 +1418,18 @@
           "totalGems": 30357
         },
         {
-          "d": "2026-10-28",
-          "grades": 202,
-          "gems": 168,
-          "totalGrades": 33641,
-          "totalGems": 30525
+          "d": "2026-10-27",
+          "grades": 157,
+          "gems": 130,
+          "totalGrades": 33596,
+          "totalGems": 30487
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 697,
+          "gems": 578,
+          "totalGrades": 34293,
+          "totalGems": 31065
         }
       ]
     },
@@ -1733,11 +1761,18 @@
           "totalGems": 72199
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 699,
           "gems": 563,
           "totalGrades": 82520,
           "totalGems": 72762
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 2016,
+          "gems": 1670,
+          "totalGrades": 84536,
+          "totalGems": 74432
         }
       ]
     },
@@ -2083,11 +2118,18 @@
           "totalGems": 35972
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 207,
           "gems": 180,
           "totalGrades": 38634,
           "totalGems": 36152
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 794,
+          "gems": 698,
+          "totalGrades": 39428,
+          "totalGems": 36850
         }
       ]
     },
@@ -2433,11 +2475,18 @@
           "totalGems": 12745
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 70,
           "gems": 55,
           "totalGrades": 13860,
           "totalGems": 12800
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 570,
+          "gems": 517,
+          "totalGrades": 14430,
+          "totalGems": 13317
         }
       ]
     },
@@ -2783,11 +2832,18 @@
           "totalGems": 35489
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 283,
           "gems": 253,
           "totalGrades": 38884,
           "totalGems": 35742
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1191,
+          "gems": 1043,
+          "totalGrades": 40075,
+          "totalGems": 36785
         }
       ]
     },
@@ -3133,11 +3189,18 @@
           "totalGems": 24739
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 165,
           "gems": 142,
           "totalGrades": 27058,
           "totalGems": 24881
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 953,
+          "gems": 850,
+          "totalGrades": 28011,
+          "totalGems": 25731
         }
       ]
     },
@@ -3146,11 +3209,10 @@
       "setName": "One Piece Japanese PRB01-Premium Booster -One Piece Card the Best-",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20PRB01-Premium%20Booster%20-One%20Piece%20Card%20the%20Best-",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 54343,
-        "totalGems": 46974,
-        "gemRate": 86.4,
-        "source": "pop-report"
+        "date": "2026-11-16",
+        "totalGrades": 54603,
+        "totalGems": 47185,
+        "gemRate": 86.4
       },
       "weekly": [
         {
@@ -3483,11 +3545,18 @@
           "totalGems": 44862
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 493,
           "gems": 422,
           "totalGrades": 52244,
           "totalGems": 45284
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1957,
+          "gems": 1568,
+          "totalGrades": 54201,
+          "totalGems": 46852
         }
       ]
     },
@@ -3833,11 +3902,18 @@
           "totalGems": 71090
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 705,
           "gems": 591,
           "totalGrades": 80579,
           "totalGems": 71681
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 3146,
+          "gems": 2681,
+          "totalGrades": 83725,
+          "totalGems": 74362
         }
       ]
     },
@@ -3846,11 +3922,10 @@
       "setName": "One Piece Japanese OP10-Royal Blood",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP10-Royal%20Blood",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 18410,
-        "totalGems": 16018,
-        "gemRate": 87,
-        "source": "pop-report"
+        "date": "2026-11-16",
+        "totalGrades": 18613,
+        "totalGems": 16186,
+        "gemRate": 87
       },
       "weekly": [
         {
@@ -4183,11 +4258,18 @@
           "totalGems": 15044
         },
         {
-          "d": "2026-10-28",
-          "grades": 292,
-          "gems": 227,
-          "totalGrades": 17515,
-          "totalGems": 15271
+          "d": "2026-10-27",
+          "grades": 234,
+          "gems": 185,
+          "totalGrades": 17457,
+          "totalGems": 15229
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 710,
+          "gems": 580,
+          "totalGrades": 18167,
+          "totalGems": 15809
         }
       ]
     },
@@ -4533,11 +4615,18 @@
           "totalGems": 14010
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 405,
           "gems": 333,
           "totalGrades": 16331,
           "totalGems": 14343
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1293,
+          "gems": 1125,
+          "totalGrades": 17624,
+          "totalGems": 15468
         }
       ]
     },
@@ -4883,11 +4972,18 @@
           "totalGems": 29048
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 412,
           "gems": 338,
           "totalGrades": 35161,
           "totalGems": 29386
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1552,
+          "gems": 1288,
+          "totalGrades": 36713,
+          "totalGems": 30674
         }
       ]
     },
@@ -5233,11 +5329,18 @@
           "totalGems": 15165
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 239,
           "gems": 216,
           "totalGrades": 17781,
           "totalGems": 15381
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1198,
+          "gems": 1024,
+          "totalGrades": 18979,
+          "totalGems": 16405
         }
       ]
     },
@@ -5583,11 +5686,18 @@
           "totalGems": 23295
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 584,
           "gems": 500,
           "totalGrades": 27156,
           "totalGems": 23795
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 2075,
+          "gems": 1773,
+          "totalGrades": 29231,
+          "totalGems": 25568
         }
       ]
     },
@@ -5933,11 +6043,18 @@
           "totalGems": 50157
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 1167,
           "gems": 960,
           "totalGrades": 60359,
           "totalGems": 51117
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 3821,
+          "gems": 3028,
+          "totalGrades": 64180,
+          "totalGems": 54145
         }
       ]
     },
@@ -6262,11 +6379,18 @@
           "totalGems": 17918
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 429,
           "gems": 356,
           "totalGrades": 21190,
           "totalGems": 18274
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1510,
+          "gems": 1227,
+          "totalGrades": 22700,
+          "totalGems": 19501
         }
       ]
     },
@@ -6605,11 +6729,18 @@
           "totalGems": 25214
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 616,
           "gems": 530,
           "totalGrades": 29742,
           "totalGems": 25744
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 2110,
+          "gems": 1736,
+          "totalGrades": 31852,
+          "totalGems": 27480
         }
       ]
     },
@@ -6857,11 +6988,18 @@
           "totalGems": 20239
         },
         {
-          "d": "2026-10-28",
-          "grades": 1421,
-          "gems": 1237,
-          "totalGrades": 23514,
-          "totalGems": 21476
+          "d": "2026-10-27",
+          "grades": 1127,
+          "gems": 982,
+          "totalGrades": 23220,
+          "totalGems": 21221
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 3082,
+          "gems": 2728,
+          "totalGrades": 26302,
+          "totalGems": 23949
         }
       ]
     },
@@ -7004,11 +7142,18 @@
           "totalGems": 16871
         },
         {
-          "d": "2026-10-28",
+          "d": "2026-10-27",
           "grades": 1009,
           "gems": 843,
           "totalGrades": 19577,
           "totalGems": 17714
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 2923,
+          "gems": 2513,
+          "totalGrades": 22500,
+          "totalGems": 20227
         }
       ]
     },
@@ -7088,11 +7233,18 @@
           "totalGems": 823
         },
         {
-          "d": "2026-10-28",
-          "grades": 392,
-          "gems": 278,
-          "totalGrades": 1621,
-          "totalGems": 1101
+          "d": "2026-10-27",
+          "grades": 329,
+          "gems": 226,
+          "totalGrades": 1558,
+          "totalGems": 1049
+        },
+        {
+          "d": "2026-11-13",
+          "grades": 1676,
+          "gems": 1261,
+          "totalGrades": 3234,
+          "totalGems": 2310
         }
       ]
     }
@@ -7146,7 +7298,8 @@
     "2026-10-07",
     "2026-10-14",
     "2026-10-21",
-    "2026-10-28"
+    "2026-10-27",
+    "2026-11-13"
   ],
   "corrections": {
     "OP-05": [

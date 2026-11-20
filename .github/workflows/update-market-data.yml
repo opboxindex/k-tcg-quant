@@ -67,31 +67,20 @@ jobs:
           mkdir -p logs
           node tools/update-box-series-history.js 2>&1 | tee logs/update-box-series-history.log
 
-      # ⚠️ GemRate 수집은 러너에서 자주 실패한다("OP-01: GemRate RowData unavailable").
-      #    로컬 크롬(사용자 IP)에서는 같은 스크립트가 멀쩡히 도는 걸로 보아 데이터센터 IP 쪽 차단으로 보인다.
-      #    이 스텝이 죽으면서 **뒤의 모든 스텝(가격 감사·페이지 재생성·커밋)까지 통째로 스킵**돼,
-      #    2026-07-27·08-03 두 주 동안 주간 갱신이 아무것도 커밋되지 않았다(2026-08-03 확인).
-      #    PSA 는 어차피 매주 월요일에 사람이 로컬에서 돌리기로 했으므로(HANDOFF 참고),
-      #    여기서는 실패해도 나머지를 계속 진행시킨다. 값을 지어내는 게 아니라 그 주 PSA 점만 비는 것이다.
-      - name: Collect and append verified PSA weekly history
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          mkdir -p logs
-          node tools/collect-gemrate-psa-history.js 2>&1 | tee logs/collect-gemrate-psa-history.log
-          node tools/import-gemrate-psa-history.js 2>&1 | tee logs/import-gemrate-psa-history.log
-
-      # 판별(일본판/영문판) 누적을 매주 한 점씩 쌓는다. 화면에는 최근 두 점의 차이만 쓰지만
-      # 점을 계속 보존해야 몇 달 뒤에 주차별 증가량을 우리 데이터로 말할 수 있다(소급 불가).
-      # 위와 같은 이유로 실패해도 뒤를 막지 않는다 — 단, audit-grading-numbers 는 여기 두지 않고
-      # 뒤의 Check(tools/check.js)에서 **등급 숫자 검증을 계속 강제**한다(그건 실패하면 진짜 멈춰야 한다).
-      - name: Append per-edition PSA cumulative snapshot
+      # PSA 원장 두 개(일본판 주간 이력 gemrate-psa-history.json · 판별 누적 psa-edition-weekly.json)는 CI 가 더 이상 쌓지 않는다 — 2026-11-20.
+      # GemRate 가 2026-09-02 부터 헤드리스를 봇으로 막아 러너 수집이 매주 실패했고("GemRate RowData unavailable"),
+      # Actions 는 이 원장들을 한 번도 커밋하지 못했다. 적재는 월요일 9346 실브라우저 덤프 → psa-trend-ingest →
+      # psa-edition-weekly-ingest(같은 스냅샷 선택기, tools/MONDAY-GRADING.md 1번) 한 길뿐이다. 그래서 헤드리스
+      # collect-gemrate-psa-history 단계(와 그 뒤 import-gemrate-psa-history)와 collect-psa-edition-weekly 를 지웠다.
+      # 아래는 영문판 총량만 다시 시도한다(실패해도 뒤를 막지 않음). inject-psa-wow 는 import-gemrate-en-totals 뒤 맨 끝 —
+      # import 가 psaFullEn 을 통째로 다시 써서 change 가 지워지기 때문이다. 등급 숫자 검증(audit-grading-numbers)은 여기 두지 않고
+      # 뒤의 Check(tools/check.js)에서 **계속 강제**한다(그건 실패하면 진짜 멈춰야 한다).
+      - name: Refresh English PSA totals
         continue-on-error: true
         run: |
           set -o pipefail
           mkdir -p logs
           node tools/collect-gemrate-en-totals.js 2>&1 | tee logs/collect-gemrate-en-totals.log
-          node tools/collect-psa-edition-weekly.js 2>&1 | tee logs/collect-psa-edition-weekly.log
           node tools/import-gemrate-en-totals.js 2>&1 | tee logs/import-gemrate-en-totals.log
           node tools/inject-psa-wow.js 2>&1 | tee logs/inject-psa-wow.log
 
@@ -129,9 +118,6 @@ jobs:
             data/box-sold-series.json
             data/derived/site-facts.json
             data/image-variants.json
-            data/gemrate-psa-history.json
-            data/psa-population-snapshots.json
-            data/psa-edition-weekly.json
             data/gemrate-psa-en-totals.json
             data/price-quality-audit.json
             data/active-listing-audit.json
@@ -140,13 +126,13 @@ jobs:
 
       - name: Commit changes
         run: |
-          if git diff --quiet data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-history.json data/psa-population-snapshots.json data/psa-edition-weekly.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html; then
+          if git diff --quiet data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html; then
             echo "No market data changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-history.json data/psa-population-snapshots.json data/psa-edition-weekly.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html
+          git add data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html
           if ! git diff --quiet; then
             echo "::error::Tracked generated files remain unstaged. Update the explicit commit scope before publishing."
             git status --short
@@ -170,7 +156,7 @@ jobs:
             # rebase 로 원본·생성기가 바뀌었을 수 있다 — 같은 순서(build → check)로 전부 다시 굽는다, 2026-10-15.
             node tools/build.js
             node tools/check.js --gate
-            git add data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-history.json data/psa-population-snapshots.json data/psa-edition-weekly.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html
+            git add data/grading-series.json data/onepiece-packs.json data/box-sold-series.json data/image-variants.json data/gemrate-psa-en-totals.json data/price-quality-audit.json data/active-listing-audit.json sets/ cards/ ko/ articles/ img/ card-img/ psa-grading.html psa10-ranking.html market-2026.html feed.xml auction.html tcg-auction.html box-prices.html compare.html index.html packs.html free-data.html weekly.html opbox-ai-data.json opbox-ai-cards.json opbox-ai-grading.json opbox-ai-auctions.json llms.txt llms-full.txt opbox-set-prices.csv opbox-grading-population.csv opbox-auction-daily.csv sitemap.xml data/sitemap-lastmod-state.json ja/ about.html amazon-lottery.html changelog.html disclaimer.html methodology.html privacy.html
             if ! git diff --quiet; then
               echo "::error::Post-rebase regeneration left tracked files unstaged."
               git status --short
@@ -183,4 +169,4 @@ jobs:
       - name: Verify PSA population snapshot freshness
         if: always()
         run: |
-          node tools/update-psa-weekly-history.js --check-freshness
+          node tools/update-psa-weekly-history.js

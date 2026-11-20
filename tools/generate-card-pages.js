@@ -271,12 +271,13 @@ for (const { code, set: s, card: c } of cands) {
     // PSA10 실거래·인구가 아직 없는 변형(금·은 SP 등) — 추정치를 넣는 건 금지다. 세트 맥락(검증된 값만)을 둔다. 2026-07-30.
     // 2026-10-15 소유자 결정: "No PSA 10 figure is shown … because …" 문장과 "Fallback estimate: none" 을 지우고
     // 값 칸 라벨 하나("PSA 10 sold median: — (fewer than 3 …)")로 바꿨다.
-    const sf = s.grading.psa.jp;
+    // 세트 증가는 원장 두 점 사이 — 시작 → 끝(날짜 수)을 같이 쓴다(2026-11-20, 종전 "latest recorded week" 는 17일 구간도 한 주로 읽혔다).
+    const sf = s.grading.psa.jp, ch = sf && sf.change;
     gradeSection = `
       <h2>${esc(c.name)} PSA 10 market status</h2>
       <ul class="factList">
         <li>PSA 10 sold median: — (fewer than 3 exact-printing sales)</li>
-        ${sf && sf.total ? `<li>${esc(code)} Japanese PSA submissions: ${intl(sf.total)} · gem rate: ${sf.gemRate}%${sf.wowAdd != null ? ` · latest recorded week: +${intl(sf.wowAdd)}` : ""}</li>` : ""}
+        ${sf && sf.total ? `<li>${esc(code)} Japanese PSA submissions: ${intl(sf.total)} · gem rate: ${sf.gemRate}%${ch ? ` · ${ch.from} → ${ch.to} (${ch.days} day${ch.days === 1 ? "" : "s"}): +${intl(ch.add)} new grades` : ""}</li>` : ""}
         <li><a href="../sets/${setSlug}.html">Open the ${esc(code)} set-level grading and box record</a></li>
       </ul>`;
   }

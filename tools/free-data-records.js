@@ -11,7 +11,7 @@ const BOX_HEAD = [
 ];
 const GRADE_HEAD = [
   "set_code", "set_name_en", "edition",
-  "psa_total", "psa10_rate_pct", "psa_weekly_add", "psa_total_as_of", "psa_weekly_add_as_of",
+  "psa_total", "psa10_rate_pct", "psa_added", "psa_total_as_of", "psa_added_from", "psa_added_to",
   "cgc_total", "cgc_total_as_of", "cgc_pristine10", "cgc_gem_mint10", "cgc_grade_split_as_of",
   "tag_total", "tag_total_as_of", "tag_10", "tag_10p", "tag_grade_split_as_of",
 ];
@@ -57,15 +57,16 @@ function buildBoxRecords(data) {
 const series = (src, code, edition) => src?.sets?.[code]?.[edition] || [];
 const latest = (src, code, edition, predicate = () => true) => [...series(src, code, edition)].reverse().find(predicate) || null;
 
-/** Keep total, weekly-change and grade-split dates separate across every grader. */
+/** Keep total, change-window and grade-split dates separate across every grader. */
 function buildGradeRecords(data, cgc, tag) {
   const records = [], dates = [];
   for (const code of trackedCodes(data)) for (const edition of ["jp", "en"]) {
     const set = data.sets[code];
     const psa = edition === "jp" ? set.psaFull : set.psaFullEn;
-    // 주간 증가분(wowAdd)은 두 판 모두 판별 주간 원장의 마지막 두 수요일 차다(inject-psa-wow.js → set.psaWow). 그 끝 수요일이 기준일이다 —
-    // 영문판 총량 날짜(psaFullEn.updated)를 쓰면 총량을 팝 리포트로 최신화한 주에 증가분 날짜가 열흘 넘게 앞서 찍힌다(2026-11-12).
-    const psaWeekly = set.psaWow?.to;
+    // 증가분은 두 판 모두 판별 원장 마지막 두 점의 차다(inject-psa-wow.js → psaFull(En).change). 총량 날짜(psa_total_as_of)와 기간이 달라
+    // 시작·끝을 따로 싣는다 — 2026-11-20: 원장 점 사이가 늘 7일이 아니라(10-27 → 11-13 = 17일) "weekly add + 끝 날짜" 한 칸으로는 기간을 못 읽는다.
+    // 옛 열(psa_weekly_add·psa_weekly_add_as_of)은 남기지 않는다. change 가 없으면 세 칸 모두 빈칸.
+    const change = psa?.change || null;
     const cgcTotal = latest(cgc, code, edition);
     const cgcSplit = latest(cgc, code, edition, (point) => point?.grades && Object.keys(point.grades).length);
     const tagTotal = latest(tag, code, edition);
@@ -73,14 +74,14 @@ function buildGradeRecords(data, cgc, tag) {
     if (!psa && !cgcTotal && !tagTotal) continue;
     const record = {
       set_code: code, set_name_en: set.nameEn ?? "", edition: edition === "jp" ? "japanese" : "english",
-      psa_total: psa?.total ?? "", psa10_rate_pct: psa?.gemRate ?? "", psa_weekly_add: psa?.wowAdd ?? "",
-      psa_total_as_of: psa?.updated ?? "", psa_weekly_add_as_of: psa?.wowAdd == null ? "" : (psaWeekly ?? ""),
+      psa_total: psa?.total ?? "", psa10_rate_pct: psa?.gemRate ?? "", psa_added: change ? change.add : "",
+      psa_total_as_of: psa?.updated ?? "", psa_added_from: change ? change.from : "", psa_added_to: change ? change.to : "",
       cgc_total: cgcTotal?.total ?? "", cgc_total_as_of: cgcTotal?.d ?? "",
       cgc_pristine10: cgcSplit?.grades?.["Pristine 10"] ?? "", cgc_gem_mint10: cgcSplit?.grades?.["Gem Mint 10"] ?? "", cgc_grade_split_as_of: cgcSplit?.d ?? "",
       tag_total: tagTotal?.total ?? "", tag_total_as_of: tagTotal?.d ?? "",
       tag_10: tagSplit?.g10 ?? "", tag_10p: tagSplit?.g10p ?? "", tag_grade_split_as_of: tagSplit?.d ?? "",
     };
-    dates.push(record.psa_total_as_of, record.psa_weekly_add_as_of, record.cgc_total_as_of, record.cgc_grade_split_as_of, record.tag_total_as_of, record.tag_grade_split_as_of);
+    dates.push(record.psa_total_as_of, record.psa_added_from, record.psa_added_to, record.cgc_total_as_of, record.cgc_grade_split_as_of, record.tag_total_as_of, record.tag_grade_split_as_of);
     records.push(record);
   }
   return { records, dates };

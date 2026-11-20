@@ -519,8 +519,10 @@ ${cardRows}
   const gradingSection = (() => {
     const n = (v) => Number(v).toLocaleString("ko-KR");
     const g = [];
-    const G = s.grading;   // 사실 파일: psa {jp,en}(total·gemRate·wowAdd) · cgc {jp,en} · tag {jp,en}
-    if (G.psa.jp && G.psa.jp.total) g.push(["PSA", "일본판", `${n(G.psa.jp.total)}장${G.psa.jp.wowAdd != null ? `<small>최근 한 주 +${n(G.psa.jp.wowAdd)}장</small>` : ""}`, G.psa.jp.gemRate != null ? `PSA 10 ${G.psa.jp.gemRate}%` : "—"]);
+    const G = s.grading;   // 사실 파일: psa {jp,en}(total·gemRate·change{from,to,days,add}) · cgc {jp,en} · tag {jp,en}
+    // 증가 꼬리표 = 원장 두 점의 시작~끝·날짜 수·증가(2026-11-20) — "최근 한 주"는 17일 구간도 한 주로 읽혔다(10-27 → 11-13). 7일이어도 같은 꼴.
+    const chJp = G.psa.jp && G.psa.jp.change;
+    if (G.psa.jp && G.psa.jp.total) g.push(["PSA", "일본판", `${n(G.psa.jp.total)}장${chJp ? `<small>${chJp.from.slice(5)}~${chJp.to.slice(5)} ${chJp.days}일 +${n(chJp.add)}장</small>` : ""}`, G.psa.jp.gemRate != null ? `PSA 10 ${G.psa.jp.gemRate}%` : "—"]);
     if (G.psa.en && G.psa.en.total) g.push(["PSA", "영문판", `${n(G.psa.en.total)}장`, G.psa.en.gemRate != null ? `PSA 10 ${G.psa.en.gemRate}%` : "—"]);
     const one = (x) => x && (x.jp ? ["일본판", x.jp] : x.en ? ["영문판", x.en] : null);
     const cgc = one(G.cgc);

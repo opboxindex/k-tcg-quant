@@ -1,6 +1,6 @@
 "use strict";
 // 원장·시계열·데이터 파일 무결성 — 사실 파일의 입력 쪽. 2026-10-15 분할. (append-only 원장은 여기서 읽기만 한다)
-//  D1 시세 시리즈 매니페스트 [2026-07-17 야간봇 덮어씀] · D2 PSA 스냅샷 = 현재 총량 · D3 PSA 전수 이력 = 검증 원천 · D5/D5b 박스 sold 시계열·boxMarket currency [2026-07-23 $0.00]
+//  D1 시세 시리즈 매니페스트 [2026-07-17 야간봇 덮어씀] · D2 PSA 스냅샷 = 현재 총량 · D3 PSA 전수 이력 = 검증 원천(점 f = 직전 보관 날짜) [2026-11-20] · D5/D5b 박스 sold 시계열·boxMarket currency [2026-07-23 $0.00]
 //  D6 박스 원장 유일키 id+판매일 [2026-08-25] · D7/D8 TAG·CGC 주간 이력 append-only · D9 카드 경매 집계 형식 · D10/D11 CGC·TAG 카드별 이력
 //  D12 다른 카드게임 혼입 금지 [2026-09-24 건담 EB-01] · D13 진행매물 스냅샷 = 시계열 점 [2026-09-30] · D15 원장 판매일 = eBay 표시일 [2026-10-01]
 //  D16 미발매 판에 sold 숫자 금지(시계열·원장 대조) [2026-10-14 OP-18 예약판매가 sold 로] · A1/A3 경매 원장(원피스·TCG) · A2 경매 시계열 축 [2026-08-25 GMV +16.9%]
@@ -50,7 +50,7 @@ function run() {
     if (!src || !full) { errors.push(`D3: ${code} full-set PSA source or live data missing`); continue; }
     if (full.total !== src.latest?.totalGrades || full.gems !== src.latest?.totalGems) errors.push(`D3: ${code} full-set PSA totals differ from verified source`);
     if (!Array.isArray(points) || points.length < 4 || points.at(-1)?.d !== V.weeklyThrough) errors.push(`D3: ${code} weekly PSA graph does not reach ${V.weeklyThrough}`);
-    if (JSON.stringify(points || []) !== JSON.stringify((src.weekly || []).map((p) => ({ d: p.d, v: p.grades })))) errors.push(`D3: ${code} weekly PSA graph differs from the verified source`);
+    if (JSON.stringify(points || []) !== JSON.stringify(psaWeeklyPoints(V, code))) errors.push(`D3: ${code} weekly PSA graph differs from the verified source`);
     const have = new Set((points || []).map((p) => p.d)), corr = new Set((V.corrections?.[code] || []).map((e) => e.date)), first = points?.[0]?.d;
     for (const d of V.retainedWeeklyDates || []) if (first && d >= first && !have.has(d) && !corr.has(d)) errors.push(`D3: ${code} retained PSA week ${d} was deleted`);
     if (points?.some((p) => !Number.isFinite(p.v) || p.v < 0)) errors.push(`D3: ${code} weekly PSA graph contains an invalid value`);
@@ -258,6 +258,14 @@ function run() {
   }
 }
 
+// D3 기대 점 {d, v, f} — import-gemrate-psa-history 코드를 쓰지 않고 원장만으로 따로 만든다(2026-11-20).
+// f = 보관 날짜(retainedWeeklyDates)에서 d 바로 앞 날짜, 첫 보관 날짜면 d − 7일(옛 점은 7일 전 수요일과의 차). 목록에 없는 d 는 f:null(= 불일치로 걸림).
+function psaWeeklyPoints(V, code) {
+  const R = V.retainedWeeklyDates || [];
+  const fOf = (d) => { const i = R.indexOf(d); return i < 0 ? null : i > 0 ? R[i - 1] : new Date(Date.parse(`${d}T00:00:00Z`) - 7 * 864e5).toISOString().slice(0, 10); };
+  return (V.sets?.[code]?.weekly || []).map((p) => ({ d: p.d, v: p.grades, f: fOf(p.d) }));
+}
+
 // OL1 — 생성기 코드를 쓰지 않고 원장만으로 다시 센다: n + out = 창 안 즉시구매, 중앙값 = outliers 뺀 중앙값, win 은 7일 단위로 cap 까지만.
 function ol1(bs, lg) {
   const rule = bs.outlierRule || {};
@@ -382,4 +390,4 @@ function auctions() {
   }
 }
 
-module.exports = { checks, run };
+module.exports = { checks, run, psaWeeklyPoints };

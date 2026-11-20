@@ -64,6 +64,7 @@ ID 는 도구 출력과 1:1 이다. "정의" 는 도구가 실제로 세는 그�
 | C9 | PSA10 실거래 | `psa10-sold` | 월 1회 | 35 / 60 |
 | C10 | 환율 | `fx` | 매일(영업일) | 2 / 3 |
 | C11 | 공식 카드리스트 | `official-cardlist` | 매일 | 2 / 3 |
+| C12 | PSA 판별 누적 | `psa-edition` | 주 1회 | 8 / 14 |
 
 상태: 정상 → OK, 지연 → WARN, 늦음·없음·오류 → FAIL. 개선 = 그 행의 `how`(수동) 또는 워크플로 `wf`(자동, 멈췄으면 Actions 로그). `collect-status.js` 에 key 가 없으면 FAIL.
 

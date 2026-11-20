@@ -2361,7 +2361,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 3,
-    "sold": 10,
+    "sold": 11,
     "windowDays": 45,
     "through": "2026-11-20"
    },
@@ -2593,7 +2593,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 3.25,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-20"
+   },
    "psa10": null,
    "cardPage": null
   },

@@ -858,13 +858,15 @@ function build(inputs) {
   const sets = {};
   for (const code of [...codes, ...seriesCodes.filter((c) => !codes.includes(c))]) sets[code] = buildSet(src, code, datasetUpdatedOn);
 
-  // ── 비교표(compare.html · best-one-piece-booster-box.html) 행 — 추적 세트(packs) 전부 + 판매 원장에만 있는 세트 중 일본판 점이 있거나 미발매인 세트.
+  // ── 비교표(compare.html · best-one-piece-booster-box.html) 행 — 추적 세트(packs) 전부 + 판매 원장에만 있는 세트 중 미발매인 세트.
   //    가장 비싼 카드·4주 변동은 세트 사실과 같은 값. 추적 세트는 일본판 점이 아직 없어도 싣는다(2026-11-02 EB-05 승격: 일본 발매 다음 날이라 일본판
   //    주간 점 0 → 행이 빠져 "Sets compared 22" ≠ 다른 페이지 23, 가드 OV1). 일본판 칸은 값이 없으면 "—".
+  //    발매됐지만 아직 승격(packs) 전인 세트는 싣지 않는다(2026-11-22 OP-18: 11-21 발매, 일본판 주간 점이 생기자 행이 늘어 "24" ≠ 성적표 23, 가드 OV1).
+  //    승격하면 codes 에 들어와 바로 실린다 — 비교표의 발매 세트는 언제나 성적표와 같은 목록이다.
   const compareRows = seriesCodes.map((code) => {
     const eds = sold.sets[code];
     const jp = (eds.jp || []).filter((x) => Number.isFinite(x.median));
-    if (!jp.length && !sets[code].unreleased && !codes.includes(code)) return null;
+    if (!codes.includes(code) && !sets[code].unreleased) return null;
     const cur = eds.current || {};
     const now = cur.jp || { median: null, n: null };
     const enNow = cur.en || null;

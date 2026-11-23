@@ -1,7 +1,7 @@
 {
   "version": 1,
   "basis": "GemRate public full-set PSA population trend",
-  "collectedAt": "2026-11-14",
+  "collectedAt": "2026-11-22",
   "weeklyThrough": "2026-11-13",
   "note": "Append-only verified Wednesday-to-Wednesday GemRate full-set PSA deltas. Retained dates must never be deleted. Declared upstream corrections remain visible as gaps instead of estimated values. Weekly history is published from 2025-12-03 only; earlier weeks are intentionally not republished. From 2026-11-20 each point is the change since the previous retained date, on one shared snapshot day per ISO week chosen by tools/psa-snapshot-select.js (not always 7 days). One logged correction: the 2026-10-28 points (GemRate repeated 2026-10-27 for 18 of 22 sets) were replaced by 2026-10-27.",
   "sets": {
@@ -10,10 +10,10 @@
       "setName": "One Piece Japanese OP01-Romance Dawn",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2022&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP01-Romance%20Dawn",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 62684,
-        "totalGems": 56224,
-        "gemRate": 89.7,
+        "date": "2026-11-22",
+        "totalGrades": 63295,
+        "totalGems": 56726,
+        "gemRate": 89.6,
         "source": "pop-report"
       },
       "weekly": [
@@ -367,9 +367,9 @@
       "setName": "One Piece Japanese OP02-Paramount War",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2022&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP02-Paramount%20War",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 31364,
-        "totalGems": 28047,
+        "date": "2026-11-22",
+        "totalGrades": 31704,
+        "totalGems": 28332,
         "gemRate": 89.4,
         "source": "pop-report"
       },
@@ -724,10 +724,10 @@
       "setName": "One Piece Japanese OP03-Pillars of Strength",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2023&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP03-Pillars%20of%20Strength",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 26983,
-        "totalGems": 23687,
-        "gemRate": 87.8,
+        "date": "2026-11-22",
+        "totalGrades": 27298,
+        "totalGems": 23953,
+        "gemRate": 87.7,
         "source": "pop-report"
       },
       "weekly": [
@@ -1081,10 +1081,10 @@
       "setName": "One Piece Japanese OP04-Kingdoms of Intrigue",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2023&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP04-Kingdoms%20of%20Intrigue",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 34323,
-        "totalGems": 31088,
-        "gemRate": 90.6,
+        "date": "2026-11-22",
+        "totalGrades": 34678,
+        "totalGems": 31393,
+        "gemRate": 90.5,
         "source": "pop-report"
       },
       "weekly": [
@@ -1438,10 +1438,10 @@
       "setName": "One Piece Japanese OP05-Awakening of the New Era",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2023&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP05-Awakening%20of%20the%20New%20Era",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 84946,
-        "totalGems": 74767,
-        "gemRate": 88,
+        "date": "2026-11-22",
+        "totalGrades": 85966,
+        "totalGems": 75603,
+        "gemRate": 87.9,
         "source": "pop-report"
       },
       "weekly": [
@@ -1781,10 +1781,10 @@
       "setName": "One Piece Japanese OP06-Wings of the Captain",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2023&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP06-Wings%20of%20the%20Captain",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 39536,
-        "totalGems": 36950,
-        "gemRate": 93.5,
+        "date": "2026-11-22",
+        "totalGrades": 39892,
+        "totalGems": 37258,
+        "gemRate": 93.4,
         "source": "pop-report"
       },
       "weekly": [
@@ -2138,10 +2138,10 @@
       "setName": "One Piece Japanese EB01-Extra Booster -Memorial Collection-",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20EB01-Extra%20Booster%20-Memorial%20Collection-",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 14452,
-        "totalGems": 13335,
-        "gemRate": 92.3,
+        "date": "2026-11-22",
+        "totalGrades": 14857,
+        "totalGems": 13692,
+        "gemRate": 92.2,
         "source": "pop-report"
       },
       "weekly": [
@@ -2495,9 +2495,9 @@
       "setName": "One Piece Japanese OP07-500 Years in the Future",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP07-500%20Years%20in%20the%20Future",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 40291,
-        "totalGems": 36964,
+        "date": "2026-11-22",
+        "totalGrades": 40836,
+        "totalGems": 37439,
         "gemRate": 91.7,
         "source": "pop-report"
       },
@@ -2852,10 +2852,10 @@
       "setName": "One Piece Japanese OP08-Two Legends",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP08-Two%20Legends",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 28042,
-        "totalGems": 25758,
-        "gemRate": 91.9,
+        "date": "2026-11-23",
+        "totalGrades": 28603,
+        "totalGems": 26253,
+        "gemRate": 91.8,
         "source": "pop-report"
       },
       "weekly": [
@@ -3209,10 +3209,11 @@
       "setName": "One Piece Japanese PRB01-Premium Booster -One Piece Card the Best-",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20PRB01-Premium%20Booster%20-One%20Piece%20Card%20the%20Best-",
       "latest": {
-        "date": "2026-11-16",
-        "totalGrades": 54603,
-        "totalGems": 47185,
-        "gemRate": 86.4
+        "date": "2026-11-22",
+        "totalGrades": 55339,
+        "totalGems": 47816,
+        "gemRate": 86.4,
+        "source": "pop-report"
       },
       "weekly": [
         {
@@ -3565,10 +3566,10 @@
       "setName": "One Piece Japanese OP09-Emperors in the New World",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP09-Emperors%20in%20the%20New%20World",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 83927,
-        "totalGems": 74538,
-        "gemRate": 88.8,
+        "date": "2026-11-22",
+        "totalGrades": 85422,
+        "totalGems": 75805,
+        "gemRate": 88.7,
         "source": "pop-report"
       },
       "weekly": [
@@ -3922,10 +3923,11 @@
       "setName": "One Piece Japanese OP10-Royal Blood",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2024&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP10-Royal%20Blood",
       "latest": {
-        "date": "2026-11-16",
-        "totalGrades": 18613,
-        "totalGems": 16186,
-        "gemRate": 87
+        "date": "2026-11-22",
+        "totalGrades": 18997,
+        "totalGems": 16500,
+        "gemRate": 86.9,
+        "source": "pop-report"
       },
       "weekly": [
         {
@@ -4278,10 +4280,10 @@
       "setName": "One Piece Japanese EB02-Extra Booster -Anime 25th Collection-",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20EB02-Extra%20Booster%20-Anime%2025th%20Collection-",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 17826,
-        "totalGems": 15636,
-        "gemRate": 87.7,
+        "date": "2026-11-22",
+        "totalGrades": 18674,
+        "totalGems": 16388,
+        "gemRate": 87.8,
         "source": "pop-report"
       },
       "weekly": [
@@ -4635,9 +4637,9 @@
       "setName": "One Piece Japanese OP11-A Fist of Divine Speed",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP11-A%20Fist%20of%20Divine%20Speed",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 36825,
-        "totalGems": 30773,
+        "date": "2026-11-22",
+        "totalGrades": 37673,
+        "totalGems": 31511,
         "gemRate": 83.6,
         "source": "pop-report"
       },
@@ -4992,9 +4994,9 @@
       "setName": "One Piece Japanese OP12-Legacy of the Master",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP12-Legacy%20of%20the%20Master",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 19057,
-        "totalGems": 16473,
+        "date": "2026-11-22",
+        "totalGrades": 19404,
+        "totalGems": 16770,
         "gemRate": 86.4,
         "source": "pop-report"
       },
@@ -5349,9 +5351,9 @@
       "setName": "One Piece Japanese PRB02-Premium Booster -One Piece Card the Best- Vol.2",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20PRB02-Premium%20Booster%20-One%20Piece%20Card%20the%20Best-%20Vol.2",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 29509,
-        "totalGems": 25799,
+        "date": "2026-11-22",
+        "totalGrades": 30386,
+        "totalGems": 26563,
         "gemRate": 87.4,
         "source": "pop-report"
       },
@@ -5706,9 +5708,9 @@
       "setName": "One Piece Japanese OP13-Carrying on His Will",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP13-Carrying%20on%20His%20Will",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 64754,
-        "totalGems": 54613,
+        "date": "2026-11-22",
+        "totalGrades": 66230,
+        "totalGems": 55804,
         "gemRate": 84.3,
         "source": "pop-report"
       },
@@ -6063,10 +6065,10 @@
       "setName": "One Piece Japanese OP14-the Azure Sea's Seven",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP14-the%20Azure%20Sea's%20Seven",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 22793,
-        "totalGems": 19569,
-        "gemRate": 85.9,
+        "date": "2026-11-23",
+        "totalGrades": 23432,
+        "totalGems": 20110,
+        "gemRate": 85.8,
         "source": "pop-report"
       },
       "weekly": [
@@ -6399,10 +6401,10 @@
       "setName": "One Piece Japanese EB03-Extra Booster -One Piece Heroines Edition-",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2025&category=tcg-cards&set_name=One%20Piece%20Japanese%20EB03-Extra%20Booster%20-One%20Piece%20Heroines%20Edition-",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 32017,
-        "totalGems": 27612,
-        "gemRate": 86.2,
+        "date": "2026-11-22",
+        "totalGrades": 33108,
+        "totalGems": 28509,
+        "gemRate": 86.1,
         "source": "pop-report"
       },
       "weekly": [
@@ -6749,10 +6751,10 @@
       "setName": "One Piece Japanese OP15-Adventure on Kami's Island",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2026&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP15-Adventure%20on%20Kami's%20Island",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 26827,
-        "totalGems": 24432,
-        "gemRate": 91.1,
+        "date": "2026-11-22",
+        "totalGrades": 27910,
+        "totalGems": 25396,
+        "gemRate": 91,
         "source": "pop-report"
       },
       "weekly": [
@@ -7008,10 +7010,10 @@
       "setName": "One Piece Japanese OP16-The Time of Battle",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2026&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP16-The%20Time%20of%20Battle",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 22622,
-        "totalGems": 20329,
-        "gemRate": 89.9,
+        "date": "2026-11-22",
+        "totalGrades": 23446,
+        "totalGems": 21046,
+        "gemRate": 89.8,
         "source": "pop-report"
       },
       "weekly": [
@@ -7162,10 +7164,10 @@
       "setName": "One Piece Japanese OP17-The World's Strongest Warriors",
       "url": "https://www.gemrate.com/set-population-trend?grader=psa&year=2026&category=tcg-cards&set_name=One%20Piece%20Japanese%20OP17-The%20World%27s%20Strongest%20Warriors",
       "latest": {
-        "date": "2026-11-14",
-        "totalGrades": 3347,
-        "totalGems": 2398,
-        "gemRate": 71.6,
+        "date": "2026-11-22",
+        "totalGrades": 4159,
+        "totalGems": 2973,
+        "gemRate": 71.5,
         "source": "pop-report"
       },
       "weekly": [

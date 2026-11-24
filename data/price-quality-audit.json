@@ -1,10 +1,10 @@
 {
- "updated": "2026-11-23T20:24:56.150Z",
+ "updated": "2026-11-24T04:00:48.645Z",
  "hideSuspiciousNm": false,
  "summary": {
-  "issues": 18,
+  "issues": 19,
   "block": 0,
-  "review": 18
+  "review": 19
  },
  "issues": [
   {
@@ -19,7 +19,7 @@
     "middle": 148663,
     "updated": "2026-06-29",
     "sampleSize": 4,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -34,7 +34,7 @@
     "middle": 108,
     "updated": "2026-09-14",
     "sampleSize": 4,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -49,7 +49,7 @@
     "middle": 383677,
     "updated": "2026-06-29",
     "sampleSize": 3,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -64,7 +64,7 @@
     "middle": 1147931,
     "updated": "2026-06-29",
     "sampleSize": 10,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -79,7 +79,7 @@
     "middle": 238,
     "updated": "2026-09-14",
     "sampleSize": 4,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -94,7 +94,7 @@
     "middle": 168103,
     "updated": "2026-06-29",
     "sampleSize": 4,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -109,7 +109,7 @@
     "middle": 145803,
     "updated": "2026-06-29",
     "sampleSize": 3,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -124,7 +124,7 @@
     "middle": 207,
     "updated": "2026-09-14",
     "sampleSize": 3,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -139,7 +139,7 @@
     "middle": 320,
     "updated": "2026-08-31",
     "sampleSize": 3,
-    "days": 84
+    "days": 85
    }
   },
   {
@@ -154,7 +154,7 @@
     "middle": 220,
     "updated": "2026-09-14",
     "sampleSize": 5,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -169,7 +169,7 @@
     "middle": 62783,
     "updated": "2026-06-29",
     "sampleSize": 2,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -184,7 +184,7 @@
     "middle": 285843,
     "updated": "2026-06-29",
     "sampleSize": 10,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -199,7 +199,7 @@
     "middle": 273,
     "updated": "2026-09-14",
     "sampleSize": 7,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -214,7 +214,7 @@
     "middle": 1158,
     "updated": "2026-09-14",
     "sampleSize": 3,
-    "days": 70
+    "days": 71
    }
   },
   {
@@ -229,7 +229,7 @@
     "middle": 227921,
     "updated": "2026-06-29",
     "sampleSize": 40,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -244,7 +244,7 @@
     "middle": 383677,
     "updated": "2026-06-29",
     "sampleSize": 19,
-    "days": 147
+    "days": 148
    }
   },
   {
@@ -259,7 +259,7 @@
     "middle": 21270433,
     "updated": "2026-07-10",
     "sampleSize": 3,
-    "days": 136
+    "days": 137
    }
   },
   {
@@ -274,6 +274,21 @@
     "nmJpy": 5980,
     "nmUpdated": null,
     "nmVenue": "遊々亭"
+   }
+  },
+  {
+   "severity": "review",
+   "code": "EB-05",
+   "rank": 2,
+   "number": "EB05-055",
+   "name": "Nami Alternate Art (Foil)",
+   "field": "nmUpdated",
+   "reason": "nm_price_stale",
+   "current": {
+    "nmJpy": 99800,
+    "nmUpdated": "2026-11-02",
+    "nmVenue": "遊々亭",
+    "days": 22
    }
   }
  ]

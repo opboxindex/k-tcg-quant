@@ -206,7 +206,7 @@ const dateCell = (iso, englishPage) => {
     const enIso = isoOf(enTxt), jpIso = isoOf(jpTxt);
     const engPage = `${slug}-english.html`;
     const nextEn = enIso && fileExists(`sets/${engPage}`) ? `<a href="../sets/${engPage}">${enTxt}</a>` : (enIso ? enTxt : enCell);
-    const name = stripTags(nameCell).replace(/\s*\([^)]*\)\s*$/, "");
+    const name = stripTags(nameCell.replace(/<small class="slBuy"[^>]*>[\s\S]*?<\/small>/g, "")).replace(/\s*\([^)]*\)\s*$/, "");
     const setUrl = fileExists(`sets/${slug}.html`) ? `https://opboxindex.com/sets/${slug}.html` : CARD_LIST.has(code) ? `https://opboxindex.com/${CARD_LIST.pagePath(code)}` : null;
     if (jpIso) items.push({ name: `One Piece Card Game ${code} ${name} Booster Box (Japanese)`, releaseDate: jpIso, url: setUrl });
     if (enIso) items.push({ name: `One Piece Card Game ${code} ${name} Booster Box (English)`, releaseDate: enIso, url: fileExists(`sets/${engPage}`) ? `https://opboxindex.com/sets/${engPage}` : setUrl });

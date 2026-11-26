@@ -30,9 +30,9 @@
   "japaneseSoldMedianUsd": null,
   "japaneseObservedOn": null,
   "japaneseN": null,
-  "englishSoldMedianUsd": 242,
-  "englishObservedOn": "2026-11-24",
-  "englishN": 16
+  "englishSoldMedianUsd": 240,
+  "englishObservedOn": "2026-11-25",
+  "englishN": 17
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -81,7 +81,7 @@
    "features": "Animal/Drum Kingdom/Straw Hat Crew",
    "trigger": false,
    "nm": {
-    "usd": 25.01,
+    "usd": 24.97,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -1563,7 +1563,7 @@
    "features": "Big Mom Pirates",
    "trigger": false,
    "nm": {
-    "usd": 25.01,
+    "usd": 24.97,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3195,7 +3195,7 @@
    "features": "Former Roger Pirates",
    "trigger": false,
    "nm": {
-    "usd": 438.68,
+    "usd": 437.87,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3269,7 +3269,7 @@
    "features": "Whitebeard Pirates",
    "trigger": false,
    "nm": {
-    "usd": 124.44,
+    "usd": 124.21,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3294,10 +3294,16 @@
    "features": "Big Mom Pirates",
    "trigger": false,
    "nm": {
-    "usd": 62.72,
+    "usd": 62.61,
     "observedOn": "2026-11-16"
    },
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 39,
+    "sold": 4,
+    "windowDays": 45,
+    "through": "2026-11-26"
+   },
    "auctionEnglishPrint": null,
    "psa10": {
     "usd": 158,
@@ -3324,7 +3330,7 @@
    "features": "Supernovas/Bonney Pirates",
    "trigger": false,
    "nm": {
-    "usd": 80.45,
+    "usd": 80.3,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3354,7 +3360,7 @@
    "features": "The Seven Warlords of the Sea/Thriller Bark Pirates",
    "trigger": false,
    "nm": {
-    "usd": 25.01,
+    "usd": 24.97,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3384,7 +3390,7 @@
    "features": "Animal Kingdom Pirates",
    "trigger": false,
    "nm": {
-    "usd": 31.3,
+    "usd": 31.24,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3409,7 +3415,7 @@
    "features": "Navy",
    "trigger": false,
    "nm": {
-    "usd": 37.58,
+    "usd": 37.51,
     "observedOn": "2026-11-16"
    },
    "auction": null,

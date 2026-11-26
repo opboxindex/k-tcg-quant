@@ -31,7 +31,7 @@
   "japaneseObservedOn": "2026-11-13",
   "japaneseN": 14,
   "englishSoldMedianUsd": 297,
-  "englishObservedOn": "2026-11-22",
+  "englishObservedOn": "2026-11-25",
   "englishN": 14
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
@@ -521,7 +521,13 @@
    "features": "Supernovas/Bonney Pirates",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 21.5,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-26"
+   },
    "auctionEnglishPrint": null,
    "psa10": null,
    "cardPage": null
@@ -543,7 +549,7 @@
    "features": "Supernovas/Bonney Pirates",
    "trigger": false,
    "nm": {
-    "usd": 18.73,
+    "usd": 18.69,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -1063,7 +1069,7 @@
    "features": "The Seven Warlords of the Sea/Kuja Pirates",
    "trigger": false,
    "nm": {
-    "usd": 80.45,
+    "usd": 80.3,
     "observedOn": "2026-11-16"
    },
    "auction": {
@@ -1457,7 +1463,7 @@
    "features": "The Seven Warlords of the Sea/Kuja Pirates",
    "trigger": false,
    "nm": {
-    "usd": 25.01,
+    "usd": 24.97,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -1482,7 +1488,7 @@
    "features": "The Seven Warlords of the Sea/Kuja Pirates",
    "trigger": false,
    "nm": {
-    "usd": 930.15,
+    "usd": 928.44,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -2976,7 +2982,7 @@
    "features": "The Four Emperors/Egghead/Straw Hat Crew",
    "trigger": true,
    "nm": {
-    "usd": 21.87,
+    "usd": 21.83,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3311,7 +3317,7 @@
    "features": "Land of Wano/The Akazaya Nine",
    "trigger": false,
    "nm": {
-    "usd": 18.73,
+    "usd": 18.69,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3336,7 +3342,7 @@
    "features": "The Seven Warlords of the Sea/Donquixote Pirates",
    "trigger": false,
    "nm": {
-    "usd": 37.58,
+    "usd": 37.51,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3405,7 +3411,7 @@
    "features": "Kid Pirates",
    "trigger": false,
    "nm": {
-    "usd": 31.3,
+    "usd": 31.24,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3435,7 +3441,7 @@
    "features": "Straw Hat Crew",
    "trigger": true,
    "nm": {
-    "usd": 218.71,
+    "usd": 218.31,
     "observedOn": "2026-11-16"
    },
    "auction": null,

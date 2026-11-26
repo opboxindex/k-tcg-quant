@@ -2162,8 +2162,8 @@
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 20.24,
-    "sold": 22,
+    "medianUsd": 21.5,
+    "sold": 23,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -2369,7 +2369,13 @@
    "features": "Straw Hat Crew",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 50,
+    "sold": 5,
+    "windowDays": 45,
+    "through": "2026-11-26"
+   },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 2.25,
@@ -2397,14 +2403,14 @@
    "features": "Straw Hat Crew",
    "trigger": false,
    "nm": {
-    "usd": 93.02,
+    "usd": 92.84,
     "observedOn": "2026-11-16"
    },
    "auction": null,
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 55.5,
-    "sold": 4,
+    "sold": 5,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -3340,7 +3346,7 @@
    "features": "Sky Island",
    "trigger": false,
    "nm": {
-    "usd": 627.22,
+    "usd": 626.07,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3443,7 +3449,7 @@
    "features": "The Seven Warlords of the Sea/Kuja Pirates",
    "trigger": false,
    "nm": {
-    "usd": 187.29,
+    "usd": 186.94,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3468,7 +3474,7 @@
    "features": "FILM/Supernovas/Heart Pirates",
    "trigger": false,
    "nm": {
-    "usd": 155.86,
+    "usd": 155.58,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3504,7 +3510,7 @@
    "features": "The Four Emperors/Whitebeard Pirates",
    "trigger": false,
    "nm": {
-    "usd": 62.72,
+    "usd": 62.61,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3551,7 +3557,7 @@
    "features": "Straw Hat Crew",
    "trigger": false,
    "nm": {
-    "usd": 187.29,
+    "usd": 186.94,
     "observedOn": "2026-11-16"
    },
    "auction": null,

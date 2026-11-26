@@ -32,7 +32,7 @@
   "japaneseN": 9,
   "englishSoldMedianUsd": 422,
   "englishObservedOn": "2026-11-25",
-  "englishN": 65
+  "englishN": 66
  },
  "notes": "Card facts (number, names, rarity, type, color, cost/life, power, counter, attribute, features, trigger) are from Bandai's official card lists linked above; effect text and images are not included. nm/auction/psa10 are OP Box Index observations attached only where the official card ID matches by rule (null otherwise): nm = Japanese raw near-mint retail ask in USD, auction / auctionEnglishPrint = median winning bid for the Japanese / English print of that card number and print type, ungraded, 45-day window (prints never combined), psa10 = median of completed sales (n >= 3). OP Box Index numbers: CC BY 4.0, attribute 'OP Box Index (opboxindex.com)'.",
  "cards": [
@@ -144,7 +144,13 @@
    "trigger": false,
    "nm": null,
    "auction": null,
-   "auctionEnglishPrint": null,
+   "auctionEnglishPrint": {
+    "print": "English",
+    "medianUsd": 5.5,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-26"
+   },
    "psa10": null,
    "cardPage": null
   },
@@ -2166,7 +2172,7 @@
    "auction": {
     "print": "Japanese",
     "medianUsd": 10.59,
-    "sold": 4,
+    "sold": 5,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -3571,7 +3577,7 @@
    "features": "Fish-Man Island/Supernovas/Straw Hat Crew",
    "trigger": false,
    "nm": {
-    "usd": 1244.39,
+    "usd": 1242.1,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3596,7 +3602,7 @@
    "features": "Fish-Man Island/Supernovas/Straw Hat Crew",
    "trigger": false,
    "nm": {
-    "usd": 8044.57,
+    "usd": 8029.73,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3652,7 +3658,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 6.74,
-    "sold": 6,
+    "sold": 7,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -3698,7 +3704,7 @@
    "features": "Whitebeard Pirates",
    "trigger": false,
    "nm": {
-    "usd": 804.46,
+    "usd": 802.97,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3723,7 +3729,7 @@
    "features": "Whitebeard Pirates",
    "trigger": false,
    "nm": {
-    "usd": 3129.84,
+    "usd": 3124.07,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3779,8 +3785,8 @@
    },
    "auctionEnglishPrint": {
     "print": "English",
-    "medianUsd": 0.99,
-    "sold": 6,
+    "medianUsd": 1,
+    "sold": 8,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -3826,7 +3832,7 @@
    "features": "Dressrosa/Revolutionary Army",
    "trigger": false,
    "nm": {
-    "usd": 501.53,
+    "usd": 500.6,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3856,7 +3862,7 @@
    "features": "Dressrosa/Revolutionary Army",
    "trigger": false,
    "nm": {
-    "usd": 1872.88,
+    "usd": 1869.42,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -3975,7 +3981,7 @@
    "features": "The Four Emperors/Red-Haired Pirates",
    "trigger": false,
    "nm": {
-    "usd": 627.22,
+    "usd": 626.07,
     "observedOn": "2026-11-16"
    },
    "auction": null,
@@ -4000,7 +4006,7 @@
    "features": "The Four Emperors/Red-Haired Pirates",
    "trigger": false,
    "nm": {
-    "usd": 312.98,
+    "usd": 312.41,
     "observedOn": "2026-11-16"
    },
    "auction": null,

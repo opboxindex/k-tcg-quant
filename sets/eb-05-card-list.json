@@ -1007,7 +1007,7 @@
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 24.5,
-    "sold": 14,
+    "sold": 15,
     "windowDays": 45,
     "through": "2026-11-26"
    },
@@ -2041,11 +2041,17 @@
    "features": "Straw Hat Crew",
    "trigger": false,
    "nm": null,
-   "auction": null,
+   "auction": {
+    "print": "Japanese",
+    "medianUsd": 10,
+    "sold": 3,
+    "windowDays": 45,
+    "through": "2026-11-26"
+   },
    "auctionEnglishPrint": {
     "print": "English",
     "medianUsd": 8.5,
-    "sold": 62,
+    "sold": 63,
     "windowDays": 45,
     "through": "2026-11-26"
    },

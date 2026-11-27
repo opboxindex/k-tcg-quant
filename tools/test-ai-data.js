@@ -148,7 +148,8 @@ const serialized = JSON.stringify(actual);
 for (const forbidden of ["bestListing", "itemPrices", "seller", "query", "marketplaceId", "campid", "client_secret", "ebay.com/itm/"]) {
   assert.ok(!serialized.includes(forbidden), `public AI data must omit ${forbidden}`);
 }
-assert.ok(Buffer.byteLength(serialized) < 200_000, "AI data must remain compact enough for answer-engine retrieval");
+// 2026-11-27 OP-18 승격(24세트)으로 200,404 바이트 — 세트 하나에 약 8KB 가 정상적으로 는다. 한도 200,000 → 250,000(세트 6개쯤 여유).
+assert.ok(Buffer.byteLength(serialized) < 250_000, "AI data must remain compact enough for answer-engine retrieval");
 
 const freeData = fs.readFileSync(path.join(ROOT, "free-data.html"), "utf8");
 const ldBlocks = [...freeData.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1]));

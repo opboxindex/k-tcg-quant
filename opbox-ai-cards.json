@@ -16,7 +16,7 @@
  "nullPolicy": "null means unavailable or not verified; it never means zero",
  "coreDataset": "https://opboxindex.com/opbox-ai-data.json",
  "note": "One page per tracked card variant. Numbers match the page; rawNmAsk is a Japanese retail asking price, psa10Sold a verified eBay sold median.",
- "count": 120,
+ "count": 121,
  "pages": [
   {
    "cardNumber": "OP05-119",
@@ -349,6 +349,48 @@
     "observedOn": "2026-11-24",
     "ageDaysAtDatasetUpdate": 3
    }
+  },
+  {
+   "cardNumber": "EB05-055",
+   "name": "Nami Alternate Art (Foil)",
+   "rarity": "SR",
+   "containerSetCode": "EB-05",
+   "url": "https://opboxindex.com/cards/eb05-055-nami-alternate-art-foil.html",
+   "exactVariantRequired": true,
+   "rawNmAsk": {
+    "basis": "japanese_retail_asking_price",
+    "currency": "JPY",
+    "priceJpy": 298000,
+    "usdEquivalent": 1870.46,
+    "fxObservedOn": "2026-11-26",
+    "sourceName": "Japanese retailer",
+    "stockStatus": "in_stock",
+    "observedOn": "2026-11-26",
+    "ageDaysAtDatasetUpdate": 1
+   },
+   "psa10Sold": null,
+   "psaPopulation": null
+  },
+  {
+   "cardNumber": "OP18-065",
+   "name": "Saint Gunko Holy Knights Super Alternate Art",
+   "rarity": "SR",
+   "containerSetCode": "OP-18",
+   "url": "https://opboxindex.com/cards/op18-065-saint-gunko-holy-knights-super-alternate-art.html",
+   "exactVariantRequired": true,
+   "rawNmAsk": {
+    "basis": "japanese_retail_asking_price",
+    "currency": "JPY",
+    "priceJpy": 298000,
+    "usdEquivalent": 1870.46,
+    "fxObservedOn": "2026-11-26",
+    "sourceName": "Japanese retailer",
+    "stockStatus": "out_of_stock",
+    "observedOn": "2026-11-27",
+    "ageDaysAtDatasetUpdate": 0
+   },
+   "psa10Sold": null,
+   "psaPopulation": null
   },
   {
    "cardNumber": "OP09-119",
@@ -5037,17 +5079,6 @@
     "observedOn": "2026-11-24",
     "ageDaysAtDatasetUpdate": 3
    }
-  },
-  {
-   "cardNumber": "EB05-055",
-   "name": "Nami Alternate Art (Foil)",
-   "rarity": "SR",
-   "containerSetCode": "EB-05",
-   "url": "https://opboxindex.com/cards/eb05-055-nami-alternate-art-foil.html",
-   "exactVariantRequired": true,
-   "rawNmAsk": null,
-   "psa10Sold": null,
-   "psaPopulation": null
   },
   {
    "cardNumber": "OP05-001",

@@ -8,6 +8,7 @@
 // 값 대조는 이번 실행이 페이지를 바꿨을 때만 FAIL(아니면 경고) — 환율·수집 워크플로는 사실만 바꾸고 페이지는 다음 빌드가 고친다(sink).
 const { errors, warnings, read, exists, ISO, money, unH, strip, ldOf, ldFlat, descOf, longDate, shortDate, json, facts, PUBLISH_TOUCHED } = require("./lib");
 const CL = require("../card-list-shared");
+const PRIORITY_SEO = json("data/priority-set-seo.json", {});
 
 const checks = ["PAGES-VS-FACTS"];
 const CAP = Number(process.env.GUARD_CAP) || 8;
@@ -170,7 +171,10 @@ function setPage(code, ed, f, lang) {
     if (ed === "en") cmp("KF1", f, "구매 버튼", first(h, /<a class="buyNow"[^>]*>[\s\S]*?<b>(\$[\d,]+)<\/b>/), k.ask ? k.ask.total : null);
   }
   cmp("U2", f, "dateModified", (ldOf(h).find((j) => j["@type"] === "WebPage") || {}).dateModified, s.pageDate);
-  if (!ko) cmp("KF1", f, "제목 Release Date", /release date/i.test(first(h, /<title>([^<]*)<\/title>/) || "") ? "있음" : null, F.latestSets.includes(code) ? "있음" : null);
+  // 기대값 = 최신 세트이거나, 일본판 페이지 제목을 data/priority-set-seo.json 이 직접 정했으면 그 제목이 Release Date 를 말하는지.
+  //   2026-11-27 OP-18 승격: OP-17 은 최신에서 빠졌지만 제목은 그 파일이 고정한다(기존 페이지 제목은 소유자 확인 없이 안 바꾼다).
+  const pinned = ed === "jp" && ((PRIORITY_SEO.sets || {})[code] || {}).title;
+  if (!ko) cmp("KF1", f, "제목 Release Date", /release date/i.test(first(h, /<title>([^<]*)<\/title>/) || "") ? "있음" : null, (pinned ? /release date/i.test(pinned) : F.latestSets.includes(code)) ? "있음" : null);
 }
 function priciestSentences(f, h, s) {
   const pc = s.top10.priciest, found = [];
@@ -686,6 +690,9 @@ function oneValue() {
   for (const f of ["box-prices.html", "index.html"]) if (exists(f)) for (const m of read(f).matchAll(/<td class="code"><a href="sets\/[^"]+">([A-Z]+-\d+)<\/a><\/td><td class="name">([^<]*)/g)) cmp("OV1", `${f} ${m[1]}`, "세트 이름", unH(m[2]), nameOf(m[1]));
 }
 const MIN = { oneValue: 60, sets: 3000, cards: 3500, summary: 300, compare: 230, weekly: 180, articles: 300, upcoming: 30, cardLists: 25000, ai: 1100 };   // 실측(2026-10-15) sets 6,286 · cards 7,210 · summary 603 · compare 474 · weekly 377 · articles 654 · upcoming 72 · cardLists 52,969 · ai 2,285
+// upcoming 은 발매 예정 세트 수에 따라 준다 — 2026-10-15 실측 72건은 예정 2개(OP-18·EB-05), 2026-11-27 OP-18 승격 뒤 EB-06 하나로 28건.
+//   세트당 하한 14(실측의 절반쯤). 예정 세트가 0이면 하한도 0.
+const minOf = (name) => name === "upcoming" ? 14 * Object.keys(F.upcoming || {}).length : MIN[name];
 let compared = 0;
 function run() {
   F = facts(); S = F.sets; counts = new Map(); compared = 0;
@@ -694,7 +701,7 @@ function run() {
     ["cards", cardPages], ["summary", summaryTables], ["compare", compareTables], ["weekly", weekly], ["articles", articles], ["upcoming", upcoming], ["cardLists", cardLists], ["ai", aiFiles], ["oneValue", oneValue],
   ];
   const byArea = {};
-  for (const [name, fn] of AREAS) { const before = compared; fn(); byArea[name] = compared - before; if (byArea[name] < MIN[name]) errors.push(`PAGES-VS-FACTS: ${name} 영역 대조 ${byArea[name]}건 < 하한 ${MIN[name]} — 표·칸 구조가 바뀌어 읽지 못했으면 이 검사도 같이 고칠 것`); }
+  for (const [name, fn] of AREAS) { const before = compared; fn(); byArea[name] = compared - before; if (byArea[name] < minOf(name)) errors.push(`PAGES-VS-FACTS: ${name} 영역 대조 ${byArea[name]}건 < 하한 ${minOf(name)} — 표·칸 구조가 바뀌어 읽지 못했으면 이 검사도 같이 고칠 것`); }
   for (const [id, k] of counts) if (k > CAP) (PUBLISH_TOUCHED ? errors : warnings).push(`PAGES-VS-FACTS/${id}${PUBLISH_TOUCHED ? ":" : "(경고)"} 그 밖에 ${k - CAP}건 더`);
   return byArea;
 }

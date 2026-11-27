@@ -43,6 +43,11 @@ const LABEL = {
   "金パラレル": "Gold",
   "銀パラレル": "Silver",
   "手配書": "Wanted Poster",
+  // 2026-11-27 OP-18: 神の騎士団 = 반다이 영문 표기 "Holy Knights of God"(OP-18 상품 페이지). 海賊団スーパーパラレル 과 같은 꼴.
+  "神の騎士団スーパーパラレル": "Holy Knights Super Alternate Art",
+  // 2026-11-27 OP-18: 箔押し(박 찍힌 패러렐) — EB-05 나미 EB05-055 를 손으로 넣을 때 쓴 이름과 같다.
+  //   가격 매칭(cardTier)은 alt 로 읽어 같은 번호의 일반 패러렐과 기존값 근접(3배)으로 갈린다.
+  "箔押し": "Alternate Art (Foil)",
 };
 function tagOf(label, sp) {
   if (label === "パラレル") return sp ? "SP" : LABEL[label];
@@ -130,6 +135,7 @@ async function main() {
     if (picked.length >= need) break;
     const skip = (why) => skipped.push(`${p.number} ${p.name} ¥${p.priceJpy.toLocaleString()} — ${why}`);
     const labels = labelsOf(p.name);
+    const yr = String(p.alt || "").trim().split(/\s+/)[1] || "";   // 유유테이 칸 레어리티(P-SR·SP·SEC …)
     const label = labels.length ? labels[labels.length - 1] : "";
     if (!(label in LABEL)) { skip(`변형 라벨 "${label}" 은 이름 체계 미확정`); continue; }
     // 등급은 괄호 라벨만으로 본다 — 캐릭터명 "シルバーズ・レイリー" 가 silver 로 읽히지 않게.
@@ -153,12 +159,15 @@ async function main() {
       const vars = inSet.filter((e) => e.id !== p.number);
       if (vars.length === 1) entry = vars[0];
       else {
-        const v = verdicts.find((x) => x.num === p.number && x.label === label);
+        const v = verdicts.find((x) => x.num === p.number && x.label === label && (!x.yr || x.yr === yr));
         entry = (v && vars.find((e) => e.id === p.number + v.suffix)) || null;
         if (!entry) noImage = `변형 이미지 ${vars.length}개(${vars.map((e) => e.id).join(", ")}) — 눈 대조 판정 없음`;
       }
     }
-    const sp = !!entry && /^SP/i.test(entry.rarity);   // 공식 목록의 변형 레어리티 "SPカード"
+    // SP 여부: 공식 목록의 변형 레어리티 "SPカード", 또는 유유테이 상품 칸 레어리티 "SP"(alt 둘째 칸).
+    //   2026-11-27: 같은 번호에 P-SR 패러렐과 SP 패러렐이 함께 있는 카드(OP18-084, 앞서 EB05-016·006)는 라벨이 둘 다
+    //   "パラレル" 이라 칸 레어리티를 안 보면 SP 상품 값이 일반 패러렐 이름에 붙었다.
+    const sp = (!!entry && /^SP/i.test(entry.rarity)) || yr === "SP";
     if (label === "パラレル" && !entry && !p.number.startsWith(code.replace("-", ""))) { skip("다른 세트 번호인데 SP 여부를 공식 목록으로 확인 못 함"); continue; }
 
     const tag = tagOf(label, sp);

@@ -30,7 +30,7 @@
     "usdKrw": 1344.65
   },
   "coverage": {
-    "trackedSets": 23,
+    "trackedSets": 24,
     "topHitsPerSet": 7,
     "editions": [
       "japanese",
@@ -6086,6 +6086,267 @@
       ]
     },
     {
+      "setCode": "OP-18",
+      "nameEn": "The Dominance of God",
+      "nameKo": "신의 지배",
+      "englishReleaseDate": "2026-11-20",
+      "canonicalUrl": "https://opboxindex.com/sets/op-18.html",
+      "englishGuideUrl": "https://opboxindex.com/sets/op-18-english.html",
+      "boxMarket": {
+        "japanese": {
+          "sold": {
+            "basis": "completed_sales",
+            "market": "eBay",
+            "currency": "USD",
+            "medianUsd": 88,
+            "p25Usd": 82,
+            "p75Usd": 100,
+            "sampleSize": 25,
+            "sampleCollectedOn": "2026-11-26",
+            "ageDaysAtDatasetUpdate": 1
+          },
+          "activeAsk": {
+            "basis": "active_asking_prices",
+            "market": "eBay",
+            "currency": "USD",
+            "medianUsd": 99,
+            "p15Usd": 83.88,
+            "p85Usd": 156.26,
+            "listingCount": 32,
+            "excludedListingCount": 14,
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0,
+            "cheapestListing": {
+              "itemPriceUsd": 83.87,
+              "shippingUsd": 0,
+              "totalUsd": 83.87,
+              "currency": "USD",
+              "shipsFrom": "JP",
+              "condition": "New/Factory Sealed",
+              "liveLinkPage": "https://opboxindex.com/sets/op-18.html",
+              "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
+            }
+          },
+          "soldToActiveMedianRatio": 0.89,
+          "qualityFlags": []
+        },
+        "english": {
+          "sold": {
+            "basis": "completed_sales",
+            "market": "eBay",
+            "currency": "USD",
+            "medianUsd": 203,
+            "p25Usd": 198,
+            "p75Usd": 220,
+            "sampleSize": 167,
+            "sampleCollectedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "activeAsk": {
+            "basis": "active_asking_prices",
+            "market": "eBay",
+            "currency": "USD",
+            "medianUsd": 220,
+            "p15Usd": 200,
+            "p85Usd": 249.99,
+            "listingCount": 25,
+            "excludedListingCount": 0,
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0,
+            "cheapestListing": {
+              "itemPriceUsd": 196.61,
+              "shippingUsd": 0,
+              "totalUsd": 196.61,
+              "currency": "USD",
+              "shipsFrom": "GB",
+              "condition": "New/Factory Sealed",
+              "liveLinkPage": "https://opboxindex.com/sets/op-18.html",
+              "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
+            }
+          },
+          "soldToActiveMedianRatio": 0.92,
+          "qualityFlags": []
+        }
+      },
+      "topHits": [
+        {
+          "id": "OP-18|1|OP18-065|saintgunkoholyknightssuperalternateart",
+          "rank": 1,
+          "containerSetCode": "OP-18",
+          "name": "Saint Gunko Holy Knights Super Alternate Art",
+          "cardNumber": "OP18-065",
+          "originalCardSetCode": "OP-18",
+          "rarity": "SR",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 298000,
+            "usdEquivalent": 1870.46,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|2|OP18-031|nicorobinsuperalternateart",
+          "rank": 2,
+          "containerSetCode": "OP-18",
+          "name": "Nico Robin Super Alternate Art",
+          "cardNumber": "OP18-031",
+          "originalCardSetCode": "OP-18",
+          "rarity": "SR",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 99800,
+            "usdEquivalent": 626.42,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|3|OP18-119|saintshamrockalternateartfoil",
+          "rank": 3,
+          "containerSetCode": "OP-18",
+          "name": "Saint Shamrock Alternate Art (Foil)",
+          "cardNumber": "OP18-119",
+          "originalCardSetCode": "OP-18",
+          "rarity": "SEC",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 99800,
+            "usdEquivalent": 626.42,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|4|OP18-060|saintgunkosuperalternateart",
+          "rank": 4,
+          "containerSetCode": "OP-18",
+          "name": "Saint Gunko Super Alternate Art",
+          "cardNumber": "OP18-060",
+          "originalCardSetCode": "OP-18",
+          "rarity": "L",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 79800,
+            "usdEquivalent": 500.88,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|5|OP17-119|lokialternateartfoil",
+          "rank": 5,
+          "containerSetCode": "OP-18",
+          "name": "Loki Alternate Art (Foil)",
+          "cardNumber": "OP17-119",
+          "originalCardSetCode": "OP-17",
+          "rarity": "SEC",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 49800,
+            "usdEquivalent": 312.58,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|6|OP18-084|saintgunkosp",
+          "rank": 6,
+          "containerSetCode": "OP-18",
+          "name": "Saint Gunko SP",
+          "cardNumber": "OP18-084",
+          "originalCardSetCode": "OP-18",
+          "rarity": "SP",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 14800,
+            "usdEquivalent": 92.9,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        },
+        {
+          "id": "OP-18|7|OP18-096|illmakethecallalternateart",
+          "rank": 7,
+          "containerSetCode": "OP-18",
+          "name": "I'll Make the Call Alternate Art",
+          "cardNumber": "OP18-096",
+          "originalCardSetCode": "OP-18",
+          "rarity": "R",
+          "exactVariantRequired": true,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 14800,
+            "usdEquivalent": 92.9,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "out_of_stock",
+            "observedOn": "2026-11-27",
+            "ageDaysAtDatasetUpdate": 0
+          },
+          "psa10Sold": null,
+          "psaPopulation": null,
+          "qualityFlags": [],
+          "citationUrl": "https://opboxindex.com/sets/op-18.html"
+        }
+      ]
+    },
+    {
       "setCode": "EB-01",
       "nameEn": "Memorial Collection",
       "nameKo": "메모리얼 컬렉션",
@@ -7865,12 +8126,20 @@
           "originalCardSetCode": "EB-05",
           "rarity": "SR",
           "exactVariantRequired": true,
-          "rawNmAsk": null,
+          "rawNmAsk": {
+            "basis": "japanese_retail_asking_price",
+            "currency": "JPY",
+            "priceJpy": 298000,
+            "usdEquivalent": 1870.46,
+            "fxObservedOn": "2026-11-26",
+            "sourceName": "Japanese retailer",
+            "stockStatus": "in_stock",
+            "observedOn": "2026-11-26",
+            "ageDaysAtDatasetUpdate": 1
+          },
           "psa10Sold": null,
           "psaPopulation": null,
-          "qualityFlags": [
-            "variant_match_uncertain"
-          ],
+          "qualityFlags": [],
           "citationUrl": "https://opboxindex.com/sets/eb-05.html"
         },
         {
@@ -8646,7 +8915,7 @@
       },
       "pages": {
         "set": "https://opboxindex.com/sets/op-18.html",
-        "englishSet": null,
+        "englishSet": "https://opboxindex.com/sets/op-18-english.html",
         "cardList": "https://opboxindex.com/sets/op-18-card-list.html"
       }
     },

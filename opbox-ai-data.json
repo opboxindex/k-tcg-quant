@@ -70,12 +70,12 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 349.95,
-            "p15Usd": 278.3,
+            "p15Usd": 278.64,
             "p85Usd": 445.31,
             "listingCount": 13,
-            "excludedListingCount": 15,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "excludedListingCount": 16,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 199.99,
               "shippingUsd": 0,
@@ -108,17 +108,17 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 1599.99,
-            "p15Usd": 1000,
+            "medianUsd": 1799.99,
+            "p15Usd": 399,
             "p85Usd": 5000,
-            "listingCount": 25,
+            "listingCount": 22,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 1000,
+              "itemPriceUsd": 1286.88,
               "shippingUsd": 0,
-              "totalUsd": 1000,
+              "totalUsd": 1286.88,
               "currency": "USD",
               "shipsFrom": "US",
               "condition": "New/Factory Sealed",
@@ -126,7 +126,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.82,
+          "soldToActiveMedianRatio": 0.72,
           "qualityFlags": [
             "active_ask_spread_over_5x"
           ]
@@ -459,16 +459,16 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 235.31,
-            "p15Usd": 212.03,
-            "p85Usd": 371.03,
+            "p15Usd": 212.29,
+            "p85Usd": 352.48,
             "listingCount": 5,
             "excludedListingCount": 26,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 140.68,
-              "shippingUsd": 14.07,
-              "totalUsd": 154.75,
+              "itemPriceUsd": 140.36,
+              "shippingUsd": 14.04,
+              "totalUsd": 154.4,
               "currency": "USD",
               "shipsFrom": "CA",
               "condition": "New/Factory Sealed",
@@ -497,13 +497,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 534.88,
-            "p15Usd": 480,
+            "medianUsd": 603.19,
+            "p15Usd": 490,
             "p85Usd": 800,
-            "listingCount": 17,
+            "listingCount": 16,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 480,
               "shippingUsd": 0,
@@ -515,7 +515,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.97,
+          "soldToActiveMedianRatio": 0.86,
           "qualityFlags": []
         }
       },
@@ -860,13 +860,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 159.99,
-            "p15Usd": 145,
+            "medianUsd": 186.99,
+            "p15Usd": 149.99,
             "p85Usd": 220.18,
-            "listingCount": 7,
+            "listingCount": 6,
             "excludedListingCount": 11,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 129.99,
               "shippingUsd": 0,
@@ -878,7 +878,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.88,
+          "soldToActiveMedianRatio": 0.75,
           "qualityFlags": [
             "stale_over_28_days"
           ]
@@ -904,8 +904,8 @@
             "p85Usd": 649.95,
             "listingCount": 22,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 449.99,
               "shippingUsd": 7.5,
@@ -1228,30 +1228,10 @@
             "sampleCollectedOn": "2026-09-25",
             "ageDaysAtDatasetUpdate": 64
           },
-          "activeAsk": {
-            "basis": "active_asking_prices",
-            "market": "eBay",
-            "currency": "USD",
-            "medianUsd": 154.99,
-            "p15Usd": 145,
-            "p85Usd": 169.99,
-            "listingCount": 3,
-            "excludedListingCount": 23,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
-            "cheapestListing": {
-              "itemPriceUsd": 145,
-              "shippingUsd": 0,
-              "totalUsd": 145,
-              "currency": "USD",
-              "shipsFrom": "US",
-              "condition": "New/Factory Sealed",
-              "liveLinkPage": "https://opboxindex.com/sets/op-04.html",
-              "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
-            }
-          },
-          "soldToActiveMedianRatio": 1.06,
+          "activeAsk": null,
+          "soldToActiveMedianRatio": null,
           "qualityFlags": [
+            "active_ask_sample_insufficient_or_invalid",
             "stale_over_28_days"
           ]
         },
@@ -1273,11 +1253,11 @@
             "currency": "USD",
             "medianUsd": 549.99,
             "p15Usd": 500,
-            "p85Usd": 699.99,
-            "listingCount": 17,
+            "p85Usd": 680,
+            "listingCount": 18,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 469,
               "shippingUsd": 0,
@@ -1589,13 +1569,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 195,
+            "medianUsd": 209.99,
             "p15Usd": 149.99,
-            "p85Usd": 458.98,
+            "p85Usd": 489.99,
             "listingCount": 11,
-            "excludedListingCount": 52,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "excludedListingCount": 57,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 149.98,
               "shippingUsd": 0,
@@ -1607,7 +1587,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.83,
+          "soldToActiveMedianRatio": 0.77,
           "qualityFlags": []
         },
         "english": {
@@ -1626,25 +1606,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 999.99,
-            "p15Usd": 925,
-            "p85Usd": 1099.99,
-            "listingCount": 12,
+            "medianUsd": 1050,
+            "p15Usd": 984.99,
+            "p85Usd": 1150,
+            "listingCount": 11,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 861.51,
+              "itemPriceUsd": 925,
               "shippingUsd": 0,
-              "totalUsd": 861.51,
+              "totalUsd": 925,
               "currency": "USD",
-              "shipsFrom": "AU",
+              "shipsFrom": "US",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-05.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.96,
+          "soldToActiveMedianRatio": 0.91,
           "qualityFlags": []
         }
       },
@@ -1949,8 +1929,8 @@
             "p85Usd": 300,
             "listingCount": 9,
             "excludedListingCount": 17,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 99.99,
               "shippingUsd": 4.99,
@@ -1983,13 +1963,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 407.99,
+            "medianUsd": 400,
             "p15Usd": 390,
             "p85Usd": 500,
-            "listingCount": 18,
+            "listingCount": 19,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 377.88,
               "shippingUsd": 0,
@@ -2001,7 +1981,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.78,
+          "soldToActiveMedianRatio": 0.8,
           "qualityFlags": []
         }
       },
@@ -2319,17 +2299,17 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 330,
+            "medianUsd": 329.99,
             "p15Usd": 320,
             "p85Usd": 390,
-            "listingCount": 12,
+            "listingCount": 11,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 262.3,
+              "itemPriceUsd": 262.14,
               "shippingUsd": 0,
-              "totalUsd": 262.3,
+              "totalUsd": 262.14,
               "currency": "USD",
               "shipsFrom": "GB",
               "condition": "New/Factory Sealed",
@@ -2638,10 +2618,10 @@
             "medianUsd": 104.99,
             "p15Usd": 69.99,
             "p85Usd": 114.99,
-            "listingCount": 13,
+            "listingCount": 12,
             "excludedListingCount": 19,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 65,
               "shippingUsd": 0,
@@ -2676,11 +2656,11 @@
             "currency": "USD",
             "medianUsd": 250,
             "p15Usd": 240,
-            "p85Usd": 399.99,
-            "listingCount": 17,
+            "p85Usd": 308.88,
+            "listingCount": 18,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 239,
               "shippingUsd": 0,
@@ -3023,16 +3003,16 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 197,
-            "p15Usd": 150,
+            "p15Usd": 104.54,
             "p85Usd": 228.1,
-            "listingCount": 9,
-            "excludedListingCount": 46,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 10,
+            "excludedListingCount": 44,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 150,
+              "itemPriceUsd": 104.54,
               "shippingUsd": 0,
-              "totalUsd": 150,
+              "totalUsd": 104.54,
               "currency": "USD",
               "shipsFrom": "US",
               "condition": "New/Factory Sealed",
@@ -3059,13 +3039,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 615,
-            "p15Usd": 563.3,
-            "p85Usd": 750,
+            "medianUsd": 600,
+            "p15Usd": 563.98,
+            "p85Usd": 690,
             "listingCount": 22,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 535,
               "shippingUsd": 0,
@@ -3077,7 +3057,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.87,
+          "soldToActiveMedianRatio": 0.89,
           "qualityFlags": []
         }
       },
@@ -3392,13 +3372,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 99.98,
+            "medianUsd": 99.99,
             "p15Usd": 80,
-            "p85Usd": 122.99,
-            "listingCount": 13,
-            "excludedListingCount": 18,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "p85Usd": 118.95,
+            "listingCount": 14,
+            "excludedListingCount": 20,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 80,
               "shippingUsd": 0,
@@ -3429,25 +3409,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 257.99,
-            "p15Usd": 235,
+            "medianUsd": 259.88,
+            "p15Usd": 245,
             "p85Usd": 299,
-            "listingCount": 29,
+            "listingCount": 27,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 229,
+              "itemPriceUsd": 235,
               "shippingUsd": 0,
-              "totalUsd": 229,
+              "totalUsd": 235,
               "currency": "USD",
-              "shipsFrom": "GB",
+              "shipsFrom": "US",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-10.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.9,
+          "soldToActiveMedianRatio": 0.89,
           "qualityFlags": []
         }
       },
@@ -3747,13 +3727,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 139.99,
+            "medianUsd": 215.39,
             "p15Usd": 109.95,
-            "p85Usd": 274.99,
+            "p85Usd": 295.95,
             "listingCount": 8,
-            "excludedListingCount": 46,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "excludedListingCount": 43,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 109.95,
               "shippingUsd": 0,
@@ -3765,7 +3745,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.86,
+          "soldToActiveMedianRatio": 0.56,
           "qualityFlags": []
         },
         "english": {
@@ -3784,13 +3764,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 599.99,
+            "medianUsd": 600,
             "p15Usd": 510,
-            "p85Usd": 679.99,
-            "listingCount": 19,
+            "p85Usd": 699,
+            "listingCount": 20,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 500,
               "shippingUsd": 0,
@@ -4137,8 +4117,8 @@
             "p85Usd": 209.12,
             "listingCount": 4,
             "excludedListingCount": 38,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 130,
               "shippingUsd": 0,
@@ -4174,8 +4154,8 @@
             "p85Usd": 304.95,
             "listingCount": 14,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 250,
               "shippingUsd": 0,
@@ -4487,13 +4467,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 159.79,
+            "medianUsd": 172.21,
             "p15Usd": 124.98,
             "p85Usd": 228.99,
-            "listingCount": 23,
-            "excludedListingCount": 16,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 24,
+            "excludedListingCount": 15,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 110,
               "shippingUsd": 3.99,
@@ -4505,7 +4485,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.79,
+          "soldToActiveMedianRatio": 0.73,
           "qualityFlags": []
         },
         "english": {
@@ -4525,16 +4505,16 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 470,
-            "p15Usd": 400,
+            "p15Usd": 415.36,
             "p85Usd": 641.76,
-            "listingCount": 24,
+            "listingCount": 23,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 380,
+              "itemPriceUsd": 399.99,
               "shippingUsd": 0,
-              "totalUsd": 380,
+              "totalUsd": 399.99,
               "currency": "USD",
               "shipsFrom": "US",
               "condition": "New/Factory Sealed",
@@ -4816,13 +4796,13 @@
             "p15Usd": 89.99,
             "p85Usd": 129.6,
             "listingCount": 11,
-            "excludedListingCount": 42,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "excludedListingCount": 41,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 75,
+              "itemPriceUsd": 69,
               "shippingUsd": 8,
-              "totalUsd": 83,
+              "totalUsd": 77,
               "currency": "USD",
               "shipsFrom": "JP",
               "condition": "New/Factory Sealed",
@@ -4849,17 +4829,17 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 269.99,
+            "medianUsd": 264.99,
             "p15Usd": 244,
             "p85Usd": 300,
             "listingCount": 29,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 236.47,
+              "itemPriceUsd": 228.47,
               "shippingUsd": 0,
-              "totalUsd": 236.47,
+              "totalUsd": 228.47,
               "currency": "USD",
               "shipsFrom": "US",
               "condition": "New/Factory Sealed",
@@ -4867,7 +4847,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.93,
+          "soldToActiveMedianRatio": 0.94,
           "qualityFlags": []
         }
       },
@@ -5182,13 +5162,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 93.99,
-            "p15Usd": 85,
+            "medianUsd": 94.99,
+            "p15Usd": 87.99,
             "p85Usd": 117.25,
-            "listingCount": 16,
-            "excludedListingCount": 13,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 14,
+            "excludedListingCount": 12,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 87.99,
               "shippingUsd": 0,
@@ -5200,7 +5180,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 1.03,
+          "soldToActiveMedianRatio": 1.02,
           "qualityFlags": []
         },
         "english": {
@@ -5219,25 +5199,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 289.99,
-            "p15Usd": 235,
+            "medianUsd": 259.47,
+            "p15Usd": 224.99,
             "p85Usd": 299.99,
-            "listingCount": 18,
+            "listingCount": 19,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 224.99,
+              "itemPriceUsd": 190,
               "shippingUsd": 0,
-              "totalUsd": 224.99,
+              "totalUsd": 190,
               "currency": "USD",
-              "shipsFrom": "PK",
-              "condition": "New",
+              "shipsFrom": "US",
+              "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-15.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.85,
+          "soldToActiveMedianRatio": 0.95,
           "qualityFlags": []
         }
       },
@@ -5488,25 +5468,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 120,
-            "p15Usd": 88.99,
-            "p85Usd": 149.88,
-            "listingCount": 30,
+            "medianUsd": 109,
+            "p15Usd": 87.99,
+            "p85Usd": 135,
+            "listingCount": 29,
             "excludedListingCount": 20,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 87.99,
-              "shippingUsd": 0,
-              "totalUsd": 87.99,
+              "itemPriceUsd": 48.3,
+              "shippingUsd": 30,
+              "totalUsd": 78.3,
               "currency": "USD",
-              "shipsFrom": "US",
+              "shipsFrom": "JP",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-16.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.79,
+          "soldToActiveMedianRatio": 0.87,
           "qualityFlags": []
         },
         "english": {
@@ -5527,15 +5507,15 @@
             "currency": "USD",
             "medianUsd": 259.99,
             "p15Usd": 229.99,
-            "p85Usd": 296.53,
+            "p85Usd": 296.88,
             "listingCount": 7,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 215.25,
+              "itemPriceUsd": 215.51,
               "shippingUsd": 0,
-              "totalUsd": 215.25,
+              "totalUsd": 215.51,
               "currency": "USD",
               "shipsFrom": "AU",
               "condition": "New/Factory Sealed",
@@ -5813,17 +5793,17 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 113.57,
+            "medianUsd": 113,
             "p15Usd": 89,
             "p85Usd": 129,
-            "listingCount": 18,
-            "excludedListingCount": 7,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 20,
+            "excludedListingCount": 6,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 77,
+              "itemPriceUsd": 76,
               "shippingUsd": 8,
-              "totalUsd": 85,
+              "totalUsd": 84,
               "currency": "USD",
               "shipsFrom": "JP",
               "condition": "New/Factory Sealed",
@@ -5831,7 +5811,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.79,
+          "soldToActiveMedianRatio": 0.8,
           "qualityFlags": []
         },
         "english": {
@@ -5850,25 +5830,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 298.99,
-            "p15Usd": 276.56,
-            "p85Usd": 369.46,
-            "listingCount": 11,
+            "medianUsd": 305.65,
+            "p15Usd": 288.34,
+            "p85Usd": 350,
+            "listingCount": 7,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 260,
+              "itemPriceUsd": 276.39,
               "shippingUsd": 0,
-              "totalUsd": 260,
+              "totalUsd": 276.39,
               "currency": "USD",
-              "shipsFrom": "US",
+              "shipsFrom": "GB",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-17.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.95,
+          "soldToActiveMedianRatio": 0.93,
           "qualityFlags": []
         }
       },
@@ -6110,16 +6090,16 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 99,
-            "p15Usd": 83.88,
+            "p15Usd": 81.59,
             "p85Usd": 156.26,
-            "listingCount": 32,
-            "excludedListingCount": 14,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 35,
+            "excludedListingCount": 12,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 83.87,
+              "itemPriceUsd": 81.59,
               "shippingUsd": 0,
-              "totalUsd": 83.87,
+              "totalUsd": 81.59,
               "currency": "USD",
               "shipsFrom": "JP",
               "condition": "New/Factory Sealed",
@@ -6146,25 +6126,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 220,
-            "p15Usd": 200,
-            "p85Usd": 249.99,
+            "medianUsd": 209.71,
+            "p15Usd": 199.99,
+            "p85Usd": 239.46,
             "listingCount": 25,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 196.61,
+              "itemPriceUsd": 199,
               "shippingUsd": 0,
-              "totalUsd": 196.61,
+              "totalUsd": 199,
               "currency": "USD",
-              "shipsFrom": "GB",
+              "shipsFrom": "US",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/op-18.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.92,
+          "soldToActiveMedianRatio": 0.97,
           "qualityFlags": []
         }
       },
@@ -6371,12 +6351,12 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 199.99,
-            "p15Usd": 194.99,
+            "p15Usd": 185.95,
             "p85Usd": 199.99,
-            "listingCount": 5,
-            "excludedListingCount": 27,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 4,
+            "excludedListingCount": 28,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 185.95,
               "shippingUsd": 0,
@@ -6409,13 +6389,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 899.95,
+            "medianUsd": 888.88,
             "p15Usd": 829.99,
             "p85Usd": 960,
-            "listingCount": 6,
+            "listingCount": 7,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 810,
               "shippingUsd": 0,
@@ -6427,7 +6407,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.98,
+          "soldToActiveMedianRatio": 0.99,
           "qualityFlags": []
         }
       },
@@ -6742,13 +6722,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 256.86,
+            "medianUsd": 249.99,
             "p15Usd": 99.94,
             "p85Usd": 289,
-            "listingCount": 8,
-            "excludedListingCount": 22,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 7,
+            "excludedListingCount": 23,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 139,
               "shippingUsd": 0,
@@ -6760,7 +6740,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.62,
+          "soldToActiveMedianRatio": 0.64,
           "qualityFlags": []
         },
         "english": {
@@ -6780,12 +6760,12 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 699.99,
-            "p15Usd": 649.99,
+            "p15Usd": 649.98,
             "p85Usd": 849.99,
             "listingCount": 11,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 619,
               "shippingUsd": 8.39,
@@ -7046,10 +7026,10 @@
             "medianUsd": 109.96,
             "p15Usd": 100,
             "p85Usd": 138.59,
-            "listingCount": 14,
-            "excludedListingCount": 21,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 13,
+            "excludedListingCount": 19,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 96,
               "shippingUsd": 8,
@@ -7082,11 +7062,11 @@
             "currency": "USD",
             "medianUsd": 279.99,
             "p15Usd": 279.99,
-            "p85Usd": 314.95,
-            "listingCount": 17,
+            "p85Usd": 300,
+            "listingCount": 16,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 248.88,
               "shippingUsd": 0,
@@ -7413,13 +7393,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 190,
+            "medianUsd": 189.99,
             "p15Usd": 149.99,
             "p85Usd": 449,
-            "listingCount": 9,
-            "excludedListingCount": 15,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "listingCount": 11,
+            "excludedListingCount": 13,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 140,
               "shippingUsd": 0,
@@ -7450,13 +7430,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 894.95,
-            "p15Usd": 820,
+            "medianUsd": 899.99,
+            "p15Usd": 844.99,
             "p85Usd": 1000,
-            "listingCount": 15,
+            "listingCount": 18,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 800,
               "shippingUsd": 0,
@@ -7468,7 +7448,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 1.05,
+          "soldToActiveMedianRatio": 1.04,
           "qualityFlags": []
         }
       },
@@ -7663,12 +7643,12 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 99.99,
-            "p15Usd": 67.97,
-            "p85Usd": 119.99,
-            "listingCount": 10,
-            "excludedListingCount": 27,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "p15Usd": 69,
+            "p85Usd": 121.99,
+            "listingCount": 11,
+            "excludedListingCount": 26,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 67.92,
               "shippingUsd": 0,
@@ -7699,13 +7679,13 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 379.99,
-            "p15Usd": 330,
+            "medianUsd": 385,
+            "p15Usd": 340,
             "p85Usd": 429.99,
             "listingCount": 13,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
               "itemPriceUsd": 325.47,
               "shippingUsd": 0,
@@ -7717,7 +7697,7 @@
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 0.97,
+          "soldToActiveMedianRatio": 0.96,
           "qualityFlags": []
         }
       },
@@ -8032,25 +8012,25 @@
             "basis": "active_asking_prices",
             "market": "eBay",
             "currency": "USD",
-            "medianUsd": 100.49,
+            "medianUsd": 99.95,
             "p15Usd": 89.99,
-            "p85Usd": 130.45,
-            "listingCount": 31,
-            "excludedListingCount": 24,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "p85Usd": 120.9,
+            "listingCount": 32,
+            "excludedListingCount": 18,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 89,
-              "shippingUsd": 0,
-              "totalUsd": 89,
+              "itemPriceUsd": 78,
+              "shippingUsd": 8,
+              "totalUsd": 86,
               "currency": "USD",
-              "shipsFrom": "US",
+              "shipsFrom": "JP",
               "condition": "New/Factory Sealed",
               "liveLinkPage": "https://opboxindex.com/sets/eb-05.html",
               "note": "Lowest verified total (item price + shipping to the US) among active eBay listings on observedOn. The live link to this listing is on liveLinkPage, which is refreshed daily; listings sell out, so send people there rather than quoting a link."
             }
           },
-          "soldToActiveMedianRatio": 1.07,
+          "soldToActiveMedianRatio": 1.08,
           "qualityFlags": []
         },
         "english": {
@@ -8070,16 +8050,16 @@
             "market": "eBay",
             "currency": "USD",
             "medianUsd": 240,
-            "p15Usd": 229.95,
+            "p15Usd": 215,
             "p85Usd": 265.49,
             "listingCount": 19,
             "excludedListingCount": 0,
-            "observedOn": "2026-11-27",
-            "ageDaysAtDatasetUpdate": 1,
+            "observedOn": "2026-11-28",
+            "ageDaysAtDatasetUpdate": 0,
             "cheapestListing": {
-              "itemPriceUsd": 215,
+              "itemPriceUsd": 214.99,
               "shippingUsd": 0,
-              "totalUsd": 215,
+              "totalUsd": 214.99,
               "currency": "USD",
               "shipsFrom": "US",
               "condition": "New/Factory Sealed",
@@ -8298,7 +8278,7 @@
       "officialCardList": {
         "cards": 154,
         "cardNumbers": 121,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550101"
       },
       "pages": {
@@ -8334,7 +8314,7 @@
       "officialCardList": {
         "cards": 154,
         "cardNumbers": 121,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550102"
       },
       "pages": {
@@ -8370,7 +8350,7 @@
       "officialCardList": {
         "cards": 154,
         "cardNumbers": 127,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550103"
       },
       "pages": {
@@ -8406,7 +8386,7 @@
       "officialCardList": {
         "cards": 149,
         "cardNumbers": 124,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550104"
       },
       "pages": {
@@ -8442,7 +8422,7 @@
       "officialCardList": {
         "cards": 154,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550105"
       },
       "pages": {
@@ -8478,7 +8458,7 @@
       "officialCardList": {
         "cards": 150,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550106"
       },
       "pages": {
@@ -8514,7 +8494,7 @@
       "officialCardList": {
         "cards": 150,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550107"
       },
       "pages": {
@@ -8550,7 +8530,7 @@
       "officialCardList": {
         "cards": 150,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550108"
       },
       "pages": {
@@ -8586,7 +8566,7 @@
       "officialCardList": {
         "cards": 158,
         "cardNumbers": 126,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550109"
       },
       "pages": {
@@ -8622,7 +8602,7 @@
       "officialCardList": {
         "cards": 150,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550110"
       },
       "pages": {
@@ -8658,7 +8638,7 @@
       "officialCardList": {
         "cards": 155,
         "cardNumbers": 126,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550111"
       },
       "pages": {
@@ -8694,7 +8674,7 @@
       "officialCardList": {
         "cards": 154,
         "cardNumbers": 126,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550112"
       },
       "pages": {
@@ -8730,7 +8710,7 @@
       "officialCardList": {
         "cards": 174,
         "cardNumbers": 128,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550113"
       },
       "pages": {
@@ -8766,7 +8746,7 @@
       "officialCardList": {
         "cards": 156,
         "cardNumbers": 126,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550114"
       },
       "pages": {
@@ -8802,7 +8782,7 @@
       "officialCardList": {
         "cards": 152,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550115"
       },
       "pages": {
@@ -8838,7 +8818,7 @@
       "officialCardList": {
         "cards": 155,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550116"
       },
       "pages": {
@@ -8874,7 +8854,7 @@
       "officialCardList": {
         "cards": 169,
         "cardNumbers": 130,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550117"
       },
       "pages": {
@@ -8910,7 +8890,7 @@
       "officialCardList": {
         "cards": 159,
         "cardNumbers": 125,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550118"
       },
       "pages": {
@@ -8946,7 +8926,7 @@
       "officialCardList": {
         "cards": 80,
         "cardNumbers": 61,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550201"
       },
       "pages": {
@@ -8982,7 +8962,7 @@
       "officialCardList": {
         "cards": 105,
         "cardNumbers": 87,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550202"
       },
       "pages": {
@@ -9018,7 +8998,7 @@
       "officialCardList": {
         "cards": 90,
         "cardNumbers": 62,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550203"
       },
       "pages": {
@@ -9054,7 +9034,7 @@
       "officialCardList": {
         "cards": 85,
         "cardNumbers": 65,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550204"
       },
       "pages": {
@@ -9090,7 +9070,7 @@
       "officialCardList": {
         "cards": 96,
         "cardNumbers": 72,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550205"
       },
       "pages": {
@@ -9157,7 +9137,7 @@
       "officialCardList": {
         "cards": 319,
         "cardNumbers": 111,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550301"
       },
       "pages": {
@@ -9193,7 +9173,7 @@
       "officialCardList": {
         "cards": 316,
         "cardNumbers": 173,
-        "checkedOn": "2026-11-27",
+        "checkedOn": "2026-11-28",
         "officialUrl": "https://www.onepiece-cardgame.com/cardlist/?series=550302"
       },
       "pages": {
